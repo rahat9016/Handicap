@@ -2,17 +2,16 @@ import ToastProvider from "@/components/share/Toast/ToastProvider";
 import QueryProvider from "@/lib/react-query/QueryProvider";
 import StoreProvider from "@/lib/redux/provider/StoreProvider";
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
+import Header from "@/components/main/layout/Header";
+import { NextIntlClientProvider } from "next-intl";
+import { Inter } from 'next/font/google';
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+const inter = Inter({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-inter',
 });
 
 export const metadata: Metadata = {
@@ -26,14 +25,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className={inter.variable}>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className="font-sans"
       >
         <StoreProvider>
           <QueryProvider>
             <ToastProvider>
-              {children}
+              <NextIntlClientProvider>
+                <Header/>
+                {children}
+                </NextIntlClientProvider>
             </ToastProvider>
           </QueryProvider>
         </StoreProvider>

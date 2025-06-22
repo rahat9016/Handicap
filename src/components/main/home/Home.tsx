@@ -1,54 +1,13 @@
-/* eslint-disable react/no-unescaped-entities */
-import Link from "next/link"
-import { ArrowRight, Github, Twitter } from "lucide-react"
-import { Button } from "@/components/ui/button"
+ 
+import { Button } from "@/components/ui/button";
+import { ArrowRight, Github, Twitter } from "lucide-react";
+import { useTranslations } from "next-intl";
+import Link from "next/link";
 
 export default function Home() {
+    const t = useTranslations('HomePage');
     return (
         <div className="flex items-center justify-center min-h-screen flex-col">
-            <header className="sticky container top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-                <div className="container flex h-16 items-center justify-between">
-                    <div className="flex items-center gap-2">
-                        <span className="font-bold text-xl text-primary">Next-Auth-V1</span>
-                    </div>
-                    <nav className="hidden md:flex gap-6">
-                        <Link
-                            href="#features"
-                            className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
-                        >
-                            Features
-                        </Link>
-                        <Link
-                            href="#pricing"
-                            className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
-                        >
-                            Pricing
-                        </Link>
-                        <Link
-                            href="#about"
-                            className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
-                        >
-                            About
-                        </Link>
-                        <Link
-                            href="#contact"
-                            className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
-                        >
-                            Contact
-                        </Link>
-                    </nav>
-                    <div className="flex items-center gap-2">
-                        <Link href="/login">
-                            <Button variant="ghost" size="sm">
-                                Log in
-                            </Button>
-                        </Link>
-                        {/* <Link href="/signup">
-                            <Button size="sm">Sign up</Button>
-                        </Link> */}
-                    </div>
-                </div>
-            </header>
             <main className="flex-1">
                 <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48">
                     <div className="container px-4 md:px-6">
@@ -58,6 +17,8 @@ export default function Home() {
                                     <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none">
                                         Your Project Title
                                     </h1>
+                                      <h1>{t('title')}</h1>
+      <Link href="/about">{t('about')}</Link>
                                     <p className="max-w-[600px] text-muted-foreground md:text-xl">
                                         A brief description of your project. Explain what problems it solves and why users should care about
                                         it.

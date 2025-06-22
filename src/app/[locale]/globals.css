@@ -5,12 +5,13 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme {
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-  --color-primary: #0F172A; /* Dark Blue - Primary */
-  --color-secondary: #1E293B; /* Slate Gray - Secondary */
-  --color-accent: #14B8A6; /* Teal - Accent */
-  --color-background: #0A0F1A; /* Near Black Background */
+  --font-sans: var(--font-sans-sans);
+  --font-inter: var(--font-inter);
+  --color-primary: #0077C7; 
+  --color-secondary: #01014E;
+  --color-accent: #14B8A6;
+  --color-gray: #666666;
+  --color-background: #0077C7; /* Near Black Background */
   --color-background-light: #F1F5F9; /* Light Mode Background */
   --border-radius: 12px;
   --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -88,9 +89,10 @@
 }
 
 @theme inline {
-  --color-primary: #0F172A; /* Dark Blue - Primary */
-  --color-secondary: #1E293B; /* Slate Gray - Secondary */
+  --color-primary: #0077C7; /* Dark Blue - Primary */
+  --color-secondary: #01014E; /* Slate Gray - Secondary */
   --color-accent: #14B8A6; /* Teal - Accent */
+  --color-gray: #666666;
   /* --color-background: #0A0F1A; Near Black Background */
   --color-background-light: #F1F5F9; /* Light Mode Background */
   --color-background: var(--background);
@@ -99,7 +101,7 @@
   --color-card-foreground: var(--card-foreground);
   --color-popover: var(--popover);
   --color-popover-foreground: var(--popover-foreground);
-  --color-primary: var(--primary);
+  /* --color-primary: var(--primary); */
   --color-primary-foreground: var(--primary-foreground);
   /* --color-secondary: var(--secondary); */
   --color-secondary-foreground: var(--secondary-foreground);
@@ -135,4 +137,44 @@
   color: red;
   font-size: 0.875rem;
   margin-top: 0.25rem;
+}
+
+
+.container {
+  width: 100%; /* Ensure the container takes full width */
+  margin-left: auto; /* Center the container */
+  margin-right: auto; /* Center the container */
+  padding: 1rem; /* Add padding */
+  max-width: 100%; /* Default max-width for small screens */
+}
+
+@media (min-width: 640px) {
+  .container {
+    max-width: 640px; /* sm breakpoint */
+  }
+}
+
+@media (min-width: 768px) {
+  .container {
+    max-width: 768px; /* md breakpoint */
+  }
+}
+
+@media (min-width: 1024px) {
+  .container {
+    max-width: 1024px; /* lg breakpoint */
+  }
+}
+
+@media (min-width: 1280px) {
+  .container {
+    max-width: 1280px; /* xl breakpoint */
+    padding: 0px;
+  }
+}
+
+@media (min-width: 1536px) {
+  .container {
+    max-width: 1536px; /* 2xl breakpoint */
+  }
 }

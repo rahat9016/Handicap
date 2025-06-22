@@ -78,14 +78,14 @@ export default function Login() {
                         Back to home
                     </Link>
                     <div className="flex justify-center">
-                        <div className="h-12 w-12 rounded-full bg-accent flex items-center justify-center">
+                        <div className="h-12 w-12 rounded-full bg-primary flex items-center justify-center">
                             <span className="text-accent-foreground text-xl font-bold">P</span>
                         </div>
                     </div>
                     <h2 className="mt-6 text-center text-2xl font-bold leading-9 tracking-tight">Sign in to your account</h2>
                     <p className="mt-2 text-center text-sm text-muted-foreground">
                         Or{" "}
-                        <Link href="/register" className="font-medium text-accent hover:text-accent/90">
+                        <Link href="/register" className="font-medium text-primary hover:text-accent/90">
                             create a new account
                         </Link>
                     </p>
@@ -119,7 +119,7 @@ export default function Login() {
                                     Password
                                 </Label>
                                 <div className="text-sm">
-                                    <Link href="/forgot-password" className="font-medium text-accent hover:text-accent/90">
+                                    <Link href="/forgot-password" className="font-medium text-primary hover:text-accent/90">
                                         Forgot password?
                                     </Link>
                                 </div>

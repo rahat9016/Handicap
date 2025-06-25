@@ -4,6 +4,7 @@ import StoreProvider from "@/lib/redux/provider/StoreProvider";
 import type { Metadata } from "next";
 import "./globals.css";
 
+import Footer from "@/components/main/layout/Footer";
 import Header from "@/components/main/layout/Header";
 import { NextIntlClientProvider } from "next-intl";
 import { Inter } from 'next/font/google';
@@ -35,6 +36,7 @@ export default function RootLayout({
               <NextIntlClientProvider>
                 <Header/>
                 {children}
+                <Footer/>
                 </NextIntlClientProvider>
             </ToastProvider>
           </QueryProvider>

@@ -12,8 +12,8 @@ export default function Header() {
   const [search, setSearch] = useState("");
   return (
     <header className="w-full pt-3 fixed top-0 z-50">
-      <div className="container">
-        <div className=" bg-black text-white text-sm px-4 py-2 flex justify-between items-center">
+      <div className="container shadow-2xl">
+        <div className=" bg-pureBlack text-white text-sm px-4 py-2 flex justify-between items-center">
           <div className="space-x-4">
             <span>WCAG 2.1 AA Compliant</span>
             <span>GDPR Compliant</span>
@@ -37,7 +37,7 @@ export default function Header() {
             />
           </Link>
 
-          <nav className="flex text-secondary font-normal divide-x divide-gray-300 text-sm">
+          <nav className="flex text-primary font-normal divide-x divide-gray-300 text-sm">
             {navLinks.map(({ label, href }) => {
               const isActive = pathname === href;
               return (
@@ -48,7 +48,7 @@ export default function Header() {
                 >
                   <div className="px-4">
                     <span
-                    className={`text-center hover:text-secondary ${isActive ? "text-secondary" : "text-gray"}`}
+                    className={`text-center  ${isActive ? "text-primary" : "text-primary"}`}
                   >
                     {label}
                   </span>

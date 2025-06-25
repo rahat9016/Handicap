@@ -4,7 +4,6 @@ import { MoveRight } from 'lucide-react'
 import Image from 'next/image'
 import shape_1 from "../../../../public/images/common/shape_1.png"
 import bg from "../../../../public/images/home/bg.png"
-import welcome from "../../../../public/images/home/welcome.jpg"
 
 export default function WelcomeDisability() {
   return (
@@ -15,7 +14,7 @@ export default function WelcomeDisability() {
         <div className="flex flex-col items-start lg:flex-row gap-5 lg:gap-10 mt-7 lg:mt-14">
           <div className="w-full lg:w-1/2">
             <TitleTag title="Welcome To The" />
-            <h1 className="text-2xl lg:text-4xl text-secondary font-poppins font-semibold mt-2 lg:mt-4">
+            <h1 className="text-2xl lg:text-4xl text-primary font-inter font-semibold mt-2 lg:mt-4">
               Welcome to the Disability Inclusion Resource Hub
             </h1>
             <p className="text-sm font-inter text-[#353535] font-normal mt-3 lg:mt-5 leading-[28px]">
@@ -27,7 +26,7 @@ export default function WelcomeDisability() {
             <p className="text-sm font-inter text-[#353535] font-normal mt-3 lg:mt-5 leading-[28px]">
               All resources are designed to be accessible and follow WCAG 2.1 guidelines, ensuring that persons with disabilities can access and utilize these materials.   
             </p>
-            <Button className='bg-transparent hover:bg-transparent text-black shadow-none text-base font-inter font-semibold'>See more <MoveRight /></Button>
+            <Button className='bg-transparent hover:bg-transparent text-pureBlack shadow-none text-base font-inter font-semibold'>See more <MoveRight /></Button>
           </div>
           <div
             className="w-full lg:w-1/2 p-4 object-contain bg-contain bg-no-repeat ml-auto"
@@ -36,7 +35,7 @@ export default function WelcomeDisability() {
             }}
           >
             <Image
-              src={welcome}
+              src={'/images/home/welcome.jpg'}
               alt="welcome Img"
               width={590}
               height={410}

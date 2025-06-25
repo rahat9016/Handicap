@@ -133,7 +133,7 @@ module.exports = {
         sm: "calc(var(--radius) - 4px)",
       },
       fontFamily: {
-        poppins: ["var(--font-poppins)", "sans-serif"],
+        inter: ["var(--font-inter)", "sans-serif"],
       },
       screens: {
         xsm: "320px",
@@ -163,7 +163,7 @@ module.exports = {
       filter: {
         "custom-filter":
           "brightness(0) saturate(0%) invert(37%) sepia(77%) saturate(597%) hue-rotate(-8deg) brightness(137%) contrast(160%)",
-        "white-filter": "brightness(0) saturate(100%) invert(100%)",
+        // "white-filter": "brightness(0) saturate(100%) invert(100%)",
       },
       keyframes: {
         "accordion-down": {
@@ -214,6 +214,14 @@ module.exports = {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    function ({ addUtilities }) {
+      addUtilities({
+        '.white-filter': {
+          filter: 'brightness(0) saturate(100%) invert(100%)',
+        },
+      });
+    },
+  ],
 }
 

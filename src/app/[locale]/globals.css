@@ -8,6 +8,7 @@ body {
 html {
   scroll-behavior: smooth;
 }
+
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -114,4 +115,7 @@ html {
   body {
     @apply bg-background text-foreground;
   }
+}
+.white-filter{
+  filter: brightness(0) saturate(100%) invert(100%);
 }

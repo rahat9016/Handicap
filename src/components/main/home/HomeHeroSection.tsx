@@ -4,7 +4,7 @@ export default function HomeHeroSection() {
   return (
     <section
       className="relative w-full h-[90vh] bg-cover bg-center"
-      style={{ backgroundImage: `url('/images/home/hero1.jpg')` }}
+      style={{ backgroundImage: `url('/images/home/hero1.jpg')`}}
     >
       <div className="container  absolute inset-0 mt-52 rounded-[12px]">
         <div className="bg-[#00000099] h-[418px] flex items-center justify-center">

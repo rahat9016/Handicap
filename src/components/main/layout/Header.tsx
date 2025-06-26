@@ -1,7 +1,7 @@
 "use client";
 import { Input } from "@/components/ui/input";
+import { Link } from "@/i18n/navigation";
 import Image from "next/image";
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { FaSearch } from "react-icons/fa";
@@ -37,9 +37,9 @@ export default function Header() {
             />
           </Link>
 
-          <nav className="flex text-primary font-normal divide-x divide-gray-300 text-sm">
+          <nav className="flex font-normal divide-x divide-gray-300 text-sm">
             {navLinks.map(({ label, href }) => {
-              const isActive = pathname === href;
+              const isActive = `/${pathname?.split('/')[2]}` === href;
               return (
                 <Link
                   key={label}
@@ -48,7 +48,7 @@ export default function Header() {
                 >
                   <div className="px-4">
                     <span
-                    className={`text-center  ${isActive ? "text-primary" : "text-primary"}`}
+                    className={`text-center ${isActive ?"text-primary font-medium":"text-[#666666]"} `}
                   >
                     {label}
                   </span>

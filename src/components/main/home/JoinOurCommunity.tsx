@@ -4,9 +4,7 @@ import { Input } from "@/components/ui/input";
 
 export default function JoinOurCommunity() {
   return (
-    <div className="relative w-full bg-[#262D3D] "
-      
-      >
+    <div className="relative w-full bg-[#262D3D]">
       <div className="container bg-contain bg-center bg-no-repeat" style={{ backgroundImage: `url('/images/home/sentBg.png')` }}>
         <div className="py-10 lg:py-20">
           <SectionTopTitle

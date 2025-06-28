@@ -46,6 +46,7 @@ export default function PlatformStatistics() {
             <div
               key={idx}
               className="relative group bg-[#F3F3F4] p-6 border border-gray-200 overflow-hidden"
+              tabIndex={0}
             >
               <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 before:absolute before:inset-0 before:bg-[url('/images/home/platformBg.png')] before:bg-cover before:bg-center before:opacity-100" />
 

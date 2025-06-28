@@ -10,7 +10,6 @@ import { routing } from "@/i18n/routing";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { Inter } from "next/font/google";
 import { notFound } from "next/navigation";
-import { MainContentWrapper } from "@/lib/mainContentWrapper/MainContentWrapper";
 import { AccessibilityControls } from "@/components/common/accessibility/AccessibilityControls";
 
 const inter = Inter({
@@ -42,12 +41,12 @@ export default async function RootLayout({
           <StoreProvider>
             <QueryProvider>
               <ToastProvider>
-                <MainContentWrapper>
+                <main id="main-content">
                   <AccessibilityControls />
                   <Header />
                   {children}
                   <Footer />
-                </MainContentWrapper>
+                </main>
               </ToastProvider>
             </QueryProvider>
           </StoreProvider>

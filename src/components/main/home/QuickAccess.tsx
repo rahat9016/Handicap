@@ -60,6 +60,7 @@ export default function QuickAccess() {
                   <TabsTrigger
                     className="group bg-[#DBE4FF] px-8 py-3 text-[#0D0D0D] data-[state=active]:bg-black data-[state=active]:text-white flex items-center gap-3"
                     value="featured1"
+                     tabIndex={0}
                   >
                     <Image
                       className="transition
@@ -75,6 +76,7 @@ export default function QuickAccess() {
                   <TabsTrigger
                    className="group bg-[#DBE4FF] px-8 py-3 text-[#0D0D0D] data-[state=active]:bg-black data-[state=active]:text-white flex items-center gap-3"
                     value="featured2"
+                     tabIndex={0}
                   >
                     <Image
                       className="transition
@@ -90,6 +92,7 @@ export default function QuickAccess() {
                   <TabsTrigger
                     className="group bg-[#DBE4FF] px-8 py-3 text-[#0D0D0D] data-[state=active]:bg-black data-[state=active]:text-white flex items-center gap-3"
                     value="announcements"
+                     tabIndex={0}
                   >
                     <Image
                       className="transition
@@ -105,15 +108,15 @@ export default function QuickAccess() {
                 </TabsList>
               </div>
               <div className="mt-20 lg:mt-10">
-                <TabsContent value="featured1">
-                <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 justify-center">
+                <TabsContent value="featured1" tabIndex={0}>
+                <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 justify-center" >
                   {resources.featured1.map((item, idx) => (
                     <QuickAccessCard key={idx} {...item} />
                   ))}
                 </div>
               </TabsContent>
 
-              <TabsContent value="featured2">
+              <TabsContent value="featured2"  tabIndex={0}>
                 <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 justify-center">
                   {resources.featured2.map((item, idx) => (
                     <QuickAccessCard key={idx} {...item} />
@@ -121,7 +124,7 @@ export default function QuickAccess() {
                 </div>
               </TabsContent>
 
-              <TabsContent value="announcements">
+              <TabsContent value="announcements"  tabIndex={0}>
                 <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 justify-center">
                   {resources.announcements.map((item, idx) => (
                     <QuickAccessCard key={idx} {...item} />

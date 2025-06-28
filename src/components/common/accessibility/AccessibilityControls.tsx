@@ -1,11 +1,10 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Contrast, EyeOff, Moon, Sun, Volume2, ZoomIn, ZoomOut } from "lucide-react";
+import { Contrast, Volume2, ZoomIn, ZoomOut } from "lucide-react";
 import { useEffect, useState } from "react";
 
 export function AccessibilityControls() {
-  const [theme, setTheme] = useState("light");
   const [fontSize, setFontSize] = useState("base");
   const [highContrast, setHighContrast] = useState(false);
   const [speechSynthesisAvailable, setSpeechSynthesisAvailable] = useState(false);
@@ -13,12 +12,6 @@ export function AccessibilityControls() {
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-
-    const savedTheme = localStorage.getItem("theme");
-    const systemPrefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-
-    if (savedTheme) setTheme(savedTheme);
-    else if (systemPrefersDark) setTheme("dark");
 
     const savedFontSize = localStorage.getItem("fontSize");
     if (savedFontSize) setFontSize(savedFontSize);
@@ -30,7 +23,7 @@ export function AccessibilityControls() {
       setSpeechSynthesisAvailable(true);
     }
 
-    applySettings(savedTheme || (systemPrefersDark ? "dark" : "light"), savedFontSize || "base", savedHighContrast);
+    applySettings(savedFontSize || "base", savedHighContrast);
   }, []);
 
   useEffect(() => {
@@ -40,7 +33,6 @@ export function AccessibilityControls() {
       if (!isSpeaking) return;
       const target = e.target as HTMLElement;
       const mainContent = document.getElementById("main-content");
-
       if (!mainContent || !mainContent.contains(target)) return;
 
       const style = window.getComputedStyle(target);
@@ -58,7 +50,6 @@ export function AccessibilityControls() {
         return;
       }
 
-      // Fallback to aria-labelledby if available
       const labelledBy = target.getAttribute("aria-labelledby");
       if (labelledBy) {
         const labelText = labelledBy
@@ -66,7 +57,6 @@ export function AccessibilityControls() {
           .map((id) => document.getElementById(id)?.textContent?.trim())
           .filter(Boolean)
           .join(" ");
-
         if (labelText) {
           speak(labelText);
         }
@@ -74,16 +64,10 @@ export function AccessibilityControls() {
     };
 
     document.addEventListener("focusin", handleFocus);
-
-    return () => {
-      document.removeEventListener("focusin", handleFocus);
-    };
+    return () => document.removeEventListener("focusin", handleFocus);
   }, [isSpeaking]);
 
-  const applySettings = (newTheme: string, newFontSize: string, newHighContrast: boolean) => {
-    document.documentElement.classList.remove("light", "dark", "black-white");
-    document.documentElement.classList.add(newTheme);
-
+  const applySettings = (newFontSize: string, newHighContrast: boolean) => {
     document.documentElement.classList.remove("text-size-base", "text-size-large", "text-size-larger");
     document.documentElement.classList.add(`text-size-${newFontSize}`);
 
@@ -94,27 +78,16 @@ export function AccessibilityControls() {
     }
   };
 
-  const toggleTheme = () => {
-    const newTheme = theme === "light" ? "dark" : theme === "dark" ? "black-white" : "light";
-
-    setTheme(newTheme);
-    localStorage.setItem("theme", newTheme);
-    applySettings(newTheme, fontSize, highContrast);
-  };
-
   const changeFontSize = (increase: boolean) => {
-    let newFontSize;
-
-    if (increase) {
-      newFontSize = fontSize === "base" ? "large" : "larger";
-    } else {
-      newFontSize = fontSize === "larger" ? "large" : "base";
-    }
+    const newFontSize =
+      increase
+        ? fontSize === "base" ? "large" : "larger"
+        : fontSize === "larger" ? "large" : "base";
 
     if (newFontSize !== fontSize) {
       setFontSize(newFontSize);
       localStorage.setItem("fontSize", newFontSize);
-      applySettings(theme, newFontSize, highContrast);
+      applySettings(newFontSize, highContrast);
     }
   };
 
@@ -122,7 +95,7 @@ export function AccessibilityControls() {
     const newHighContrast = !highContrast;
     setHighContrast(newHighContrast);
     localStorage.setItem("highContrast", String(newHighContrast));
-    applySettings(theme, fontSize, newHighContrast);
+    applySettings(fontSize, newHighContrast);
   };
 
   const toggleTextToSpeech = () => {
@@ -143,10 +116,6 @@ export function AccessibilityControls() {
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = "en-US";
     utterance.rate = 1;
-    utterance.onend = () => {
-      // Optionally reset isSpeaking here if you want
-      // setIsSpeaking(false);
-    };
     window.speechSynthesis.speak(utterance);
   };
 
@@ -157,28 +126,6 @@ export function AccessibilityControls() {
       aria-label="Accessibility controls"
       tabIndex={0}
     >
-      <Button
-        variant="outline"
-        size="icon"
-        onClick={toggleTheme}
-        aria-pressed={theme !== "light"}
-        aria-label={
-          theme === "light"
-            ? "Switch to dark mode"
-            : theme === "dark"
-            ? "Switch to black and white mode for color blind users"
-            : "Switch to light mode"
-        }
-      >
-        {theme === "light" ? (
-          <Moon className="h-4 w-4" />
-        ) : theme === "dark" ? (
-          <EyeOff className="h-4 w-4" />
-        ) : (
-          <Sun className="h-4 w-4" />
-        )}
-      </Button>
-
       <Button
         variant="outline"
         size="icon"

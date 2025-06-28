@@ -74,6 +74,7 @@ export default function KeyDocuments() {
                 <div
                   key={idx}
                   className="bg-[#F3F3F4] group hover:bg-[#252525] p-8"
+                  tabIndex={0}
                 >
                   <Image
                     src={res.icon}

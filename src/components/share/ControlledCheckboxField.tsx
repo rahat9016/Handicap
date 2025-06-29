@@ -4,15 +4,9 @@ import { Controller, useFormContext } from "react-hook-form";
 import { Checkbox } from "../ui/checkbox";
 import { Label } from "../ui/label";
 
-interface FilterFormValues {
-  sortBy: string;
-  sectors: string[];
-  resourceTypes: string[];
-  languages: string[];
-}
 
 interface ControlledInputFieldProps {
-  name: keyof FilterFormValues;
+  name: string;
   options: { label: string; value: string }[];
 }
 
@@ -31,10 +25,10 @@ const ControlledCheckboxField: React.FC<ControlledInputFieldProps> = ({
           const currentValues = field.value || [];
 
           const handleCheckedChange = (checked: boolean, value: string) => {
-            if (value === "all") {
-              field.onChange(checked ? [] : []);
-              return;
-            }
+            // if (value === "all") {
+            //   field.onChange(checked ? [] : []);
+            //   return;
+            // }
 
             if (checked) {
               field.onChange([...currentValues, value]);
@@ -49,11 +43,7 @@ const ControlledCheckboxField: React.FC<ControlledInputFieldProps> = ({
                 <div key={value} className="flex items-center space-x-2 cursor-pointer">
                   <Checkbox
                     id={`${name}-${value}`}
-                    checked={
-                      value === "all"
-                        ? currentValues.length === 0
-                        : currentValues.includes(value)
-                    }
+                    checked={currentValues.includes(value)}
                     onCheckedChange={(checked) =>
                       handleCheckedChange(!!checked, value)
                     }

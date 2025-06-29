@@ -10,6 +10,7 @@ import { routing } from "@/i18n/routing";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { Inter } from "next/font/google";
 import { notFound } from "next/navigation";
+import { AccessibilityControls } from "@/components/common/accessibility/AccessibilityControls";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -40,9 +41,12 @@ export default async function RootLayout({
           <StoreProvider>
             <QueryProvider>
               <ToastProvider>
-                <Header />
-                {children}
-                <Footer />
+                <main id="main-content">
+                  <AccessibilityControls />
+                  <Header />
+                  {children}
+                  <Footer />
+                </main>
               </ToastProvider>
             </QueryProvider>
           </StoreProvider>

@@ -72,15 +72,17 @@ export default function Footer() {
               width={140}
               height={40}
               className="white-filter mb-5"
+              tabIndex={0}
+              aria-label="logo of humanity and inclusive"
             />
-            <p className="text-sm text-[#B7B7B7] font-inter mb-9">
+            <p className="text-sm text-[#B7B7B7] font-inter mb-9"  tabIndex={0}>
               Working together to build an inclusive, accessible, and empowered
               future for persons with disabilities—where everyone has the
               opportunity to participate fully, live with dignity, and
               contribute meaningfully to society, regardless of ability.
             </p>
             <div className="space-y-1 text-sm">
-              <p className="flex items-start gap-3 text-[#B7B7B7]">
+              <p className="flex items-start gap-3 text-[#B7B7B7]" tabIndex={0} aria-label="Email">
                 <Mail />
                 <Link
                   href="mailto:info@disabilityinclusionhub.org"
@@ -89,15 +91,15 @@ export default function Footer() {
                   info@disabilityinclusionhub.org
                 </Link>
               </p>
-              <p className="flex items-start gap-3 text-[#B7B7B7]">
-                <Phone /> +880 1234 567890
+              <p className="flex items-start gap-3 text-[#B7B7B7]"tabIndex={0} aria-label="Contact Number">
+                <Phone /> <span tabIndex={0}>+880 1234 567890</span>
               </p>
             </div>
           </div>
           <div className="w-full lg:w-8/12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 lg:gap-10">
             {sections.map((section, idx) => (
               <div key={idx}>
-                <h4 className="font-semibold mb-6">{section.title}</h4>
+                <h4 className="font-semibold mb-6" tabIndex={0}>{section.title}</h4>
                 <ul className="space-y-2 text-sm text-white/80">
                   {section.links.map((linkText, i) => (
                     <li
@@ -119,23 +121,23 @@ export default function Footer() {
 
       <div className="flex flex-col items-center justify-center gap-4 pt-8">
         <div className="flex items-center gap-10 lg:gap-20 bg-[#3D465A] border border-[#FFFFFF4D] h-14 px-10 lg:px-20 rounded-full ">
-          <Link href="#" className="hover:text-[#5ABBFD]">
+          <Link href="#" className="hover:text-[#5ABBFD]" aria-label="Facebook Account Link">
             <FaFacebookF />
           </Link>
-          <Link href="#" className="hover:text-[#5ABBFD]">
+          <Link href="#" className="hover:text-[#5ABBFD]" aria-label="Twitter Account  Link">
             <FaTwitter />
           </Link>
-          <Link href="#" className="hover:text-[#5ABBFD]">
+          <Link href="#" className="hover:text-[#5ABBFD]" aria-label="Instagram Account Link">
             <FaInstagram />
           </Link>
-          <Link href="#" className="hover:text-[#5ABBFD]">
+          <Link href="#" className="hover:text-[#5ABBFD]" aria-label="Linkedin Account Link">
             <FaLinkedinIn />
           </Link>
         </div>
       </div>
       <div className="flex items-center justify-center w-full py-11 text-xs text-[#B3B3B3]">
         <div className="flex-grow border-t border-[#B3B3B3]"></div>
-        <span className="px-4 text-center font-inter font-normal text-sm">
+        <span className="px-4 text-center font-inter font-normal text-sm" tabIndex={0}>
           © 2025 Humanity & Inclusion. All rights reserved. Funded by DFAT.
         </span>
         <div className="flex-grow border-t border-[#B3B3B3]"></div>
@@ -152,7 +154,7 @@ export default function Footer() {
             />
           </span>{" "}
           <span className="px-4">|</span> Developed by{" "}
-          <span className="text-white">
+          <span className="text-white" tabIndex={0} aria-label="Developed By A T I Limited">
             <Image
               width={67}
               height={24}

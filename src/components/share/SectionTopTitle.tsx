@@ -20,6 +20,7 @@ export default function SectionTopTitle({
           "text-4xl font-inter text-primary font-semibold",
           classTitle
         )}
+        tabIndex={0}
       >
         {title}
       </h1>
@@ -28,6 +29,7 @@ export default function SectionTopTitle({
           "text-sm font-inter text-[#666666] font-medium mt-3 lg:mt-6 leading-[28px] mx-auto w-full lg:w-6/12",
           classDesc
         )}
+        tabIndex={0}
       >
         {desc}
       </p>

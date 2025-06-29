@@ -1,23 +1,20 @@
 "use client";
-import { Input } from "@/components/ui/input";
 import { Link } from "@/i18n/navigation";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
-import { FaSearch } from "react-icons/fa";
 import { navLinks } from "./navLinks";
 
 export default function Header() {
   const pathname = usePathname();
-  const [search, setSearch] = useState("");
+  // const [search, setSearch] = useState("");
   return (
-    <header className="w-full pt-3 fixed top-0 z-50">
-      <div className="container shadow-2xl">
+    <header className="w-full pt-3 fixed top-0 z-50 ">
+      <div className="container shadow-2xl" aria-label="Nav bar" tabIndex={0}>
         <div className=" bg-pureBlack text-white text-sm px-4 py-2 flex justify-between items-center">
           <div className="space-x-4">
-            <span>WCAG 2.1 AA Compliant</span>
-            <span>GDPR Compliant</span>
-            <span>Color Blind Mode Available</span>
+            <span tabIndex={0}>WCAG 2.1 AA Compliant</span>
+            <span tabIndex={0}>GDPR Compliant</span>
+            <span tabIndex={0}>Color Blind Mode Available</span>
           </div>
           <div className="space-x-4">
             <Link href="#">Accessibility Statement</Link>
@@ -28,7 +25,7 @@ export default function Header() {
         </div>
 
         <div className="bg-white flex items-center justify-between px-6 py-4">
-          <Link href="/">
+          <Link href="/" aria-label="logo of Humanity & inclusion">
             <Image
               src="/logo.png"
               alt="Humanity & inclusion"
@@ -61,7 +58,7 @@ export default function Header() {
               );
             })}
           </nav>
-          <div className="flex items-center gap-2 border-b border-gray-300 pb-1">
+          {/* <div className="flex items-center gap-2 border-b border-gray-300 pb-1">
             <Input
               type="text"
               placeholder="I'am looking for..."
@@ -70,7 +67,7 @@ export default function Header() {
               className="outline-none px-2 py-1 text-sm border-none  shadow-none"
             />
             <FaSearch className="text-gray-500 mr-2" />
-          </div>
+          </div> */}
         </div>
       </div>
     </header>

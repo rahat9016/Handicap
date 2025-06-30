@@ -152,8 +152,9 @@ export function AccessibilityControls() {
         onClick={toggleHighContrast}
         aria-pressed={highContrast}
         aria-label={highContrast ? "Disable high contrast" : "Enable high contrast"}
+         className={highContrast ? "bg-primary" : ""}
       >
-        <Contrast className="h-4 w-4" />
+        <Contrast className={`h-4 w-4 ${highContrast && "text-white"}`} />
       </Button>
 
       {speechSynthesisAvailable && (
@@ -165,7 +166,7 @@ export function AccessibilityControls() {
           aria-label={isSpeaking ? "Stop text-to-speech" : "Start text-to-speech"}
           className={isSpeaking ? "bg-primary text-primary-foreground" : ""}
         >
-          <Volume2 className="h-4 w-4" />
+          <Volume2 className={`h-4 w-4 ${isSpeaking  && "text-white"}`} />
         </Button>
       )}
     </div>

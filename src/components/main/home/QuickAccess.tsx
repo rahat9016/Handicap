@@ -63,7 +63,7 @@ export default function QuickAccess() {
             tabIndex={0}
             onFocus={() => setActive(true)}
           >
-            <Tabs value={activeTab} onValueChange={setActiveTab} className="mt-0"> {/* ✅ Updated */}
+            <Tabs value={activeTab} onValueChange={setActiveTab} className="mt-0">
               <div className="w-6/12 mx-auto ">
                 <TabsList className="mx-auto flex-col lg:flex-row w-fit bg-transparent rounded-lg mb-6 gap-5">
                   <TabsTrigger

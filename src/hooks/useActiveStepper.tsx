@@ -34,6 +34,7 @@ const useActiveStepper = () => {
     },
   ]);
   const handleNext = () => {
+    if (active >= steps.length - 1) return;
     setSteps((prevSteps) =>
       prevSteps.map((step, index) => {
         if (index === active) {

@@ -2,6 +2,7 @@
 import { Link } from "@/i18n/navigation";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
+import { LanguageToggle } from "./LanguageToggle";
 import { navLinks } from "./navLinks";
 
 export default function Header() {
@@ -17,13 +18,14 @@ export default function Header() {
             <span tabIndex={0}>Color Blind Mode Available</span>
           </div>
           <div className="space-x-4">
+            <LanguageToggle />
             <Link href="#">Accessibility Statement</Link>
             <Link href="#">Event Calendar</Link>
             <Link href="#">Privacy Policy</Link>
             <Link href="#">Login</Link>
           </div>
         </div>
-
+        
         <div className="bg-white flex items-center justify-between px-6 py-4">
           <Link href="/" aria-label="logo of Humanity & inclusion">
             <Image
@@ -31,6 +33,7 @@ export default function Header() {
               alt="Humanity & inclusion"
               width={86}
               height={40}
+              className="w-auto h-10"
             />
           </Link>
 

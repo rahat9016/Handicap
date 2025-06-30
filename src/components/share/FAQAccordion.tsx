@@ -1,10 +1,10 @@
 import {
-    Accordion,
-    AccordionContent,
-    AccordionItem,
-    AccordionTrigger,
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
 } from "@/components/ui/accordion";
-import { data } from "./data";
+import { data } from "../../data/data";
 
 export default function FAQAccordion() {
   return (

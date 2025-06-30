@@ -1,6 +1,6 @@
 import SectionTopTitle from "@/components/share/SectionTopTitle";
 import Image from "next/image";
-import FAQAccordion from "./FAQAccordion";
+import FAQAccordion from "../../share/FAQAccordion";
 
 export default function FAQ() {
   return (

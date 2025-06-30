@@ -119,3 +119,44 @@ html {
 .white-filter{
   filter: brightness(0) saturate(100%) invert(100%);
 }
+
+/* Accessibility improvements */
+.sr-only:focus {
+  position: absolute;
+  width: auto;
+  height: auto;
+  padding: 0.5rem;
+  margin: 0.5rem;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+  border-radius: var(--radius);
+}
+
+/* Font size adjustments */
+.text-size-base {
+  font-size: 1rem;
+}
+
+.text-size-large {
+  font-size: 1.25rem;
+}
+
+.text-size-larger {
+  font-size: 1.5rem;
+}
+
+/* High contrast mode */
+.high-contrast {
+  --background: 0 0% 100%;
+  --foreground: 0 0% 0%;
+  --primary: 195 100% 30%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 172 100% 25%;
+  --secondary-foreground: 0 0% 100%;
+  --muted: 0 0% 90%;
+  --muted-foreground: 0 0% 0%;
+  --accent: 267 33% 35%;
+  --accent-foreground: 0 0% 100%;
+  --border: 0 0% 0%;
+}

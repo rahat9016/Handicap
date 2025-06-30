@@ -25,11 +25,6 @@ const ControlledCheckboxField: React.FC<ControlledInputFieldProps> = ({
           const currentValues = field.value || [];
 
           const handleCheckedChange = (checked: boolean, value: string) => {
-            // if (value === "all") {
-            //   field.onChange(checked ? [] : []);
-            //   return;
-            // }
-
             if (checked) {
               field.onChange([...currentValues, value]);
             } else {

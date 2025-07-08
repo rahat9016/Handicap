@@ -5,6 +5,7 @@ export default function CoursesList() {
     <div className="grid grid-cols-3 gap-6">
       {Array.from({ length: 9 }, (_, index) => (
         <CourseCard
+          id={index}
           key={index}
           title="Disability Data Collection Methods"
           description="Video tutorial on using the Washington Group Questionnaire for disability data collection in humanitarian contexts."

@@ -1,3 +1,4 @@
+"use client";
 import Paragraph from "@/components/share/Paragraph";
 import SectionTopTitle from "@/components/share/SectionTopTitle";
 import Title from "@/components/share/Title";
@@ -33,6 +34,7 @@ const colorClasses: Record<string, string> = {
 };
 
 export default function FeaturedResources() {
+
   return (
     <div className="bg-[#8c8ccb10]">
       <div className="container py-10 lg:py-20 xl:py-40">
@@ -40,6 +42,7 @@ export default function FeaturedResources() {
           title="Featured Resources"
           desc="Explore a curated selection of high-impact tools, guides, and publications designed to advance disability inclusion in humanitarian action."
         />
+        
         <div className="mt-10 px-[58px]">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-10 lg:mt-20">
             {resources.map((res, idx) => (
@@ -105,12 +108,14 @@ export default function FeaturedResources() {
                 </Paragraph>
                 <div className="flex justify-end  mt-6">
                   <div className="flex items-center gap-2">
-                    <Button className="w-1/2 h-10 bg-transparent hover:bg-transparent text-[#666666] group-hover:text-white">
-                    <Eye className="w-4 h-4" /> Preview
-                  </Button>
-                  <Button className="w-1/2 h-10 bg-[#00A896] hover:bg-[#057266] text-white">
-                    <Download className="w-4 h-4 mr-1" /> Download
-                  </Button>
+                    <Button
+                      className="w-1/2 h-10 bg-transparent hover:bg-transparent text-[#666666] group-hover:text-white"
+                    >
+                      <Eye className="w-4 h-4" /> Preview
+                    </Button>
+                    <Button className="w-1/2 h-10 bg-[#00A896] hover:bg-[#057266] text-white">
+                      <Download className="w-4 h-4 mr-1" /> Download
+                    </Button>
                   </div>
                 </div>
               </div>

@@ -27,7 +27,8 @@ export default function Header() {
         </div>
         
         <div className="bg-white flex items-center justify-between px-6 py-4">
-          <Link href="/" aria-label="logo of Humanity & inclusion">
+          <div className="flex items-center gap-5">
+            <Link href="/" aria-label="logo of Humanity & inclusion">
             <Image
               src="/logo.png"
               alt="Humanity & inclusion"
@@ -36,6 +37,11 @@ export default function Header() {
               className="w-auto h-10"
             />
           </Link>
+          <Link href="/" aria-label="Disability Inclusion Hub">
+            <h2 className="font-inter text-lg text-black font-semibold">Disability Inclusion Hub</h2>
+            <p className="font-inter font-medium text-sm text-[#666666]">Humanity & Inclusion | DFAT</p>
+          </Link>
+          </div>
 
           <nav className="flex font-normal divide-x divide-gray-300 text-sm">
             {navLinks.map(({ label, href }) => {

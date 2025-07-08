@@ -3,9 +3,11 @@ import Title from "@/components/share/Title";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Link } from "@/i18n/navigation";
 import Image from "next/image";
 
 interface CourseCardProps {
+  id: string | number;
   title: string;
   description: string;
   imageUrl: string;
@@ -21,6 +23,7 @@ const users = [
   "https://i.pravatar.cc/100?u=4",
 ];
 export default function CourseCard({
+  id,
   title,
   description,
   imageUrl,
@@ -120,9 +123,9 @@ export default function CourseCard({
         </div>
         </div>
         <div className="flex flex-col gap-2 mt-3">
-          <Button className="w-full h-10 bg-primary text-white">
+          <Link href={`/training/${id}`} className="w-full h-10 bg-primary text-white flex items-center justify-center">
             Preview Course
-          </Button>
+          </Link>
           <Button className="w-full h-10 bg-transparent hover:bg-transparent border border-[#B7B7B7] text-primary">
             Take Quiz Again
           </Button>

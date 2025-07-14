@@ -30,6 +30,7 @@ module.exports = {
         "primary": "#242D65",
         "secondary": "#F68C25",
         "blue":"#2A53CD",
+        "dashboard-primary":"#135393",
         aliceBlue: "#F2FBFD",
         lightBlue: "#EFF3F4",
         greyLight: "#F2F2F2",

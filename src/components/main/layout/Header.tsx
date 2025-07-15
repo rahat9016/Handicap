@@ -7,8 +7,6 @@ import { navLinks } from "./navLinks";
 
 export default function Header() {
   const pathname = usePathname();
-  // const [search, setSearch] = useState("");
-  console.log(pathname.endsWith('/admin'))
   return (
     <header className="pb-32">
       <div className="fixed w-full top-0 z-50">

@@ -9,7 +9,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
         <Sidebar />
       </div>
       <div className="ml-[300px] w-full">
-        <div className="w-full">
+        <div className="w-full sticky top-0 bg-white z-50">
           <DashboardHeader />
         </div>
         <div className="p-6">

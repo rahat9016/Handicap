@@ -4,7 +4,7 @@ import { Bell, Search } from "lucide-react";
 
 export default function DashboardHeader() {
   return (
-    <div className="h-[90px] bg-white shadow-sm flex items-center justify-end px-6 border-b border-skeleton gap-5">
+    <div className="h-[90px] bg-white shadow-sm flex items-center justify-end px-6 border-b border-skeleton gap-5 ">
       <div className="flex items-center gap-1 border border-gray rounded-xl px-2 h-12 w-full max-w-64">
         <Search className={`w-7 h-7 text-[#8C8C8C] `} />
         <Input

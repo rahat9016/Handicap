@@ -13,6 +13,19 @@ export default function WelcomeDisability() {
       >
       <div className="container">
         <div className="flex flex-col items-start lg:flex-row gap-5 lg:gap-10 mt-7 lg:mt-14">
+          <div
+            className="w-full lg:w-1/2 p-4 object-contain bg-contain bg-no-repeat ml-auto"
+            style={{
+              backgroundImage: `url(${shape_1.src})`,
+            }}
+          >
+            <Image
+              src={'/images/home/welcome.jpg'}
+              alt="welcome Img"
+              width={590}
+              height={410}
+            />
+          </div>
           <div className="w-full lg:w-1/2">
             <TitleTag title="Welcome To The" />
             <h1 className="text-2xl lg:text-4xl text-primary font-inter font-semibold mt-2 lg:mt-4" tabIndex={0}>
@@ -29,21 +42,9 @@ export default function WelcomeDisability() {
               All resources are designed to be accessible and follow WCAG 2.1 guidelines, ensuring that persons with disabilities can access and utilize these materials.   
             </p>
             </div>
-            <Button className='bg-transparent hover:bg-transparent text-pureBlack shadow-none text-base font-inter font-semibold'>See more <MoveRight /></Button>
+            <Button className='bg-transparent hover:bg-transparent text-pureBlack hover:text-[#01014E] shadow-none text-base font-inter font-semibold'>See more <MoveRight /></Button>
           </div>
-          <div
-            className="w-full lg:w-1/2 p-4 object-contain bg-contain bg-no-repeat ml-auto"
-            style={{
-              backgroundImage: `url(${shape_1.src})`,
-            }}
-          >
-            <Image
-              src={'/images/home/welcome.jpg'}
-              alt="welcome Img"
-              width={590}
-              height={410}
-            />
-          </div>
+          
         </div>
       </div>
     </div>

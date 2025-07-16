@@ -1,9 +1,12 @@
+"use client";
 import Paragraph from "@/components/share/Paragraph";
 import Title from "@/components/share/Title";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Download, Eye } from "lucide-react";
 import Image from "next/image";
+import { useState } from "react";
+import PDFModal from "./PDFModal";
 
 interface ResourceCardProps {
   title: string;
@@ -28,8 +31,25 @@ export default function ResourceCard({
   isFeatured,
   isPdf,
 }: ResourceCardProps) {
+  const [open, setOpen] = useState(false);
+
   return (
     <div className="rounded-lg overflow-hidden border bg-white shadow-sm flex flex-col">
+      <PDFModal
+        open={open}
+        onClose={() => setOpen(false)}
+        data={{
+          title,
+          description,
+          imageUrl,
+          date,
+          size,
+          ratings: ratings ?? 0,
+          downloads,
+          isFeatured,
+          isPdf,
+        }}
+      />
       <div className="relative w-full h-56">
         <Image src={imageUrl} alt={title} fill className="object-cover" />
         {isFeatured && (
@@ -62,7 +82,10 @@ export default function ResourceCard({
           <Button className="w-full h-10 bg-primary text-white">
             <Download className="w-4 h-4 mr-1" /> Download
           </Button>
-          <Button className="w-full h-10 bg-transparent hover:bg-transparent border border-[#00A896] text-[#00A896]">
+          <Button
+            onClick={() => setOpen(true)}
+            className="w-full h-10 bg-transparent hover:bg-transparent border border-[#00A896] text-[#00A896]"
+          >
             <Eye className="w-4 h-4 mr-1" /> Preview
           </Button>
         </div>

@@ -121,7 +121,7 @@ export function AccessibilityControls() {
 
   return (
     <div
-      className="fixed right-4 top-20 z-50 flex flex-col gap-2 bg-background border rounded-lg p-2 shadow-md"
+      className="fixed right-4 top-[25%] z-50 flex flex-col gap-2 bg-background border rounded-lg p-2 shadow-md"
       role="region"
       aria-label="Accessibility controls"
       tabIndex={0}

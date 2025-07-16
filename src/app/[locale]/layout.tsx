@@ -4,13 +4,11 @@ import StoreProvider from "@/lib/redux/provider/StoreProvider";
 import type { Metadata } from "next";
 import "./globals.css";
 
-import Footer from "@/components/main/layout/Footer";
-import Header from "@/components/main/layout/Header";
+import { AccessibilityControls } from "@/components/common/accessibility/AccessibilityControls";
 import { routing } from "@/i18n/routing";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { Inter } from "next/font/google";
 import { notFound } from "next/navigation";
-import { AccessibilityControls } from "@/components/common/accessibility/AccessibilityControls";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -34,6 +32,7 @@ export default async function RootLayout({
   if (!hasLocale(routing.locales, locale)) {
     notFound();
   }
+
   return (
     <html lang={locale} className={inter.variable}>
       <body className="font-sans">
@@ -43,9 +42,7 @@ export default async function RootLayout({
               <ToastProvider>
                 <main id="main-content">
                   <AccessibilityControls />
-                  <Header />
                   {children}
-                  <Footer />
                 </main>
               </ToastProvider>
             </QueryProvider>

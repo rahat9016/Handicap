@@ -1,4 +1,5 @@
 import CourseVideoStep from "./CourseVideoStep";
+// import PDFViewer from "./PDFViewer";
 
 const CourseStepProvider = ({ activeStep }: { activeStep: number }) => {
   switch (activeStep) {

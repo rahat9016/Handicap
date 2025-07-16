@@ -7,11 +7,12 @@ import { navLinks } from "./navLinks";
 
 export default function Header() {
   const pathname = usePathname();
-  // const [search, setSearch] = useState("");
   return (
-    <header className="w-full pt-3 fixed top-0 z-50 ">
-      <div className="container shadow-2xl" aria-label="Nav bar" tabIndex={0}>
-        <div className=" bg-pureBlack text-white text-sm px-4 py-2 flex justify-between items-center">
+    <header className="pb-32">
+      <div className="fixed w-full top-0 z-50">
+        <div className="w-full pt-3  bg-pureBlack">
+        <div className="container" aria-label="Nav bar" tabIndex={0}>
+        <div className="  text-white text-sm px-4 py-2 flex justify-between items-center">
           <div className="space-x-4">
             <span tabIndex={0}>WCAG 2.1 AA Compliant</span>
             <span tabIndex={0}>GDPR Compliant</span>
@@ -22,12 +23,15 @@ export default function Header() {
             <Link href="#">Accessibility Statement</Link>
             <Link href="#">Event Calendar</Link>
             <Link href="#">Privacy Policy</Link>
-            <Link href="#">Login</Link>
+            <Link href="/login">Login</Link>
           </div>
         </div>
-        
-        <div className="bg-white flex items-center justify-between px-6 py-4">
-          <Link href="/" aria-label="logo of Humanity & inclusion">
+      </div>
+      </div>
+      <div className="bg-white shadow-lg">
+        <div className="container flex items-center justify-between py-4">
+          <div className="flex items-center gap-5">
+            <Link href="/" aria-label="logo of Humanity & inclusion">
             <Image
               src="/logo.png"
               alt="Humanity & inclusion"
@@ -36,6 +40,11 @@ export default function Header() {
               className="w-auto h-10"
             />
           </Link>
+          <Link href="/" aria-label="Disability Inclusion Hub">
+            <h2 className="font-inter text-lg text-black font-semibold">Disability Inclusion Hub</h2>
+            <p className="font-inter font-medium text-sm text-[#666666]">Humanity & Inclusion | DFAT</p>
+          </Link>
+          </div>
 
           <nav className="flex font-normal divide-x divide-gray-300 text-sm">
             {navLinks.map(({ label, href }) => {
@@ -44,7 +53,7 @@ export default function Header() {
                 <Link
                   key={label}
                   href={href}
-                  className="group relative pb-1 px-6 "
+                  className="group relative pb-1 px-2 "
                 >
                   <div className="px-4">
                     <span
@@ -72,6 +81,7 @@ export default function Header() {
             <FaSearch className="text-gray-500 mr-2" />
           </div> */}
         </div>
+      </div>
       </div>
     </header>
   );

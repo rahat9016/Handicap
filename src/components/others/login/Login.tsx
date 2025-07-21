@@ -8,17 +8,17 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/hooks/useAuth";
+import { useRouter } from "@/i18n/navigation";
 import { LoginFormData, loginSchema } from "@/schemas/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { SubmitHandler, useForm } from "react-hook-form";
 
 
 export default function Login() {
     const router = useRouter();
-
+    
     const {
         register,
         handleSubmit,
@@ -30,7 +30,7 @@ export default function Login() {
 
     const { mutate: login, isPending } = useAuth(() => {
         reset();
-        router.push("/dashboard");
+        router.push("/admin");
     });
 
     const onSubmit: SubmitHandler<LoginFormData> = (data) => {

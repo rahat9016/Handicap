@@ -39,7 +39,7 @@ export default function Sidebar() {
       label: "Organization Manage",
       icon: Settings,
       children: [
-        { label: "Add Organization", href: "/organization/add" },
+        { label: "Add Organization", href: "/admin/organizer/add-organizer" },
         { label: "All Organizations", href: "/organization/all" },
       ],
     },
@@ -99,7 +99,6 @@ export default function Sidebar() {
         >
           {menuItems.map((item) => {
             const isActive = item.href === pathname;
-            console.log(item.href, pathname);
             return (
               <AccordionItem
                 key={item.label}

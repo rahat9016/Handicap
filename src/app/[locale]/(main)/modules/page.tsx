@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { useRouter } from "next/navigation"
-import { Calendar, User, ArrowRight, Plus } from "lucide-react"
+import { Calendar, User, ArrowRight } from "lucide-react"
 import { Module } from "@/types/module"
 import { PageHeader } from "@/components/dashboard/projectProgress/PageHeader"
 import { StatusBadge } from "@/components/dashboard/projectProgress/StatusBadge"
@@ -67,7 +67,7 @@ export default function ModulesListPage() {
   ])
 
   const handleModuleClick = (moduleId: string) => {
-    router.push(`/modules/${moduleId}`)
+    router.push(`/en/modules/${moduleId}`)
   }
 
   return (
@@ -88,13 +88,7 @@ export default function ModulesListPage() {
               {modules.filter((m) => m.status === "in-progress").length} In Progress
             </Badge>
           </div>
-          <Button
-            onClick={() => router.push("/")}
-            className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold px-6 py-3 shadow-lg hover:shadow-xl transition-all duration-200"
-          >
-            <Plus className="w-4 h-4 mr-2" />
-            New Module
-          </Button>
+          
         </div>
 
         {/* Modules Grid */}

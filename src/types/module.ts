@@ -2,10 +2,11 @@ export interface Module {
   id: string;
   name: string;
   description: string;
-  status: "completed" | "in-progress" | "pending" | "blocked";
+  status: "completed" | "in-progress" | "pending" | "blocked" | "" | string;
   createdDate: string;
   lastUpdated: string;
   clientCount?: number;
+
 }
 
 export interface Client {

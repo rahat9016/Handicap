@@ -1,28 +1,26 @@
 "use client";
 
-import { useState, JSX } from "react";
-import { getUsers } from "@/api/users";
 import { getUserInfo } from "@/services/auth.service";
-import { toast } from "react-toastify";
-import { Loader2, Users, CheckCircle, Hourglass } from "lucide-react";
+import { CheckCircle, Hourglass, Users } from "lucide-react";
+import { JSX } from "react";
 
 export default function Dashboard() {
     const { email } = (getUserInfo() as { email?: string }) || {};
-    const [loading, setLoading] = useState(false);
+    // const [loading, setLoading] = useState(false);
 
-    const fetchUsers = async () => {
-        setLoading(true);
-        try {
-            const users = await getUsers();
-            toast.success("Users fetched successfully!");
-            console.log(users);
-        } catch (error) {
-            toast.error("Failed to fetch users!");
-            console.error(error);
-        } finally {
-            setLoading(false);
-        }
-    };
+    // const fetchUsers = async () => {
+    //     setLoading(true);
+    //     try {
+    //         const users = await getUsers();
+    //         toast.success("Users fetched successfully!");
+    //         console.log(users);
+    //     } catch (error) {
+    //         toast.error("Failed to fetch users!");
+    //         console.error(error);
+    //     } finally {
+    //         setLoading(false);
+    //     }
+    // };
 
     return (
         <div className="min-h-screen bg-gray-100 p-6">
@@ -57,9 +55,9 @@ export default function Dashboard() {
 
                 {/* Fetch Users Button */}
                 <div className="mt-8 flex justify-center">
-                    <button
+                    {/* <button
                         className="px-6 py-3 bg-blue-600 text-white font-medium rounded-lg shadow-md hover:bg-blue-700 transition flex items-center justify-center"
-                        onClick={fetchUsers}
+                        // onClick={fetchUsers}
                         disabled={loading}
                     >
                         {loading ? (
@@ -70,7 +68,7 @@ export default function Dashboard() {
                         ) : (
                             "Fetch Users"
                         )}
-                    </button>
+                    </button> */}
                 </div>
             </div>
         </div>

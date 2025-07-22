@@ -4,20 +4,23 @@ import { useEffect, useState } from 'react';
 import { Controller, ControllerRenderProps, useFormContext } from 'react-hook-form';
 import { Button } from '../ui/button';
 const ImageFileInput = ({ name }: { name: string }) => {
-  const { control, getValues, setValue } = useFormContext();
+  const { control, getValues, setValue, watch } = useFormContext();
   const initialValue = getValues(name);
+  const fileValue = watch(name);
   const [preview, setPreview] = useState<string | null>(
     initialValue instanceof File ? URL.createObjectURL(initialValue) : initialValue || null,
   );
 
   useEffect(() => {
-    if (initialValue instanceof File) {
-      const fileUrl = URL.createObjectURL(initialValue);
+    if (fileValue instanceof File) {
+      const fileUrl = URL.createObjectURL(fileValue);
       setPreview(fileUrl);
-    } else if (typeof initialValue === 'string') {
-      setPreview(initialValue);
+    } else if (typeof fileValue === 'string') {
+      setPreview(fileValue);
+    } else {
+      setPreview(null);
     }
-  }, [initialValue]);
+  }, [fileValue]);
 
   const handleFileChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -45,37 +48,35 @@ const ImageFileInput = ({ name }: { name: string }) => {
       defaultValue={null}
       render={({ field, fieldState }) => {
         return (
-          <div>
-            <div className="w-[126px] h-[150px] border-[1px] border-dashed lg:bg-AntiFlashWhite  border-grayDark lg:border-gray rounded-lg cursor-pointer block mx-auto lg:w-full lg:h-[64px]">
+          <div className=''>
+            <div className="w-[244px] h-[132px] border-[1px] border-dashed hover:border-dashboard-primary bg-[#F5F5F5] border-[#B0B0B0] rounded-lg cursor-pointer block">
               {preview ? (
                 <div className="w-full h-full relative group">
                   <Button
                     onClick={() => handleDelete(field)}
                     onKeyDown={(e) => e.key === 'Enter' && handleDelete(field)}
-                    className="absolute  w-6 h-6 flex items-center justify-center bg-[#0D0D0D] rounded-full p-1 -right-2 -top-2"
+                    className="absolute  w-6 h-6 flex items-center justify-center bg-dashboard-primary hover:bg-dashboard-primary rounded-full p-1 -right-2 -top-2"
                     aria-label="Delete image"
                     type="button"
                   >
-                    <X className="w-4 h-4" />
+                    <X className="w-4 h-4 text-white" />
                   </Button>
                   <Image
                     width={126}
                     height={150}
                     src={preview}
                     alt="File Preview"
-                    className="w-full h-full bg-contain object-cover rounded-lg"
+                    className="w-full h-full bg-contain object-fill rounded-lg"
                   />
                 </div>
               ) : (
                 <label
                   htmlFor="file"
-                  className="flex flex-col items-center justify-center h-full lg:flex-row lg:gap-2"
+                  className="flex flex-col items-center justify-center h-full lg:gap-2 cursor-pointer"
                 >
-                  <span className="text-grayDark lg:text-[#A6A6A6] text-3xl font-poppins font-extralight">
-                    +
-                  </span>
+                  <Image width={36} height={36} src="/images/dashboard/gallery-add.svg" alt='gallery'  />
                   <span className="text-grayDark lg:text-[#A6A6A6] text-xs font-poppins font-normal">
-                    Upload Picture
+                    Upload your photo
                   </span>
 
                   <input

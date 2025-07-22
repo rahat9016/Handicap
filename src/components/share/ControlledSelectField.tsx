@@ -39,8 +39,7 @@ const ControlledSelectField: React.FC<ControlledSelectFieldProps> = ({
           <>
             <Select
               onValueChange={field.onChange}
-              value={field.value}
-              defaultValue={field.value}
+              value={field.value ?? ""}
             >
               <SelectTrigger
                 className={cn(

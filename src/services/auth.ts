@@ -13,7 +13,7 @@ export const authService = {
 
 
 export const postService = {
-    request: async (endpoint: string, data: Record<string, unknown>) => {
+    request: async (endpoint: string, data: FormData | Record<string, unknown>) => {
         console.log(`Requesting ${endpoint} with data:`, data);
         const response = await axiosInstance.post(endpoint, data);
         console.log("Response:", response);

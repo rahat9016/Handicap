@@ -1,9 +1,9 @@
-import axios from "axios";
-import { getFromLocalStorage, setToLocalStorage } from "@/utils/local-storage";
-import { getNewAccessToken, logout } from "@/services/auth.service";
-import { authKey } from "@/constants/auth/storageKey";
-import { IGenericErrorResponse, ResponseSuccessType } from "@/types";
 import { getBaseUrl } from "@/config/envConfig";
+import { authKey } from "@/constants/auth/storageKey";
+import { getNewAccessToken, logout } from "@/services/auth.service";
+import { IGenericErrorResponse, ResponseSuccessType } from "@/types";
+import { getFromLocalStorage, setToLocalStorage } from "@/utils/local-storage";
+import axios from "axios";
 import { toast } from "react-toastify";
 
 const instance = axios.create({
@@ -12,12 +12,19 @@ const instance = axios.create({
 });
 
 instance.defaults.headers.post["Content-Type"] = "application/json";
-instance.defaults.headers["Accept"] = "application/json";
+// instance.defaults.headers["Accept"] = "application/json";
 instance.defaults.timeout = 60000;
 
 // Request interceptor
 instance.interceptors.request.use(
   function (config) {
+    if (!(config.data instanceof FormData)) {
+      config.headers["Content-Type"] = "application/json";
+    } else {
+      // Let the browser set the correct multipart boundary
+      config.headers["Content-Type"] = "multipart/form-data";
+    }
+
     // Skip adding Authorization header for login endpoint
     if (!config.url?.includes("/auth/login")) {
       const accessToken = getFromLocalStorage(authKey);

@@ -32,6 +32,7 @@ export interface Message {
 export interface StatusOption {
   value: string;
   label: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   icon: any;
   color: string;
   textColor: string;

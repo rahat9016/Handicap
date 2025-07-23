@@ -1,38 +1,74 @@
 "use client"
 
-import { useState } from "react"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Label } from "@/components/ui/label"
 import { ScrollArea } from "@/components/ui/scroll-area"
+import { Textarea } from "@/components/ui/textarea"
+import { useState } from "react"
 
-import { useRouter } from "next/navigation"
-import { ArrowLeft, Mail, Phone, Star, MessageCircle, Send, Plus } from "lucide-react"
-import { Message, Module } from "@/types/module"
 import { PageHeader } from "@/components/dashboard/projectProgress/PageHeader"
 import { StatusBadge } from "@/components/dashboard/projectProgress/StatusBadge"
+import { useGet } from "@/hooks/useGet"
+import { usePost } from "@/hooks/usePost"
+import Cookies from "js-cookie"
+import { ArrowLeft, Mail, MessageCircle, Phone, Plus, Send } from "lucide-react"
+import { useParams, useRouter } from "next/navigation"
 
-
-interface ModuleDetailsPageProps {
-  params: {
-    id: string
-  }
+interface IProjectModule {
+  id: string;
+  name: string;
+  description: string;
+  createdAt: string;
+  updatedAt: string;
+  status: string;
+}
+interface IUserInfo {
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  roleName: string;
+  createdAt: string;
+  updatedAt: string;
+  status: string;
+}
+export interface IMessage {
+  id: number;
+  content: string;
+  isFromAdmin: boolean;
+  createdAt: string;
+  moduleId: number;
 }
 
-export default function ModuleDetailsPage({ params }: ModuleDetailsPageProps) {
+
+export default function ModuleDetailsPage() {
   const router = useRouter()
-  const [moduleData] = useState<Module>({
-    id: params.id,
-    name: "User Authentication System",
-    description:
-      "Complete user authentication module with login, registration, password reset, and multi-factor authentication. Includes social login integration and role-based access control with advanced security features.",
-    status: "in-progress",
-    createdDate: "2024-01-15",
-    lastUpdated: "2024-01-20",
-  })
+  const params = useParams()
+  const userId = Cookies.get("userId")
+  const { mutateAsync } = usePost(
+      `/modules/${params.id}/messages`,
+      (data) => {
+        console.log("POST success", data);
+      },
+      [["organizations"]]
+    );
+  const { data: userData } = useGet<IUserInfo>(
+      `/user/${userId}`,
+      ["user"],
+      );
+  const { data } = useGet<IProjectModule>(
+      `/project-modules/${params.id}`,
+      ["project-modules"],
+      );
+  const { data:message, refetch } = useGet<IMessage[]>(
+      `/modules/${params.id}/messages`,
+      ["messages"],
+      );
+  console.log(message)
 
   // Single client data
   const [clientData] = useState({
@@ -45,62 +81,11 @@ export default function ModuleDetailsPage({ params }: ModuleDetailsPageProps) {
     lastUpdated: "2024-01-20",
   })
 
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: "1",
-      clientId: "1",
-      clientName: "Sarah Johnson",
-      senderType: "client",
-      message:
-        "The authentication flow is incredibly smooth and user-friendly. I'm particularly impressed with the social login integration. However, I'd like to see more customization options for the login page design to match our brand better.",
-      timestamp: "2024-01-18T10:30:00Z",
-    },
-    {
-      id: "2",
-      clientId: "1",
-      clientName: "Admin",
-      senderType: "admin",
-      message:
-        "Thank you for the feedback, Sarah! I'm glad you're happy with the social login integration. Regarding the customization options, we can definitely add more branding features. I'll schedule a call with you this week to discuss your specific requirements.",
-      timestamp: "2024-01-18T14:20:00Z",
-    },
-    {
-      id: "3",
-      clientId: "1",
-      clientName: "Sarah Johnson",
-      senderType: "client",
-      message:
-        "That sounds perfect! I'm also wondering about the mobile responsiveness. How does the authentication system work on mobile devices? Our users are primarily mobile-first.",
-      timestamp: "2024-01-19T09:15:00Z",
-    },
-    {
-      id: "4",
-      clientId: "1",
-      clientName: "Admin",
-      senderType: "admin",
-      message:
-        "Great question! The system is fully responsive and optimized for mobile devices. We've tested it across iOS and Android platforms. I can send you some screenshots of the mobile interface if you'd like to review them.",
-      timestamp: "2024-01-19T11:30:00Z",
-    },
-  ])
+
 
   const [newMessage, setNewMessage] = useState("")
   const [messageType, setMessageType] = useState<"client" | "admin">("client")
   const [showNewMessageForm, setShowNewMessageForm] = useState(false)
-
-  const getRatingStars = (rating: number) => {
-    return Array.from({ length: 5 }, (_, i) => (
-      <Star key={i} className={`w-4 h-4 ${i < rating ? "text-yellow-400 fill-current" : "text-gray-300"}`} />
-    ))
-  }
-
-  const getInitials = (name: string) => {
-    return name
-      .split(" ")
-      .map((n) => n[0])
-      .join("")
-      .toUpperCase()
-  }
 
   const formatTimestamp = (timestamp: string) => {
     const date = new Date(timestamp)
@@ -116,23 +101,19 @@ export default function ModuleDetailsPage({ params }: ModuleDetailsPageProps) {
 
   const handleSendMessage = () => {
     if (!newMessage.trim()) return
-
-    const message: Message = {
-      id: Date.now().toString(),
-      clientId: clientData.id,
-      clientName: messageType === "client" ? clientData.name : "Admin",
-      senderType: messageType,
-      message: newMessage.trim(),
-      timestamp: new Date().toISOString(),
-    }
-
-    setMessages([...messages, message])
-    setNewMessage("")
-    setShowNewMessageForm(false)
+    const isAdmin = Boolean(Cookies.get("isAdmin"))
+    mutateAsync({
+      content: newMessage,
+      isFromAdmin: isAdmin,
+    }).then((response) => {
+      console.log("Message sent successfully:", response)
+      setNewMessage("")
+      refetch()
+    })
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-20">
       <div className="max-w-6xl mx-auto">
         {/* Back Button */}
         <div className="mb-6">
@@ -149,10 +130,10 @@ export default function ModuleDetailsPage({ params }: ModuleDetailsPageProps) {
         <PageHeader title="Module Details" description="Client communication and feedback management" />
 
         {/* Module Information Card */}
-        <Card className="shadow-xl border-0 bg-white/90 backdrop-blur-sm mb-8">
+        <Card className="shadow-xl border bg-white/90 backdrop-blur-sm mb-8">
           <CardHeader className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-t-lg">
-            <CardTitle className="text-2xl">{moduleData.name}</CardTitle>
-            <CardDescription className="text-blue-100">Module overview and current status</CardDescription>
+            <CardTitle className="text-2xl text-black">{data?.data?.name}</CardTitle>
+            <CardDescription className="text-black">Module overview and current status</CardDescription>
           </CardHeader>
 
           <CardContent className="p-8">
@@ -160,13 +141,13 @@ export default function ModuleDetailsPage({ params }: ModuleDetailsPageProps) {
               <div className="space-y-6">
                 <div>
                   <Label className="text-sm font-semibold text-gray-600 uppercase tracking-wide">Description</Label>
-                  <p className="text-gray-800 mt-2 leading-relaxed text-lg">{moduleData.description}</p>
+                  <p className="text-black mt-2 leading-relaxed text-lg">{data?.data?.description}</p>
                 </div>
 
                 <div>
                   <Label className="text-sm font-semibold text-gray-600 uppercase tracking-wide">Status</Label>
                   <div className="mt-2">
-                    <StatusBadge status={moduleData.status} />
+                    {data?.data && <StatusBadge status={data?.data?.status} />}
                   </div>
                 </div>
               </div>
@@ -175,29 +156,27 @@ export default function ModuleDetailsPage({ params }: ModuleDetailsPageProps) {
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <Label className="text-sm font-semibold text-gray-600 uppercase tracking-wide">Created</Label>
-                    <p className="text-gray-800 mt-1 text-lg">
-                      {new Date(moduleData.createdDate).toLocaleDateString()}
-                    </p>
+                    {data?.data?.createdAt && (
+  <p className="text-black mt-1 text-lg">
+    {new Date(data.data.createdAt).toLocaleDateString()}
+  </p>
+)}
                   </div>
                   <div>
                     <Label className="text-sm font-semibold text-gray-600 uppercase tracking-wide">Updated</Label>
-                    <p className="text-gray-800 mt-1 text-lg">
-                      {new Date(moduleData.lastUpdated).toLocaleDateString()}
-                    </p>
+                    {data?.data?.updatedAt && (
+  <p className="text-black mt-1 text-lg">
+    {new Date(data.data.updatedAt).toLocaleDateString()}
+  </p>
+)}
+              
                   </div>
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <Label className="text-sm font-semibold text-gray-600 uppercase tracking-wide">Messages</Label>
-                    <p className="text-3xl font-bold text-blue-600 mt-1">{messages.length}</p>
-                  </div>
-                  <div>
-                    <Label className="text-sm font-semibold text-gray-600 uppercase tracking-wide">Client Rating</Label>
-                    <div className="flex items-center gap-2 mt-1">
-                      <span className="text-3xl font-bold text-yellow-500">{clientData.rating}</span>
-                      <div className="flex">{getRatingStars(clientData.rating)}</div>
-                    </div>
+                    <p className="text-3xl font-bold text-blue-600 mt-1">{message?.data.length}</p>
                   </div>
                 </div>
               </div>
@@ -215,9 +194,9 @@ export default function ModuleDetailsPage({ params }: ModuleDetailsPageProps) {
           <CardContent className="p-6">
             <div className="flex items-center gap-6">
               <Avatar className="w-16 h-16">
-                <AvatarImage src="/placeholder.svg" alt={clientData.name} />
-                <AvatarFallback className="bg-blue-500 text-white font-semibold text-xl">
-                  {getInitials(clientData.name)}
+                <AvatarImage src="/placeholder.svg" alt='user' />
+                <AvatarFallback className="bg-blue text-white font-semibold text-xl">
+                  {userData?.data?.firstName?.charAt(0)}
                 </AvatarFallback>
               </Avatar>
 
@@ -226,25 +205,16 @@ export default function ModuleDetailsPage({ params }: ModuleDetailsPageProps) {
                 <div className="grid md:grid-cols-2 gap-4 text-gray-600">
                   <div className="flex items-center gap-2">
                     <Mail className="w-4 h-4" />
-                    {clientData.email}
+                    {userData?.data?.email}
                   </div>
                   <div className="flex items-center gap-2">
                     <Phone className="w-4 h-4" />
-                    {clientData.phone}
+                    {userData?.data?.phone}
                   </div>
                 </div>
-                <p className="text-gray-600 mt-2 font-medium">{clientData.company}</p>
+                
               </div>
 
-              <div className="text-right">
-                <div className="flex items-center gap-1 mb-2">
-                  {getRatingStars(clientData.rating)}
-                  <span className="text-sm text-gray-600 ml-2 font-semibold">({clientData.rating}/5)</span>
-                </div>
-                <p className="text-xs text-gray-500">
-                  Last active: {new Date(clientData.lastUpdated).toLocaleDateString()}
-                </p>
-              </div>
             </div>
           </CardContent>
         </Card>
@@ -352,55 +322,61 @@ export default function ModuleDetailsPage({ params }: ModuleDetailsPageProps) {
               <CardHeader className="pb-4">
                 <CardTitle className="text-lg text-gray-800 flex items-center gap-2">
                   <MessageCircle className="w-5 h-5" />
-                  Conversation History ({messages.length} messages)
+                  Conversation History ({message?.data?.length} messages)
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <ScrollArea className="h-96 w-full p-4 bg-gray-50 rounded-lg">
                   <div className="space-y-4">
-                    {messages.length === 0 ? (
+                    {message?.data?.length === 0 ? (
                       <p className="text-gray-500 text-center py-8">No messages yet. Start the conversation!</p>
                     ) : (
-                      messages.map((message) => (
+                      message?.data?.map((message) => (
                         <div
                           key={message.id}
-                          className={`flex gap-3 ${message.senderType === "admin" ? "justify-end" : "justify-start"}`}
+                          className={`flex gap-3 ${message?.isFromAdmin ? "justify-end" : "justify-start"}`}
                         >
-                          {message.senderType === "client" && (
-                            <Avatar className="w-10 h-10">
-                              <AvatarFallback className="bg-blue-500 text-white text-sm">
-                                {getInitials(clientData.name)}
-                              </AvatarFallback>
+                          {/* Message Bubble */
+                          message?.isFromAdmin ? (
+                            <Avatar className="w-14 h-14 p-1">
+                              <AvatarImage src="/placeholder.svg" alt='user' />
+                              <AvatarFallback className="bg-slate-600 text-white text-sm">Admin</AvatarFallback>
+                            </Avatar>
+                          ) : (
+                            <Avatar className="w-14 h-14 p-1  ">
+                              <AvatarImage src="/placeholder.svg" alt='user' />
+                              <AvatarFallback className="bg-blue text-white text-sm">Client</AvatarFallback>
                             </Avatar>
                           )}
 
                           <div
                             className={`max-w-md px-4 py-3 rounded-lg ${
-                              message.senderType === "admin"
+                              message.isFromAdmin 
                                 ? "bg-slate-600 text-white"
                                 : "bg-white border-2 border-blue-200 shadow-sm"
                             }`}
                           >
                             <div className="flex items-center gap-2 mb-2">
                               <span className="text-xs font-semibold">
-                                {message.senderType === "admin" ? "Admin" : clientData.name}
+                                {message.isFromAdmin ? "Admin" : 'Client'}
                               </span>
                               <span
                                 className={`text-xs ${
-                                  message.senderType === "admin" ? "text-slate-200" : "text-gray-500"
+                                  message.isFromAdmin  ? "text-slate-200" : "text-gray-500"
                                 }`}
                               >
-                                {formatTimestamp(message.timestamp)}
+                                {formatTimestamp(message.createdAt)}
+                                
                               </span>
                             </div>
-                            <p className="text-sm leading-relaxed">{message.message}</p>
+                            <p className="text-sm leading-relaxed">{message.content}</p>
                           </div>
 
-                          {message.senderType === "admin" && (
+                          {/* {message.senderType === "admin" && (
                             <Avatar className="w-10 h-10">
                               <AvatarFallback className="bg-slate-600 text-white text-sm">AD</AvatarFallback>
                             </Avatar>
-                          )}
+                          )} */}
                         </div>
                       ))
                     )}

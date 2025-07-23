@@ -2,7 +2,7 @@ import { getBaseUrl } from "@/config/envConfig";
 import { authKey } from "@/constants/auth/storageKey";
 import { getNewAccessToken, logout } from "@/services/auth.service";
 import { IGenericErrorResponse, ResponseSuccessType } from "@/types";
-import { getFromLocalStorage, setToLocalStorage } from "@/utils/local-storage";
+import { getCookies, setToLocalStorage } from "@/utils/local-storage";
 import axios from "axios";
 import { toast } from "react-toastify";
 
@@ -27,7 +27,7 @@ instance.interceptors.request.use(
 
     // Skip adding Authorization header for login endpoint
     if (!config.url?.includes("/auth/login")) {
-      const accessToken = getFromLocalStorage(authKey);
+      const accessToken = getCookies(authKey);
       if (accessToken) {
         config.headers.Authorization = `Bearer ${accessToken}`;
       }

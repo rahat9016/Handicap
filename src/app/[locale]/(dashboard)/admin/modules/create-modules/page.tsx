@@ -10,11 +10,20 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
+import { usePost } from "@/hooks/usePost"
 import { Module } from "@/types/module"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
+import { toast } from "react-toastify"
 export default function ModuleFormPage() {
   const router = useRouter()
+  const { mutateAsync } = usePost(
+      "/project-modules",
+      (data) => {
+        console.log("POST success", data);
+      },
+      [["project-modules"]]
+    );
   const [formData, setFormData] = useState<Partial<Module>>({
     name: "",
     description: "",
@@ -23,11 +32,14 @@ export default function ModuleFormPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    
-    console.log("Form submitted:", formData)
-    // Handle form submission here
-    // After successful submission, redirect to modules list
-    router.push("/modules")
+    if (!formData.status) {
+      toast.error("Please fill in the status field")
+      return
+    }
+    mutateAsync(formData).then(() => {
+      setFormData({ name: "", description: "", status: "" })
+      toast.success("Module created successfully")
+    })
   }
 
   return (
@@ -37,8 +49,8 @@ export default function ModuleFormPage() {
 
         <Card className="shadow-xl border-0 bg-white/80 backdrop-blur-sm">
           <CardHeader className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-t-lg">
-            <CardTitle className="text-2xl">Module Information</CardTitle>
-            <CardDescription className="text-blue-100">Enter the basic details for your new module</CardDescription>
+            <CardTitle className="text-2xl text-black">Module Information</CardTitle>
+            <CardDescription className="text-black">Enter the basic details for your new module</CardDescription>
           </CardHeader>
 
           <CardContent className="p-8">
@@ -81,6 +93,7 @@ export default function ModuleFormPage() {
                 <Select
                   value={formData.status || ""}
                   onValueChange={(value) => setFormData({ ...formData, status: value })}
+                  required
                 >
                   <SelectTrigger className="text-lg p-3 border-2 focus:border-blue-500">
                     <SelectValue placeholder="Select current status" />

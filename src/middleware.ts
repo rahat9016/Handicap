@@ -52,10 +52,32 @@
 // };
 
 import createMiddleware from 'next-intl/middleware';
+import { NextRequest, NextResponse } from 'next/server';
 import { routing } from './i18n/routing';
 
-export default createMiddleware(routing);
- 
+const intlMiddleware = createMiddleware(routing);
+
+export function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl;
+  const locale = pathname.split("/")[1]; // 'en' or 'bn'
+
+  // Regex matchers
+  const isModuleDetail = /^\/(en|bn)\/modules\/[^/]+$/.test(pathname);
+  const isAdminRoute = /^\/(en|bn)\/admin(\/.*)?$/.test(pathname);
+
+  const isProtected = isModuleDetail || isAdminRoute;
+
+  if (isProtected) {
+    const token = request.cookies.get("accessToken")?.value;
+
+    if (!token) {
+      const loginUrl = new URL(`/${locale}/login`, request.url);
+      return NextResponse.redirect(loginUrl);
+    }
+  }
+
+  return intlMiddleware(request);
+}
 export const config = {
   matcher: ['/', "/(en|bn)/:path*"]
 };

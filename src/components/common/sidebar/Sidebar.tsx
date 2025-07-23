@@ -7,6 +7,7 @@ import {
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { Link } from "@/i18n/navigation";
+import { logout } from "@/services/auth.service";
 import {
   BarChart3,
   Folder,
@@ -77,7 +78,15 @@ export default function Sidebar() {
       icon: Settings,
       href: "/settings",
     },
+    {
+      label: "Modules Management",
+      icon: ShieldCheck,
+      children: [
+        { label: "Add Module", href: "/admin/modules/create-modules" },
+      ],
+    },
   ];
+
   const pathname = usePathname();
   return (
     <aside className="w-[300px] bg-white h-[90vh] border-r border-skeleton flex flex-col px-[22px] fixed top-0 overflow-y-auto py-6">
@@ -141,7 +150,7 @@ export default function Sidebar() {
             );
           })}
         </Accordion>
-        <Button className="w-full bg-[#F0F0F0] hover:bg-[#FDECEC] text-[#A8A8A8] hover:text-[#EB5757]  flex items-center justify-start gap-2 h-12 !px-4">
+        <Button onClick={() => logout()} className="w-full bg-[#F0F0F0] hover:bg-[#FDECEC] text-[#A8A8A8] hover:text-[#EB5757]  flex items-center justify-start gap-2 h-12 !px-4">
           <LogOut className="h-6 w-6" size={24} /> Logout
         </Button>
       </nav>

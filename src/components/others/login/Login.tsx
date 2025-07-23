@@ -8,11 +8,10 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/hooks/useAuth";
-import { useRouter } from "@/i18n/navigation";
+import { Link, useRouter } from "@/i18n/navigation";
 import { LoginFormData, loginSchema } from "@/schemas/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
-import Link from "next/link";
 import { SubmitHandler, useForm } from "react-hook-form";
 
 
@@ -30,42 +29,12 @@ export default function Login() {
 
     const { mutate: login, isPending } = useAuth(() => {
         reset();
-        router.push("/admin");
+        router.push("/");
     });
 
     const onSubmit: SubmitHandler<LoginFormData> = (data) => {
         login(data);
     };
-
-    // const onSubmit = (data: LoginFormData) => {
-    //     alert(JSON.stringify(data));
-
-    //     fetch(
-    //         `http://localhost:3332/nest-b-auth/api/v1/auth/login`,
-    //         {
-    //             method: "POST",
-    //             headers: {
-    //                 "content-type": "application/json",
-    //             },
-    //             body: JSON.stringify(data),
-    //         }
-    //     )
-    //         .then((res) => {
-    //             console.log("res", res);
-
-    //             return res.json();
-    //         })
-    //         .then((data) => {
-    //             console.log("data", data);
-    //             if (data.success === true) {
-
-    //                 reset();
-
-    //             } else {
-
-    //             }
-    //         })
-    // };
 
     return (
         <div>
@@ -106,7 +75,7 @@ export default function Login() {
                                     Password
                                 </Label>
                                 <div className="text-sm">
-                                    <Link href="/forgot-password" className="font-medium text-primary hover:text-accent/90">
+                                    <Link href="#" className="font-medium text-primary hover:text-accent/90">
                                         Forgot password?
                                     </Link>
                                 </div>
@@ -160,7 +129,7 @@ export default function Login() {
                     <p className="mt-10 text-center text-sm text-muted-foreground">
                         Don’t have an account?
                         and{" "}
-                        <Link href="/privacy" className="font-medium text-accent hover:text-accent/90">
+                        <Link href="/register" className="font-medium text-black">
                             Sign Up Now
                         </Link>
                     </p>

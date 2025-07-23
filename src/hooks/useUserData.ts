@@ -1,12 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
-import { getUserAdmin, getUsers, } from "../api/api";
+import { getUserAdmin, } from "../api/api";
 
-export const useUserData = () => {
-    return useQuery({
-        queryKey: ["allUserData"],
-        queryFn: () => getUsers(),
-    });
-};
+// export const useUserData = () => {
+//     return useQuery({
+//         queryKey: ["allUserData"],
+//         queryFn: () => ,
+//     });
+// };
 
 export const useUserAdminData = () => {
     return useQuery({

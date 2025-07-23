@@ -1,11 +1,11 @@
+import { refreshDelete } from "@/actions/cookiesAction";
+import { getBaseUrl } from "@/config/envConfig";
 import { authKey } from "@/constants/auth/storageKey";
 import { axiosInstance } from "@/helpers/axios/axiosInstance";
 import { getFromLocalStorage, setToLocalStorage } from "@/utils/local-storage";
-import { decodedToken } from "./jwt";
-import { getBaseUrl } from "@/config/envConfig";
-import { refreshDelete } from "@/actions/cookiesAction";
+import Cookies from "js-cookie";
 import { redirect } from "next/navigation";
-
+import { decodedToken } from "./jwt";
 export const storeUserInfo = ({ accessToken }: { accessToken: string }) => {
   return setToLocalStorage(authKey, accessToken as string);
 };
@@ -36,7 +36,9 @@ export async function logout() {
 
   // Remove user-specific information from localStorage
   removeUserInfo("accessToken"); // Replace "userInfo" with the actual key you use
-
+  Cookies.remove("accessToken");
+  Cookies.remove("refreshToken");
+  Cookies.remove("isAdmin");
   // Redirect to the home page
   redirect("/");
 }

@@ -1,23 +1,23 @@
 "use client";
 
+import HeroSection from "@/components/share/HeroSection";
+import Paragraph from "@/components/share/Paragraph";
+import Title from "@/components/share/Title";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/hooks/useAuth";
+import { Link, useRouter } from "@/i18n/navigation";
 import { LoginFormData, loginSchema } from "@/schemas/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ArrowLeft, Github, Twitter } from "lucide-react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-// import { useRouter } from "next/navigation";
-// import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { SubmitHandler, useForm } from "react-hook-form";
 
 
 export default function Login() {
     const router = useRouter();
-
+    
     const {
         register,
         handleSubmit,
@@ -29,82 +29,38 @@ export default function Login() {
 
     const { mutate: login, isPending } = useAuth(() => {
         reset();
-        router.push("/dashboard");
+        router.push("/");
     });
 
     const onSubmit: SubmitHandler<LoginFormData> = (data) => {
         login(data);
     };
 
-    // const onSubmit = (data: LoginFormData) => {
-    //     alert(JSON.stringify(data));
-
-    //     fetch(
-    //         `http://localhost:3332/nest-b-auth/api/v1/auth/login`,
-    //         {
-    //             method: "POST",
-    //             headers: {
-    //                 "content-type": "application/json",
-    //             },
-    //             body: JSON.stringify(data),
-    //         }
-    //     )
-    //         .then((res) => {
-    //             console.log("res", res);
-
-    //             return res.json();
-    //         })
-    //         .then((data) => {
-    //             console.log("data", data);
-    //             if (data.success === true) {
-
-    //                 reset();
-
-    //             } else {
-
-    //             }
-    //         })
-    // };
-
     return (
-        <div className="flex min-h-screen flex-col">
-            <div className="flex min-h-screen flex-1 flex-col justify-center px-6 py-12 lg:px-8">
-                <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-                    <Link
-                        href="/"
-                        className="inline-flex items-center text-sm font-medium text-muted-foreground mb-8 hover:text-accent transition-colors"
-                    >
-                        <ArrowLeft className="mr-2 h-4 w-4" />
-                        Back to home
-                    </Link>
-                    <div className="flex justify-center">
-                        <div className="h-12 w-12 rounded-full bg-primary flex items-center justify-center">
-                            <span className="text-accent-foreground text-xl font-bold">P</span>
-                        </div>
-                    </div>
-                    <h2 className="mt-6 text-center text-2xl font-bold leading-9 tracking-tight">Sign in to your account</h2>
-                    <p className="mt-2 text-center text-sm text-muted-foreground">
-                        Or{" "}
-                        <Link href="/register" className="font-medium text-primary hover:text-accent/90">
-                            create a new account
-                        </Link>
-                    </p>
+        <div>
+            <HeroSection />
+            <div style={{ backgroundImage: `url('/images/common/loginBg.png')` }} className="flex flex-col bg-contain bg-top bg-no-repeat py-20 px-4">
+            <div className="w-full lg:w-4/12 mx-auto px-6 py-7 lg:px-8 bg-white shadow-xl rounded-md">
+                <div className="flex flex-col items-center">
+                    <Image width={97} height={43} src="/logo.png" alt="logo" />
+                    <Title>Login To Your Account</Title>
+                    <Paragraph>We’re glad to see you again</Paragraph>
                 </div>
 
-                <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-                    <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
-                        <div>
+                <div>
+                    <form onSubmit={handleSubmit(onSubmit)}>
+                        <div className="mb-6">
                             <Label htmlFor="email" className="block text-sm font-medium leading-6">
                                 Email address
                             </Label>
-                            <div className="mt-2">
+                            <div className="mt-3">
                                 <Input
                                     id="email"
                                     type="email"
                                     autoComplete="email"
                                     required
                                     className="block w-full rounded-[--radius] border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                                    placeholder="name@example.com"
+                                    placeholder="Enter your valid email address here"
                                     {...register("email")}
                                 />
                                 {errors.email && (
@@ -119,16 +75,17 @@ export default function Login() {
                                     Password
                                 </Label>
                                 <div className="text-sm">
-                                    <Link href="/forgot-password" className="font-medium text-primary hover:text-accent/90">
+                                    <Link href="#" className="font-medium text-primary hover:text-accent/90">
                                         Forgot password?
                                     </Link>
                                 </div>
                             </div>
-                            <div className="mt-2">
+                            <div className="mt-3">
                                 <Input
                                     id="password"
                                     type="password"
                                     autoComplete="current-password"
+                                    placeholder="Enter your password here"
                                     required
                                     className="block w-full rounded-[--radius] border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                                     {...register("password")}
@@ -139,7 +96,7 @@ export default function Login() {
                             </div>
                         </div>
 
-                        <div className="flex items-center space-x-2">
+                        <div className="flex items-center space-x-2 my-6">
                             <Checkbox id="remember" />
                             <Label
                                 htmlFor="remember"
@@ -154,48 +111,31 @@ export default function Login() {
                                 type="submit"
                                 className="w-full rounded-[--radius] bg-accent text-accent-foreground hover:bg-accent/90"
                             >
-
-                                {/* Sign in */}
                                 {isPending ? "Loading..." : "Sign in"}
                             </Button>
                         </div>
                     </form>
 
                     <div className="mt-6">
-                        <div className="relative">
-                            <div className="absolute inset-0 flex items-center">
-                                <div className="w-full border-t border-border"></div>
-                            </div>
-                            <div className="relative flex justify-center text-sm">
-                                <span className="bg-background px-2 text-muted-foreground">Or continue with</span>
-                            </div>
-                        </div>
+                       
 
-                        <div className="mt-6 grid grid-cols-2 gap-4">
+                        <div className="mt-6  gap-4">
                             <Button variant="outline" className="w-full">
-                                <Github className="mr-2 h-4 w-4" />
-                                GitHub
-                            </Button>
-                            <Button variant="outline" className="w-full">
-                                <Twitter className="mr-2 h-4 w-4" />
-                                Twitter
+                                 Continue with Google
                             </Button>
                         </div>
                     </div>
 
                     <p className="mt-10 text-center text-sm text-muted-foreground">
-                        By signing in, you agree to our{" "}
-                        <Link href="/terms" className="font-medium text-accent hover:text-accent/90">
-                            Terms of Service
-                        </Link>{" "}
+                        Don’t have an account?
                         and{" "}
-                        <Link href="/privacy" className="font-medium text-accent hover:text-accent/90">
-                            Privacy Policy
+                        <Link href="/register" className="font-medium text-black">
+                            Sign Up Now
                         </Link>
-                        .
                     </p>
                 </div>
             </div>
+        </div>
         </div>
     )
 }

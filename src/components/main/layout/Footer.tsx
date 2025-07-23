@@ -144,15 +144,6 @@ export default function Footer() {
       </div>
       <div className="container text-xs text-[#B3B3B3] flex justify-end pb-3">
         <p className="flex items-center gap-3">
-          Designed by{" "}
-          <span className="text-white">
-            <Image
-              width={46}
-              height={24}
-              src="/images/common/CMLogo.png"
-              alt="ATI_Logo"
-            />
-          </span>{" "}
           <span className="px-4">|</span> Developed by{" "}
           <span className="text-white" tabIndex={0} aria-label="Developed By A T I Limited">
             <Image

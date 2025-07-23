@@ -33,7 +33,7 @@ export default function EssentialFeatures() {
   return (
     <div>
       <div className="container">
-        <div className="py-10 lg:py-20">
+        <div className="py-10 lg:py-20 lg:pt  -[120px]">
           <SectionTopTitle
             title="Essential Features"
             desc="The Disability Inclusion Resource Hub offers a range of essential features designed to enhance user experience and promote inclusive access. These include multilingual content, downloadable tools, accessible formats."

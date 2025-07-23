@@ -39,24 +39,24 @@ export default function Sidebar() {
       label: "Organization Manage",
       icon: Settings,
       children: [
-        { label: "Add Organization", href: "/organization/add" },
-        { label: "All Organizations", href: "/organization/all" },
+        { label: "Add Organization", href: "/admin/organizer/add-organizer" },
+        { label: "All Organizations", href: "/admin/organizer/all-organization" },
       ],
     },
     {
       label: "Resources",
       icon: Folder,
       children: [
-        { label: "Add Resources", href: "/resources/add" },
-        { label: "All Resources", href: "/resources/all" },
+        { label: "Add Resources", href: "#" },
+        { label: "All Resources", href: "#" },
       ],
     },
     {
       label: "Training Management",
       icon: GraduationCap,
       children: [
-        { label: "Add Training", href: "/training/add" },
-        { label: "All Trainings", href: "/training/all" },
+        { label: "Add Training", href: "#" },
+        { label: "All Trainings", href: "#" },
       ],
     },
     {
@@ -68,8 +68,8 @@ export default function Sidebar() {
       label: "Role Management",
       icon: ShieldCheck,
       children: [
-        { label: "Add Role", href: "/roles/add" },
-        { label: "All Roles", href: "/roles/all" },
+        { label: "Add Role", href: "#" },
+        { label: "All Roles", href: "#" },
       ],
     },
     {
@@ -99,7 +99,6 @@ export default function Sidebar() {
         >
           {menuItems.map((item) => {
             const isActive = item.href === pathname;
-            console.log(item.href, pathname);
             return (
               <AccordionItem
                 key={item.label}

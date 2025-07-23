@@ -1,18 +1,17 @@
 "use client";
 
-import { useState } from "react";
-import { useReactTable, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, SortingState } from "@tanstack/react-table";
-import EditUser from "./EditUser";
-import { useUserData } from "@/hooks/useUserData";
-import { useAppDispatch } from "@/lib/redux/hooks";
+import CustomDialog from "@/components/share/dialog/CustomDialog";
 import { getUserColumns } from "@/lib/constants/tableColumns";
 import { rowValue } from "@/lib/redux/features/user/userSlice";
-import CustomDialog from "@/components/share/dialog/CustomDialog";
+import { useAppDispatch } from "@/lib/redux/hooks";
+import { getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, SortingState, useReactTable } from "@tanstack/react-table";
+import { useState } from "react";
+import EditUser from "./EditUser";
 // import UserTable from "./UserTable";
-import { EditDataProps } from "@/types/user/user.types";
 import GenericTable from "@/components/share/table/GenericTable";
-import AddUser from "./AddUser";
 import TableHeading from "@/components/share/table/TableHeading";
+import { EditDataProps } from "@/types/user/user.types";
+import AddUser from "./AddUser";
 
 const User = () => {
     const [editModalOpen, setEditModalOpen] = useState(false);
@@ -22,7 +21,7 @@ const User = () => {
     const [columnVisibility, setColumnVisibility] = useState({});
     const dispatch = useAppDispatch();
 
-    const { isLoading, data: allUserData, refetch } = useUserData();
+    // const { isLoading, data: allUserData, refetch } = useUserData();
 
     // Define handleEdit function
     const handleEdit = (rowData: EditDataProps) => {
@@ -34,7 +33,7 @@ const User = () => {
     const columns = getUserColumns(handleEdit);
 
     const table = useReactTable({
-        data: allUserData ?? [],
+        data: [],
         columns,
         getCoreRowModel: getCoreRowModel(),
         getPaginationRowModel: getPaginationRowModel(),
@@ -67,17 +66,17 @@ const User = () => {
 
             <GenericTable
                 table={table}
-                isLoading={isLoading}
+                isLoading={false}
                 filtering={filtering}
                 setFiltering={setFiltering}
                 filterModalOpen={filterModalOpen}
                 setFilterModalOpen={setFilterModalOpen}
-                tableData={allUserData ?? []}
-                refetch={refetch}
+                tableData={[]}
+                refetch={() => {}}
                 buttonName="Add"
                 headerName="Add User Information"
                 userName="User"
-                addComponent={<AddUser setOpen={setFilterModalOpen} refetch={refetch} />}
+                addComponent={<AddUser setOpen={setFilterModalOpen} refetch={() => {}} />}
             />
 
             <CustomDialog
@@ -85,7 +84,7 @@ const User = () => {
                 onOpenChange={setEditModalOpen}
                 title="User Information Edit"
             >
-                <EditUser setEditModalOpen={setEditModalOpen} refetch={refetch} />
+                <EditUser setEditModalOpen={setEditModalOpen} refetch={() => {}} />
             </CustomDialog>
 
         </div>

@@ -15,8 +15,7 @@ import {
   LayoutDashboard,
   LogOut,
   Settings,
-  ShieldCheck,
-  Users,
+  ShieldCheck
 } from "lucide-react";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -29,18 +28,10 @@ export default function Sidebar() {
       href: "/admin",
     },
     {
-      label: "Funders",
-      icon: Users,
-      children: [
-        { label: "Add Funder", href: "/admin/dashboard" },
-        { label: "All Funders", href: "/admin/funders/all" },
-      ],
-    },
-    {
       label: "Organization Manage",
       icon: Settings,
       children: [
-        { label: "Add Organization", href: "/admin/organizer/add-organizer" },
+        { label: "Organization mapped", href: "/admin/organizer/organizer-mapped" },
         { label: "All Organizations", href: "/admin/organizer/all-organization" },
       ],
     },

@@ -160,3 +160,53 @@ html {
   --accent-foreground: 0 0% 100%;
   --border: 0 0% 0%;
 }
+
+
+.ProseMirror ul {
+  list-style-type: disc;
+  margin-left: 1.25rem; /* 20px */
+  padding-left: 0;
+}
+
+.ProseMirror ol {
+  list-style-type: decimal;
+  margin-left: 1.25rem;
+  padding-left: 0;
+}
+
+.ProseMirror li {
+  margin-bottom: 0.25rem; /* spacing between list items */
+}
+
+.rich-text-content ul {
+  list-style-type: disc;
+  margin-left: 1.25rem; /* 20px */
+  margin-bottom: 0.75rem;
+  padding-left: 0;
+}
+
+.rich-text-content ol {
+  list-style-type: decimal;
+  margin-left: 1.25rem;
+  margin-bottom: 0.75rem;
+  padding-left: 0;
+}
+
+.rich-text-content li {
+  margin-bottom: 0.25rem;
+}
+
+.rich-text-content strong,
+.rich-text-content b {
+  font-weight: 700;
+}
+
+.ProseMirror {
+  min-height: 200px;      /* initial height */
+  max-height: 600px;      /* max height if you want */
+  overflow-y: auto;       /* scroll when exceeding max height */
+  resize: vertical;       /* optional: user can drag to resize */
+  outline: none;          /* remove default outline */
+  white-space: pre-wrap;  /* preserve line breaks */
+  word-wrap: break-word;  /* break long words */
+}

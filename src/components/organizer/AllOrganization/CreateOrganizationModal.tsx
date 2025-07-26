@@ -1,17 +1,28 @@
-"use client";
 import ControlledInputField from "@/components/share/ControlledInputField";
 import ControlledSelectField from "@/components/share/ControlledSelectField";
 import ControlledTextareaField from "@/components/share/ControlledTextareaField";
 import ImageFileInput from "@/components/share/ImageFileInput";
 import InputLabel from "@/components/share/InputLabel";
 import { Button } from "@/components/ui/button";
+import {
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+} from "@/components/ui/dialog";
 import { usePost } from "@/hooks/usePost";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { FormProvider, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { OrganizationForm, organizationSchema } from "../schema/AddOrganizer";
 
-export default function AddOrganizer() {
+export default function CreateOrganizationModal({
+  isOpen,
+  onClose,
+}: {
+  isOpen: boolean;
+  onClose: () => void;
+}) {
   const { mutateAsync } = usePost(
     "/organizations",
     (data) => {
@@ -47,13 +58,17 @@ export default function AddOrganizer() {
     mutateAsync(formData).then(() => {
       console.log("Organization created successfully");
       toast.success("Organization created successfully");
+      onClose();
       // Reset the form after successful submission
       methods.reset();
     });
   };
   return (
-    <div className="bg-white min-h-[80vh] p-8">
-      <div className="w-9/12">
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent className="bg-white h-[90vh] w-[80vw] overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle>Create Organization</DialogTitle>
+        </DialogHeader>
         <FormProvider {...methods}>
           <form onSubmit={methods.handleSubmit(onSubmit)} className="w-full">
             <div className="border-b pb-8">
@@ -61,7 +76,7 @@ export default function AddOrganizer() {
               <ImageFileInput name="logo" />
             </div>
             <div className="flex flex-col gap-6 mt-8">
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 lg:gap-5">
+              <div className="grid grid-cols-1 lg:grid-cols-1 gap-3 lg:gap-5">
                 <div>
                   <InputLabel label="Organizer name" required />
                   <ControlledInputField
@@ -80,7 +95,7 @@ export default function AddOrganizer() {
                   />
                 </div>
               </div>
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 lg:gap-5">
+              <div className="grid grid-cols-1 lg:grid-cols-1 gap-3 lg:gap-5">
                 <div>
                   <InputLabel label="Organizer type" required />
                   <ControlledSelectField
@@ -104,7 +119,7 @@ export default function AddOrganizer() {
                   />
                 </div>
               </div>
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 lg:gap-5">
+              <div className="grid grid-cols-1 lg:grid-cols-1 gap-3 lg:gap-5">
                 <div>
                   <InputLabel label="Address" />
                   <ControlledInputField
@@ -140,7 +155,7 @@ export default function AddOrganizer() {
             </div>
           </form>
         </FormProvider>
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   );
 }

@@ -24,10 +24,12 @@ export default function CreateOrganizerMappedModal({
   onClose: () => void;
 }) {
   const { data: userData } = useGet<IUser[]>(`/user`, ["user"]);
-  const { data: organizationData } = useGet<IOrganization[]>(`/organizations`, ["organizations"]);
+  const { data: organizationData } = useGet<IOrganization[]>(`/organizations`, [
+    "organizations",
+  ]);
   const { data: roleData } = useGet<IRole[]>(`/roles`, ["roles"]);
 
-  const { mutateAsync } = usePost<IUser[]>(
+  const { mutateAsync, error } = usePost<IUser[]>(
     "/user-organization-role",
     (data) => {
       console.log("POST success", data);
@@ -39,7 +41,6 @@ export default function CreateOrganizerMappedModal({
   });
 
   const onSubmit = (data: UserRoleForm) => {
-    console.log(data)
     const formattedData = {
       organizationId: Number(data.organizationId),
       userId: Number(data.userId),
@@ -54,9 +55,14 @@ export default function CreateOrganizerMappedModal({
       methods.reset();
     });
   };
-  const organizationOptions = mapToSelectOptions(organizationData?.data, "name", "id");
-const userOptions = mapToSelectOptions(userData?.data, "email", "id");
-const roleOptions = mapToSelectOptions(roleData?.data, "name", "id");
+
+  const organizationOptions = mapToSelectOptions(
+    organizationData?.data,
+    "name",
+    "id"
+  );
+  const userOptions = mapToSelectOptions(userData?.data, "email", "id");
+  const roleOptions = mapToSelectOptions(roleData?.data, "name", "id");
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="bg-white min-h-[50vh] w-[80vw] overflow-y-auto">
@@ -89,6 +95,11 @@ const roleOptions = mapToSelectOptions(roleData?.data, "name", "id");
                 options={roleOptions}
               />
             </div>
+            {error?.errors?.length && (
+              <div className="text-rose-600 bg-rose-200 text-center py-2 rounded-sm font-inter text-sm">
+                {error?.errors && error?.errors[0]}
+              </div>
+            )}
             <div className="flex justify-end gap-3 mt-6">
               <Button
                 type="submit"

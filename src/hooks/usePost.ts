@@ -31,7 +31,9 @@ export const usePost = <T>(
       }
     },
     onError: (error: IGenericErrorResponse) => {
+      console.log("POST error", error);
       toast.error(error.message || "Something went wrong.");
+      throw error;
     },
   });
 };

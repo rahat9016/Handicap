@@ -19,7 +19,7 @@ export const organizationSchema = Yup.object().shape({
     .max(500, "Description must be at most 500 characters")
     .optional(),
 
-  type: Yup.string()
+  typeId: Yup.string()
     .required("Organizer type is required")
     .min(1, "Organizer type is required"),
   contactPhone: Yup.string()
@@ -58,4 +58,18 @@ export const organizationSchema = Yup.object().shape({
     ),
 });
 
+export const userRoleSchema = Yup.object().shape({
+  userId: Yup.string()
+    .required("User ID is required")
+    .min(1, "User ID is required"),
+  organizationId: Yup.string()
+    .required("Organization ID is required")
+    .min(1, "Organization ID is required"),
+  roleId: Yup.string()
+    .required("Role ID is required")
+    .min(1, "Role ID is required"),
+});
+
+
+export type UserRoleForm = InferType<typeof userRoleSchema>;
 export type OrganizationForm = InferType<typeof organizationSchema>;

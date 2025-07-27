@@ -9,7 +9,7 @@ import { toast } from "react-toastify";
 export const usePost = <T>(
   endpoint: string,
   onSuccess?: (data: T) => void,
-  invalidateQueriesKeys?: Array<string | string[]>
+  invalidateQueriesKeys?: Array<string[]>
 ) => {
   const queryClient = useQueryClient();
 
@@ -19,11 +19,10 @@ export const usePost = <T>(
     onSuccess: (data) => {
       toast.success(data.message);
 
-      // Invalidate provided query keys if any
+      // Automatically refetch matching queries
       if (invalidateQueriesKeys) {
         invalidateQueriesKeys.forEach((key) => {
-          const queryKey: readonly unknown[] = typeof key === "string" ? [key] : key;
-          queryClient.invalidateQueries({ queryKey, exact: true });
+          queryClient.invalidateQueries({ queryKey: key });
         });
       }
 
@@ -32,7 +31,9 @@ export const usePost = <T>(
       }
     },
     onError: (error: IGenericErrorResponse) => {
-      toast.error(error.message);
+      console.log("POST error", error);
+      toast.error(error.message || "Something went wrong.");
+      throw error;
     },
   });
 };

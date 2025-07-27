@@ -94,9 +94,10 @@ export default function ModulesListPage() {
                       <CardTitle className="text-lg mb-2 group-hover:text-white transition-colors">
                         {module.name}
                       </CardTitle>
-                      <CardDescription className="text-slate-200 text-sm line-clamp-2">
-                        {module.description}
-                      </CardDescription>
+                      <CardDescription
+  className="text-slate-200 text-sm line-clamp-2 rich-text-content"
+  dangerouslySetInnerHTML={{ __html: module.description }}
+/>
                     </div>
                     
                   </div>

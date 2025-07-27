@@ -17,8 +17,12 @@ export const registerSchema = Yup.object().shape({
 });
 
 export const otpSchema = Yup.object({
-  email: Yup.string().email().required("Email is required"),
+  email: Yup.string()
+    .required("Email is required")
+    .email("Invalid email address"),
   otp: Yup.string().required("OTP is required"),
 });
 
 export type SignupForm = InferType<typeof registerSchema>;
+export type OTPForm = InferType<typeof otpSchema>;
+export const signupValidationSchemas = [registerSchema, otpSchema];

@@ -15,8 +15,7 @@ import {
   LayoutDashboard,
   LogOut,
   Settings,
-  ShieldCheck,
-  Users,
+  ShieldCheck
 } from "lucide-react";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -29,19 +28,18 @@ export default function Sidebar() {
       href: "/admin",
     },
     {
-      label: "Funders",
-      icon: Users,
-      children: [
-        { label: "Add Funder", href: "/admin/dashboard" },
-        { label: "All Funders", href: "/admin/funders/all" },
-      ],
-    },
-    {
       label: "Organization Manage",
       icon: Settings,
       children: [
-        { label: "Add Organization", href: "/admin/organizer/add-organizer" },
+        { label: "Organization mapped", href: "/admin/organizer/organizer-mapped" },
         { label: "All Organizations", href: "/admin/organizer/all-organization" },
+      ],
+    },
+    {
+      label: "Setup",
+      icon: Settings,
+      children: [
+        { label: "Organization Type Setup", href: "/admin/setup/organization-type-setup" },
       ],
     },
     {
@@ -107,7 +105,9 @@ export default function Sidebar() {
           className="w-full h-full flex  flex-col gap-1"
         >
           {menuItems.map((item) => {
-            const isActive = item.href === pathname;
+            const pathnameWithoutLocale = pathname.replace(/^\/(en|bn)/, '');
+            const isActive = item.href === pathnameWithoutLocale;
+
             return (
               <AccordionItem
                 key={item.label}
@@ -141,7 +141,7 @@ export default function Sidebar() {
                     href={item.href}
                     className={`w-full h-[46px] flex items-center gap-2 px-4 text-sm hover:bg-[#EAF6FB] hover:text-dashboard-primary ${
                       isActive ? "bg-dashboard-primary text-white" : ""
-                    } rounded-2xl font-inter text-[#8C8C8C]`}
+                    } rounded-md font-inter text-[#8C8C8C]`}
                   >
                     <item.icon className="h-4 w-4" /> {item.label}
                   </Link>

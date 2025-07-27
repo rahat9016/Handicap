@@ -1,141 +1,122 @@
 "use client";
 
+import ControlledInputField from "@/components/share/ControlledInputField";
 import HeroSection from "@/components/share/HeroSection";
+import InputLabel from "@/components/share/InputLabel";
 import Paragraph from "@/components/share/Paragraph";
 import Title from "@/components/share/Title";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/hooks/useAuth";
 import { Link, useRouter } from "@/i18n/navigation";
-import { LoginFormData, loginSchema } from "@/schemas/auth";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { LoginFormData } from "@/schemas/auth";
+import { yupResolver } from "@hookform/resolvers/yup";
 import Image from "next/image";
-import { SubmitHandler, useForm } from "react-hook-form";
-
-
+import { useSearchParams } from "next/navigation";
+import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
+import { LoginForm, userLoginSchema } from "./Schema/Login";
 export default function Login() {
-    const router = useRouter();
-    
-    const {
-        register,
-        handleSubmit,
-        reset,
-        formState: { errors },
-    } = useForm<LoginFormData>({
-        resolver: zodResolver(loginSchema),
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const methods = useForm<LoginForm>({
+    resolver: yupResolver(userLoginSchema),
+  });
+
+  const { mutateAsync: login, isPending } = useAuth(() => {
+    router.push("/");
+  });
+  const callbackUrl = decodeURIComponent(
+    searchParams.get('callbackUrl') || `/admin`
+  );
+
+  console.log(callbackUrl);
+  const onSubmit: SubmitHandler<LoginFormData> = (data) => {
+    login(data).then(() => {
+      router.push(callbackUrl);
+    }).catch((error) => {
+
+      console.error("Login failed:", error);
     });
+  };
 
-    const { mutate: login, isPending } = useAuth(() => {
-        reset();
-        router.push("/");
-    });
-
-    const onSubmit: SubmitHandler<LoginFormData> = (data) => {
-        login(data);
-    };
-
-    return (
-        <div>
-            <HeroSection />
-            <div style={{ backgroundImage: `url('/images/common/loginBg.png')` }} className="flex flex-col bg-contain bg-top bg-no-repeat py-20 px-4">
-            <div className="w-full lg:w-4/12 mx-auto px-6 py-7 lg:px-8 bg-white shadow-xl rounded-md">
-                <div className="flex flex-col items-center">
-                    <Image width={97} height={43} src="/logo.png" alt="logo" />
-                    <Title>Login To Your Account</Title>
-                    <Paragraph>We’re glad to see you again</Paragraph>
+  return (
+    <div>
+      <HeroSection />
+      <div
+        style={{ backgroundImage: `url('/images/common/loginBg.png')` }}
+        className="flex flex-col bg-contain bg-top bg-no-repeat py-20 px-4"
+      >
+        <div className="w-full lg:w-4/12 mx-auto px-6 py-7 lg:px-8 bg-white shadow-xl rounded-md">
+          <div className="flex flex-col items-center">
+            <Image width={97} height={43} src="/logo.png" alt="logo" />
+            <Title>Login To Your Account</Title>
+            <Paragraph>We’re glad to see you again</Paragraph>
+          </div>
+          <FormProvider {...methods}>
+            <div>
+              <form onSubmit={methods.handleSubmit(onSubmit)}>
+                <div className="mb-6">
+                  <InputLabel label="Email" required />
+                  <ControlledInputField
+                    name="email"
+                    type="email"
+                    placeholder="Enter your email"
+                  />
                 </div>
 
                 <div>
-                    <form onSubmit={handleSubmit(onSubmit)}>
-                        <div className="mb-6">
-                            <Label htmlFor="email" className="block text-sm font-medium leading-6">
-                                Email address
-                            </Label>
-                            <div className="mt-3">
-                                <Input
-                                    id="email"
-                                    type="email"
-                                    autoComplete="email"
-                                    required
-                                    className="block w-full rounded-[--radius] border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                                    placeholder="Enter your valid email address here"
-                                    {...register("email")}
-                                />
-                                {errors.email && (
-                                    <span className="error">{errors.email.message}</span>
-                                )}
-                            </div>
-                        </div>
-
-                        <div>
-                            <div className="flex items-center justify-between">
-                                <Label htmlFor="password" className="block text-sm font-medium leading-6">
-                                    Password
-                                </Label>
-                                <div className="text-sm">
-                                    <Link href="#" className="font-medium text-primary hover:text-accent/90">
-                                        Forgot password?
-                                    </Link>
-                                </div>
-                            </div>
-                            <div className="mt-3">
-                                <Input
-                                    id="password"
-                                    type="password"
-                                    autoComplete="current-password"
-                                    placeholder="Enter your password here"
-                                    required
-                                    className="block w-full rounded-[--radius] border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                                    {...register("password")}
-                                />
-                                {errors.password && (
-                                    <span className="error">{errors.password.message}</span>
-                                )}
-                            </div>
-                        </div>
-
-                        <div className="flex items-center space-x-2 my-6">
-                            <Checkbox id="remember" />
-                            <Label
-                                htmlFor="remember"
-                                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                            >
-                                Remember me
-                            </Label>
-                        </div>
-
-                        <div>
-                            <Button
-                                type="submit"
-                                className="w-full rounded-[--radius] bg-accent text-accent-foreground hover:bg-accent/90"
-                            >
-                                {isPending ? "Loading..." : "Sign in"}
-                            </Button>
-                        </div>
-                    </form>
-
-                    <div className="mt-6">
-                       
-
-                        <div className="mt-6  gap-4">
-                            <Button variant="outline" className="w-full">
-                                 Continue with Google
-                            </Button>
-                        </div>
-                    </div>
-
-                    <p className="mt-10 text-center text-sm text-muted-foreground">
-                        Don’t have an account?
-                        and{" "}
-                        <Link href="/register" className="font-medium text-black">
-                            Sign Up Now
-                        </Link>
-                    </p>
+                  <div className="mt-3">
+                    <InputLabel label="Password" required />
+                    <ControlledInputField
+                      name="password"
+                      type="password"
+                      placeholder="Enter your password"
+                    />
+                  </div>
+                  <Link href="#" className="font-medium text-primary mt-3 block text-right">
+                    Forgot password?
+                  </Link>
                 </div>
+
+                <div className="flex items-center space-x-2 my-6">
+                  <Checkbox id="remember" />
+                  <Label
+                    htmlFor="remember"
+                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                  >
+                    Remember me
+                  </Label>
+                </div>
+
+                <div>
+                  <Button
+                    type="submit"
+                    className="w-full rounded-[--radius] bg-accent text-accent-foreground hover:bg-accent/90"
+                  >
+                    {isPending ? "Loading..." : "Sign in"}
+                  </Button>
+                </div>
+              </form>
+
+              <div className="mt-6">
+                <div className="mt-6  gap-4">
+                  <Button variant="outline" className="w-full">
+                    Continue with Google
+                  </Button>
+                </div>
+              </div>
+
+              <p className="mt-10 text-center text-sm text-muted-foreground">
+                Don’t have an account? and{" "}
+                <Link href="/register" className="font-medium text-black">
+                  Sign Up Now
+                </Link>
+              </p>
             </div>
+          </FormProvider>
         </div>
-        </div>
-    )
+      </div>
+    </div>
+  );
 }

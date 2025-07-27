@@ -90,6 +90,7 @@ instance.interceptors.response.use(
         statusCode: error?.response?.data?.statusCode || 500,
         message: error?.response?.data?.message || "Something went wrong",
         errorMessages: error?.response?.data?.message,
+        errors: error?.response?.data?.errors,
       };
       return Promise.reject(responseObject);
     }

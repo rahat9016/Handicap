@@ -36,6 +36,13 @@ export default function Sidebar() {
       ],
     },
     {
+      label: "Setup",
+      icon: Settings,
+      children: [
+        { label: "Organization Type Setup", href: "/admin/setup/organization-type-setup" },
+      ],
+    },
+    {
       label: "Resources",
       icon: Folder,
       children: [
@@ -98,7 +105,9 @@ export default function Sidebar() {
           className="w-full h-full flex  flex-col gap-1"
         >
           {menuItems.map((item) => {
-            const isActive = item.href === pathname;
+            const pathnameWithoutLocale = pathname.replace(/^\/(en|bn)/, '');
+            const isActive = item.href === pathnameWithoutLocale;
+
             return (
               <AccordionItem
                 key={item.label}
@@ -132,7 +141,7 @@ export default function Sidebar() {
                     href={item.href}
                     className={`w-full h-[46px] flex items-center gap-2 px-4 text-sm hover:bg-[#EAF6FB] hover:text-dashboard-primary ${
                       isActive ? "bg-dashboard-primary text-white" : ""
-                    } rounded-2xl font-inter text-[#8C8C8C]`}
+                    } rounded-md font-inter text-[#8C8C8C]`}
                   >
                     <item.icon className="h-4 w-4" /> {item.label}
                   </Link>

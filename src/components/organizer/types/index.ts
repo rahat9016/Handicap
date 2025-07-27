@@ -38,3 +38,13 @@ export interface IUser {
   roleId: number;
   roleName: string;
 }
+
+
+export interface IOrganizationTypes {
+  id: number;
+  name: string;
+  description: string;
+  isActive: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+}

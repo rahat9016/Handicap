@@ -13,21 +13,31 @@ import { Link, useRouter } from "@/i18n/navigation";
 import { LoginFormData } from "@/schemas/auth";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Image from "next/image";
+import { useSearchParams } from "next/navigation";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import { LoginForm, userLoginSchema } from "./Schema/Login";
-
 export default function Login() {
+  const searchParams = useSearchParams();
   const router = useRouter();
   const methods = useForm<LoginForm>({
     resolver: yupResolver(userLoginSchema),
   });
 
-  const { mutate: login, isPending } = useAuth(() => {
+  const { mutateAsync: login, isPending } = useAuth(() => {
     router.push("/");
   });
+  const callbackUrl = decodeURIComponent(
+    searchParams.get('callbackUrl') || `/admin`
+  );
 
+  console.log(callbackUrl);
   const onSubmit: SubmitHandler<LoginFormData> = (data) => {
-    login(data);
+    login(data).then(() => {
+      router.push(callbackUrl);
+    }).catch((error) => {
+
+      console.error("Login failed:", error);
+    });
   };
 
   return (

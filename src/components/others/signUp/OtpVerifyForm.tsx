@@ -1,54 +1,26 @@
 "use client";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { Controller, FormProvider, useForm } from "react-hook-form";
+import { Controller, useFormContext } from "react-hook-form";
 import OtpInput from "react-otp-input";
-import { otpSchema } from "./Schema/Signup";
 
-export default function OtpVerifyForm({ email }: { email: string }) {
-  const methods = useForm({
-    resolver: yupResolver(otpSchema),
-    defaultValues: {
-      email,
-      otp: "",
-    },
-  });
-
-  const { control, handleSubmit } = methods;
-
+export default function OtpVerifyForm({resendOTPHandler}: { resendOTPHandler: () => void }) {
+  const { control } = useFormContext();
   
-
-  const handleResend = () => {
-    // sendOtp.mutate(email);
-  };
-
-  const onSubmit = async (data: { email: string; otp: string }) => {
-    try {
-        console.log(data)
-      alert("OTP verified successfully", );
-    } catch (error) {
-      console.error("OTP verification error", error);
-    }
-  };
-
-
+  
   return (
-    <FormProvider {...methods}>
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-        <p className="text-sm text-gray-600">OTP sent to: <strong>{email}</strong></p>
-
-        <Controller
+    <div className="mt-3">
+      <Controller
           control={control}
           name="otp"
           render={({ field, fieldState }) => (
-            <div>
+            <div className="w-full">
               <OtpInput
                 value={field.value}
                 onChange={field.onChange}
                 numInputs={6}
                 shouldAutoFocus
-                containerStyle="flex gap-2 justify-center"
-                inputStyle="border border-gray-300 w-10 h-10 text-center rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                renderInput={(props) => <input {...props} />}
+                containerStyle="flex justify-between gap-2 w-full"
+                inputStyle={`border ${fieldState.error ? "border-red-500" : "border-gray-300"} !w-10 h-10 text-center rounded focus:outline-none focus:ring-2 focus:ring-blue-500`}
+                renderInput={(props) => <input {...props} placeholder="-" />}
               />
               {fieldState.error && (
                 <p className="text-red-500 text-sm mt-1">{fieldState.error.message}</p>
@@ -56,22 +28,16 @@ export default function OtpVerifyForm({ email }: { email: string }) {
             </div>
           )}
         />
-
+      <div className="flex justify-end mt-4">
         <button
           type="button"
-          onClick={handleResend}
-          className="text-sm text-blue-600 underline"
+          onClick={resendOTPHandler}
+          className="text-blue underline text-sm "
         >
           Resend OTP
         </button>
-
-        <button
-          type="submit"
-          className="bg-green-600 text-white w-full p-2 rounded"
-        >
-          Verify OTP
-        </button>
-      </form>
-    </FormProvider>
+      </div>
+        
+    </div>
   );
 }

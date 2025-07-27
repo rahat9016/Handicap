@@ -127,7 +127,7 @@ export function DataTable<T>({
       <Table>
         <TableHeader className="bg-[#C6DFF8] h-[62px] px-6">
           <TableRow>
-            {columns.map((column, index) => (
+            {columns?.map((column, index) => (
               <TableHead key={index} className="font-medium font-inter text-base text-erieBlack">
                 {column.header}
               </TableHead>
@@ -153,15 +153,15 @@ export function DataTable<T>({
               </TableCell>
             </TableRow>
           ) : (
-            data.map((row, rowIndex) => (
+            data?.map((row, rowIndex) => (
               <TableRow className=" h-[62px] text-darkLiver font-inter font-normal text-sm" key={rowIndex}>
-                {columns.map((column) => {
+                {columns?.map((column) => {
                   const value = row[column.accessorKey];
                   return (
                     <TableCell
                       key={`${rowIndex}-${String(column.accessorKey)}`}
                     >
-                      {column.cell
+                      {column?.cell
                         ? column.cell(value, row)
                         : (value as React.ReactNode)}
                     </TableCell>

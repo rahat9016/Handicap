@@ -5,67 +5,42 @@ import ImageFileInput from "@/components/share/ImageFileInput";
 import InputLabel from "@/components/share/InputLabel";
 import { Button } from "@/components/ui/button";
 import {
-    Dialog,
-    DialogContent,
-    DialogHeader,
-    DialogTitle,
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
 } from "@/components/ui/dialog";
-import { usePost } from "@/hooks/usePost";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { FormProvider, useForm } from "react-hook-form";
-import { toast } from "react-toastify";
-import { OrganizationForm, organizationSchema } from "../schema/AddOrganizer";
+import { useGet } from "@/hooks/useGet";
+import { mapToSelectOptions } from "@/utils/mapToSelectOptions";
+import { FormProvider } from "react-hook-form";
+import { OrganizationForm } from "../schema/AddOrganizer";
+import { IOrganizationTypes } from "../types";
 
 export default function CreateOrganizationModal({
   isOpen,
   onClose,
+  errors,
+  methods,
+  onSubmit
 }: {
   isOpen: boolean;
   onClose: () => void;
+  errors: string[] | undefined;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  methods: any;
+  onSubmit: (data: OrganizationForm) => void;
+
 }) {
-  const { mutateAsync } = usePost(
-    "/organizations",
-    (data) => {
-      console.log("POST success", data);
-    },
-    [["organizations"]]
+  const { data } = useGet<IOrganizationTypes[]>(
+    "/organization-types/all?isActive=true",
+    ["organizations"]
   );
-  const methods = useForm<OrganizationForm>({
-    resolver: yupResolver(organizationSchema),
-  });
 
-  const onSubmit = (data: OrganizationForm) => {
-    const formData = new FormData();
-
-    // Append required fields
-    formData.append("name", data.name);
-    formData.append("contactPhone", data.contactPhone || "");
-    formData.append("type", data.type);
-    formData.append("code", data.name.toLowerCase().replace(/\s+/g, "-"));
-
-    // Append optional fields only if they are provided
-    if (data.contactEmail) formData.append("contactEmail", data.contactEmail);
-    if (data.address) formData.append("address", data.address || "");
-    if (data.description)
-      formData.append("description", data.description || "");
-    if (data.logo instanceof File) {
-      formData.append("logo", data.logo);
-    } else if (typeof data.logo === "string" && data.logo.trim() !== "") {
-      formData.append("logo", data.logo);
-    }
-
-    // Submit the form data
-    mutateAsync(formData).then(() => {
-      console.log("Organization created successfully");
-      toast.success("Organization created successfully");
-      onClose();
-      // Reset the form after successful submission
-      methods.reset();
-    });
-  };
+  
+  const organizationOptions = mapToSelectOptions(data?.data, "name", "id");
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="bg-white h-[90vh] w-[80vw] overflow-y-auto">
+      <DialogContent className="bg-white h-[90vh] w-[800px] !max-w-none overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Create Organization</DialogTitle>
         </DialogHeader>
@@ -76,7 +51,7 @@ export default function CreateOrganizationModal({
               <ImageFileInput name="logo" />
             </div>
             <div className="flex flex-col gap-6 mt-8">
-              <div className="grid grid-cols-1 lg:grid-cols-1 gap-3 lg:gap-5">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 lg:gap-5">
                 <div>
                   <InputLabel label="Organizer name" required />
                   <ControlledInputField
@@ -95,22 +70,17 @@ export default function CreateOrganizationModal({
                   />
                 </div>
               </div>
-              <div className="grid grid-cols-1 lg:grid-cols-1 gap-3 lg:gap-5">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 lg:gap-5">
                 <div>
                   <InputLabel label="Organizer type" required />
                   <ControlledSelectField
-                    name="type"
+                    name="typeId"
                     placeholder="please enter your organizer type"
-                    options={[
-                      { label: "NGO", value: "NGO" },
-                      { label: "UN Agency", value: "UN_AGENCY" },
-                      { label: "Government", value: "GOVERNMENT" },
-                      { label: "Other", value: "OTHER" },
-                    ]}
+                    options={organizationOptions}
                   />
                 </div>
                 <div>
-                  <InputLabel label="Phone" />
+                  <InputLabel label="Phone" required />
                   <ControlledInputField
                     type="tel"
                     name="contactPhone"
@@ -139,9 +109,17 @@ export default function CreateOrganizationModal({
                 </div>
               </div>
             </div>
+            {errors?.length && (
+              <div className="text-rose-600 bg-rose-200 text-center py-2 rounded-sm font-inter text-sm mt-3">
+                {errors && errors[0]}
+              </div>
+            )}
             <div className="flex justify-end gap-3 mt-6">
               <Button
-                onClick={methods.reset}
+                onClick={() => {
+                  methods.reset();
+                  onClose();
+                }}
                 className="bg-transparent hover:bg-transparent text-darkLiver border"
               >
                 Cancel

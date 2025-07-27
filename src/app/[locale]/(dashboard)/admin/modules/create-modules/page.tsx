@@ -23,9 +23,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { usePost } from "@/hooks/usePost";
+import { useRouter } from "@/i18n/navigation";
 import { Module } from "@/types/module";
 import dynamic from "next/dynamic";
-import { useRouter } from "next/navigation";
 import type React from "react";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";

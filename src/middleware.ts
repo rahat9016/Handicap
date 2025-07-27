@@ -59,12 +59,10 @@ const intlMiddleware = createMiddleware(routing);
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
-  const locale = pathname.split("/")[1]; // 'en' or 'bn'
+  const locale = pathname.split('/')[1]; // 'en' or 'bn'
 
-  // Regex matchers
   const isModuleDetail = /^\/(en|bn)\/modules\/[^/]+$/.test(pathname);
   const isAdminRoute = /^\/(en|bn)\/admin(\/.*)?$/.test(pathname);
-
   const isProtected = isModuleDetail || isAdminRoute;
 
   if (isProtected) {
@@ -72,13 +70,18 @@ export function middleware(request: NextRequest) {
 
     if (!token) {
       const loginUrl = new URL(`/${locale}/login`, request.url);
+
+      // Remove locale prefix from the pathname
+      const pathnameWithoutLocale = pathname.replace(/^\/(en|bn)/, '');
+
+      loginUrl.searchParams.set("callbackUrl", encodeURIComponent(pathnameWithoutLocale));
       return NextResponse.redirect(loginUrl);
     }
   }
 
   return intlMiddleware(request);
 }
-export const config = {
-  matcher: ['/', "/(en|bn)/:path*"]
-};
 
+export const config = {
+  matcher: ['/', '/(en|bn)/:path*'],
+};

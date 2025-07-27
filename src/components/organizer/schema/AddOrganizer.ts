@@ -19,7 +19,7 @@ export const organizationSchema = Yup.object().shape({
     .max(500, "Description must be at most 500 characters")
     .optional(),
 
-  type: Yup.string()
+  typeId: Yup.string()
     .required("Organizer type is required")
     .min(1, "Organizer type is required"),
   contactPhone: Yup.string()

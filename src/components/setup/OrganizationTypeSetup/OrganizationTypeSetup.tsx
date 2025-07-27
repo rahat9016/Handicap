@@ -5,13 +5,14 @@ import { ColumnDef, DataTable } from "@/components/ui/data-table";
 import { useGet } from "@/hooks/useGet";
 import { usePagination } from "@/hooks/usePagination";
 import { useEffect, useState } from "react";
-import CreateOrganizerMappedModal from "./CreateOrganizerMappedModal";
+import CreateUpdateOrganizationTypeSetup from "./CreateUpdateOrganizationTypeSetup";
 interface IOrganization {
-  organizationName: string;
-  role: string;
-  userName: string;
+  id: number;
+  name: string;
+  description: string;
+  isActive: boolean;
 }
-export default function AllOrganizerMapped() {
+export default function OrganizationTypeSetup() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const {
     setCurrentPage,
@@ -21,8 +22,8 @@ export default function AllOrganizerMapped() {
     setTotalItems,
   } = usePagination();
   const { data, isLoading } = useGet(
-    "/user-organization-role",
-    ["user-organization-role", currentPage.toString()],
+    "/organization-types",
+    ["organization-types", currentPage.toString()],
     {
       page: currentPage.toString(),
       limit: itemsPerPage.toString(),
@@ -37,11 +38,28 @@ export default function AllOrganizerMapped() {
   }, [data]);
 
   const columns: ColumnDef<IOrganization>[] = [
-    { header: "User Name", accessorKey: "userName" },
-    { header: "Organization Name", accessorKey: "organizationName" },
-    { header: "Role", accessorKey: "role" },
-    
-    
+    { header: "ID", accessorKey: "id" },
+    { header: "Name", accessorKey: "name" },
+    { header: "Description", accessorKey: "description" },
+    {
+    header: "Is Active",
+    accessorKey: "isActive",
+    cell: (value) => {
+      const isActive = value
+
+      return (
+        <span
+          className={`px-2 py-1 rounded-full text-xs font-medium ${
+            isActive
+              ? "bg-[#bfffda] text-green"
+              : "bg-rose-200 text-rose-700"
+          }`}
+        >
+          {isActive ? "Active" : "Inactive"}
+        </span>
+      );
+    },
+  },
   ];
   return (
     <div className="bg-white p-8 min-h-[85vh] border border-skeleton rounded-2xl">
@@ -49,7 +67,7 @@ export default function AllOrganizerMapped() {
         <h1 className="text-xl font-bold text-erieBlack font-inter">Mapped Organizer</h1>
         <Button className="text-white font-inter text-sm font-medium bg-rose-600 hover:bg-rose-700 h-11" onClick={() => setIsModalOpen(true)}>
           {" "}
-          Create User Role Organizer{" "}
+          Create Type Setup{" "}
         </Button>
       </div>
       <DataTable
@@ -61,7 +79,7 @@ export default function AllOrganizerMapped() {
         itemsPerPage={itemsPerPage}
         onPageChange={setCurrentPage}
       />
-      <CreateOrganizerMappedModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      <CreateUpdateOrganizationTypeSetup isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
     </div>
   );
 }

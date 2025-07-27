@@ -19,6 +19,8 @@ export type IGenericErrorResponse = {
     statusCode: number;
     message: string;
     errorMessages: IGenericErrorMessage[];
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    errors?: any[]
 };
 
 export type IGenericErrorMessage = {

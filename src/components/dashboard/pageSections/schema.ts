@@ -16,7 +16,7 @@ export const pageSectionSchema = Yup.object().shape({
   subtitle: Yup.string().optional(),
   content: Yup.string().optional(),
   buttonLabel: Yup.string().optional(),
-  buttonUrl: Yup.string().url("Must be a valid URL").optional(),
+  buttonUrl: Yup.string().optional(),
   configuration: Yup.object().optional(),
   isActive: Yup.boolean().default(true),
   images: Yup.mixed<File | string>()

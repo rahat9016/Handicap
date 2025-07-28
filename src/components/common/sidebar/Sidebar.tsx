@@ -16,7 +16,9 @@ import {
   LayoutDashboard,
   LogOut,
   Settings,
-  ShieldCheck
+  ShieldCheck,
+  Upload,
+  User2
 } from "lucide-react";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -28,6 +30,18 @@ export default function Sidebar() {
       label: "Overview",
       icon: LayoutDashboard,
       href: "/admin",
+    },
+    {
+      label: "Users",
+      icon: User2,
+      href: "/admin/users",
+    },
+    {
+      label: "Content",
+      icon: Upload,
+      children: [
+        { label: "Home Section", href: "/admin/organizer/organizer-mapped" },
+      ],
     },
     {
       label: "Organization Manage",

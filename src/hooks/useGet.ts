@@ -24,7 +24,7 @@
 
 import { axiosInstance } from "@/helpers/axios/axiosInstance";
 import { IGenericErrorResponse } from "@/types";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, UseQueryOptions } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 
 interface IGenericResponse<T> {
@@ -42,9 +42,18 @@ interface IGenericResponse<T> {
 export const useGet = <T>(
   endpoint: string,
   queryKey: string[],
-  queryParams?: Record<string, unknown>
+  queryParams?: Record<string, unknown>,
+  options?: Omit<
+    UseQueryOptions<
+      IGenericResponse<T>,        // TQueryFnData
+      IGenericErrorResponse,      // TError
+      IGenericResponse<T>,        // TData
+      string[]                    // TQueryKey
+    >,
+    "queryKey" | "queryFn"
+  >
 ) => {
-  return useQuery<IGenericResponse<T>, IGenericErrorResponse>({
+  return useQuery<IGenericResponse<T>, IGenericErrorResponse, IGenericResponse<T>, string[]>({
     queryKey,
     queryFn: async () => {
       try {
@@ -59,6 +68,7 @@ export const useGet = <T>(
         throw error;
       }
     },
+    ...options,
   });
 };
 

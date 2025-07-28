@@ -1,19 +1,32 @@
-import { useMutation } from "@tanstack/react-query";
-import { toast } from "react-toastify";
-import { IGenericErrorResponse } from "@/types";
 import { postService } from "@/services/auth";
+import { IGenericErrorResponse } from "@/types";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "react-toastify";
 
-export const usePatch = <T>(endpoint: string, onSuccess?: (data: T) => void) => {
-    return useMutation({
-        mutationFn: (data: Record<string, unknown>) => postService.patch(endpoint, data),
-        onSuccess: (data) => {
-            toast.success(data.message || "Updated successfully!");
-            if (onSuccess) {
-                onSuccess(data);
-            }
-        },
-        onError: (error: IGenericErrorResponse) => {
-            toast.error(error.message || "Failed to update.");
-        },
-    });
+export const usePatch = <T>(
+  onSuccess?: (data: T) => void,
+  invalidateQueriesKeys?: Array<string[]>
+) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (params: { url: string; data: Record<string, unknown> }) => {
+      return postService.patch(params.url, params.data);
+    },
+    onSuccess: (data) => {
+      toast.success(data.message || "Updated successfully!");
+      if (invalidateQueriesKeys) {
+        invalidateQueriesKeys.forEach((key) => {
+          queryClient.invalidateQueries({ queryKey: key });
+        });
+      }
+      if (onSuccess) {
+        onSuccess(data);
+      }
+    },
+    onError: (error: IGenericErrorResponse) => {
+      toast.error(error.message || "Failed to update.");
+      throw error;
+    },
+  });
 };

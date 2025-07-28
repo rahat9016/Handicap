@@ -1,19 +1,23 @@
 export interface IUserInformation {
-    id: string;
-    name: string;
-    email: string;
-    role: string;
-    routes: string[];
-    permissions: string[];
+  id: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  phone: string;
+  profilePicture: string;
+  isVerified: boolean;
+  accountStatus: string;
+  roleId: string;
+  roleName: string
 }
 
 export interface IDataItem {
-    id: number;
-    name: string;
+  id: number;
+  name: string;
 }
 
 export interface IInitialState {
-    userInformation: IUserInformation;
-    data: unknown[];
-    // data: IDataItem[]; // Array of IDataItem objects
+  userInformation: IUserInformation;
+  data: unknown[];
+  // data: IDataItem[]; // Array of IDataItem objects
 }

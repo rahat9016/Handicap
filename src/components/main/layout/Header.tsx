@@ -1,11 +1,14 @@
 "use client";
 import { Link } from "@/i18n/navigation";
+import { useAppSelector } from "@/lib/redux/hooks";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { LanguageToggle } from "./LanguageToggle";
 import { navLinks } from "./navLinks";
+import { ProfileDropdown } from "./ProfileDropdown";
 
 export default function Header() {
+  const { userInformation: {email} } = useAppSelector(state => state.auth)
   const pathname = usePathname();
   return (
     <header className="pb-32">
@@ -23,7 +26,10 @@ export default function Header() {
             <Link href="#">Accessibility Statement</Link>
             <Link href="#">Event Calendar</Link>
             <Link href="#">Privacy Policy</Link>
-            <Link href="/login">Login</Link>
+            {email?
+            <ProfileDropdown /> : <Link href="/login">Login</Link>
+             }
+            
           </div>
         </div>
       </div>

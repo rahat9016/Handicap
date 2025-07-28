@@ -34,7 +34,7 @@ export interface IUser {
   phone: string | null;
   profilePicture: string | null;
   isVerified: boolean;
-  accountStatus: "ACTIVE" | "INACTIVE" | string; // extend or narrow based on your backend
+  accountStatus: "ACTIVE" | "INACTIVE" | string;
   roleId: number;
   roleName: string;
 }

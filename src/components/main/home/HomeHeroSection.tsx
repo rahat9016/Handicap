@@ -1,7 +1,22 @@
+"use client"
 import { Button } from "@/components/ui/button";
+import { useGet } from "@/hooks/useGet";
+import { IPageSection } from "@/types";
 import Image from "next/image";
+import HeroSkeleton from "./Skeleton/HeroSkeleton";
+
+
+
 
 export default function HomeHeroSection() {
+  const { data, isLoading } = useGet<IPageSection>(
+      "/page-sections/query/first?page=HOME&sectionType=HERO",
+      ["user"]
+    );
+  if(isLoading) { 
+    return <HeroSkeleton />
+  }
+  console.log(data?.data?.imageUrls[0])
   return (
     <section
       tabIndex={0}
@@ -12,10 +27,10 @@ export default function HomeHeroSection() {
         <div className="grid grid-cols-2 items-center gap-10">
         <div>
           <h1 className="text-5xl md:text-5xl font-bold leading-tight font-inter text-primary mb-6" tabIndex={0}>
-            Disability Inclusion Resource Hub
+            {data?.data?.title}
           </h1>
           <p className="text-lg font-inter font-normal text-[#666666]" tabIndex={0}>
-           A centralized and accessible platform designed to support humanitarian actors in Cox&apos;s Bazar, Bangladesh with practical tools, guidelines, and resources for promoting disability inclusion. This hub empowers organizations to create more inclusive, equitable, and responsive programs for people with disabilities in humanitarian settings.
+           {data?.data?.subtitle}
           </p>
           <Button className="px-4 py-3 h-[46px] bg-[#2A53CD] hover:bg-[#0490EF] text-white border text-sm cursor-pointer font-inter font-medium">
             Browse Resources
@@ -25,7 +40,7 @@ export default function HomeHeroSection() {
           </Button>
         </div>
         <div>
-          <Image width={765} height={460} src="/images/home/heroSection.png" alt="hero" />
+          <Image width={765} height={460} src={data?.data?.imageUrls[0] || "/images/home/heroSection.png"} alt="hero" className="h-[460px] object-cover" />
         </div>
         </div>
       </div>

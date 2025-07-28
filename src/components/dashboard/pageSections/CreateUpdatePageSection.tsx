@@ -1,8 +1,7 @@
 // src/components/page-sections/CreateSectionModal.tsx
-import { usePost } from "@/hooks/usePost";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { FormProvider, useForm } from "react-hook-form";
-import { toast } from "react-toastify";
+import ControlledInputField from "@/components/share/ControlledInputField";
+import ControlledSelectField from "@/components/share/ControlledSelectField";
+import InputLabel from "@/components/share/InputLabel";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -10,15 +9,18 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import ControlledInputField from "@/components/share/ControlledInputField";
-import ControlledSelectField from "@/components/share/ControlledSelectField";
-import ControlledTextareaField from "@/components/share/ControlledTextareaField";
-import ImageFileInput from "@/components/share/ImageFileInput";
-import InputLabel from "@/components/share/InputLabel";
-import { PageSectionForm, pageSectionSchema } from "./schema";
-import { useQueryClient } from "@tanstack/react-query";
+import { usePost } from "@/hooks/usePost";
+import { yupResolver } from "@hookform/resolvers/yup";
+import dynamic from "next/dynamic";
 import { useEffect } from "react";
-// import { Switch } from "@/components/ui/switch";
+import { FormProvider, useForm } from "react-hook-form";
+import { toast } from "react-toastify";
+import { PageSectionForm, pageSectionSchema } from "./schema";
+import { IPageSection } from "./types";
+const EditorWrapper = dynamic(
+  () => import("@/components/share/EditorWrapper"),
+  { ssr: false }
+);
 
 enum PageIdentifier {
   HOME = "HOME",
@@ -64,16 +66,17 @@ const sectionTypeOptions = Object.values(SectionType).map((value) => ({
   value,
 }));
 
-interface CreateSectionModalProps {
+interface CreateUpdateSectionModalProps {
   isOpen: boolean;
   onClose: () => void;
+  initialValues?: IPageSection | undefined;
 }
 
 export default function CreateSectionModal({
   isOpen,
   onClose,
-}: CreateSectionModalProps) {
-  const queryClient = useQueryClient();
+  initialValues,
+}: CreateUpdateSectionModalProps) {
   const { mutateAsync } = usePost(
     "/page-sections",
     (data) => {
@@ -81,18 +84,15 @@ export default function CreateSectionModal({
     },
     [["page-sections"]]
   );
-
+  const isEditMode = !!initialValues;
   const methods = useForm<PageSectionForm>({
     resolver: yupResolver(pageSectionSchema),
     defaultValues: {
       isActive: true,
-      configuration: "{}", // Initialize as empty JSON string
+      configuration: {},
     },
   });
 
-  // const [configuration, setConfiguration] = useState<Record<string, any>>({});
-
-  // Watch section type to update configuration defaults
   const sectionType = methods.watch("sectionType");
 
   useEffect(() => {
@@ -100,10 +100,17 @@ export default function CreateSectionModal({
       // Set default configuration based on section type
       const defaults = getDefaultConfiguration(sectionType);
       // setConfiguration(defaults);
-      methods.setValue("configuration", JSON.stringify(defaults));
+      methods.setValue("configuration", defaults);
     }
   }, [sectionType, methods]);
 
+  useEffect(() => {
+    if (initialValues) {
+      methods.reset({
+        ...initialValues,
+      });
+    }
+  }, [initialValues, methods]);
   const getDefaultConfiguration = (type: string) => {
     switch (type) {
       case SectionType.HERO:
@@ -116,13 +123,7 @@ export default function CreateSectionModal({
         return {};
     }
   };
-
-  // const handleConfigChange = (key: string, value: any) => {
-  //   const newConfig = { ...configuration, [key]: value };
-  //   setConfiguration(newConfig);
-  //   methods.setValue("configuration", JSON.stringify(newConfig));
-  // };
-
+console.log(methods.formState.errors)
   const onSubmit = (data: PageSectionForm) => {
     const formData = new FormData();
 
@@ -130,6 +131,7 @@ export default function CreateSectionModal({
     formData.append("pageId", data.pageId);
     formData.append("sectionType", data.sectionType);
     formData.append("order", data.order.toString());
+    formData.append("isActive", data.isActive.toString());
 
     // Optional fields
     if (data.title) formData.append("title", data.title);
@@ -137,13 +139,6 @@ export default function CreateSectionModal({
     if (data.content) formData.append("content", data.content);
     if (data.buttonLabel) formData.append("buttonLabel", data.buttonLabel);
     if (data.buttonUrl) formData.append("buttonUrl", data.buttonUrl);
-
-    // Configuration (always sent, at least as empty object)
-    // if (data.configuration) {
-    //   formData.append("configuration", data.configuration);
-    // }
-
-    formData.append("isActive", data.isActive.toString());
 
     // Handle image
     if (data.images instanceof File) {
@@ -154,7 +149,6 @@ export default function CreateSectionModal({
 
     mutateAsync(formData)
       .then(() => {
-        queryClient.invalidateQueries({ queryKey: ["page-sections"] });
         toast.success("Section created successfully");
         onClose();
         methods.reset();
@@ -166,7 +160,13 @@ export default function CreateSectionModal({
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
+    <Dialog
+      open={isOpen}
+      onOpenChange={() => {
+        methods.reset();
+        onClose();
+      }}
+    >
       <DialogContent className="bg-white !max-w-[60vw] w-[60vw] max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Create Page Section</DialogTitle>
@@ -220,12 +220,11 @@ export default function CreateSectionModal({
                   placeholder="Secondary heading for the section"
                 />
               </div>
-
               <div className="col-span-2">
                 <InputLabel label="Content" />
-                <ControlledTextareaField
-                  name="content"
-                  placeholder="Enter the main content (HTML supported)"
+                <EditorWrapper
+                  value={methods.watch("content") || ""}
+                  onChange={(value) => methods.setValue("content", value)}
                 />
               </div>
 
@@ -244,56 +243,9 @@ export default function CreateSectionModal({
                   placeholder="URL for the button (e.g., '/about')"
                 />
               </div>
-
-              {/* Configuration Fields */}
-              {/* <div className="col-span-2 space-y-4 p-4 border rounded-lg">
-                <h3 className="font-medium">Section Configuration</h3>
-
-                {sectionType === SectionType.HERO && (
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <InputLabel label="Theme" />
-                      <ControlledSelectField
-                        name="config.theme"
-                        options={[
-                          { label: "Light", value: "light" },
-                          { label: "Dark", value: "dark" },
-                        ]}
-                      />
-                    </div>
-                    <div>
-                      <InputLabel label="Layout" />
-                      <ControlledSelectField
-                        name="config.layout"
-                        options={[
-                          { label: "Centered", value: "centered" },
-                          { label: "Left Aligned", value: "left" },
-                        ]}
-                      />
-                    </div>
-                  </div>
-                )}
-
-                {sectionType === SectionType.FEATURE_GRID && (
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <InputLabel label="Number of Columns" />
-                      <ControlledInputField type="number" name="" />
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Switch checked={configuration.showIcons !== false} />
-                      <InputLabel label="Show Icons" />
-                    </div>
-                  </div>
-                )}
-
-              
-              </div> */}
-
-              {/* Media Field */} 
               <div className="col-span-2">
                 <InputLabel label="Section Image" />
-                <ImageFileInput name="images" />
+                {/* <MultipleImageFileInput name="images" errors={{ images: methods.formState.errors.images as FieldError }} /> */}
               </div>
 
               {/* Status Field */}
@@ -318,9 +270,9 @@ export default function CreateSectionModal({
               </Button>
               <Button
                 type="submit"
-                className="min-w-[100px] bg-primary hover:bg-primary-dark"
+                className="min-w-[100px] bg-dashboard-primary hover:bg-dashboard-primary  text-white hover:text-white"
               >
-                Create Section
+                {isEditMode ? "Update Section" : "Create Section"}
               </Button>
             </div>
           </form>

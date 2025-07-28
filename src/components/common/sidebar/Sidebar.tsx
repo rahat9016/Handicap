@@ -7,7 +7,8 @@ import {
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { Link } from "@/i18n/navigation";
-import { logout } from "@/services/auth.service";
+import { logoutUser } from "@/lib/redux/features/auth/authSlice";
+import { useAppDispatch } from "@/lib/redux/hooks";
 import {
   BarChart3,
   Folder,
@@ -21,6 +22,7 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 
 export default function Sidebar() {
+  const dispatch = useAppDispatch()
   const menuItems = [
     {
       label: "Overview",
@@ -150,7 +152,7 @@ export default function Sidebar() {
             );
           })}
         </Accordion>
-        <Button onClick={() => logout()} className="w-full bg-[#F0F0F0] hover:bg-[#FDECEC] text-[#A8A8A8] hover:text-[#EB5757]  flex items-center justify-start gap-2 h-12 !px-4">
+        <Button onClick={() => dispatch(logoutUser())} className="w-full bg-[#F0F0F0] hover:bg-[#FDECEC] text-[#A8A8A8] hover:text-[#EB5757]  flex items-center justify-start gap-2 h-12 !px-4">
           <LogOut className="h-6 w-6" size={24} /> Logout
         </Button>
       </nav>

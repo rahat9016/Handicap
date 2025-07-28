@@ -1,8 +1,11 @@
+"use client"
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
+import { useAppSelector } from "@/lib/redux/hooks";
 import { Bell, Search } from "lucide-react";
 
 export default function DashboardHeader() {
+  const { userInformation: { firstName, roleName } } = useAppSelector(state => state.auth)
   return (
     <div className="h-[90px] bg-white shadow-sm flex items-center justify-end px-6 border-b border-skeleton gap-5 ">
       <div className="flex items-center gap-1 border border-gray rounded-xl px-2 h-12 w-full max-w-64">
@@ -26,8 +29,8 @@ export default function DashboardHeader() {
         <AvatarImage src="https://github.com/shadcn.png" />
       </Avatar>
       <div>
-        <h2 className="text-dashboard-primary font-semibold font-inter text-base">Hello, MERN</h2>
-        <p className="text-[#8C8C8C] text-sm font-inter font-normal">Supper User</p>
+        <h2 className="text-dashboard-primary font-semibold font-inter text-base">Hello, {firstName}</h2>
+        <p className="text-[#8C8C8C] text-sm font-inter font-normal">{roleName}</p>
       </div>
       </div>
     </div>

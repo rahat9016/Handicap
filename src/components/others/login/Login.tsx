@@ -10,6 +10,8 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/hooks/useAuth";
 import { Link, useRouter } from "@/i18n/navigation";
+import { setUserId } from "@/lib/redux/features/auth/authSlice";
+import { useAppDispatch } from "@/lib/redux/hooks";
 import { LoginFormData } from "@/schemas/auth";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Image from "next/image";
@@ -18,6 +20,7 @@ import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import { LoginForm, userLoginSchema } from "./Schema/Login";
 export default function Login() {
   const searchParams = useSearchParams();
+  const dispatch = useAppDispatch();
   const router = useRouter();
   const methods = useForm<LoginForm>({
     resolver: yupResolver(userLoginSchema),
@@ -27,17 +30,21 @@ export default function Login() {
     router.push("/");
   });
   const callbackUrl = decodeURIComponent(
-    searchParams.get('callbackUrl') || `/admin`
+    searchParams.get("callbackUrl") || `/admin`
   );
 
-  console.log(callbackUrl);
   const onSubmit: SubmitHandler<LoginFormData> = (data) => {
-    login(data).then(() => {
-      router.push(callbackUrl);
-    }).catch((error) => {
-
-      console.error("Login failed:", error);
-    });
+    login(data)
+      .then((res) => {
+        console.log("Login successful:", res?.id);
+        if(res?.id) {
+          dispatch(setUserId(res?.id));
+        }
+        router.push(callbackUrl);
+      })
+      .catch((error) => {
+        console.error("Login failed:", error);
+      });
   };
 
   return (
@@ -74,7 +81,10 @@ export default function Login() {
                       placeholder="Enter your password"
                     />
                   </div>
-                  <Link href="#" className="font-medium text-primary mt-3 block text-right">
+                  <Link
+                    href="#"
+                    className="font-medium text-primary mt-3 block text-right"
+                  >
                     Forgot password?
                   </Link>
                 </div>

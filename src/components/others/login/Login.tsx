@@ -1,5 +1,6 @@
 "use client";
 
+import { IUser } from "@/components/organizer/types";
 import ControlledInputField from "@/components/share/ControlledInputField";
 import HeroSection from "@/components/share/HeroSection";
 import InputLabel from "@/components/share/InputLabel";
@@ -9,18 +10,26 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/hooks/useAuth";
+import { useGet } from "@/hooks/useGet";
 import { Link, useRouter } from "@/i18n/navigation";
-import { setUserId } from "@/lib/redux/features/auth/authSlice";
-import { useAppDispatch } from "@/lib/redux/hooks";
+import {
+  setUserId,
+  setUserInformation,
+} from "@/lib/redux/features/auth/authSlice";
+import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
 import { LoginFormData } from "@/schemas/auth";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
+import { useEffect } from "react";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import { LoginForm, userLoginSchema } from "./Schema/Login";
 export default function Login() {
   const searchParams = useSearchParams();
   const dispatch = useAppDispatch();
+  const {
+    userInformation: { id },
+  } = useAppSelector((state) => state.auth);
   const router = useRouter();
   const methods = useForm<LoginForm>({
     resolver: yupResolver(userLoginSchema),
@@ -29,6 +38,15 @@ export default function Login() {
   const { mutateAsync: login, isPending } = useAuth(() => {
     router.push("/");
   });
+  const { data, isSuccess } = useGet<IUser>(
+    `/user/${id}`,
+    ["user", id || ""],
+    undefined,
+    {
+      enabled: !!id,
+      staleTime: 5 * 60 * 1000,
+    }
+  );
   const callbackUrl = decodeURIComponent(
     searchParams.get("callbackUrl") || `/admin`
   );
@@ -37,7 +55,7 @@ export default function Login() {
     login(data)
       .then((res) => {
         console.log("Login successful:", res?.id);
-        if(res?.id) {
+        if (res?.id) {
           dispatch(setUserId(res?.id));
         }
         router.push(callbackUrl);
@@ -46,6 +64,12 @@ export default function Login() {
         console.error("Login failed:", error);
       });
   };
+
+  useEffect(() => {
+    if (isSuccess && data?.data) {
+      dispatch(setUserInformation(data.data));
+    }
+  }, [isSuccess, data, dispatch]);
 
   return (
     <div>

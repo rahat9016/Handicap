@@ -17,8 +17,8 @@ import ImageFileInput from "@/components/share/ImageFileInput";
 import InputLabel from "@/components/share/InputLabel";
 import { PageSectionForm, pageSectionSchema } from "./schema";
 import { useQueryClient } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
-import { Switch } from "@/components/ui/switch";
+import { useEffect } from "react";
+// import { Switch } from "@/components/ui/switch";
 
 enum PageIdentifier {
   HOME = "HOME",
@@ -90,7 +90,7 @@ export default function CreateSectionModal({
     },
   });
 
-  const [configuration, setConfiguration] = useState<Record<string, any>>({});
+  // const [configuration, setConfiguration] = useState<Record<string, any>>({});
 
   // Watch section type to update configuration defaults
   const sectionType = methods.watch("sectionType");
@@ -99,7 +99,7 @@ export default function CreateSectionModal({
     if (sectionType) {
       // Set default configuration based on section type
       const defaults = getDefaultConfiguration(sectionType);
-      setConfiguration(defaults);
+      // setConfiguration(defaults);
       methods.setValue("configuration", JSON.stringify(defaults));
     }
   }, [sectionType, methods]);
@@ -117,11 +117,11 @@ export default function CreateSectionModal({
     }
   };
 
-  const handleConfigChange = (key: string, value: any) => {
-    const newConfig = { ...configuration, [key]: value };
-    setConfiguration(newConfig);
-    methods.setValue("configuration", JSON.stringify(newConfig));
-  };
+  // const handleConfigChange = (key: string, value: any) => {
+  //   const newConfig = { ...configuration, [key]: value };
+  //   setConfiguration(newConfig);
+  //   methods.setValue("configuration", JSON.stringify(newConfig));
+  // };
 
   const onSubmit = (data: PageSectionForm) => {
     const formData = new FormData();
@@ -139,9 +139,9 @@ export default function CreateSectionModal({
     if (data.buttonUrl) formData.append("buttonUrl", data.buttonUrl);
 
     // Configuration (always sent, at least as empty object)
-    if (data.configuration) {
-      formData.append("configuration", data.configuration);
-    }
+    // if (data.configuration) {
+    //   formData.append("configuration", data.configuration);
+    // }
 
     formData.append("isActive", data.isActive.toString());
 
@@ -246,7 +246,7 @@ export default function CreateSectionModal({
               </div>
 
               {/* Configuration Fields */}
-              <div className="col-span-2 space-y-4 p-4 border rounded-lg">
+              {/* <div className="col-span-2 space-y-4 p-4 border rounded-lg">
                 <h3 className="font-medium">Section Configuration</h3>
 
                 {sectionType === SectionType.HERO && (
@@ -287,8 +287,8 @@ export default function CreateSectionModal({
                   </div>
                 )}
 
-                {/* Add more configuration options for other section types */}
-              </div>
+              
+              </div> */}
 
               {/* Media Field */} 
               <div className="col-span-2">

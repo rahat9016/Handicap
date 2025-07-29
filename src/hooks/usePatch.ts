@@ -10,7 +10,7 @@ export const usePatch = <T>(
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (params: { url: string; data: Record<string, unknown> }) => {
+    mutationFn: (params: { url: string; data: Record<string, unknown>  | FormData}) => {
       return postService.patch(params.url, params.data);
     },
     onSuccess: (data) => {

@@ -20,7 +20,7 @@ export const postService = {
         return response.data;
     },
 
-    patch: async (endpoint: string, data: Record<string, unknown>) => {
+    patch: async (endpoint: string, data: Record<string, unknown> | FormData) => {
         console.log(`PATCH Request to ${endpoint} with data:`, data);
         const response = await axiosInstance.patch(endpoint, data);
         console.log("Response:", response);

@@ -2,9 +2,9 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { Controller, FieldError, useFormContext } from "react-hook-form";
 import { IoCloseOutline } from "react-icons/io5";
-import { SUPPORTED_FORMATS } from "../organizer/schema/AddOrganizer";
-import { Input } from "../ui/input";
 
+import { Input } from "../ui/input";
+const SUPPORTED_FORMATS = ["image/jpg", "image/jpeg", "image/png",  "image/svg+xml"];
 interface IImageFileInputProps {
   name: string;
   errors: Record<string, FieldError>;
@@ -93,7 +93,6 @@ const MultipleImageFileInput = ({ name, errors }: IImageFileInputProps) => {
   const fieldError = errors?.[name];
   const { messages: errorMessages, indexes: errorIndex } =
     parseFieldErrors(fieldError);
-  const imagesLength = previews.length;
   return (
     <Controller
       name={name}
@@ -102,67 +101,70 @@ const MultipleImageFileInput = ({ name, errors }: IImageFileInputProps) => {
       render={({ field }) => {
         return (
           <div>
-            <div
-              className={
-                "border-[1px] border-dashed border-grayDark rounded-lg cursor-pointer block"
-              }
-            >
-              <label
-                htmlFor={"id"}
-                className={"flex flex-col items-center justify-center h-full"}
+            <div className="flex items-center gap-4">
+              <div
+                className={
+                  "w-[56px] lg:w-full xl:w-[163px] h-[56px] lg:h-[157px] border-[1px] border-dashed border-grayDark hover:border-dashboard-primary rounded-lg cursor-pointer block"
+                }
               >
-                <span className="text-grayDark text-3xl font-poppins font-extralight">
-                  +
-                </span>
-                <span className="text-grayDark text-xs font-poppins font-normal">
-                  Upload Picture
-                </span>
+                <label
+                  htmlFor={"id"}
+                  className="flex flex-col items-center justify-center h-full lg:gap-2 cursor-pointer py-5"
+                >
+                  <Image
+                    width={36}
+                    height={36}
+                    src="/images/dashboard/gallery-add.svg"
+                    alt="gallery"
+                  />
+                  <span className="text-grayDark lg:text-[#A6A6A6] text-xs font-poppins font-normal">
+                    Upload your photo
+                  </span>
 
-                <Input
-                  multiple
-                  id={"id"}
-                  type="file"
-                  className="hidden"
-                  onChange={(e) => handleFileChange(e, field)}
-                />
-              </label>
-            </div>
-            <div
-              className={`grid ${
-                imagesLength < 1 ? "grid-cols-1" : "grid-cols-5 lg:grid-cols-2"
-              }  gap-1 lg:gap-4`}
-            >
-              {previews &&
-                previews?.map((src, index: number) => {
-                  return (
-                    <div
-                      key={index}
-                      className={`w-[56px] lg:w-full xl:w-[163px] h-[56px] lg:h-[157px] border lg:border-none bg-[#DAE6F5] lg:p-2 ${
-                        errorIndex.includes(index)
-                          ? "border-2 border-rose-600"
-                          : "border-[#B2B2B2]"
-                      } rounded-lg relative group`}
-                    >
+                  <Input
+                    multiple
+                    id={"id"}
+                    type="file"
+                    className="hidden"
+                    onChange={(e) => handleFileChange(e, field)}
+                  />
+                </label>
+              </div>
+              <div className="grid grid-cols-3 gap-4">
+                {previews &&
+                  previews?.map((src, index: number) => {
+                    return (
                       <div
-                        role="button"
-                        tabIndex={0}
-                        onClick={() => handleDelete(index, field)}
-                        onKeyDown={(e) => {
-                          if (e.key === "Enter" || e.key === " ")
-                            handleDelete(index, field);
-                        }}
-                        className="absolute w-5 lg:w-6 h-5 lg:h-6 flex items-center justify-center bg-smokyBlack lg:bg-white lg:text-[#1A1A1A] text-white rounded-full -right-2 lg:right-3 lg:top-3 -top-2 cursor-pointer z-10 lg:shadow-md"
+                        key={index}
+                        className={`w-[56px] lg:w-full xl:w-[160px] h-[56px] lg:h-[157px] border lg:border-none bg-[#DAE6F5] lg:p-2 ${
+                          errorIndex.includes(index)
+                            ? "border-2 border-rose-600"
+                            : "border-[#B2B2B2]"
+                        } rounded-lg relative group`}
                       >
-                        <IoCloseOutline />
+                        <div
+                          role="button"
+                          tabIndex={0}
+                          onClick={() => handleDelete(index, field)}
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter" || e.key === " ")
+                              handleDelete(index, field);
+                          }}
+                          className="absolute w-5 lg:w-6 h-5 lg:h-6 flex items-center justify-center bg-smokyBlack lg:bg-white lg:text-[#1A1A1A] text-white rounded-full -right-2 lg:right-3 lg:top-3 -top-2 cursor-pointer z-10 lg:shadow-md"
+                        >
+                          <IoCloseOutline />
+                        </div>
+                        <Image
+                          width={126}
+                          height={150}
+                          src={src}
+                          alt={`Preview ${index}`}
+                          className="w-full h-full rounded-lg"
+                        />
                       </div>
-                      <Image
-                        src={src}
-                        alt={`Preview ${index}`}
-                        className="w-full h-full object-cover rounded-lg"
-                      />
-                    </div>
-                  );
-                })}
+                    );
+                  })}
+              </div>
             </div>
             {errorMessages.length > 0 && (
               <p className="text-rose-500 text-xs mt-1 pl-2">

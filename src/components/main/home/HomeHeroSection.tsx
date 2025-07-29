@@ -40,7 +40,7 @@ export default function HomeHeroSection() {
           </Button>
         </div>
         <div>
-          <Image width={765} height={460} src={data?.data?.imageUrls[0] || "/images/home/heroSection.png"} alt="hero" className="h-[460px] object-cover" />
+          <Image width={765} height={460} src={data?.data?.imageUrls[0] || ""} alt="hero" className="h-[460px] object-cover rounded-lg" />
         </div>
         </div>
       </div>

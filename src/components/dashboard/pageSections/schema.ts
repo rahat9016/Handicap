@@ -2,8 +2,8 @@
 import * as Yup from "yup";
 import { InferType } from "yup";
 
-const FILE_SIZE = 2 * 1024 * 1024; // 2MB
-const SUPPORTED_FORMATS = ["image/jpg", "image/jpeg", "image/png"];
+const FILE_SIZE = 5 * 1024 * 1024; // 2MB
+const SUPPORTED_FORMATS = ["image/jpg", "image/jpeg", "image/png",  "image/svg+xml"];
 
 const imageSchema = Yup
   .mixed<File | string>()
@@ -36,7 +36,6 @@ export const pageSectionSchema = Yup.object().shape({
   content: Yup.string().optional(),
   buttonLabel: Yup.string().optional(),
   buttonUrl: Yup.string().optional(),
-  configuration: Yup.object().optional(),
   isActive: Yup.boolean().default(true),
   images: Yup.array().nullable().of(imageSchema)
 });

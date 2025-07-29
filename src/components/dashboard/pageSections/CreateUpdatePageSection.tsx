@@ -2,6 +2,7 @@
 import ControlledInputField from "@/components/share/ControlledInputField";
 import ControlledSelectField from "@/components/share/ControlledSelectField";
 import InputLabel from "@/components/share/InputLabel";
+import MultipleImageFileInput from "@/components/share/MultipleImageFileInput";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -9,11 +10,12 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { usePatch } from "@/hooks/usePatch";
 import { usePost } from "@/hooks/usePost";
 import { yupResolver } from "@hookform/resolvers/yup";
 import dynamic from "next/dynamic";
 import { useEffect } from "react";
-import { FormProvider, useForm } from "react-hook-form";
+import { FieldError, FormProvider, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { PageSectionForm, pageSectionSchema } from "./schema";
 import { IPageSection } from "./types";
@@ -77,11 +79,15 @@ export default function CreateSectionModal({
   onClose,
   initialValues,
 }: CreateUpdateSectionModalProps) {
-  const { mutateAsync } = usePost(
+  const { mutateAsync, error } = usePost(
     "/page-sections",
     (data) => {
       console.log("POST success", data);
     },
+    [["page-sections"]]
+  );
+  const { mutateAsync: patchAsync, error: patchError } = usePatch<FormData>(
+    (data) => console.log("Success", data),
     [["page-sections"]]
   );
   const isEditMode = !!initialValues;
@@ -89,44 +95,45 @@ export default function CreateSectionModal({
     resolver: yupResolver(pageSectionSchema),
     defaultValues: {
       isActive: true,
-      configuration: {},
     },
+    mode: "onChange",
   });
 
-  const sectionType = methods.watch("sectionType");
-
-  useEffect(() => {
-    if (sectionType) {
-      // Set default configuration based on section type
-      const defaults = getDefaultConfiguration(sectionType);
-      // setConfiguration(defaults);
-      methods.setValue("configuration", defaults);
-    }
-  }, [sectionType, methods]);
+  // const sectionType = methods.watch("sectionType");
+console.log(methods.formState.errors)
+  // useEffect(() => {
+  //   if (sectionType) {
+  //     // Set default configuration based on section type
+  //     const defaults = getDefaultConfiguration(sectionType);
+  //     // setConfiguration(defaults);
+  //     methods.setValue("configuration", defaults);
+  //   }
+  // }, [sectionType, methods]);
 
   useEffect(() => {
     if (initialValues) {
       methods.reset({
         ...initialValues,
+        images: initialValues?.imageUrls,
       });
     }
   }, [initialValues, methods]);
-  const getDefaultConfiguration = (type: string) => {
-    switch (type) {
-      case SectionType.HERO:
-        return { theme: "light", layout: "centered" };
-      case SectionType.FEATURE_GRID:
-        return { columns: 3, showIcons: true };
-      case SectionType.TESTIMONIALS:
-        return { layout: "carousel", autoplay: true };
-      default:
-        return {};
-    }
-  };
-console.log(methods.formState.errors)
+  // const getDefaultConfiguration = (type: string) => {
+  //   switch (type) {
+  //     case SectionType.HERO:
+  //       return { theme: "light", layout: "centered" };
+  //     case SectionType.FEATURE_GRID:
+  //       return { columns: 3, showIcons: true };
+  //     case SectionType.TESTIMONIALS:
+  //       return { layout: "carousel", autoplay: true };
+  //     default:
+  //       return {};
+  //   }
+  // };
+
   const onSubmit = (data: PageSectionForm) => {
     const formData = new FormData();
-
+    console.log(data);
     // Required fields
     formData.append("pageId", data.pageId);
     formData.append("sectionType", data.sectionType);
@@ -141,12 +148,29 @@ console.log(methods.formState.errors)
     if (data.buttonUrl) formData.append("buttonUrl", data.buttonUrl);
 
     // Handle image
-    if (data.images instanceof File) {
-      formData.append("images", data.images);
-    } else if (typeof data.images === "string") {
-      formData.append("images", data.images);
+    if (Array.isArray(data.images)) {
+      data.images.forEach((img) => {
+        if (img instanceof File) {
+          formData.append("images", img);
+        } else if (typeof img === "string" && img.trim() !== "") {
+          formData.append("images", img);
+        }
+      });
     }
 
+    if (isEditMode) {
+      patchAsync({
+        url: `/page-sections/${initialValues?.id}`,
+        data: formData,
+      }).then(() => {
+        console.log("Page section updated successfully");
+        toast.success("Page section updated successfully");
+        onClose();
+        // Reset the form after successful submission
+        methods.reset();
+      });
+      return;
+    }
     mutateAsync(formData)
       .then(() => {
         toast.success("Section created successfully");
@@ -245,7 +269,12 @@ console.log(methods.formState.errors)
               </div>
               <div className="col-span-2">
                 <InputLabel label="Section Image" />
-                {/* <MultipleImageFileInput name="images" errors={{ images: methods.formState.errors.images as FieldError }} /> */}
+                <MultipleImageFileInput
+                  name="images"
+                  errors={{
+                    images: methods.formState.errors.images as FieldError,
+                  }}
+                />
               </div>
 
               {/* Status Field */}
@@ -258,7 +287,13 @@ console.log(methods.formState.errors)
                 <InputLabel label="Active Section (Visible on website)" />
               </div>
             </div>
-
+            {error?.errors?.length ||
+              (patchError?.errors?.length && (
+                <div className="text-rose-600 bg-rose-200 text-center py-2 rounded-sm font-inter text-sm">
+                  {error?.errors && error?.errors[0]}
+                  {patchError?.errors && patchError?.errors[0]}
+                </div>
+              ))}
             <div className="flex justify-end gap-3 pt-4">
               <Button
                 type="button"

@@ -9,6 +9,7 @@ import { routing } from "@/i18n/routing";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { Inter } from "next/font/google";
 import { notFound } from "next/navigation";
+import { UserFetcher } from "./UserFetcher";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -40,6 +41,7 @@ export default async function RootLayout({
           <StoreProvider>
             <QueryProvider>
               <ToastProvider>
+                <UserFetcher />
                 <main id="main-content">
                   <AccessibilityControls />
                   {children}

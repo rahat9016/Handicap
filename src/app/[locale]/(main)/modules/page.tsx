@@ -33,7 +33,6 @@ export default function ModulesListPage() {
     router.push(`/modules/${moduleId}`);
   };
 
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-20">
       <div className="max-w-7xl mx-auto">
@@ -95,11 +94,10 @@ export default function ModulesListPage() {
                         {module.name}
                       </CardTitle>
                       <CardDescription
-  className="text-slate-200 text-sm line-clamp-2 rich-text-content"
-  dangerouslySetInnerHTML={{ __html: module.description }}
-/>
+                        className="text-slate-200 text-sm line-clamp-2 rich-text-content"
+                        dangerouslySetInnerHTML={{ __html: module.description }}
+                      />
                     </div>
-                    
                   </div>
                 </CardHeader>
 

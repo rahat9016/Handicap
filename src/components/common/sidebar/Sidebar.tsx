@@ -40,7 +40,8 @@ export default function Sidebar() {
       label: "Content",
       icon: Upload,
       children: [
-        { label: "Home Section", href: "/admin/organizer/organizer-mapped" },
+        { label: "Page Sections", href: "/admin/page-sections" },
+        // { label: "Home Section", href: "/admin/organizer/organizer-mapped" },
       ],
     },
     {

@@ -19,7 +19,6 @@ export const UserFetcher = () => {
   }
 );
 
-  console.log(data?.data)
   useEffect(() => {
     if (userId) {
       dispatch(setUserId(userId));

@@ -63,8 +63,8 @@ export default function Sidebar() {
       label: "Resources",
       icon: Folder,
       children: [
-        { label: "Add Resources", href: "#" },
-        { label: "All Resources", href: "#" },
+        // { label: "Add Resources", href: "#" },
+        { label: "All Resources", href: "/admin/resources" },
       ],
     },
     {
@@ -84,8 +84,8 @@ export default function Sidebar() {
       label: "Role Management",
       icon: ShieldCheck,
       children: [
-        { label: "Add Role", href: "#" },
-        { label: "All Roles", href: "#" },
+        { label: "Add Role", href: "/admin/roles/create-roles" },
+        { label: "All Roles", href: "/admin/roles/all-roles" },
       ],
     },
     {

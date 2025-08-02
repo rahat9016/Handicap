@@ -48,22 +48,27 @@ export default function Login() {
     }
   );
   const callbackUrl = decodeURIComponent(
-    searchParams.get("callbackUrl") || `/admin`
-  );
+  searchParams.get("callbackUrl") || `/admin`
+);
 
-  const onSubmit: SubmitHandler<LoginFormData> = (data) => {
-    login(data)
-      .then((res) => {
-        console.log("Login successful:", res?.id);
-        if (res?.id) {
-          dispatch(setUserId(res?.id));
-        }
-        router.push(callbackUrl);
-      })
-      .catch((error) => {
-        console.error("Login failed:", error);
-      });
-  };
+const onSubmit: SubmitHandler<LoginFormData> = (data) => {
+  login(data)
+    .then((res) => {
+      console.log("Login successful:", res?.id);
+
+      if (res?.id) {
+        dispatch(setUserId(res.id));
+      }
+
+      const destination =
+        res?.parentId === null ? callbackUrl : "/admin/resources";
+
+      router.push(destination);
+    })
+    .catch((error) => {
+      console.error("Login failed:", error);
+    });
+};
 
   useEffect(() => {
     if (isSuccess && data?.data) {

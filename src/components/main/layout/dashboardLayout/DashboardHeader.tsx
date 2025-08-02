@@ -1,21 +1,12 @@
 "use client"
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
-import { Input } from "@/components/ui/input";
 import { useAppSelector } from "@/lib/redux/hooks";
-import { Bell, Search } from "lucide-react";
+import { Bell } from "lucide-react";
 
 export default function DashboardHeader() {
   const { userInformation: { firstName, roleName } } = useAppSelector(state => state.auth)
   return (
     <div className="h-[90px] bg-white shadow-sm flex items-center justify-end px-6 border-b border-skeleton gap-5 ">
-      <div className="flex items-center gap-1 border border-gray rounded-xl px-2 h-12 w-full max-w-64">
-        <Search className={`w-7 h-7 text-[#8C8C8C] `} />
-        <Input
-          type="text"
-          placeholder="Search..."
-          className="border-none bg-transparent placeholder-gray-400 shadow-none py-1 placeholder:text-[#646464] group-hover:placeholder:text-white group-hover:text-white"
-        />
-      </div>
       <div>
         <div className="w-12 h-12 bg-dashboard-primary rounded-full flex items-center justify-center text-white relative">
           <div className="w-[22px] h-[22px] bg-[#DC3545] rounded-full flex items-center justify-center absolute top-0 -right-2">

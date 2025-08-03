@@ -48,7 +48,8 @@ export default function Users() {
     { header: "ID", accessorKey: "id" },
     { header: "First Name", accessorKey: "firstName" },
     { header: "Last Name", accessorKey: "lastName" },
-    { header: "phone", accessorKey: "phone" },
+    { header: "Email", accessorKey: "email" },
+    { header: "Phone", accessorKey: "phone" },
     { header: "User Role", accessorKey: "roleName" },
     {
       header: "Is Active",

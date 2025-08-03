@@ -17,6 +17,7 @@ export interface IDataItem {
 }
 
 export interface IInitialState {
+  loading: boolean;
   userInformation: IUserInformation;
   data: unknown[];
   // data: IDataItem[]; // Array of IDataItem objects

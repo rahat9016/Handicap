@@ -1,5 +1,7 @@
 
 export interface IInitialState {
   id: string;
-  role: string;
+  roleId: string;
+  roleName: string;
+  organizationName: string
 }

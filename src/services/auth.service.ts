@@ -40,6 +40,7 @@ export async function logout() {
   Cookies.remove("refreshToken");
   Cookies.remove("isAdmin");
   Cookies.remove("userId");
+  Cookies.remove("roleId");
   // Redirect to the home page
   redirect("/");
 }

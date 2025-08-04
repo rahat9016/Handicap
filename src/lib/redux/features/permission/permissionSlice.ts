@@ -5,6 +5,7 @@ const initialState: IInitialState = {
   hasPermission: false
 };
 
+
 const permissionSlice = createSlice({
   name: "permission",
   initialState,

@@ -1,12 +1,16 @@
 import { configureStore } from "@reduxjs/toolkit";
-import userReducer from "./features/user/userSlice";
 import authReducer from "./features/auth/authSlice";
+import organizerReducer from "./features/organizer/organizationSlice";
+import permissionReducer from "./features/permission/permissionSlice";
+import userReducer from "./features/user/userSlice";
 
 export const makeStore = () => {
     return configureStore({
         reducer: {
             user: userReducer,
             auth: authReducer,
+            organizer: organizerReducer,
+            permission: permissionReducer,
         },
     });
 };

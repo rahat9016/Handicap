@@ -6,57 +6,68 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
-import { Link } from "@/i18n/navigation";
+import { Link, useRouter } from "@/i18n/navigation";
 import { logoutUser } from "@/lib/redux/features/auth/authSlice";
-import { useAppDispatch } from "@/lib/redux/hooks";
+import { clearOrganization } from "@/lib/redux/features/organizer/organizationSlice";
+import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
 import {
   BarChart3,
   Folder,
   GraduationCap,
   LayoutDashboard,
   LogOut,
+  LucideIcon,
   Settings,
   ShieldCheck,
   Upload,
-  User2
+  User2,
 } from "lucide-react";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 
 export default function Sidebar() {
-  const dispatch = useAppDispatch()
+  const router = useRouter();
+  const dispatch = useAppDispatch();
+  const { hasPermission } = useAppSelector((state) => state.permission);
+
   const menuItems = [
     {
       label: "Overview",
       icon: LayoutDashboard,
       href: "/admin",
     },
-    {
+    hasPermission && {
       label: "Users",
       icon: User2,
       href: "/admin/users",
     },
-    {
+    hasPermission && {
       label: "Content",
       icon: Upload,
-      children: [
-        { label: "Page Sections", href: "/admin/page-sections" },
-        // { label: "Home Section", href: "/admin/organizer/organizer-mapped" },
-      ],
+      children: [{ label: "Page Sections", href: "/admin/page-sections" }],
     },
     {
       label: "Organization Manage",
       icon: Settings,
       children: [
-        { label: "Organization mapped", href: "/admin/organizer/organizer-mapped" },
-        { label: "All Organizations", href: "/admin/organizer/all-organization" },
+        {
+          label: "Organization mapped",
+          href: "/admin/organizer/organizer-mapped",
+        },
+        {
+          label: "All Organizations",
+          href: "/admin/organizer/all-organization",
+        },
       ],
     },
     {
       label: "Setup",
       icon: Settings,
       children: [
-        { label: "Organization Type Setup", href: "/admin/setup/organization-type-setup" },
+        {
+          label: "Organization Type Setup",
+          href: "/admin/setup/organization-type-setup",
+        },
       ],
     },
     {
@@ -100,13 +111,21 @@ export default function Sidebar() {
         { label: "Add Module", href: "/admin/modules/create-modules" },
       ],
     },
-  ];
+  ].filter(Boolean) as Array<{
+    label: string;
+    icon: LucideIcon;
+    href?: string;
+    children?: { label: string; href: string }[];
+  }>;
 
   const pathname = usePathname();
   return (
-    <aside className="w-[300px] bg-white h-[90vh] border-r border-skeleton flex flex-col px-[22px] fixed top-0 overflow-y-auto py-6">
+    <aside className="w-[300px] bg-white h-screen border-r border-skeleton flex flex-col px-[22px] fixed top-0 overflow-y-auto py-6">
       <nav className="flex flex-col h-full">
-        <div className="flex flex-col items-center  gap-3 mb-8">
+        <div
+          onClick={() => router.push("/")}
+          className="flex flex-col items-center  gap-3 mb-8 cursor-pointer"
+        >
           <Image width={109} height={48} src="/logo.png" alt="logo" />
           <div className="text-center">
             <h3 className="font-inter text-lg font-bold mb-1 text-erieBlack">
@@ -122,7 +141,7 @@ export default function Sidebar() {
           className="w-full h-full flex  flex-col gap-1"
         >
           {menuItems.map((item) => {
-            const pathnameWithoutLocale = pathname.replace(/^\/(en|bn)/, '');
+            const pathnameWithoutLocale = pathname.replace(/^\/(en|bn)/, "");
             const isActive = item.href === pathnameWithoutLocale;
 
             return (
@@ -155,7 +174,7 @@ export default function Sidebar() {
                   </>
                 ) : (
                   <Link
-                    href={item.href}
+                    href={item.href ?? "#"}
                     className={`w-full h-[46px] flex items-center gap-2 px-4 text-sm hover:bg-[#EAF6FB] hover:text-dashboard-primary ${
                       isActive ? "bg-dashboard-primary text-white" : ""
                     } rounded-md font-inter text-[#8C8C8C]`}
@@ -167,7 +186,13 @@ export default function Sidebar() {
             );
           })}
         </Accordion>
-        <Button onClick={() => dispatch(logoutUser())} className="w-full bg-[#F0F0F0] hover:bg-[#FDECEC] text-[#A8A8A8] hover:text-[#EB5757]  flex items-center justify-start gap-2 h-12 !px-4">
+        <Button
+          onClick={() => {
+            dispatch(logoutUser());
+            dispatch(clearOrganization());
+          }}
+          className="w-full bg-[#F0F0F0] hover:bg-[#FDECEC] text-[#A8A8A8] hover:text-[#EB5757]  flex items-center justify-start gap-2 h-12 !px-4"
+        >
           <LogOut className="h-6 w-6" size={24} /> Logout
         </Button>
       </nav>

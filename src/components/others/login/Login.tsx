@@ -7,8 +7,6 @@ import InputLabel from "@/components/share/InputLabel";
 import Paragraph from "@/components/share/Paragraph";
 import Title from "@/components/share/Title";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Label } from "@/components/ui/label";
 import { useAuth } from "@/hooks/useAuth";
 import { useGet } from "@/hooks/useGet";
 import { Link, useRouter } from "@/i18n/navigation";
@@ -16,6 +14,7 @@ import {
   setUserId,
   setUserInformation,
 } from "@/lib/redux/features/auth/authSlice";
+import { setPermission } from "@/lib/redux/features/permission/permissionSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
 import { LoginFormData } from "@/schemas/auth";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -33,9 +32,17 @@ export default function Login() {
   const router = useRouter();
   const methods = useForm<LoginForm>({
     resolver: yupResolver(userLoginSchema),
+    defaultValues: {
+      email: "",
+      password: "12345678",
+    },
   });
 
-  const { mutateAsync: login, isPending } = useAuth(() => {
+  const {
+    mutateAsync: login,
+    isPending,
+    error,
+  } = useAuth(() => {
     router.push("/");
   });
   const { data, isSuccess } = useGet<IUser>(
@@ -48,28 +55,30 @@ export default function Login() {
     }
   );
   const callbackUrl = decodeURIComponent(
-  searchParams.get("callbackUrl") || `/admin`
-);
+    searchParams.get("callbackUrl") || `/admin`
+  );
 
-const onSubmit: SubmitHandler<LoginFormData> = (data) => {
-  login(data)
-    .then((res) => {
-      console.log("Login successful:", res?.id);
+  const onSubmit: SubmitHandler<LoginFormData> = (data) => {
+    login(data)
+      .then((res) => {
+        console.log("Login successful:", res?.id);
+        console.log("res?.roleId === 1", res?.roleId === 1) 
+        if (res?.id) {
+          dispatch(setUserId(res.id));
+          if (res?.roleId === 1) dispatch(setPermission(true));
+          else dispatch(setPermission(false));
+        }
 
-      if (res?.id) {
-        dispatch(setUserId(res.id));
-      }
+        const destination =
+          res?.parentRoleId === 2 ? "/organization-list" : callbackUrl;
 
-      const destination =
-        res?.parentId === null ? callbackUrl : "/admin/resources";
-
-      router.push(destination);
-    })
-    .catch((error) => {
-      console.error("Login failed:", error);
-    });
-};
-
+        router.push(destination);
+      })
+      .catch((error) => {
+        console.error("Login failed:", error);
+      });
+  };
+  
   useEffect(() => {
     if (isSuccess && data?.data) {
       dispatch(setUserInformation(data.data));
@@ -117,35 +126,20 @@ const onSubmit: SubmitHandler<LoginFormData> = (data) => {
                     Forgot password?
                   </Link>
                 </div>
-
-                <div className="flex items-center space-x-2 my-6">
-                  <Checkbox id="remember" />
-                  <Label
-                    htmlFor="remember"
-                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                  >
-                    Remember me
-                  </Label>
-                </div>
-
+                {error && error?.errors && (
+                  <div className="text-rose-600 bg-rose-200 text-center py-2 rounded-sm font-inter text-sm mt-3">
+                    {error?.errors[0]}
+                  </div>
+                )}
                 <div>
                   <Button
                     type="submit"
-                    className="w-full rounded-[--radius] bg-accent text-accent-foreground hover:bg-accent/90"
+                    className="w-full rounded-[--radius] bg-dashboard-primary text-white hover:bg-dashboard-primary hover:text-white mt-3"
                   >
                     {isPending ? "Loading..." : "Sign in"}
                   </Button>
                 </div>
               </form>
-
-              <div className="mt-6">
-                <div className="mt-6  gap-4">
-                  <Button variant="outline" className="w-full">
-                    Continue with Google
-                  </Button>
-                </div>
-              </div>
-
               <p className="mt-10 text-center text-sm text-muted-foreground">
                 Don’t have an account? and{" "}
                 <Link href="/register" className="font-medium text-black">

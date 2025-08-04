@@ -1,9 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
+import Cookies from "js-cookie";
 import { IInitialState } from "./organizationTypes";
 
 const initialState: IInitialState = {
   id: "",
-  role: "",
+  roleId: "",
+  roleName: "",
+  organizationName: "",
 };
 
 const organizationSlice = createSlice({
@@ -12,10 +15,19 @@ const organizationSlice = createSlice({
   reducers: {
     setOrganization: (state, action) => {
       state.id = action.payload.id;
-      state.role = action.payload.role;
+      state.roleId = action.payload.roleId;
+      state.roleName = action.payload.roleName;
+      state.organizationName = action.payload.organizationName;
+    },
+    clearOrganization: (state) => {
+      state.id = "";
+      state.roleName = "";
+      state.roleId = "";
+      state.organizationName = "";
+      Cookies.remove("organizationData");
     },
   },
 });
 
-export const { setOrganization } = organizationSlice.actions;
+export const { setOrganization, clearOrganization } = organizationSlice.actions;
 export default organizationSlice.reducer;

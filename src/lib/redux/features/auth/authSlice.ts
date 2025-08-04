@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { IInitialState } from "./authTypes";
 
 const initialState: IInitialState = {
+  loading: false,
   userInformation: {
     id: "",
     email: "",
@@ -13,7 +14,7 @@ const initialState: IInitialState = {
     isVerified: false,
     accountStatus: "",
     roleId: "",
-    roleName:""
+    roleName: "",
   },
   data: [],
 };
@@ -23,8 +24,11 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     logoutUser: (state) => {
-      logout()
+      logout();
       state.userInformation = initialState.userInformation;
+    },
+    setLoading: (state, action) => {
+      state.loading = action.payload;
     },
     setUserInformation: (state, action) => {
       state.userInformation = {
@@ -41,6 +45,11 @@ const authSlice = createSlice({
   },
 });
 
-export const { setUserInformation, setData, logoutUser, setUserId } =
-  authSlice.actions;
+export const {
+  setLoading,
+  setUserInformation,
+  setData,
+  logoutUser,
+  setUserId,
+} = authSlice.actions;
 export default authSlice.reducer;

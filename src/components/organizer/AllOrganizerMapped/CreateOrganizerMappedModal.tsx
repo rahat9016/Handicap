@@ -23,11 +23,11 @@ export default function CreateOrganizerMappedModal({
   isOpen: boolean;
   onClose: () => void;
 }) {
-  const { data: userData } = useGet<IUser[]>(`/user`, ["user"]);
+  const { data: userData } = useGet<IUser[]>(`/user/users-for-organizations`, ["users-for-organizations"]);
   const { data: organizationData } = useGet<IOrganization[]>(`/organizations`, [
     "organizations",
   ]);
-  const { data: roleData } = useGet<IRole[]>(`/roles`, ["roles"]);
+  const { data: roleData } = useGet<IRole[]>(`/roles/ADMIN`, ["roles"]);
 
   const { mutateAsync, error } = usePost<IUser[]>(
     "/user-organization-role",

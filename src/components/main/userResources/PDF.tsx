@@ -3,6 +3,7 @@
 import { Document, Page, StyleSheet, Text, View } from '@react-pdf/renderer'
 import { IResourceData } from './types/interface'
 
+
 const styles = StyleSheet.create({
   page: {
     padding: 20,

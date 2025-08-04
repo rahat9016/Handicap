@@ -1,9 +1,9 @@
-import Resources from "@/components/main/resources/Resources";
+import UserResources from "@/components/main/userResources/UserResources";
 
 export default function page() {
   return (
     <div>
-      <Resources />
+      <UserResources />
     </div>
   );
 }

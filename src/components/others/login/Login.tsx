@@ -61,8 +61,7 @@ export default function Login() {
   const onSubmit: SubmitHandler<LoginFormData> = (data) => {
     login(data)
       .then((res) => {
-        console.log("Login successful:", res?.id);
-        console.log("res?.roleId === 1", res?.roleId === 1) 
+        
         if (res?.id) {
           dispatch(setUserId(res.id));
           if (res?.roleId === 1) dispatch(setPermission(true));

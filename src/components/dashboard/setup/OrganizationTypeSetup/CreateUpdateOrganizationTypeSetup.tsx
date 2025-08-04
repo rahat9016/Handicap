@@ -11,7 +11,7 @@ import { usePost } from "@/hooks/usePost";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { FormProvider, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import { IUser } from "../../organizer/types";
+import { IUser } from "../../../organizer/types";
 import { organizerTypeSetup, OrganizerTypeSetupForm } from "../Schema/Setup";
 
 export default function CreateUpdateOrganizationTypeSetup({

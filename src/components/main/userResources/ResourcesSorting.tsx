@@ -1,10 +1,10 @@
 "use client";
 import ControlledCheckboxField from "@/components/share/ControlledCheckboxField";
 import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
+    Accordion,
+    AccordionContent,
+    AccordionItem,
+    AccordionTrigger,
 } from "@/components/ui/accordion";
 import { FormProvider, useForm } from "react-hook-form";
 

@@ -42,7 +42,6 @@ export default async function RootLayout({
               <ToastProvider>
                 <UserFetcher />
                 <main id="main-content">
-                  {/* <AccessibilityControls /> */}
                   {children}
                 </main>
               </ToastProvider>

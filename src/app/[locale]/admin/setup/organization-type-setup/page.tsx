@@ -1,4 +1,4 @@
-import OrganizationTypeSetup from "@/components/setup/OrganizationTypeSetup/OrganizationTypeSetup";
+import OrganizationTypeSetup from "@/components/dashboard/setup/OrganizationTypeSetup/OrganizationTypeSetup";
 
 export default function page() {
   return (

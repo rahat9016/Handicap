@@ -75,7 +75,7 @@ export default function Sidebar() {
       icon: Folder,
       children: [
         // { label: "Add Resources", href: "#" },
-        { label: "All Resources", href: "/admin/resources" },
+        { label: "Resource Categories", href: "/admin/resources/resource-categories" },
       ],
     },
     {
@@ -89,13 +89,13 @@ export default function Sidebar() {
     {
       label: "Analytics",
       icon: BarChart3,
-      href: "/analytics",
+      href: "/admin/analytics",
     },
     {
       label: "Role Management",
       icon: ShieldCheck,
       children: [
-        { label: "Add Role", href: "/admin/roles/create-roles" },
+        // { label: "Add Role", href: "/admin/roles/create-roles" },
         { label: "All Roles", href: "/admin/roles/all-roles" },
       ],
     },

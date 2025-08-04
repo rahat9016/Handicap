@@ -11,8 +11,6 @@ import CreateUpdateRole from "./CreateUpdateRoles";
 import { IRole } from "./types/Role";
 export default function Roles() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  // const [isView, setIsView] = useState<boolean>(false);
-  // const [open, setOpen] = useState(false);
   const [role, setRole] = useState<IRole>();
   const {
     setCurrentPage,

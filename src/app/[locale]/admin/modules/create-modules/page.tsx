@@ -29,7 +29,7 @@ import dynamic from "next/dynamic";
 import type React from "react";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-const EditorWrapper = dynamic(() => import("../../../../../../components/share/EditorWrapper"), { ssr: false })
+const EditorWrapper = dynamic(() => import("../../../../../components/share/EditorWrapper"), { ssr: false })
 
 
 export default function ModuleFormPage() {

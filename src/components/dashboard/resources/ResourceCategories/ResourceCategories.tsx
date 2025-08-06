@@ -1,15 +1,17 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import { ColumnDef, DataTable } from "@/components/ui/data-table";
 import { useGet } from "@/hooks/useGet";
 import { usePagination } from "@/hooks/usePagination";
 import { format } from "date-fns";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import CreateUpdateCategories from "./CreateUpdateCategories";
 import { IResource } from "./types/Categories";
 
 export default function ResourceCategories() {
-  // const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  //   const [role, setRole] = useState<IResource>();
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+
   const {
     setCurrentPage,
     itemsPerPage,
@@ -35,7 +37,7 @@ export default function ResourceCategories() {
 
   const columns: ColumnDef<IResource>[] = [
     { header: "ID", accessorKey: "id" },
-    { header: "Role", accessorKey: "name" },
+    { header: "Name", accessorKey: "name" },
     { header: "Description", accessorKey: "description" },
     {
       header: "Created date",
@@ -66,9 +68,11 @@ export default function ResourceCategories() {
   return (
     <div className="bg-white p-8 min-h-[85vh] border border-skeleton rounded-2xl">
       <div className="flex w-full items-center justify-between mb-6">
-        <h1 className="text-xl font-bold text-erieBlack font-inter">
-          Resource Categories
-        </h1>
+        <h1 className="text-xl font-bold text-erieBlack font-inter">Resource Categories</h1>
+        <Button className="text-white font-inter text-sm font-medium bg-rose-600 hover:bg-rose-700 h-11" onClick={() => setIsModalOpen(true)}>
+          {" "}
+          Create Category{" "}
+        </Button>
       </div>
       <DataTable
         columns={columns}
@@ -79,14 +83,13 @@ export default function ResourceCategories() {
         itemsPerPage={itemsPerPage}
         onPageChange={setCurrentPage}
       />
-      {/* <CreateUpdateRole
+      <CreateUpdateCategories
             isOpen={isModalOpen}
             onClose={() => {
               setIsModalOpen(false);
-              setRole(undefined);
             }}
             // initialValues={role}
-          /> */}
+          />
     </div>
   );
 }

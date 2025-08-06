@@ -1,9 +1,9 @@
 import { getBaseUrl } from "@/config/envConfig";
 import { authKey } from "@/constants/auth/storageKey";
 import { getNewAccessToken, logout } from "@/services/auth.service";
-import { IGenericErrorResponse, ResponseSuccessType } from "@/types";
-import { getCookies, setToLocalStorage } from "@/utils/local-storage";
+import { getCookies } from "@/utils/local-storage";
 import axios from "axios";
+import Cookies from "js-cookie";
 import { toast } from "react-toastify";
 
 const instance = axios.create({
@@ -12,12 +12,15 @@ const instance = axios.create({
 });
 
 instance.defaults.headers.post["Content-Type"] = "application/json";
-// instance.defaults.headers["Accept"] = "application/json";
 instance.defaults.timeout = 60000;
 
 // Request interceptor
 instance.interceptors.request.use(
   function (config) {
+    // <========
+    // If the request is a POST request and the data is not FormData,
+    // set Content-Type to application/json
+    // ========>
     if (!(config.data instanceof FormData)) {
       config.headers["Content-Type"] = "application/json";
     } else {
@@ -40,98 +43,6 @@ instance.interceptors.request.use(
 );
 
 // Response interceptor
-instance.interceptors.response.use(
-  //@ts-expect-error: response type is not always consistent
-  function (response) {
-    const responseObject: ResponseSuccessType = {
-      data: response?.data?.data,
-      meta: response?.data?.meta,
-    };
-    return responseObject;
-  },
-  async function (error) {
-    const config = await error.config;
-    if (error?.response?.status === 401 && !config?.sent) {
-      config.sent = true;
-      const errorMessage = error?.response?.data?.message || "You are not authorized";
-
-      if (errorMessage.includes("Invalid or expired token")) {
-        const response = await getNewAccessToken();
-        const newAccessToken = response.data.access_token;
-
-        config.headers["Authorization"] = `Bearer ${newAccessToken}`;
-
-        console.log("newAccessToken", newAccessToken);
-
-
-        setToLocalStorage(authKey, newAccessToken);
-
-        return instance(config);
-      } else if (errorMessage.includes("Refresh token expired")) {
-        logout()
-      } else if (errorMessage.includes("Password is incorrect")) {
-        const responseObject: IGenericErrorResponse = {
-          statusCode: error?.response?.data?.statusCode || 500,
-          message: error?.response?.data?.message || "Something went wrong",
-          errorMessages: error?.response?.data?.message,
-        };
-        return Promise.reject(responseObject);
-      } else {
-        console.error("401: You are not authorized");
-        logout()
-      }
-    } else if (error?.response?.status === 403) {
-      console.error("403: Forbidden");
-      toast.error("You do not have permission to access this resource");
-      // logout()
-
-    } else {
-      const responseObject: IGenericErrorResponse = {
-        statusCode: error?.response?.data?.statusCode || 500,
-        message: error?.response?.data?.message || "Something went wrong",
-        errorMessages: error?.response?.data?.message,
-        errors: error?.response?.data?.errors,
-      };
-      return Promise.reject(responseObject);
-    }
-  }
-);
-
-export { instance as axiosInstance };
-// import axios from "axios";
-// import { getFromLocalStorage, setToLocalStorage } from "@/utils/local-storage";
-// import { getNewAccessToken, logout } from "@/services/auth.service";
-// import { authKey } from "@/constants/auth/storageKey";
-// import { IGenericErrorResponse, ResponseSuccessType } from "@/types";
-// import { getBaseUrl } from "@/config/envConfig";
-
-// const instance = axios.create({
-//   baseURL: getBaseUrl(),
-//   withCredentials: true,
-// });
-
-// instance.defaults.headers.post["Content-Type"] = "application/json";
-// instance.defaults.headers["Accept"] = "application/json";
-// instance.defaults.timeout = 60000;
-
-// // Request interceptor
-// instance.interceptors.request.use(
-//   function (config) {
-//     // Skip adding Authorization header for login endpoint
-//     if (!config.url?.includes("/auth/login")) {
-//       const accessToken = getFromLocalStorage(authKey);
-//       if (accessToken) {
-//         config.headers.Authorization = `Bearer ${accessToken}`;
-//       }
-//     }
-//     return config;
-//   },
-//   function (error) {
-//     return Promise.reject(error);
-//   }
-// );
-
-// // Response interceptor
 // instance.interceptors.response.use(
 //   //@ts-expect-error: response type is not always consistent
 //   function (response) {
@@ -145,21 +56,22 @@ export { instance as axiosInstance };
 //     const config = await error.config;
 //     if (error?.response?.status === 401 && !config?.sent) {
 //       config.sent = true;
-//       const errorMessage = error?.response?.data?.message || "You are not authorized";
+//       const errorMessage =
+//         error?.response?.data?.message || "You are not authorized";
 
-//       if (errorMessage.includes("No token provided")) {
-//         console.error("401: You are not authorized");
-//       } else if (errorMessage.includes("expired")) {
+//       if (errorMessage.includes("Invalid or expired token")) {
 //         const response = await getNewAccessToken();
-//         const newAccessToken = response.data.accessToken;
+//         const newAccessToken = response.data.access_token;
 
 //         config.headers["Authorization"] = `Bearer ${newAccessToken}`;
+
+//         console.log("newAccessToken", newAccessToken);
 
 //         setToLocalStorage(authKey, newAccessToken);
 
 //         return instance(config);
 //       } else if (errorMessage.includes("Refresh token expired")) {
-//         console.error("401: Invalid token");
+//         logout();
 //       } else if (errorMessage.includes("Password is incorrect")) {
 //         const responseObject: IGenericErrorResponse = {
 //           statusCode: error?.response?.data?.statusCode || 500,
@@ -169,18 +81,98 @@ export { instance as axiosInstance };
 //         return Promise.reject(responseObject);
 //       } else {
 //         console.error("401: You are not authorized");
+//         logout();
 //       }
 //     } else if (error?.response?.status === 403) {
-//       logout()
+//       console.error("403: Forbidden");
+//       toast.error("You do not have permission to access this resource");
+//       // logout()
 //     } else {
 //       const responseObject: IGenericErrorResponse = {
 //         statusCode: error?.response?.data?.statusCode || 500,
 //         message: error?.response?.data?.message || "Something went wrong",
 //         errorMessages: error?.response?.data?.message,
+//         errors: error?.response?.data?.errors,
 //       };
 //       return Promise.reject(responseObject);
 //     }
 //   }
 // );
+instance.interceptors.response.use(
+  // ✅ Handle success
+  //@ts-expect-error: response type is not always consistent
+  function (response) {
+    return {
+      data: response?.data?.data,
+      meta: response?.data?.meta,
+    };
+  },
 
-// export { instance as axiosInstance };
+  // ❌ Handle errors
+  async function (error) {
+    const originalRequest = error.config;
+    // console.log("error message", error);
+    // console.log('error status === 401', error?.response?.status === 401);
+    // Check for 401 (Unauthorized)
+    if (error?.response?.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+      
+      const errorMessage = error?.response?.data?.message;
+      // console.log("errorMessage", errorMessage);
+
+      // Case: Access token expired or invalid
+      if (errorMessage.includes("jwt expired")) {
+        try {
+          const response = await getNewAccessToken();
+          const newAccessToken = response.data.accessToken;
+          console.log("response ", response);
+
+          Cookies.set("accessToken", newAccessToken);
+
+          // Retry original request
+          originalRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
+          return instance(originalRequest);
+        } catch (refreshError) {
+          console.error("Refresh failed:", refreshError);
+          logout();
+          return Promise.reject(refreshError);
+        }
+      }
+
+      // Case: Refresh token expired or missing
+      if (errorMessage.includes("jwt expired")) {
+        logout();
+        return Promise.reject("Session expired. Please login again.");
+      }
+
+      // Case: Invalid password
+      if (errorMessage.includes("Password is incorrect")) {
+        const errorObj = {
+          statusCode: error?.response?.data?.statusCode || 500,
+          message: error?.response?.data?.message || "Something went wrong",
+          errorMessages: error?.response?.data?.message,
+        };
+        return Promise.reject(errorObj);
+      }
+
+      logout();
+    }
+
+    // Handle 403
+    if (error?.response?.status === 403) {
+      toast.error("You do not have permission to access this resource");
+      return Promise.reject(error);
+    }
+
+    // Generic Error Handler
+    const errorObj = {
+      statusCode: error?.response?.data?.statusCode || 500,
+      message: error?.response?.data?.message || "Something went wrong",
+      errorMessages: error?.response?.data?.message,
+      errors: error?.response?.data?.errors,
+    };
+
+    return Promise.reject(errorObj);
+  }
+);
+export { instance as axiosInstance };

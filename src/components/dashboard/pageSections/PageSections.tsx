@@ -65,13 +65,13 @@ export default function PageSections() {
       },
     },
     {
-              header: "Created date",
-              accessorKey: "createdAt",
-              cell: (value) => {
-                const date = new Date(value as string);
-                return <span>{format(date, "dd MMM yyyy")}</span>;
-              },
-            },
+      header: "Created date",
+      accessorKey: "createdAt",
+      cell: (value) => {
+        const date = new Date(value as string);
+        return <span>{format(date, "dd MMM yyyy")}</span>;
+      },
+    },
 
     {
       header: "Action",

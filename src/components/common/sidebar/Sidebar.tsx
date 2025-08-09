@@ -78,9 +78,9 @@ export default function Sidebar() {
       label: "Resources",
       icon: Folder,
       children: [
-      
+        { label: "Resources", href: "/admin/resources/resources-list" },      
         { label: "Resource Categories", href: "/admin/resources/resource-categories" },
-        { label: "Resources", href: "/admin/resources/resources-list" },
+        { label: "Resource Keywords", href: "/admin/resources/resource-keywords" },
       ],
     },
     {

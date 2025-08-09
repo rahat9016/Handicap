@@ -1,18 +1,19 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
+
 import { Button } from "@/components/ui/button";
 import { ColumnDef, DataTable } from "@/components/ui/data-table";
+import { Input } from "@/components/ui/input";
 import { useGet } from "@/hooks/useGet";
 import { usePagination } from "@/hooks/usePagination";
 import { format } from "date-fns";
-import { SquarePen } from "lucide-react";
+import { Plus, SquarePen } from "lucide-react";
 import { useEffect, useState } from "react";
-import { IOrganizationResponse } from "../types";
-import CreateUpdateOrganization from "./CreateUpdateOrganization";
-
-export default function AllOrganization() {
+import { ILanguage } from "../types/setup";
+import CreateUpdateLanguageSetup from "./CreateUpdateLanguageSetup";
+export default function LanguageSetup() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [organization, setOrganization] = useState<IOrganizationResponse | undefined>(undefined);
+  const [language, setLanguage] = useState<ILanguage | undefined>(undefined);
+
   const {
     setCurrentPage,
     itemsPerPage,
@@ -20,19 +21,15 @@ export default function AllOrganization() {
     totalItems,
     setTotalItems,
   } = usePagination();
-  const { data, isLoading } = useGet(
-    "/organizations",
-    ["organizations", currentPage.toString()],
+  const { data, isLoading } = useGet<ILanguage[]>(
+    "/languages",
+    ["languages", currentPage.toString()],
     {
       page: currentPage.toString(),
       limit: itemsPerPage.toString(),
+      // query: debouncedSearch,
     }
   );
-
-  const handleEdit = (row: IOrganizationResponse) => {
-      setOrganization(row);
-      setIsModalOpen(true);
-    };
 
   // Update total items whenever data changes
   useEffect(() => {
@@ -41,17 +38,16 @@ export default function AllOrganization() {
     }
   }, [data]);
 
-  const columns: ColumnDef<IOrganizationResponse>[] = [
-    { header: "Organization Name", accessorKey: "name" },
-    {
-      header: "Type",
-      accessorKey: "type",
-      cell: (_, row) => {
-        return <span>{row.type?.name || "N/A"}</span>;
-      },
-    },
-    { header: "E-mail", accessorKey: "contactEmail" },
-    { header: "Phone", accessorKey: "contactPhone" },
+  const handleEdit = (row: ILanguage) => {
+    setLanguage(row);
+    setIsModalOpen(true);
+  };
+
+  const columns: ColumnDef<ILanguage>[] = [
+    { header: "ID", accessorKey: "id" },
+    { header: "Code", accessorKey: "code" },
+    { header: "Name", accessorKey: "name" },
+    { header: "Native Name", accessorKey: "nativeName" },
     {
       header: "Created date",
       accessorKey: "createdAt",
@@ -60,6 +56,15 @@ export default function AllOrganization() {
         return <span>{format(date, "dd MMM yyyy")}</span>;
       },
     },
+    {
+      header: "Updated At date",
+      accessorKey: "updatedAt",
+      cell: (value) => {
+        const date = new Date(value as string);
+        return <span>{format(date, "dd MMM yyyy")}</span>;
+      },
+    },
+    
     {
       header: "Is Active",
       accessorKey: "isActive",
@@ -80,7 +85,7 @@ export default function AllOrganization() {
     {
       header: "Action",
       accessorKey: "id",
-      cell: (_value, row: IOrganizationResponse) => {
+      cell: (_value, row) => {
         return (
           <div className="flex items-center gap-5">
             <button
@@ -99,32 +104,34 @@ export default function AllOrganization() {
     <div className="bg-white p-8 min-h-[85vh] border border-skeleton rounded-2xl">
       <div className="flex w-full items-center justify-between mb-6">
         <h1 className="text-xl font-bold text-erieBlack font-inter">
-          All Organizations
+          Language Setup
         </h1>
-        <Button
-          className="text-white font-inter text-sm font-medium bg-rose-600 hover:bg-rose-700 h-11"
-          onClick={() => setIsModalOpen(true)}
-        >
-          {" "}
-          Create Organization{" "}
-        </Button>
+        <div className="flex items-center gap-4">
+          <Input placeholder="Search languages..." className="w-[300px]" />
+          <Button
+            className="text-white font-inter text-sm font-medium bg-rose-600 hover:bg-rose-700 h-11 gap-1"
+            onClick={() => setIsModalOpen(true)}
+          >
+            <Plus className="!text-2xl text-white"/> Create 
+          </Button>
+        </div>
       </div>
       <DataTable
         columns={columns}
-        data={Array.isArray(data?.data) ? (data.data as IOrganizationResponse[]) : []}
+        data={Array.isArray(data?.data) ? data.data : []}
         isLoading={isLoading}
         totalItems={totalItems}
         currentPage={currentPage}
         itemsPerPage={itemsPerPage}
         onPageChange={setCurrentPage}
       />
-      <CreateUpdateOrganization
+      <CreateUpdateLanguageSetup
         isOpen={isModalOpen}
         onClose={() => {
           setIsModalOpen(false);
-          setOrganization(undefined);
+          setLanguage(undefined);
         }}
-        initialValues={organization}
+        initialValues={language}
       />
     </div>
   );

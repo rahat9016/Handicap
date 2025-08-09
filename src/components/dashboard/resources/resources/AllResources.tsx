@@ -1,22 +1,20 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
+import { Button } from "@/components/ui/button";
 import { ColumnDef, DataTable } from "@/components/ui/data-table";
 import { useGet } from "@/hooks/useGet";
 import { usePagination } from "@/hooks/usePagination";
-import { useSearchDebounce } from "@/hooks/useSearchDebounce";
-import { Eye, SquarePen } from "lucide-react";
+import { format } from "date-fns";
+import { Eye, Plus, SquarePen } from "lucide-react";
 import { useEffect, useState } from "react";
-import { IUser } from "../organizer/types";
-import { Input } from "../ui/input";
-import CreateUpdateUser from "./CreateUpdateUsers";
-import ViewDetails from "./ViewDetails";
+import { IResource } from "../types/types";
+import CreateUpdateResources from "./CreateUpdateResources";
+import ViewResourceDetails from "./ViewDetails";
 
-export default function Users() {
+export default function AllResources() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [resource, setResource] = useState<IResource | undefined>(undefined);
   const [isView, setIsView] = useState<boolean>(false);
-  const [user, setUser] = useState<IUser>();
-  const { search, handleSearchChange } =
-    useSearchDebounce(300);
   const {
     setCurrentPage,
     itemsPerPage,
@@ -24,16 +22,23 @@ export default function Users() {
     totalItems,
     setTotalItems,
   } = usePagination();
-  const { data, isLoading } = useGet<IUser>(
-    "/user",
-    ["user", currentPage.toString()],
+  const { data, isLoading } = useGet(
+    "/resources",
+    ["resources", currentPage.toString()],
     {
       page: currentPage.toString(),
       limit: itemsPerPage.toString(),
-      // query: debouncedSearch,
     }
   );
 
+  const handleEdit = (row: IResource) => {
+    setResource(row);
+    setIsModalOpen(true);
+  };
+  const handleView = (row: IResource) => {
+    setResource(row);
+    setIsView(true);
+  };
   // Update total items whenever data changes
   useEffect(() => {
     if (data) {
@@ -41,36 +46,32 @@ export default function Users() {
     }
   }, [data]);
 
-  const handleEdit = (row: IUser) => {
-    setUser(row);
-    setIsModalOpen(true);
-  };
-  const handleView = (row: IUser) => {
-    setUser(row);
-    setIsView(true);
-  };
-  const columns: ColumnDef<IUser>[] = [
-    { header: "ID", accessorKey: "id" },
-    { header: "First Name", accessorKey: "firstName" },
-    { header: "Last Name", accessorKey: "lastName" },
-    { header: "Email", accessorKey: "email" },
-    { header: "Phone", accessorKey: "phone" },
-    { header: "User Role", accessorKey: "roleName" },
+  const columns: ColumnDef<IResource>[] = [
+    { header: "Resource Title", accessorKey: "title" },
+    { header: "Description", accessorKey: "description" },
+    { header: "Download Count", accessorKey: "downloadCount" },
+    { header: "View Count", accessorKey: "viewCount" },
+    {
+      header: "Created date",
+      accessorKey: "createdAt",
+      cell: (value) => {
+        const date = new Date(value as string);
+        return <span>{format(date, "dd MMM yyyy")}</span>;
+      },
+    },
     {
       header: "Is Active",
-      accessorKey: "accountStatus",
+      accessorKey: "isCurrent",
       cell: (value) => {
         const isActive = value;
 
         return (
           <span
             className={`px-2 py-1 rounded-full text-xs font-medium ${
-              isActive == "ACTIVE"
-                ? "bg-[#bfffda] text-green"
-                : "bg-rose-200 text-rose-700"
+              isActive ? "bg-[#bfffda] text-green" : "bg-rose-200 text-rose-700"
             }`}
           >
-            {isActive}
+            {isActive ? "Active" : "Inactive"}
           </span>
         );
       },
@@ -78,7 +79,7 @@ export default function Users() {
     {
       header: "Action",
       accessorKey: "id",
-      cell: (_value, row) => {
+      cell: (_value, row: IResource) => {
         return (
           <div className="flex items-center gap-5">
             <button
@@ -86,7 +87,7 @@ export default function Users() {
               className="text-darkLiver hover:underline text-sm flex items-center gap-1"
             >
               <SquarePen size={16} />
-              Edit Role
+              Edit
             </button>
             <button
               onClick={() => handleView(row)}
@@ -103,41 +104,42 @@ export default function Users() {
   return (
     <div className="bg-white p-8 min-h-[85vh] border border-skeleton rounded-2xl">
       <div className="flex w-full items-center justify-between mb-6">
-        <h1 className="text-xl font-bold text-erieBlack font-inter">Users</h1>
-        <div>
-          <Input
-            placeholder="Search users..."
-            value={search}
-            onChange={handleSearchChange}
-            className="w-[300px]"
-          />
-        </div>
+        <h1 className="text-xl font-bold text-erieBlack font-inter">
+          All Resources
+        </h1>
+        <Button
+          className="text-white font-inter text-sm font-medium bg-rose-600 hover:bg-rose-700 h-11 gap-1"
+          onClick={() => setIsModalOpen(true)}
+        >
+          <Plus className="!text-2xl text-white" /> Create
+        </Button>
       </div>
       <DataTable
         columns={columns}
-        data={Array.isArray(data?.data) ? data.data : []}
+        data={Array.isArray(data?.data) ? (data.data as IResource[]) : []}
         isLoading={isLoading}
         totalItems={totalItems}
         currentPage={currentPage}
         itemsPerPage={itemsPerPage}
         onPageChange={setCurrentPage}
       />
-      <CreateUpdateUser
+      <CreateUpdateResources
         isOpen={isModalOpen}
         onClose={() => {
           setIsModalOpen(false);
-          setUser(undefined);
+          setResource(undefined);
         }}
-        initialValues={user}
+        initialValues={resource}
       />
-      {user && (
-        <ViewDetails
+
+      {resource && (
+        <ViewResourceDetails
           isOpen={isView}
           onClose={() => {
             setIsView(false);
-            setUser(undefined);
+            setResource(undefined);
           }}
-          user={user}
+          resource={resource}
         />
       )}
     </div>

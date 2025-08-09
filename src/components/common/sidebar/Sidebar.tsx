@@ -68,14 +68,19 @@ export default function Sidebar() {
           label: "Organization Type Setup",
           href: "/admin/setup/organization-type-setup",
         },
+        {
+          label: "Language Setup",
+          href: "/admin/setup/language-setup",
+        },
       ],
     },
     {
       label: "Resources",
       icon: Folder,
       children: [
-        // { label: "Add Resources", href: "#" },
+      
         { label: "Resource Categories", href: "/admin/resources/resource-categories" },
+        { label: "Resources", href: "/admin/resources/resources-list" },
       ],
     },
     {

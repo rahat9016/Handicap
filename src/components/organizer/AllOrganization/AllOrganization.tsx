@@ -4,33 +4,15 @@ import { Button } from "@/components/ui/button";
 import { ColumnDef, DataTable } from "@/components/ui/data-table";
 import { useGet } from "@/hooks/useGet";
 import { usePagination } from "@/hooks/usePagination";
-import { usePost } from "@/hooks/usePost";
-import { yupResolver } from "@hookform/resolvers/yup";
 import { format } from "date-fns";
+import { SquarePen } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import { toast } from "react-toastify";
-import { OrganizationForm, organizationSchema } from "../schema/AddOrganizer";
-import CreateOrganizationModal from "./CreateOrganizationModal";
+import { IOrganizationResponse } from "../types";
+import CreateUpdateOrganization from "./CreateUpdateOrganization";
 
-interface IOrganization {
-  name: string;
-  type: {
-    createdAt: string;
-    description: string;
-    id: number;
-    isActive: boolean;
-    name: string;
-    updatedAt: string;
-  };
-  contactEmail: string;
-  contactPhone: string;
-  createdAt: string;
-  isActive: boolean;
-  id: string;
-}
 export default function AllOrganization() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [organization, setOrganization] = useState<IOrganizationResponse | undefined>(undefined);
   const {
     setCurrentPage,
     itemsPerPage,
@@ -47,46 +29,10 @@ export default function AllOrganization() {
     }
   );
 
-  const { mutateAsync, error } = usePost(
-    "/organizations",
-    (data) => {
-      console.log("POST success", data);
-    },
-    [["organizations"]]
-  );
-  const methods = useForm<OrganizationForm>({
-    resolver: yupResolver(organizationSchema),
-  });
-
-  const onSubmit = (data: OrganizationForm) => {
-    const formData = new FormData();
-
-    // Append required fields
-    formData.append("name", data.name);
-    formData.append("contactPhone", data.contactPhone || "");
-    formData.append("typeId", data.typeId);
-    formData.append("code", data.name.toLowerCase().replace(/\s+/g, "-"));
-
-    // Append optional fields only if they are provided
-    if (data.contactEmail) formData.append("contactEmail", data.contactEmail);
-    if (data.address) formData.append("address", data.address || "");
-    if (data.description)
-      formData.append("description", data.description || "");
-    if (data.logo instanceof File) {
-      formData.append("logo", data.logo);
-    } else if (typeof data.logo === "string" && data.logo.trim() !== "") {
-      formData.append("logo", data.logo);
-    }
-
-    // Submit the form data
-    mutateAsync(formData).then(() => {
-      console.log("Organization created successfully");
-      toast.success("Organization created successfully");
-      setIsModalOpen(false);
-      // Reset the form after successful submission
-      methods.reset();
-    });
-  };
+  const handleEdit = (row: IOrganizationResponse) => {
+      setOrganization(row);
+      setIsModalOpen(true);
+    };
 
   // Update total items whenever data changes
   useEffect(() => {
@@ -95,7 +41,7 @@ export default function AllOrganization() {
     }
   }, [data]);
 
-  const columns: ColumnDef<IOrganization>[] = [
+  const columns: ColumnDef<IOrganizationResponse>[] = [
     { header: "Organization Name", accessorKey: "name" },
     {
       header: "Type",
@@ -112,6 +58,40 @@ export default function AllOrganization() {
       cell: (value) => {
         const date = new Date(value as string);
         return <span>{format(date, "dd MMM yyyy")}</span>;
+      },
+    },
+    {
+      header: "Is Active",
+      accessorKey: "isActive",
+      cell: (value) => {
+        const isActive = value;
+
+        return (
+          <span
+            className={`px-2 py-1 rounded-full text-xs font-medium ${
+              isActive ? "bg-[#bfffda] text-green" : "bg-rose-200 text-rose-700"
+            }`}
+          >
+            {isActive ? "Active" : "Inactive"}
+          </span>
+        );
+      },
+    },
+    {
+      header: "Action",
+      accessorKey: "id",
+      cell: (_value, row: IOrganizationResponse) => {
+        return (
+          <div className="flex items-center gap-5">
+            <button
+              onClick={() => handleEdit(row)}
+              className="text-darkLiver hover:underline text-sm flex items-center gap-1"
+            >
+              <SquarePen size={16} />
+              Edit
+            </button>
+          </div>
+        );
       },
     },
   ];
@@ -131,19 +111,20 @@ export default function AllOrganization() {
       </div>
       <DataTable
         columns={columns}
-        data={Array.isArray(data?.data) ? data.data : []}
+        data={Array.isArray(data?.data) ? (data.data as IOrganizationResponse[]) : []}
         isLoading={isLoading}
         totalItems={totalItems}
         currentPage={currentPage}
         itemsPerPage={itemsPerPage}
         onPageChange={setCurrentPage}
       />
-      <CreateOrganizationModal
+      <CreateUpdateOrganization
         isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        methods={methods}
-        errors={error?.errors}
-        onSubmit={onSubmit}
+        onClose={() => {
+          setIsModalOpen(false);
+          setOrganization(undefined);
+        }}
+        initialValues={organization}
       />
     </div>
   );

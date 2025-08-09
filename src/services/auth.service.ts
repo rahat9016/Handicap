@@ -1,8 +1,8 @@
 import { refreshDelete } from "@/actions/cookiesAction";
 import { getBaseUrl } from "@/config/envConfig";
 import { authKey } from "@/constants/auth/storageKey";
-import { axiosInstance } from "@/helpers/axios/axiosInstance";
 import { getFromLocalStorage, setToLocalStorage } from "@/utils/local-storage";
+import axios from "axios";
 import Cookies from "js-cookie";
 import { redirect } from "next/navigation";
 import { decodedToken } from "./jwt";
@@ -40,15 +40,31 @@ export async function logout() {
   Cookies.remove("refreshToken");
   Cookies.remove("isAdmin");
   Cookies.remove("userId");
+  Cookies.remove("roleId");
   // Redirect to the home page
   redirect("/");
 }
 
 export const getNewAccessToken = async () => {
-  return await axiosInstance({
-    url: `${getBaseUrl()}/auth/refresh-token`,
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    withCredentials: true,
-  });
+  const refreshToken = Cookies.get("refreshToken");
+  console.log("refreshToken", refreshToken);
+  if (!refreshToken) {
+    throw new Error("Refresh token expired");
+  }
+
+  const response = await axios.post(
+    `${getBaseUrl()}/auth/refresh-token`,
+    {
+      refreshToken: refreshToken,
+    },
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
+
+  return response.data;
 };
+
+

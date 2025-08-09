@@ -11,9 +11,10 @@ export const useAuth = (onSuccess?: () => void) => {
       Cookies.set("accessToken", data.accessToken, { expires: 1 });
       Cookies.set("refreshToken", data.refreshToken, { expires: 2 });
       Cookies.set("userId", data.id, { expires: 1 });
-      if (data.role === "DEVELOPER") {
-        Cookies.set("isAdmin", "true");
-      }
+      Cookies.set("roleId", data.roleId, { expires: 1 });
+
+      // Set admin cookie if the user is a developer
+      if (data.role === "DEVELOPER") Cookies.set("isAdmin", "true");
 
       toast.success(data.message);
       if (onSuccess) {
@@ -22,6 +23,7 @@ export const useAuth = (onSuccess?: () => void) => {
     },
     onError: (error: IGenericErrorResponse) => {
       toast.error(error.message);
+      throw error;
     },
   });
 };

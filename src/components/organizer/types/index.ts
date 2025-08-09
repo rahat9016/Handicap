@@ -48,3 +48,18 @@ export interface IOrganizationTypes {
   createdAt: Date;
   updatedAt: Date;
 }
+export interface IOrganizationResponse {
+  id: number;
+  name: string;
+  code: string;
+  description: string;
+  type: IOrganizationTypes;
+  contactEmail: string;
+  contactPhone: string;
+  address: string;
+  logoUrl: string;
+  isActive: boolean;
+  createdAt: string; // ISO date string
+  updatedAt: string; // ISO date string
+  creatorId: number;
+}

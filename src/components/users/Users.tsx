@@ -3,9 +3,11 @@
 import { ColumnDef, DataTable } from "@/components/ui/data-table";
 import { useGet } from "@/hooks/useGet";
 import { usePagination } from "@/hooks/usePagination";
+import { useSearchDebounce } from "@/hooks/useSearchDebounce";
 import { Eye, SquarePen } from "lucide-react";
 import { useEffect, useState } from "react";
 import { IUser } from "../organizer/types";
+import { Input } from "../ui/input";
 import CreateUpdateUser from "./CreateUpdateUsers";
 import ViewDetails from "./ViewDetails";
 
@@ -13,6 +15,8 @@ export default function Users() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isView, setIsView] = useState<boolean>(false);
   const [user, setUser] = useState<IUser>();
+  const { search, handleSearchChange } =
+    useSearchDebounce(300);
   const {
     setCurrentPage,
     itemsPerPage,
@@ -26,6 +30,7 @@ export default function Users() {
     {
       page: currentPage.toString(),
       limit: itemsPerPage.toString(),
+      // query: debouncedSearch,
     }
   );
 
@@ -48,7 +53,8 @@ export default function Users() {
     { header: "ID", accessorKey: "id" },
     { header: "First Name", accessorKey: "firstName" },
     { header: "Last Name", accessorKey: "lastName" },
-    { header: "phone", accessorKey: "phone" },
+    { header: "Email", accessorKey: "email" },
+    { header: "Phone", accessorKey: "phone" },
     { header: "User Role", accessorKey: "roleName" },
     {
       header: "Is Active",
@@ -98,6 +104,14 @@ export default function Users() {
     <div className="bg-white p-8 min-h-[85vh] border border-skeleton rounded-2xl">
       <div className="flex w-full items-center justify-between mb-6">
         <h1 className="text-xl font-bold text-erieBlack font-inter">Users</h1>
+        <div>
+          <Input
+            placeholder="Search users..."
+            value={search}
+            onChange={handleSearchChange}
+            className="w-[300px]"
+          />
+        </div>
       </div>
       <DataTable
         columns={columns}

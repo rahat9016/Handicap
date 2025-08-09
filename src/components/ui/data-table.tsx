@@ -72,7 +72,7 @@ export function DataTable<T>({
     if (totalPages > 1) pages.push(totalPages);
 
     return (
-      <div className="flex items-center justify-between px-2 py-4">
+      <div className="flex items-center justify-between px-2 py-4 border-t">
         <div className="text-sm text-muted-foreground">
           Showing{" "}
           <span className="font-medium">

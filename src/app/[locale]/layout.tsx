@@ -4,7 +4,6 @@ import StoreProvider from "@/lib/redux/provider/StoreProvider";
 import type { Metadata } from "next";
 import "./globals.css";
 
-import { AccessibilityControls } from "@/components/common/accessibility/AccessibilityControls";
 import { routing } from "@/i18n/routing";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { Inter } from "next/font/google";
@@ -43,7 +42,6 @@ export default async function RootLayout({
               <ToastProvider>
                 <UserFetcher />
                 <main id="main-content">
-                  <AccessibilityControls />
                   {children}
                 </main>
               </ToastProvider>

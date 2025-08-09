@@ -63,20 +63,37 @@ export function middleware(request: NextRequest) {
 
   const isModuleDetail = /^\/(en|bn)\/modules\/[^/]+$/.test(pathname);
   const isAdminRoute = /^\/(en|bn)\/admin(\/.*)?$/.test(pathname);
+  const isLoginPage = /^\/(en|bn)\/login$/.test(pathname);
   const isProtected = isModuleDetail || isAdminRoute;
 
-  if (isProtected) {
-    const token = request.cookies.get("accessToken")?.value;
+  const token = request.cookies.get("accessToken")?.value;
+  const roleId = Number(request.cookies.get("roleId")?.value);
 
-    if (!token) {
-      const loginUrl = new URL(`/${locale}/login`, request.url);
+  // ✅ Redirect logged-in users away from login page
+  if (isLoginPage && token) {
+    const redirectUrl = new URL(`/${locale}/admin`, request.url);
+    return NextResponse.redirect(redirectUrl);
+  }
 
-      // Remove locale prefix from the pathname
-      const pathnameWithoutLocale = pathname.replace(/^\/(en|bn)/, '');
+  // ✅ Redirect guests trying to access protected routes
+  if (isProtected && !token) {
+    const loginUrl = new URL(`/${locale}/login`, request.url);
+    const pathnameWithoutLocale = pathname.replace(/^\/(en|bn)/, '');
+    loginUrl.searchParams.set("callbackUrl", encodeURIComponent(pathnameWithoutLocale));
+    return NextResponse.redirect(loginUrl);
+  }
 
-      loginUrl.searchParams.set("callbackUrl", encodeURIComponent(pathnameWithoutLocale));
-      return NextResponse.redirect(loginUrl);
-    }
+  // 🚫 Block roleId !== 1 from accessing restricted admin routes
+  const restrictedAdminRoutes = [
+    `/admin/users`,
+    `/admin/page-sections`,
+  ];
+
+  const pathnameWithoutLocale = pathname.replace(/^\/(en|bn)/, '');
+
+  if (restrictedAdminRoutes.includes(pathnameWithoutLocale) && roleId !== 1) {
+    const redirectUrl = new URL(`/${locale}/admin`, request.url);
+    return NextResponse.redirect(redirectUrl);
   }
 
   return intlMiddleware(request);

@@ -16,7 +16,7 @@ export default function HomeHeroSection() {
   if(isLoading) { 
     return <HeroSkeleton />
   }
-  console.log(data?.data?.imageUrls[0])
+  
   return (
     <section
       tabIndex={0}

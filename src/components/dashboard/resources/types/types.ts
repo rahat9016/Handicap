@@ -36,9 +36,15 @@ interface Keyword {
 interface ResourceCount {
   versions: number;
 }
-
+interface IOrganization {
+  id: number;
+  name: string;
+  code: string;
+}
 export interface IResource {
   id: number;
+  name?: string;
+  isPrivate?: boolean;
   title: string;
   description: string;
   filePath: string;
@@ -54,5 +60,6 @@ export interface IResource {
   category: Category;
   uploader: Uploader;
   keywords: Keyword[];
+  organization: IOrganization;
   _count: ResourceCount;
 }

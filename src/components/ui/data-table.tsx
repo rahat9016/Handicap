@@ -127,11 +127,14 @@ export function DataTable<T>({
       <Table>
         <TableHeader className="bg-[#C6DFF8] h-[62px] px-6">
           <TableRow>
-            {columns?.map((column, index) => (
-              <TableHead key={index} className="font-medium font-inter text-base text-erieBlack">
+            {columns?.map((column, index) => {
+              console.log("Column Header:", column.header);
+              return (
+              <TableHead key={index} className={`font-medium font-inter text-base text-erieBlack `}>
                 {column.header}
               </TableHead>
-            ))}
+            )
+            })}
           </TableRow>
         </TableHeader>
 

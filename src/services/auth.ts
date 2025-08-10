@@ -27,3 +27,11 @@ export const postService = {
         return response.data;
     },
 };
+export const deleteService = {
+    delete: async (endpoint: string) => {
+        console.log(`Requesting ${endpoint}`);
+        const response = await axiosInstance.delete(endpoint);
+        console.log("Response:", response);
+        return response.data;
+    }
+};

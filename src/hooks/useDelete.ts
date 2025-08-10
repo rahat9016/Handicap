@@ -1,17 +1,17 @@
-import { postService } from "@/services/auth";
+import { deleteService } from "@/services/auth";
 import { IGenericErrorResponse } from "@/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 
-export const usePatch = <T>(
+export const useDelete = <T>(
   onSuccess?: (data: T) => void,
   invalidateQueriesKeys?: Array<string[]>
 ) => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (params: { url: string; data: Record<string, unknown>  | FormData}) => {
-      return postService.patch(params.url, params.data);
+    mutationFn: (params: { url: string }) => {
+      return deleteService.delete(params.url);
     },
     onSuccess: (data) => {
       if (invalidateQueriesKeys) {
@@ -24,7 +24,7 @@ export const usePatch = <T>(
       }
     },
     onError: (error: IGenericErrorResponse) => {
-      toast.error(error.message || "Failed to update.");
+      toast.error(error.message || "Failed to delete.");
       throw error;
     },
   });

@@ -1,184 +1,89 @@
 import { Badge } from "@/components/ui/badge";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Calendar, CheckCircle, Download, Eye, FileText, FileType, Globe, HardDrive, Hash, Tag, User } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import {
+  Calendar,
+  CheckCircle,
+  Download,
+  Eye,
+  FileText,
+  FileType,
+  Globe,
+  HardDrive,
+  Hash,
+  Tag,
+  User,
+} from "lucide-react";
 import Image from "next/image";
 import { IResource } from "../types/types";
-
-// export default function ViewResourceDetails({
-//   isOpen,
-//   onClose,
-//   resource,
-// }: {
-//   isOpen: boolean;
-//   onClose: () => void;
-//   resource?: IResource;
-// }) {
-//     console.log(resource)
-//   return (
-//     <Dialog open={isOpen} onOpenChange={onClose}>
-//       <DialogContent className="bg-white min-h-[20vh] w-[80vw] overflow-y-auto">
-//         <DialogHeader>
-//           <DialogTitle>Resource Details</DialogTitle>
-//         </DialogHeader>
-
-//         {/* File Preview */}
-//         <div className="flex items-center space-x-4">
-//           <div className="w-16 h-16 rounded-md bg-gray-100 overflow-hidden flex items-center justify-center">
-//             {resource?.filePath ? (
-//               <Image
-//                 src={resource.filePath}
-//                 alt="Resource"
-//                 width={64}
-//                 height={64}
-//                 className="object-cover"
-//               />
-//             ) : (
-//               <FileText className="w-8 h-8 text-gray-400" />
-//             )}
-//           </div>
-//           <div>
-//             <h2 className="text-xl font-semibold text-gray-800">
-//               {resource?.title}
-//             </h2>
-//             <p className="text-sm text-gray-500">{resource?.description}</p>
-//           </div>
-//         </div>
-
-//         {/* Info List */}
-//         <div className="mt-6 space-y-2">
-//           <div className="flex items-center justify-between">
-//             <span className="text-gray-600 font-medium">Category:</span>
-//             <span className="text-sm bg-blue-100 text-blue-800 px-2 py-1 rounded-full">
-//               {resource?.category?.name}
-//             </span>
-//           </div>
-
-//           <div className="flex items-center justify-between">
-//             <span className="text-gray-600 font-medium">Language:</span>
-//             <span className="text-sm flex items-center gap-1">
-//               <Languages className="w-4 h-4" /> {resource?.language?.name}
-//             </span>
-//           </div>
-
-//           <div className="flex items-center justify-between">
-//             <span className="text-gray-600 font-medium">File Type:</span>
-//             <span className="text-sm">{resource?.fileType}</span>
-//           </div>
-
-//           <div className="flex items-center justify-between">
-//             <span className="text-gray-600 font-medium">File Size:</span>
-//             <span className="text-sm">{(resource?.fileSize ?? 0) / 1024} KB</span>
-//           </div>
-
-//           <div className="flex items-center justify-between">
-//             <span className="text-gray-600 font-medium">Version:</span>
-//             <span className="text-sm">{resource?.version}</span>
-//           </div>
-
-//           <div className="flex items-center justify-between">
-//             <span className="text-gray-600 font-medium">Uploader:</span>
-//             <span className="text-sm">
-//               {resource?.uploader?.firstName} {resource?.uploader?.lastName}
-//             </span>
-//           </div>
-
-//           <div className="flex items-center justify-between">
-//             <span className="text-gray-600 font-medium">Keywords:</span>
-//             <div className="flex flex-wrap gap-1">
-//               {resource?.keywords?.map((k) => (
-//                 <span
-//                   key={k.keyword.id}
-//                   className="bg-gray-200 text-gray-700 px-2 py-1 rounded-full text-xs"
-//                 >
-//                   <Tag className="w-3 h-3 inline-block mr-1" />
-//                   {k.keyword.name}
-//                 </span>
-//               ))}
-//             </div>
-//           </div>
-
-//           <div className="flex items-center justify-between">
-//             <span className="text-gray-600 font-medium">Views:</span>
-//             <span className="text-sm flex items-center gap-1">
-//               <Eye className="w-4 h-4" /> {resource?.viewCount}
-//             </span>
-//           </div>
-
-//           <div className="flex items-center justify-between">
-//             <span className="text-gray-600 font-medium">Downloads:</span>
-//             <span className="text-sm flex items-center gap-1">
-//               <Download className="w-4 h-4" /> {resource?.downloadCount}
-//             </span>
-//           </div>
-
-//           <div className="flex items-center justify-between">
-//             <span className="text-gray-600 font-medium">Created At:</span>
-//             <span className="text-sm flex items-center gap-1">
-//               <Calendar className="w-4 h-4" />{" "}
-//               {resource?.createdAt &&
-//                 new Date(resource.createdAt).toLocaleDateString()}
-//             </span>
-//           </div>
-//         </div>
-//       </DialogContent>
-//     </Dialog>
-//   );
-// }
-
 
 export default function ViewResourceDetails({
   isOpen,
   onClose,
   resource,
 }: {
-  isOpen: boolean
-  onClose: () => void
-  resource?: IResource
+  isOpen: boolean;
+  onClose: () => void;
+  resource?: IResource;
 }) {
   const formatFileSize = (bytes: number) => {
-    if (bytes === 0) return "0 Bytes"
-    const k = 1024
-    const sizes = ["Bytes", "KB", "MB", "GB"]
-    const i = Math.floor(Math.log(bytes) / Math.log(k))
-    return Number.parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i]
-  }
+    if (bytes === 0) return "0 Bytes";
+    const k = 1024;
+    const sizes = ["Bytes", "KB", "MB", "GB"];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return (
+      Number.parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i]
+    );
+  };
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString("en-US", {
       year: "numeric",
       month: "short",
       day: "numeric",
-    })
-  }
+    });
+  };
 
   const getFileTypeIcon = (fileType: string) => {
-    if (fileType.includes("pdf")) return "📄"
-    if (fileType.includes("image")) return "🖼️"
-    if (fileType.includes("video")) return "🎥"
-    if (fileType.includes("audio")) return "🎵"
-    return "📁"
-  }
-console.log(resource)
+    if (fileType.includes("pdf")) return "📄";
+    if (fileType.includes("image")) return "🖼️";
+    if (fileType.includes("video")) return "🎥";
+    if (fileType.includes("audio")) return "🎵";
+    return "📁";
+  };
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="bg-white min-h-[20vh] w-[80vw] max-w-2xl overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <FileText className="w-5 h-5 text-blue" />
-            
             Resource Details
           </DialogTitle>
         </DialogHeader>
-
-        {/* Header Section */}
         <div className="flex items-start space-x-4 pb-4 border-b font-inter">
           <div className="w-16 h-16 rounded-lg bg-gradient-to-br from-blue to-purple-100 flex items-center justify-center text-2xl overflow-hidden">
-            <Image src={resource?.filePath || ""} alt="Resource" width={64} height={64} className="object-cover" />
-            {/* {getFileTypeIcon(resource?.fileType || "")} */}
+            {resource?.fileType === "application/pdf" ? (
+              <FileText className="w-10 h-10 mb-2 text-white" />
+            ) : (
+              <Image
+                src={resource?.filePath || ""}
+                alt="Resource Thumbnail"
+                width={64}
+                height={64}
+                className="object-cover rounded-lg"
+              />
+            )}
           </div>
           <div className="flex-1">
             <h2 className="text-xl font-semibold  mb-1">{resource?.title}</h2>
-            <p className="text-sm text-gray-600 mb-2">{resource?.description}</p>
+            <p className="text-sm text-gray-600 mb-2">
+              {resource?.description}
+            </p>
             <div className="flex items-center gap-4 text-xs text-gray-500">
               <span className="flex items-center gap-1">
                 <Download className="w-3 h-3 text-green" />
@@ -205,7 +110,8 @@ console.log(resource)
               <div className="flex items-center justify-between">
                 <span className="text-gray-600 text-sm">Type:</span>
                 <Badge className="text-xs bg-purple-100 text-purple-800 hover:bg-purple-100">
-                  {getFileTypeIcon(resource?.fileType || "")} {resource?.fileType}
+                  {getFileTypeIcon(resource?.fileType || "")}{" "}
+                  {resource?.fileType}
                 </Badge>
               </div>
 
@@ -223,7 +129,9 @@ console.log(resource)
                   <Badge className="text-xs text-purple-800 hover:bg-purple-100 bg-purple-50">
                     v{resource?.version}
                   </Badge>
-                  {resource?.isCurrent && <CheckCircle className="w-4 h-4 text-green" />}
+                  {resource?.isCurrent && (
+                    <CheckCircle className="w-4 h-4 text-green" />
+                  )}
                 </div>
               </div>
             </div>
@@ -298,5 +206,5 @@ console.log(resource)
         </div>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

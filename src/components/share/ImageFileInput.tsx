@@ -83,13 +83,13 @@ const ImageFileInput = ({ name, supportedImageTypes, supportedPdfType }: { name:
                 >
                   <X className="w-4 h-4 text-white" />
                 </button>
-                <Image
+                {preview && <Image
                   width={244}
                   height={132}
-                  src={preview}
+                  src={preview||"/images/dashboard/gallery-add.svg"}
                   alt="File Preview"
                   className="w-full h-full object-contain rounded-lg"
-                />
+                />} 
               </div>
             ) : isPdf ? (
               <div className="w-full h-full flex flex-col items-center justify-center text-gray-600">

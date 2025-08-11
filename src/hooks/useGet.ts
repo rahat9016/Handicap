@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 // import { axiosInstance } from "@/helpers/axios/axiosInstance";
 // import { useQuery } from "@tanstack/react-query";
 // import { toast } from "react-toastify";
@@ -45,19 +46,36 @@ export const useGet = <T>(
   queryParams?: Record<string, unknown>,
   options?: Omit<
     UseQueryOptions<
-      IGenericResponse<T>,        // TQueryFnData
-      IGenericErrorResponse,      // TError
-      IGenericResponse<T>,        // TData
-      string[]                    // TQueryKey
+      IGenericResponse<T>,
+      IGenericErrorResponse,
+      IGenericResponse<T>,
+      string[]
     >,
     "queryKey" | "queryFn"
   >
 ) => {
-  return useQuery<IGenericResponse<T>, IGenericErrorResponse, IGenericResponse<T>, string[]>({
-    queryKey,
+  // Remove empty params so queryKey doesn't get polluted
+  const filteredParams = Object.fromEntries(
+    Object.entries(queryParams || {}).filter(([_, value]) => {
+      return value !== "" && value !== undefined && value !== null;
+    })
+  );
+
+  const finalQueryKey = [
+    ...queryKey,
+    ...Object.values(filteredParams).map(String),
+  ];
+
+  return useQuery<
+    IGenericResponse<T>,
+    IGenericErrorResponse,
+    IGenericResponse<T>,
+    string[]
+  >({
+    queryKey: finalQueryKey,
     queryFn: async () => {
       try {
-        const response = await axiosInstance.get(endpoint, { params: queryParams });
+        const response = await axiosInstance.get(endpoint, { params: filteredParams });
         return response;
       } catch (error) {
         if (error instanceof Error) {

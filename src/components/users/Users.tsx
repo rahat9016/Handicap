@@ -14,7 +14,7 @@ export default function Users() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isView, setIsView] = useState<boolean>(false);
   const [user, setUser] = useState<IUser>();
-  const { search, handleSearchChange } = useSearchDebounce(300);
+  const { search, handleSearchChange, debouncedSearch } = useSearchDebounce(300);
   const {
     setCurrentPage,
     itemsPerPage,
@@ -28,7 +28,7 @@ export default function Users() {
     {
       page: currentPage.toString(),
       limit: itemsPerPage.toString(),
-      // query: debouncedSearch,
+      search: debouncedSearch,
     }
   );
 

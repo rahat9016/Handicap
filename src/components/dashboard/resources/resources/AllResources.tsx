@@ -1,15 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
-import DeleteDialog from "@/components/common/DeleteDialog";
 import { Button } from "@/components/ui/button";
 import { ColumnDef, DataTable } from "@/components/ui/data-table";
-import { useDelete } from "@/hooks/useDelete";
 import { useGet } from "@/hooks/useGet";
 import { usePagination } from "@/hooks/usePagination";
 import { format } from "date-fns";
-import { Eye, Plus, SquarePen, Trash2 } from "lucide-react";
+import { Eye, Plus, SquarePen } from "lucide-react";
 import { useEffect, useState } from "react";
-import { toast } from "react-toastify";
 import { IResource } from "../types/types";
 import CreateUpdateResources from "./CreateUpdateResources";
 import ViewResourceDetails from "./ViewDetails";
@@ -17,7 +14,6 @@ import ViewResourceDetails from "./ViewDetails";
 export default function AllResources() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [resource, setResource] = useState<IResource | undefined>(undefined);
-  const [deleteKeywords, setDeleteKeywords] = useState<IResource | undefined>();
   const [isView, setIsView] = useState<boolean>(false);
   const {
     setCurrentPage,
@@ -34,12 +30,7 @@ export default function AllResources() {
       limit: itemsPerPage.toString(),
     }
   );
-  const { mutateAsync: deleteAsync, isPending: isDeleting } = useDelete(
-    (data) => {
-      console.log("DELETE success", data);
-    },
-    [["rresources"]]
-  );
+  
 
   const handleEdit = (row: IResource) => {
     setResource(row);
@@ -87,6 +78,23 @@ export default function AllResources() {
       },
     },
     {
+      header: "Is Private",
+      accessorKey: "isPrivate",
+      cell: (value) => {
+        const isActive = value;
+
+        return (
+          <span
+            className={`px-2 py-1 rounded-full text-xs font-medium ${
+              isActive ? "bg-[#bfffda] text-green" : "bg-rose-200 text-rose-700"
+            }`}
+          >
+            {isActive ? "Active" : "Inactive"}
+          </span>
+        );
+      },
+    },
+    {
       header: "Action",
       accessorKey: "id",
       cell: (_value, row: IResource) => {
@@ -106,13 +114,7 @@ export default function AllResources() {
               <Eye size={16} />
               View
             </button>
-            <button
-              onClick={() => setDeleteKeywords(row)}
-              className="text-darkLiver hover:text-rose-600 hover:underline text-sm flex items-center gap-1"
-            >
-              <Trash2 size={16} className="text-rose-600" />
-              Delete
-            </button>
+            
           </div>
         );
       },
@@ -159,25 +161,6 @@ export default function AllResources() {
           resource={resource}
         />
       )}
-
-      <DeleteDialog
-        open={!!deleteKeywords}
-        onOpenChange={(open) => !open && setDeleteKeywords(undefined)}
-        loading={isDeleting}
-        onConfirm={() => {
-          if (deleteKeywords) {
-            deleteAsync({ url: `/resources/${deleteKeywords.id}` })
-              .then(() => {
-                toast.success("Resource deleted successfully");
-                setDeleteKeywords(undefined);
-              })
-              .catch((error) => {
-                toast.error("Failed to delete resource");
-                console.error(error);
-              });
-          }
-        }}
-      />
     </div>
   );
 }

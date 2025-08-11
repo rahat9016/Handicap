@@ -69,13 +69,14 @@ export default function CreateUpdateResources({
     [["resources"]]
   );
 
+  // Initialize form methods
   const methods = useForm({
     resolver: yupResolver(resourcesSchema),
     defaultValues: {
       keywordIds: [4],
     },
   });
-
+console.log(methods.formState.errors);
   useEffect(() => {
     if (initialValues) {
       methods.reset({
@@ -146,7 +147,8 @@ export default function CreateUpdateResources({
       url: `/resources/${initialValues.id}`,
       data: formData,
     }).then(() => {
-      console.log("Resource updated successfully");
+      toast.success("Resource updated successfully");
+      patchReset();
       onClose();
       // Reset the form after successful submission
       methods.reset();
@@ -165,7 +167,7 @@ export default function CreateUpdateResources({
     "name",
     "id"
   );
-  console.log("initialValues", initialValues);
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="bg-white max-h-[95vh]  w-[800px] !max-w-none overflow-y-auto">

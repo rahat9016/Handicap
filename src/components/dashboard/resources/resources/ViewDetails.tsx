@@ -71,7 +71,7 @@ export default function ViewResourceDetails({
               <FileText className="w-10 h-10 mb-2 text-white" />
             ) : (
               <Image
-                src={resource?.filePath || ""}
+                src={resource?.filePath || "/images/dashboard/gallery-add.svg"}
                 alt="Resource Thumbnail"
                 width={64}
                 height={64}

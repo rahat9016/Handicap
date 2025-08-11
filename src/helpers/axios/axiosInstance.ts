@@ -42,62 +42,6 @@ instance.interceptors.request.use(
   }
 );
 
-// Response interceptor
-// instance.interceptors.response.use(
-//   //@ts-expect-error: response type is not always consistent
-//   function (response) {
-//     const responseObject: ResponseSuccessType = {
-//       data: response?.data?.data,
-//       meta: response?.data?.meta,
-//     };
-//     return responseObject;
-//   },
-//   async function (error) {
-//     const config = await error.config;
-//     if (error?.response?.status === 401 && !config?.sent) {
-//       config.sent = true;
-//       const errorMessage =
-//         error?.response?.data?.message || "You are not authorized";
-
-//       if (errorMessage.includes("Invalid or expired token")) {
-//         const response = await getNewAccessToken();
-//         const newAccessToken = response.data.access_token;
-
-//         config.headers["Authorization"] = `Bearer ${newAccessToken}`;
-
-//         console.log("newAccessToken", newAccessToken);
-
-//         setToLocalStorage(authKey, newAccessToken);
-
-//         return instance(config);
-//       } else if (errorMessage.includes("Refresh token expired")) {
-//         logout();
-//       } else if (errorMessage.includes("Password is incorrect")) {
-//         const responseObject: IGenericErrorResponse = {
-//           statusCode: error?.response?.data?.statusCode || 500,
-//           message: error?.response?.data?.message || "Something went wrong",
-//           errorMessages: error?.response?.data?.message,
-//         };
-//         return Promise.reject(responseObject);
-//       } else {
-//         console.error("401: You are not authorized");
-//         logout();
-//       }
-//     } else if (error?.response?.status === 403) {
-//       console.error("403: Forbidden");
-//       toast.error("You do not have permission to access this resource");
-//       // logout()
-//     } else {
-//       const responseObject: IGenericErrorResponse = {
-//         statusCode: error?.response?.data?.statusCode || 500,
-//         message: error?.response?.data?.message || "Something went wrong",
-//         errorMessages: error?.response?.data?.message,
-//         errors: error?.response?.data?.errors,
-//       };
-//       return Promise.reject(responseObject);
-//     }
-//   }
-// );
 instance.interceptors.response.use(
   // ✅ Handle success
   //@ts-expect-error: response type is not always consistent
@@ -111,9 +55,6 @@ instance.interceptors.response.use(
   // ❌ Handle errors
   async function (error) {
     const originalRequest = error.config;
-    // console.log("error message", error);
-    // console.log('error status === 401', error?.response?.status === 401);
-    // Check for 401 (Unauthorized)
     if (error?.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
       

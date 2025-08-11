@@ -59,7 +59,7 @@ export default function CreateUpdateResources({
     },
     [["resources"]]
   );
-  console.log(initialValues);
+
   const {
     mutateAsync: patchAsync,
     error: patchError,
@@ -111,7 +111,6 @@ export default function CreateUpdateResources({
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = (data: any) => {
-    console.log(data)
     const formData = new FormData();
 
     formData.append("title", data.title);
@@ -166,7 +165,7 @@ export default function CreateUpdateResources({
     "name",
     "id"
   );
-  
+  console.log("initialValues", initialValues);
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="bg-white max-h-[95vh]  w-[800px] !max-w-none overflow-y-auto">

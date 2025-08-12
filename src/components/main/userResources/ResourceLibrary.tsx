@@ -1,23 +1,37 @@
+import { IResource } from "@/components/dashboard/resources/types/types";
+import { useAppSelector } from "@/lib/redux/hooks";
 import ResourceCard from "./ResourceCard";
 
-export default function ResourceLibrary() {
+export default function ResourceLibrary({
+  resources,
+}: {
+  resources: IResource[];
+}) {
+  const { userInformation:{id} } = useAppSelector(state => state.auth)
   return (
     <div>
       <div className="grid grid-cols-3 gap-6">
-        {Array.from({ length: 9 }, (_, index) => (
-          <ResourceCard
-            key={index}
-            title="Disability Data Collection Methods"
-            description="Video tutorial on using the Washington Group Questionnaire for disability data collection in humanitarian contexts."
-            imageUrl="/images/resources/image.jpg"
-            date="10/05/2023"
-            size="2.4 MB"
-            downloads={347}
-            ratings={3.2}
-            isFeatured
-            isPdf
-          />
-        ))}
+        {resources?.map((resource, index) => {
+          return (
+            <ResourceCard
+              id={resource.id}
+              key={index}
+              title={resource.title}
+              description={resource.description}
+              imageUrl={resource.filePath}
+              date={resource.createdAt}
+              size={resource.fileSize}
+              ratings={3.2}
+              isFeatured
+              isPdf
+              fileType={resource.fileType}
+              filePath={resource.filePath}
+              downloadCount={resource.downloadCount}
+              isPrivate={resource.isPrivate && !!id}
+              
+            />
+          );
+        })}
       </div>
     </div>
   );

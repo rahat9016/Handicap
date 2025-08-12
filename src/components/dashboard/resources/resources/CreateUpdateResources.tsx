@@ -1,5 +1,4 @@
 import ErrorMessage from "@/components/common/Errors/ErrorMessage";
-import { IOrganizationResponse } from "@/components/organizer/types";
 import ControlledInputField from "@/components/share/ControlledInputField";
 import ControlledMultiSelectField from "@/components/share/ControlledMultiSelectField";
 import ControlledSelectField from "@/components/share/ControlledSelectField";
@@ -17,6 +16,7 @@ import {
 import { useGet } from "@/hooks/useGet";
 import { usePatch } from "@/hooks/usePatch";
 import { usePost } from "@/hooks/usePost";
+import { useAppSelector } from "@/lib/redux/hooks";
 import { mapToSelectOptions } from "@/utils/mapToSelectOptions";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useEffect } from "react";
@@ -35,9 +35,6 @@ export default function CreateUpdateResources({
   onClose: () => void;
   initialValues?: IResource | undefined;
 }) {
-  const { data } = useGet<IOrganizationResponse[]>("/organizations", [
-    "organizations",
-  ]);
   const { data: resourceCategories } = useGet<IResource[]>(
     "/resource-categories",
     ["resource-categories"]
@@ -59,7 +56,6 @@ export default function CreateUpdateResources({
     },
     [["resources"]]
   );
-  console.log(initialValues);
   const {
     mutateAsync: patchAsync,
     error: patchError,
@@ -69,10 +65,13 @@ export default function CreateUpdateResources({
     [["resources"]]
   );
 
+  const { id } = useAppSelector(state => state.organizer)
+  // Initialize form methods
   const methods = useForm({
     resolver: yupResolver(resourcesSchema),
     defaultValues: {
-      keywordIds: [4],
+      keywordIds: [],
+      organizationId: id,
     },
   });
 
@@ -85,12 +84,12 @@ export default function CreateUpdateResources({
         isPrivate: initialValues.isPrivate,
         languageId: String(initialValues.language.id),
         categoryId: String(initialValues.category.id),
-        organizationId: String(initialValues.organization.id),
+        organizationId: String(initialValues.organization.id) || id,
         keywordIds: initialValues.keywords?.map((k) => k.keyword.id) || []
       });
     }
-  }, [initialValues, methods]);
-
+  }, [id, initialValues, methods]);
+console.log(methods.formState.errors, id)
   // Open the dialog when isOpen changes
   useEffect(() => {
     if (!isOpen) {
@@ -111,14 +110,13 @@ export default function CreateUpdateResources({
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = (data: any) => {
-    console.log(data)
     const formData = new FormData();
 
     formData.append("title", data.title);
     if (data.description) formData.append("description", data.description);
     formData.append("languageId", data.languageId);
     formData.append("categoryId", data.categoryId);
-    formData.append("organizationId", data.organizationId);
+    formData.append("organizationId", id);
 
     if (data.keywordIds && data.keywordIds.length > 0) {
       formData.append("keywordIds", data.keywordIds);
@@ -147,14 +145,14 @@ export default function CreateUpdateResources({
       url: `/resources/${initialValues.id}`,
       data: formData,
     }).then(() => {
-      console.log("Resource updated successfully");
+      toast.success("Resource updated successfully");
+      patchReset();
       onClose();
       // Reset the form after successful submission
       methods.reset();
     });
   };
 
-  const organizationOptions = mapToSelectOptions(data?.data, "name", "id");
   const resourceCategoryOptions = mapToSelectOptions(
     resourceCategories?.data,
     "name",
@@ -166,7 +164,7 @@ export default function CreateUpdateResources({
     "name",
     "id"
   );
-  
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="bg-white max-h-[95vh]  w-[800px] !max-w-none overflow-y-auto">
@@ -206,14 +204,6 @@ export default function CreateUpdateResources({
               </div>
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 lg:gap-5">
                 <div>
-                  <InputLabel label="Organizations" required />
-                  <ControlledSelectField
-                    name="organizationId"
-                    placeholder="Please enter your organization"
-                    options={organizationOptions}
-                  />
-                </div>
-                <div>
                   <InputLabel label="Category" required />
                   <ControlledSelectField
                     name="categoryId"
@@ -221,8 +211,6 @@ export default function CreateUpdateResources({
                     options={resourceCategoryOptions}
                   />
                 </div>
-              </div>
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 lg:gap-5">
                 <div>
                   <InputLabel label="Languages" required />
                   <ControlledSelectField
@@ -231,6 +219,9 @@ export default function CreateUpdateResources({
                     options={languageOptions}
                   />
                 </div>
+              </div>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 lg:gap-5">
+                
                 <div>
                   <InputLabel label="Keywords" required />
                   <ControlledMultiSelectField

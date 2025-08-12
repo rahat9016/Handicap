@@ -2,8 +2,11 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { ColumnDef, DataTable } from "@/components/ui/data-table";
+import { Input } from "@/components/ui/input";
 import { useGet } from "@/hooks/useGet";
 import { usePagination } from "@/hooks/usePagination";
+import { useSearchDebounce } from "@/hooks/useSearchDebounce";
+import { useAppSelector } from "@/lib/redux/hooks";
 import { format } from "date-fns";
 import { Eye, Plus, SquarePen } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -22,13 +25,20 @@ export default function AllResources() {
     totalItems,
     setTotalItems,
   } = usePagination();
+  const { search, handleSearchChange, debouncedSearch } =
+    useSearchDebounce(300);
   const { data, isLoading } = useGet(
     "/resources",
     ["resources", currentPage.toString()],
     {
       page: currentPage.toString(),
       limit: itemsPerPage.toString(),
+      search: debouncedSearch,
     }
+  );
+
+  const { adminOrganizationPermission } = useAppSelector(
+    (state) => state.permission
   );
 
   const handleEdit = (row: IResource) => {
@@ -77,18 +87,37 @@ export default function AllResources() {
       },
     },
     {
+      header: "Is Private",
+      accessorKey: "isPrivate",
+      cell: (value) => {
+        const isActive = value;
+
+        return (
+          <span
+            className={`px-2 py-1 rounded-full text-xs font-medium ${
+              isActive ? "bg-[#bfffda] text-green" : "bg-rose-200 text-rose-700"
+            }`}
+          >
+            {isActive ? "Active" : "Inactive"}
+          </span>
+        );
+      },
+    },
+    {
       header: "Action",
       accessorKey: "id",
       cell: (_value, row: IResource) => {
         return (
           <div className="flex items-center gap-5">
-            <button
-              onClick={() => handleEdit(row)}
-              className="text-darkLiver hover:underline text-sm flex items-center gap-1"
-            >
-              <SquarePen size={16} />
-              Edit
-            </button>
+            {adminOrganizationPermission && (
+              <button
+                onClick={() => handleEdit(row)}
+                className="text-darkLiver hover:underline text-sm flex items-center gap-1"
+              >
+                <SquarePen size={16} />
+                Edit
+              </button>
+            )}
             <button
               onClick={() => handleView(row)}
               className="text-darkLiver hover:underline text-sm flex items-center gap-1"
@@ -107,12 +136,26 @@ export default function AllResources() {
         <h1 className="text-xl font-bold text-erieBlack font-inter">
           All Resources
         </h1>
-        <Button
-          className="text-white font-inter text-sm font-medium bg-rose-600 hover:bg-rose-700 h-11 gap-1"
-          onClick={() => setIsModalOpen(true)}
-        >
-          <Plus className="!text-2xl text-white" /> Create
-        </Button>
+        <div className="flex items-center gap-5">
+          {adminOrganizationPermission && (
+            <div>
+              <Input
+                placeholder="Search..."
+                value={search}
+                onChange={handleSearchChange}
+                className="w-[300px]"
+              />
+            </div>
+          )}
+          {adminOrganizationPermission && (
+            <Button
+              className="text-white font-inter text-sm font-medium bg-rose-600 hover:bg-rose-700 h-11 gap-1"
+              onClick={() => setIsModalOpen(true)}
+            >
+              <Plus className="!text-2xl text-white" /> Create
+            </Button>
+          )}
+        </div>
       </div>
       <DataTable
         columns={columns}

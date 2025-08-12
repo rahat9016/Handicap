@@ -14,7 +14,7 @@ import {
   setUserId,
   setUserInformation,
 } from "@/lib/redux/features/auth/authSlice";
-import { setPermission } from "@/lib/redux/features/permission/permissionSlice";
+import { setAdminOrganizationPermission, setPermission } from "@/lib/redux/features/permission/permissionSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
 import { LoginFormData } from "@/schemas/auth";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -61,10 +61,10 @@ export default function Login() {
   const onSubmit: SubmitHandler<LoginFormData> = (data) => {
     login(data)
       .then((res) => {
-        
         if (res?.id) {
           dispatch(setUserId(res.id));
           if (res?.roleId === 1) dispatch(setPermission(true));
+          else if (res?.roleId === 2) dispatch(setAdminOrganizationPermission(true));
           else dispatch(setPermission(false));
         }
 

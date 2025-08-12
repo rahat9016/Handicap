@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { logoutUser } from "@/lib/redux/features/auth/authSlice";
 import { clearOrganization } from "@/lib/redux/features/organizer/organizationSlice";
+import { setAdminOrganizationPermission, setPermission } from "@/lib/redux/features/permission/permissionSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
 import { ChevronDown, User } from "lucide-react";
 
@@ -33,6 +34,8 @@ export function ProfileDropdown() {
         <DropdownMenuItem onClick={() => {
           dispatch(logoutUser());
           dispatch(clearOrganization());
+          dispatch(setPermission(false))
+          dispatch(setAdminOrganizationPermission(false))
         }}>
           Logout
         </DropdownMenuItem>

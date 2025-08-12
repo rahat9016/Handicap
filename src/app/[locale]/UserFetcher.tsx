@@ -2,7 +2,7 @@
 import { useGet } from "@/hooks/useGet";
 import { setLoading, setUserId, setUserInformation } from "@/lib/redux/features/auth/authSlice";
 import { setOrganization } from "@/lib/redux/features/organizer/organizationSlice";
-import { setPermission } from "@/lib/redux/features/permission/permissionSlice";
+import { setAdminOrganizationPermission, setPermission } from "@/lib/redux/features/permission/permissionSlice";
 import { useAppDispatch } from "@/lib/redux/hooks";
 import Cookies from "js-cookie";
 import { useEffect } from "react";
@@ -35,6 +35,8 @@ export const UserFetcher = () => {
   useEffect(() => {
     if (roleId === "1") {
       dispatch(setPermission(true));
+    }else if(roleId === "2"){
+      dispatch(setAdminOrganizationPermission(true))
     }
   }, [roleId, dispatch]);
 

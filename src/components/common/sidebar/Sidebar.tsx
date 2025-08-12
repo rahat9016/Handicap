@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Link, useRouter } from "@/i18n/navigation";
 import { logoutUser } from "@/lib/redux/features/auth/authSlice";
 import { clearOrganization } from "@/lib/redux/features/organizer/organizationSlice";
+import { setAdminOrganizationPermission, setPermission } from "@/lib/redux/features/permission/permissionSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
 import {
   BarChart3,
@@ -195,6 +196,8 @@ export default function Sidebar() {
           onClick={() => {
             dispatch(logoutUser());
             dispatch(clearOrganization());
+            dispatch(setPermission(false))
+            dispatch(setAdminOrganizationPermission(false))
           }}
           className="w-full bg-[#F0F0F0] hover:bg-[#FDECEC] text-[#A8A8A8] hover:text-[#EB5757]  flex items-center justify-start gap-2 h-12 !px-4"
         >

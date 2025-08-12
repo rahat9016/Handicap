@@ -1,47 +1,49 @@
 "use client";
 
 import { Dialog, DialogContent } from "@/components/ui/dialog";
-import { pdf } from "@react-pdf/renderer";
-import { useEffect, useState } from "react";
-import PDF from "./PDF";
-import { IResourceData } from "./types/interface";
+import Image from "next/image";
 
 interface PDFModalProps {
   open: boolean;
   onClose: () => void;
-  data: IResourceData;
+  filePath: string | null;
+  fileType: string | undefined;
 }
 
-export default function PDFModal({ open, onClose, data }: PDFModalProps) {
-  const [pdfUrl, setPdfUrl] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (open && data) {
-      const generatePDF = async () => {
-        const blob = await pdf(<PDF data={data} />).toBlob();
-        const url = URL.createObjectURL(blob);
-        setPdfUrl(url);
-      };
-      generatePDF();
-    } else {
-      setPdfUrl(null);
-    }
-
-    return () => {
-      if (pdfUrl) URL.revokeObjectURL(pdfUrl);
-    };
-  }, [open, data]);
-
+export default function PDFModal({
+  open,
+  onClose,
+  filePath,
+  fileType,
+}: PDFModalProps) {
+  const isImage = fileType?.startsWith("image/");
+  const isPdf = fileType === "application/pdf";
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="max-w-6xl h-[90vh]">
-        <div className="mt-3">
-          {pdfUrl ? (
-            <iframe src={pdfUrl} className="w-full h-full border rounded-md" />
+      <DialogContent className="w-1/2 !max-w-none h-[90vh] p-0">
+        {filePath ? (
+          isImage ? (
+            <Image
+              width={500}
+              height={500}
+              src={filePath}
+              alt="Preview"
+              className="max-w-full max-h-full object-contain"
+            />
+          ) : isPdf ? (
+            <iframe
+              src={filePath}
+              className="w-full h-full border-none"
+              title="PDF Preview"
+            />
           ) : (
-            <p className="text-center">Generating PDF...</p>
-          )}
-        </div>
+            <p className="text-center mt-4">
+              File type not supported for preview.
+            </p>
+          )
+        ) : (
+          <p className="text-center mt-4">Loading preview...</p>
+        )}
       </DialogContent>
     </Dialog>
   );

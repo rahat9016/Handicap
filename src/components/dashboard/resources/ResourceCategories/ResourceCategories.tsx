@@ -2,8 +2,11 @@
 
 import { Button } from "@/components/ui/button";
 import { ColumnDef, DataTable } from "@/components/ui/data-table";
+import { Input } from "@/components/ui/input";
 import { useGet } from "@/hooks/useGet";
 import { usePagination } from "@/hooks/usePagination";
+import { useSearchDebounce } from "@/hooks/useSearchDebounce";
+import { useAppSelector } from "@/lib/redux/hooks";
 import { format } from "date-fns";
 import { SquarePen } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -22,15 +25,20 @@ export default function ResourceCategories() {
     totalItems,
     setTotalItems,
   } = usePagination();
+  const { search, handleSearchChange, debouncedSearch } =
+    useSearchDebounce(300);
   const { data, isLoading } = useGet<IResource[]>(
     "/resource-categories",
     ["resource-categories", currentPage.toString()],
     {
       page: currentPage.toString(),
       limit: itemsPerPage.toString(),
+      search: debouncedSearch,
     }
   );
-
+  const { adminOrganizationPermission } = useAppSelector(
+    (state) => state.permission
+  );
   // Update total items whenever data changes
   useEffect(() => {
     if (data) {
@@ -50,7 +58,7 @@ export default function ResourceCategories() {
     {
       header: "Created date",
       accessorKey: "createdAt",
-      cell: (value) => {
+      cell: (value: string | number | undefined) => {
         const date = new Date(value as string);
         return <span>{format(date, "dd MMM yyyy")}</span>;
       },
@@ -58,7 +66,7 @@ export default function ResourceCategories() {
     {
       header: "Is Active",
       accessorKey: "isActive",
-      cell: (value) => {
+      cell: (value: boolean | undefined) => {
         const isActive = value;
 
         return (
@@ -72,37 +80,53 @@ export default function ResourceCategories() {
         );
       },
     },
-    {
-      header: "Action",
-      accessorKey: "id",
-      cell: (_value, row: IResource) => {
-        return (
-          <div className="flex items-center gap-5">
-            <button
-              onClick={() => handleEdit(row)}
-              className="text-darkLiver hover:underline text-sm flex items-center gap-1"
-            >
-              <SquarePen size={16} />
-              Edit
-            </button>
-          </div>
-        );
-      },
-    },
-  ];
+    adminOrganizationPermission
+      ? {
+          header: "Action",
+          accessorKey: "id",
+          cell: (_value: string | number | undefined, row: IResource) => {
+            return (
+              <div className="flex items-center gap-5">
+                <button
+                  onClick={() => handleEdit(row)}
+                  className="text-darkLiver hover:underline text-sm flex items-center gap-1"
+                >
+                  <SquarePen size={16} />
+                  Edit
+                </button>
+              </div>
+            );
+          },
+        }
+      : undefined,
+  ].filter(Boolean) as ColumnDef<IResource>[];
   return (
     <div className="bg-white p-8 min-h-[85vh] border border-skeleton rounded-2xl">
       <div className="flex w-full items-center justify-between mb-6">
         <h1 className="text-xl font-bold text-erieBlack font-inter">
           Resource Categories
         </h1>
-        <Button
-          className="text-white font-inter text-sm font-medium bg-rose-600 hover:bg-rose-700 h-11"
-          onClick={() => setIsModalOpen(true)}
-        >
-          {" "}
-          Create Category{" "}
-        </Button>
+        <div className="flex items-center gap-5">
+          {adminOrganizationPermission && (
+            <div>
+              <Input
+                placeholder="Search..."
+                value={search}
+                onChange={handleSearchChange}
+                className="w-[300px]"
+              />
+            </div>
+          )}
+          {adminOrganizationPermission && (
+            <Button
+              className="text-white font-inter text-sm font-medium bg-rose-600 hover:bg-rose-700 h-11"
+              onClick={() => setIsModalOpen(true)}
+            >
+              {" "}
+              Create Category{" "}
+            </Button>
+          )}
+        </div>
       </div>
       <DataTable
         columns={columns}

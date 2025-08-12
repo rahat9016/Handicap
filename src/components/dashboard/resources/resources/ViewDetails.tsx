@@ -5,6 +5,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { formatFileSize } from "@/utils/formatFileSize";
+import { isValidUrl } from "@/utils/isValidUrl";
 import {
   Calendar,
   CheckCircle,
@@ -30,16 +32,6 @@ export default function ViewResourceDetails({
   onClose: () => void;
   resource?: IResource;
 }) {
-  const formatFileSize = (bytes: number) => {
-    if (bytes === 0) return "0 Bytes";
-    const k = 1024;
-    const sizes = ["Bytes", "KB", "MB", "GB"];
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return (
-      Number.parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i]
-    );
-  };
-
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString("en-US", {
       year: "numeric",
@@ -55,7 +47,7 @@ export default function ViewResourceDetails({
     if (fileType.includes("audio")) return "🎵";
     return "📁";
   };
-
+  
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="bg-white min-h-[20vh] w-[80vw] max-w-2xl overflow-y-auto">
@@ -71,7 +63,11 @@ export default function ViewResourceDetails({
               <FileText className="w-10 h-10 mb-2 text-white" />
             ) : (
               <Image
-                src={resource?.filePath || "/images/dashboard/gallery-add.svg"}
+                src={
+                  isValidUrl(resource?.filePath)
+                    ? (resource?.filePath as string)
+                    : "/images/dashboard/gallery-add.svg"
+                }
                 alt="Resource Thumbnail"
                 width={64}
                 height={64}

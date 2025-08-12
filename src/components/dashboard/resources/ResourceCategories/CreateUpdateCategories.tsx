@@ -53,7 +53,7 @@ export default function CreateUpdateCategories({
   const methods = useForm<CategoryForm>({
     resolver: yupResolver(categorySchema),
   });
-  console.log(initialValues);
+
   useEffect(() => {
     if (initialValues) {
       methods.reset({
@@ -81,7 +81,7 @@ export default function CreateUpdateCategories({
       name: data.name,
       description: data.description,
     }
-    if(data.category === ""){
+    if(data.category !== ""){
       organizedData.parentId = Number(data.category);
     }
     if (initialValues) {

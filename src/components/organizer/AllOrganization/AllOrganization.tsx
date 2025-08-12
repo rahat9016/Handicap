@@ -2,8 +2,10 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { ColumnDef, DataTable } from "@/components/ui/data-table";
+import { Input } from "@/components/ui/input";
 import { useGet } from "@/hooks/useGet";
 import { usePagination } from "@/hooks/usePagination";
+import { useSearchDebounce } from "@/hooks/useSearchDebounce";
 import { format } from "date-fns";
 import { SquarePen } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -20,12 +22,14 @@ export default function AllOrganization() {
     totalItems,
     setTotalItems,
   } = usePagination();
+  const { search, handleSearchChange, debouncedSearch } = useSearchDebounce(300);
   const { data, isLoading } = useGet(
     "/organizations",
     ["organizations", currentPage.toString()],
     {
       page: currentPage.toString(),
       limit: itemsPerPage.toString(),
+      search: debouncedSearch,
     }
   );
 
@@ -101,6 +105,15 @@ export default function AllOrganization() {
         <h1 className="text-xl font-bold text-erieBlack font-inter">
           All Organizations
         </h1>
+        <div className="flex items-center gap-5">
+          <div>
+          <Input
+            placeholder="Search..."
+            value={search}
+            onChange={handleSearchChange}
+            className="w-[300px]"
+          />
+        </div>
         <Button
           className="text-white font-inter text-sm font-medium bg-rose-600 hover:bg-rose-700 h-11"
           onClick={() => setIsModalOpen(true)}
@@ -108,6 +121,7 @@ export default function AllOrganization() {
           {" "}
           Create Organization{" "}
         </Button>
+        </div>
       </div>
       <DataTable
         columns={columns}

@@ -7,7 +7,7 @@ const initialState: IInitialState = {
 };
 
 const permissionSlice = createSlice({
-  name: "permission",
+  name: "filtering",
   initialState,
   reducers: {
     setPermission: (state, action) => {

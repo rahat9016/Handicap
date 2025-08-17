@@ -4,6 +4,7 @@ import Pagination from "@/components/share/Pagination";
 import SectionTopTitle from "@/components/share/SectionTopTitle";
 import { useGet } from "@/hooks/useGet";
 import { usePagination } from "@/hooks/usePagination";
+import { useAppSelector } from "@/lib/redux/hooks";
 import { useEffect } from "react";
 import ResourceCardSkeleton from "./ResourceCardSkeleton";
 import ResourceLibrary from "./ResourceLibrary";
@@ -17,14 +18,25 @@ export default function ResourcesFilter() {
     totalItems,
     setTotalItems,
   } = usePagination();
-  const { data, isLoading } = useGet<IResource[]>(
-    "/resources",
-    ["resources", currentPage.toString()],
-    {
-      page: currentPage.toString(),
-      limit: itemsPerPage.toString(),
-    }
-  );
+  const filter = useAppSelector((state) => state.filter);
+
+  const params = [
+    filter.sortBy.length ? `sortBy=${filter.sortBy.join(",")}` : "",
+    filter.resourceTypes.length
+      ? `categoryId=${filter.resourceTypes.join(",")}`
+      : "",
+    filter.languages.length ? `languageId=${filter.languages.join(",")}` : "",
+    `page=${currentPage}`,
+    `limit=${itemsPerPage}`,
+  ]
+    .filter(Boolean)
+    .join("&");
+
+  const { data, isLoading } = useGet<IResource[]>(`/resources?${params}`, [
+    "resources",
+    currentPage.toString(),
+    JSON.stringify(filter),
+  ]);
 
   useEffect(() => {
     if (data) {

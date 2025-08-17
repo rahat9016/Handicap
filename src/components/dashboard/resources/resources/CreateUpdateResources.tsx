@@ -65,13 +65,13 @@ export default function CreateUpdateResources({
     [["resources"]]
   );
 
-  const { id } = useAppSelector(state => state.organizer)
+  const { organizationId } = useAppSelector(state => state.organizer)
   // Initialize form methods
   const methods = useForm({
     resolver: yupResolver(resourcesSchema),
     defaultValues: {
       keywordIds: [],
-      organizationId: id,
+      organizationId: organizationId || "",
     },
   });
 
@@ -84,12 +84,12 @@ export default function CreateUpdateResources({
         isPrivate: initialValues.isPrivate,
         languageId: String(initialValues.language.id),
         categoryId: String(initialValues.category.id),
-        organizationId: String(initialValues.organization.id) || id,
+        organizationId: String(initialValues.organization.id) || organizationId ,
         keywordIds: initialValues.keywords?.map((k) => k.keyword.id) || []
       });
     }
-  }, [id, initialValues, methods]);
-console.log(methods.formState.errors, id)
+  }, [initialValues, methods, organizationId]);
+  
   // Open the dialog when isOpen changes
   useEffect(() => {
     if (!isOpen) {
@@ -116,7 +116,7 @@ console.log(methods.formState.errors, id)
     if (data.description) formData.append("description", data.description);
     formData.append("languageId", data.languageId);
     formData.append("categoryId", data.categoryId);
-    formData.append("organizationId", id);
+    formData.append("organizationId", organizationId);
 
     if (data.keywordIds && data.keywordIds.length > 0) {
       formData.append("keywordIds", data.keywordIds);

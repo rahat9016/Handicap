@@ -4,16 +4,17 @@ import Paragraph from "@/components/share/Paragraph";
 import Title from "@/components/share/Title";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { getBaseUrl } from "@/config/envConfig";
+import { useGet } from "@/hooks/useGet";
+import { usePreview } from "@/hooks/usePreview";
 import { formatFileSize } from "@/utils/formatFileSize";
 import { isValidUrl } from "@/utils/isValidUrl";
-import axios from "axios";
 import { format } from "date-fns";
-import Cookies from "js-cookie";
 import { Download, Eye, FileText } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 import PDFModal from "./PDFModal";
+import { useDownloadResource } from "./useDownloadResource";
 
 interface ResourceCardProps {
   id: number;
@@ -38,7 +39,6 @@ export default function ResourceCard({
   imageUrl,
   date,
   size,
-  // ratings,
   isFeatured,
   fileType,
   filePath,
@@ -47,6 +47,16 @@ export default function ResourceCard({
 }: ResourceCardProps) {
   const [open, setOpen] = useState(false);
   const [pdfBlobUrl, setPdfBlobUrl] = useState<string | null>(null);
+  const { download, loading } = useDownloadResource();
+  const { mutateAsync: previewFile } = usePreview();
+  const { refetch } = useGet(
+  `/resources/${id}/view`,
+  ["resources"],
+  {},
+  {
+    enabled: false,
+  }
+);
 
   useEffect(() => {
     return () => {
@@ -56,46 +66,15 @@ export default function ResourceCard({
 
   const handlePreview = async (filePath: string) => {
     try {
-      const res = await axios.get(filePath, {
-        responseType: "blob",
-      });
-
-      const blob = new Blob([res.data], { type: "application/pdf" });
-      const url = URL.createObjectURL(blob);
+      const blob = await previewFile(filePath);
+      const url = URL.createObjectURL(new Blob([blob], { type: "application/pdf" }));
       setPdfBlobUrl(url);
       setOpen(true);
+      refetch()
     } catch (err) {
       console.error("PDF preview failed:", err);
+      toast.error("PDF preview failed")
     }
-  };
-
-  const handleDownload = () => {
-    fetch(`${getBaseUrl()}/resources/${id}/download`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${Cookies.get("accessToken")}`,
-        Accept: "application/octet-stream",
-      },
-    })
-      .then((res) => {
-        if (!res.ok) throw new Error("Failed to fetch file");
-        console.log(res);
-        return res.blob();
-      })
-      .then((blob) => {
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = `${title || "download"}.bin`;
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-        window.URL.revokeObjectURL(url);
-      })
-      .catch((err) => {
-        console.error("Download error:", err);
-        alert("Download failed");
-      });
   };
 
   const handleClose = () => {
@@ -129,7 +108,7 @@ export default function ResourceCard({
             className="object-cover"
           />
         ) : isPdf ? (
-          <FileText className="w-32 h-32 text-red-500 " /> // PDF icon
+          <FileText className="w-32 h-32 text-red-500 " /> 
         ) : (
           <span className="text-gray-500">No preview available</span>
         )}
@@ -163,8 +142,8 @@ export default function ResourceCard({
         <div className="flex flex-col gap-2 mt-3">
           <Button
             className="w-full h-10 bg-primary text-white"
-            onClick={handleDownload}
-            disabled={isPrivate}
+            onClick={() => download(id, title, filePath)}
+            disabled={isPrivate || loading}
           >
             <Download className="w-4 h-4 mr-1" /> Download
           </Button>

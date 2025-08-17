@@ -60,7 +60,7 @@ export const useGet = <T>(
       return value !== "" && value !== undefined && value !== null;
     })
   );
-
+  
   const finalQueryKey = [
     ...queryKey,
     ...Object.values(filteredParams).map(String),
@@ -86,6 +86,7 @@ export const useGet = <T>(
         throw error;
       }
     },
+    enabled: options?.enabled ?? true,
     ...options,
   });
 };

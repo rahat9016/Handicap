@@ -29,9 +29,7 @@ export const resourcesSchema = Yup.object().shape({
   categoryId: Yup.string()
     .required("Category is required")
     .min(1, "Category is required"),
-  organizationId: Yup.string()
-    .required("Organization is required")
-    .min(1, "Organization is required"),
+  organizationId: Yup.string(),
   keywordIds: Yup.array().of(Yup.number()).optional(),
   file: Yup.mixed<File | string>()
   .test(

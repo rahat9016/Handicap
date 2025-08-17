@@ -7,7 +7,9 @@ export default function ResourceLibrary({
 }: {
   resources: IResource[];
 }) {
-  const { userInformation:{id} } = useAppSelector(state => state.auth)
+  const {
+    userInformation: { id },
+  } = useAppSelector((state) => state.auth);
   return (
     <div>
       <div className="grid grid-cols-3 gap-6">
@@ -28,7 +30,6 @@ export default function ResourceLibrary({
               filePath={resource.filePath}
               downloadCount={resource.downloadCount}
               isPrivate={resource.isPrivate && !!id}
-              
             />
           );
         })}

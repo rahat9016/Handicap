@@ -3,5 +3,6 @@ export interface IInitialState {
   id: string;
   roleId: string;
   roleName: string;
-  organizationName: string
+  organizationName: string;
+  organizationId: string
 }

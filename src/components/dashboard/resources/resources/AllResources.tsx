@@ -18,6 +18,7 @@ export default function AllResources() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [resource, setResource] = useState<IResource | undefined>(undefined);
   const [isView, setIsView] = useState<boolean>(false);
+  const { organizationId } = useAppSelector((state) => state.organizer);
   const {
     setCurrentPage,
     itemsPerPage,
@@ -25,16 +26,24 @@ export default function AllResources() {
     totalItems,
     setTotalItems,
   } = usePagination();
+
   const { search, handleSearchChange, debouncedSearch } =
     useSearchDebounce(300);
+  console.log(organizationId);
+  const endpoint = organizationId
+    ? `/resources/organization/${organizationId}`
+    : "/resources";
+  const shouldFetch = organizationId !== undefined;
+  console.log({ shouldFetch });
   const { data, isLoading } = useGet(
-    "/resources",
-    ["resources", currentPage.toString()],
+    endpoint,
+    ["resources", currentPage.toString(),  organizationId ?? "all"],
     {
       page: currentPage.toString(),
       limit: itemsPerPage.toString(),
       search: debouncedSearch,
-    }
+    },
+    { enabled: shouldFetch }
   );
 
   const { adminOrganizationPermission } = useAppSelector(

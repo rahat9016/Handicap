@@ -9,7 +9,7 @@ import { usePreview } from "@/hooks/usePreview";
 import { formatFileSize } from "@/utils/formatFileSize";
 import { isValidUrl } from "@/utils/isValidUrl";
 import { format } from "date-fns";
-import { Download, Eye, FileText } from "lucide-react";
+import { Building2, Download, Eye, FileText } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
@@ -30,6 +30,9 @@ interface ResourceCardProps {
   filePath?: string;
   downloadCount: number;
   isPrivate?: boolean;
+  viewCount: number;
+  organizerName?: string;
+  refetch: () => void;
 }
 
 export default function ResourceCard({
@@ -44,19 +47,22 @@ export default function ResourceCard({
   filePath,
   downloadCount,
   isPrivate,
+  viewCount,
+  organizerName,
+  refetch: refetchResources
 }: ResourceCardProps) {
   const [open, setOpen] = useState(false);
   const [pdfBlobUrl, setPdfBlobUrl] = useState<string | null>(null);
-  const { download, loading } = useDownloadResource();
+  const { download, loading,  } = useDownloadResource(refetchResources);
   const { mutateAsync: previewFile } = usePreview();
   const { refetch } = useGet(
-  `/resources/${id}/view`,
-  ["resources"],
-  {},
-  {
-    enabled: false,
-  }
-);
+    `/resources/${id}/view`,
+    ["resources"],
+    {},
+    {
+      enabled: false,
+    }
+  );
 
   useEffect(() => {
     return () => {
@@ -67,13 +73,16 @@ export default function ResourceCard({
   const handlePreview = async (filePath: string) => {
     try {
       const blob = await previewFile(filePath);
-      const url = URL.createObjectURL(new Blob([blob], { type: "application/pdf" }));
+      const url = URL.createObjectURL(
+        new Blob([blob], { type: "application/pdf" })
+      );
       setPdfBlobUrl(url);
       setOpen(true);
-      refetch()
+      refetch();
+      refetchResources()
     } catch (err) {
       console.error("PDF preview failed:", err);
-      toast.error("PDF preview failed")
+      toast.error("PDF preview failed");
     }
   };
 
@@ -108,7 +117,7 @@ export default function ResourceCard({
             className="object-cover"
           />
         ) : isPdf ? (
-          <FileText className="w-32 h-32 text-red-500 " /> 
+          <FileText className="w-32 h-32 text-red-500 " />
         ) : (
           <span className="text-gray-500">No preview available</span>
         )}
@@ -130,13 +139,14 @@ export default function ResourceCard({
             {title}
           </Title>
           <Paragraph className="line-clamp-3">{description}</Paragraph>
+          <Paragraph className="flex items-center gap-2 mt-2"><Building2 /> {organizerName}</Paragraph>
           <div className="grid grid-cols-2 mt-3">
             <Paragraph>{downloadCount} Downloads</Paragraph>
-            {/* <Paragraph>Ratings: {ratings ?? 0}</Paragraph> */}
-
+            <Paragraph>{viewCount} Views</Paragraph>
             <Paragraph>Date: {format(createdDate, "dd MMM yyyy")}</Paragraph>
             <Paragraph>File Size: {formatFileSize(size || 0)}</Paragraph>
           </div>
+          
         </div>
 
         <div className="flex flex-col gap-2 mt-3">

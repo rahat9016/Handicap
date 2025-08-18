@@ -4,7 +4,8 @@ import { IInitialState } from "./filterTypes";
 const initialState: IInitialState = {
   sortBy: [],
   resourceTypes: [],
-  languages: []
+  languages: [],
+  keywords: []
 };
 
 const filteringSlice = createSlice({
@@ -20,6 +21,9 @@ const filteringSlice = createSlice({
     setLanguages: (state, action) => {
       state.languages = action.payload;
     },
+    setKeywords: (state, action) => {
+      state.keywords = action.payload;
+    },
     clearFilters: (state) => {
       state.sortBy = [];
       state.resourceTypes = [];
@@ -28,5 +32,5 @@ const filteringSlice = createSlice({
   },
 });
 
-export const { setSortBy, setResourceTypes, setLanguages, clearFilters } = filteringSlice.actions;
+export const { setSortBy, setResourceTypes, setLanguages,setKeywords, clearFilters } = filteringSlice.actions;
 export default filteringSlice.reducer;

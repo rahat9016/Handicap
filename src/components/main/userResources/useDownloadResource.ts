@@ -15,15 +15,9 @@ function ensureExtension(filename: string, ext: string) {
   return filename + ext;
 }
 
-export function useDownloadResource() {
+export function useDownloadResource(onSuccess?: () => void) {
   const [loading, setLoading] = useState(false);
 
-  /**
-   * Download a resource file.
-   * @param id Resource ID
-   * @param filename Desired filename (without extension)
-   * @param filePath The file path (to extract extension)
-   */
   const download = async (id: number, filename: string, filePath?: string) => {
     setLoading(true);
     try {
@@ -34,11 +28,13 @@ export function useDownloadResource() {
           Accept: "application/octet-stream",
         },
       });
+
       if (!res.ok) throw new Error("Failed to fetch file");
+
       const disposition = res.headers.get("content-disposition");
       let suggestedName = filename;
 
-      // Try to extract filename from content-disposition header
+      // Extract filename from content-disposition
       if (disposition && disposition.includes("filename=")) {
         const match = disposition.match(/filename="?([^"]+)"?/);
         if (match && match[1]) {
@@ -50,6 +46,7 @@ export function useDownloadResource() {
         suggestedName = ensureExtension(filename, ext);
       }
 
+      // Download logic
       const blob = await res.blob();
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement("a");
@@ -59,6 +56,9 @@ export function useDownloadResource() {
       a.click();
       a.remove();
       window.URL.revokeObjectURL(url);
+
+      // ✅ trigger refetch if provided
+      if (onSuccess) onSuccess();
     } catch (err) {
       console.error("Download error:", err);
       alert("Download failed");

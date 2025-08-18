@@ -17,7 +17,7 @@ import { mapToSelectOptions } from "@/utils/mapToSelectOptions";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { OrganizationForm, organizationSchema } from "../schema/AddOrganizer";
+import { OrganizationForm, organizationSchema, SUPPORTED_FORMATS } from "../schema/AddOrganizer";
 import { IOrganizationResponse, IOrganizationTypes } from "../types";
 
 export default function CreateUpdateOrganization({
@@ -145,7 +145,7 @@ export default function CreateUpdateOrganization({
           <form onSubmit={methods.handleSubmit(onSubmit)} className="w-full">
             <div className="border-b pb-8">
               <InputLabel label="Logo" />
-              <ImageFileInput name="logo" />
+              <ImageFileInput name="logo"  supportedImageTypes={SUPPORTED_FORMATS} />
             </div>
             <div className="flex flex-col gap-6 mt-8">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 lg:gap-5">

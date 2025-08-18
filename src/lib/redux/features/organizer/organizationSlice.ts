@@ -26,6 +26,7 @@ const organizationSlice = createSlice({
       state.roleName = "";
       state.roleId = "";
       state.organizationName = "";
+      state.organizationId = "";
       Cookies.remove("organizationData");
     },
   },

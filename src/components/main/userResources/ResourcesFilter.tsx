@@ -5,6 +5,7 @@ import SectionTopTitle from "@/components/share/SectionTopTitle";
 import { useGet } from "@/hooks/useGet";
 import { usePagination } from "@/hooks/usePagination";
 import { useAppSelector } from "@/lib/redux/hooks";
+import { buildQueryParams } from "@/utils/buildQueryParams";
 import { useEffect } from "react";
 import ResourceCardSkeleton from "./ResourceCardSkeleton";
 import ResourceLibrary from "./ResourceLibrary";
@@ -18,26 +19,26 @@ export default function ResourcesFilter() {
     totalItems,
     setTotalItems,
   } = usePagination();
-  const filter = useAppSelector((state) => state.filter);
+  const { resourceTypes, languages, sortBy, keywords } = useAppSelector((state) => state.filter);
 
-  const params = [
-    filter.sortBy.length ? `sortBy=${filter.sortBy.join(",")}` : "",
-    filter.resourceTypes.length
-      ? `categoryId=${filter.resourceTypes.join(",")}`
-      : "",
-    filter.languages.length ? `languageId=${filter.languages.join(",")}` : "",
-    `page=${currentPage}`,
-    `limit=${itemsPerPage}`,
-  ]
-    .filter(Boolean)
-    .join("&");
+  const filters = {
+    sort: sortBy,
+    categoryIds: resourceTypes,
+    languageIds: languages,
+    keywordIds: keywords
+  };
 
-  const { data, isLoading } = useGet<IResource[]>(`/resources?${params}`, [
-    "resources",
-    currentPage.toString(),
-    JSON.stringify(filter),
-  ]);
 
+  const queryString = buildQueryParams(filters, {
+    page: currentPage,
+    limit: itemsPerPage,
+  });
+
+  // API call
+  const { data, isLoading, refetch } = useGet<IResource[]>(
+    `/resources?${queryString}`,
+    ["resources", currentPage.toString(), JSON.stringify(filters)]
+  );
   useEffect(() => {
     if (data) {
       setTotalItems(data.meta?.totalItems || 0);
@@ -67,6 +68,7 @@ export default function ResourcesFilter() {
               <div>
                 <ResourceLibrary
                   resources={(data?.data as IResource[]) || []}
+                  refetch={refetch}
                 />
                 <Pagination
                   currentPage={currentPage}

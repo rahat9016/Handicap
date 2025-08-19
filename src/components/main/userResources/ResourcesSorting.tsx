@@ -23,12 +23,9 @@ import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 
 const sortOptions = [
-  { label: "Low to High Downloads", value: "downloadCount:asc" },
-  { label: "High to low Downloads", value: "downloadCount:desc" },
-  { label: "Less View", value: "viewCount:asc" },
-  { label: "More View", value: "viewCount:desc" },
-  { label: "Oldest First", value: "oldest" },
-  { label: "Created At", value: "createdAt:desc" },
+  { label: "Most Downloads", value: "downloadCount:desc" },
+  { label: "Most View", value: "viewCount:desc" },
+  { label: "Oldest First", value: "createdAt:desc" },
 ];
 
 export default function ResourcesSorting() {

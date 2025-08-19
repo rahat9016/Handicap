@@ -36,7 +36,7 @@ export default function ResourceCategories() {
       search: debouncedSearch,
     }
   );
-  const { adminOrganizationPermission } = useAppSelector(
+  const { hasPermission } = useAppSelector(
     (state) => state.permission
   );
   // Update total items whenever data changes
@@ -80,7 +80,7 @@ export default function ResourceCategories() {
         );
       },
     },
-    adminOrganizationPermission
+    hasPermission
       ? {
           header: "Action",
           accessorKey: "id",
@@ -107,7 +107,7 @@ export default function ResourceCategories() {
           Resource Categories
         </h1>
         <div className="flex items-center gap-5">
-          {adminOrganizationPermission && (
+          {hasPermission && (
             <div>
               <Input
                 placeholder="Search..."
@@ -117,7 +117,7 @@ export default function ResourceCategories() {
               />
             </div>
           )}
-          {adminOrganizationPermission && (
+          {hasPermission && (
             <Button
               className="text-white font-inter text-sm font-medium bg-rose-600 hover:bg-rose-700 h-11"
               onClick={() => setIsModalOpen(true)}

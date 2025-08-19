@@ -39,7 +39,7 @@ export default function ResourceKeywords() {
     },
     [["resource-keywords"]]
   );
-  const { adminOrganizationPermission } = useAppSelector(
+  const { hasPermission } = useAppSelector(
     (state) => state.permission
   );
 
@@ -70,7 +70,7 @@ export default function ResourceKeywords() {
         return <span>{format(date, "dd MMM yyyy")}</span>;
       },
     },
-    adminOrganizationPermission
+    hasPermission
       ? {
           header: "Action",
           accessorKey: "id",
@@ -112,7 +112,7 @@ export default function ResourceKeywords() {
             <p className="font-inter text-xs">Manage resource keywords</p>
           </div>
         </div>
-        {adminOrganizationPermission && <Button
+        {hasPermission && <Button
           className="text-white font-inter text-sm font-medium bg-rose-600 hover:bg-rose-700 h-11 gap-1"
           onClick={() => setIsModalOpen(true)}
         >

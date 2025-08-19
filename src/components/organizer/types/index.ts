@@ -37,6 +37,7 @@ export interface IUser {
   accountStatus: "ACTIVE" | "INACTIVE" | string;
   roleId: number;
   roleName: string;
+  actions?: string
 }
 
 

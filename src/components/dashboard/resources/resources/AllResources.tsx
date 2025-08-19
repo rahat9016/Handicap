@@ -25,19 +25,20 @@ export default function AllResources() {
     currentPage,
     totalItems,
     setTotalItems,
+    setItemsPerPage
   } = usePagination();
 
   const { search, handleSearchChange, debouncedSearch } =
     useSearchDebounce(300);
-  console.log(organizationId);
+
   const endpoint = organizationId
     ? `/resources/organization/${organizationId}`
     : "/resources";
   const shouldFetch = organizationId !== undefined;
-  console.log({ shouldFetch });
+
   const { data, isLoading } = useGet(
     endpoint,
-    ["resources", currentPage.toString(),  organizationId ?? "all"],
+    ["resources", currentPage.toString(), organizationId ?? "all"],
     {
       page: currentPage.toString(),
       limit: itemsPerPage.toString(),
@@ -146,16 +147,14 @@ export default function AllResources() {
           All Resources
         </h1>
         <div className="flex items-center gap-5">
-          {adminOrganizationPermission && (
-            <div>
-              <Input
-                placeholder="Search..."
-                value={search}
-                onChange={handleSearchChange}
-                className="w-[300px]"
-              />
-            </div>
-          )}
+          <div>
+            <Input
+              placeholder="Search..."
+              value={search}
+              onChange={handleSearchChange}
+              className="w-[300px]"
+            />
+          </div>
           {adminOrganizationPermission && (
             <Button
               className="text-white font-inter text-sm font-medium bg-rose-600 hover:bg-rose-700 h-11 gap-1"
@@ -174,6 +173,7 @@ export default function AllResources() {
         currentPage={currentPage}
         itemsPerPage={itemsPerPage}
         onPageChange={setCurrentPage}
+        setItemsPerPage={setItemsPerPage}
       />
       <CreateUpdateResources
         isOpen={isModalOpen}

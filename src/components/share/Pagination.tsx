@@ -1,5 +1,12 @@
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import { Button } from "../ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
 
 interface IPaginationProps {
   currentPage: number;
@@ -7,6 +14,7 @@ interface IPaginationProps {
   onPageChange: (page: number) => void;
   itemsPerPage: number;
   totalItems: number;
+  setItemsPerPage?: (page: number) => void
 }
 
 const Pagination = ({
@@ -15,6 +23,7 @@ const Pagination = ({
   onPageChange,
   itemsPerPage,
   totalItems,
+  setItemsPerPage
 }: IPaginationProps) => {
   const pages = [];
 
@@ -59,42 +68,64 @@ const Pagination = ({
         of <span className="font-medium">{totalItems}</span> entries
       </div>
 
-      <div className="flex items-center space-x-2">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => onPageChange(currentPage - 1)}
-          disabled={currentPage === 1}
-        >
-          <ChevronLeftIcon className="h-4 w-4" />
-        </Button>
-
-        {pages.map((page, index) => (
-          <Button
-            key={index}
-            variant="outline"
-            className={`${
-              page === currentPage
-                ? "bg-dashboard-primary hover:bg-dashboard-primary text-white hover:text-white"
-                : ""
-            }`}
-            // variant={page === currentPage ? "default" : "outline"}
-            size="sm"
-            onClick={() => typeof page === "number" && onPageChange(page)}
-            disabled={typeof page !== "number"}
+      <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2">
+          <span className="text-sm">Rows per page:</span>
+          <Select
+            value={itemsPerPage.toString()}
+            onValueChange={(value) =>
+              setItemsPerPage?.(Number(value))
+            }
           >
-            {page}
+            <SelectTrigger className="w-[80px]">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {[10, 20, 30, 40, 50].map((size) => (
+                <SelectItem key={size} value={size.toString()}>
+                  {size}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="flex items-center space-x-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => onPageChange(currentPage - 1)}
+            disabled={currentPage === 1}
+          >
+            <ChevronLeftIcon className="h-4 w-4" />
           </Button>
-        ))}
 
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => onPageChange(currentPage + 1)}
-          disabled={currentPage === totalPages}
-        >
-          <ChevronRightIcon className="h-4 w-4" />
-        </Button>
+          {pages.map((page, index) => (
+            <Button
+              key={index}
+              variant="outline"
+              className={`${
+                page === currentPage
+                  ? "bg-dashboard-primary hover:bg-dashboard-primary text-white hover:text-white"
+                  : ""
+              }`}
+              // variant={page === currentPage ? "default" : "outline"}
+              size="sm"
+              onClick={() => typeof page === "number" && onPageChange(page)}
+              disabled={typeof page !== "number"}
+            >
+              {page}
+            </Button>
+          ))}
+
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => onPageChange(currentPage + 1)}
+            disabled={currentPage === totalPages}
+          >
+            <ChevronRightIcon className="h-4 w-4" />
+          </Button>
+        </div>
       </div>
     </div>
   );

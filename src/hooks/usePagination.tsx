@@ -1,5 +1,5 @@
 // hooks/usePagination.ts
-import { useState } from 'react';
+import { useState } from "react";
 
 interface IPaginationState {
   currentPage: number;
@@ -15,16 +15,20 @@ export const usePagination = () => {
   });
 
   const setCurrentPage = (page: number) => {
-    setPagination(prev => ({ ...prev, currentPage: page }));
+    setPagination((prev) => ({ ...prev, currentPage: page }));
   };
 
   const setTotalItems = (total: number) => {
-    setPagination(prev => ({ ...prev, totalItems: total }));
+    setPagination((prev) => ({ ...prev, totalItems: total }));
   };
 
+  const setItemsPerPage = (items: number) => {
+    setPagination((prev) => ({ ...prev, itemsPerPage: items }));
+  };
   return {
     ...pagination,
     setCurrentPage,
     setTotalItems,
+    setItemsPerPage,
   };
 };

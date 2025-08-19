@@ -7,6 +7,7 @@ export interface QueryFilters {
   organizationIds?: string[];
   keywordIds?: string[];
   isCurrent?: boolean;
+  search?: string;
 }
 
 export interface Pagination {
@@ -20,7 +21,7 @@ export const buildQueryParams = (
 ): string => {
   const params = new URLSearchParams();
   filters.sort?.forEach((field) => {
-    params.append('sort', field);
+    params.append("sort", field);
   });
 
   // categoryIds (multiple)
@@ -46,6 +47,11 @@ export const buildQueryParams = (
     params.append("isCurrent", filters.isCurrent.toString());
   }
 
+  // search 
+  if (filters.search) {
+    params.append("search", filters.search);
+  }
+  
   // pagination
   params.append("page", pagination.page.toString());
   params.append("limit", pagination.limit.toString());

@@ -3,12 +3,16 @@ import {
   Accordion,
   AccordionContent,
   AccordionItem,
-  AccordionTrigger,
+  AccordionTrigger
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { Link, useRouter } from "@/i18n/navigation";
 import { logoutUser } from "@/lib/redux/features/auth/authSlice";
 import { clearOrganization } from "@/lib/redux/features/organizer/organizationSlice";
+import {
+  setAdminOrganizationPermission,
+  setPermission,
+} from "@/lib/redux/features/permission/permissionSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
 import {
   BarChart3,
@@ -68,14 +72,25 @@ export default function Sidebar() {
           label: "Organization Type Setup",
           href: "/admin/setup/organization-type-setup",
         },
+        {
+          label: "Language Setup",
+          href: "/admin/setup/language-setup",
+        },
       ],
     },
     {
       label: "Resources",
       icon: Folder,
       children: [
-        // { label: "Add Resources", href: "#" },
-        { label: "All Resources", href: "/admin/resources" },
+        { label: "Resources List", href: "/admin/resources/resources-list" },
+        {
+          label: "Resource Categories",
+          href: "/admin/resources/resource-categories",
+        },
+        {
+          label: "Resource Keywords",
+          href: "/admin/resources/resource-keywords",
+        },
       ],
     },
     {
@@ -89,13 +104,13 @@ export default function Sidebar() {
     {
       label: "Analytics",
       icon: BarChart3,
-      href: "/analytics",
+      href: "/admin/analytics",
     },
     {
       label: "Role Management",
       icon: ShieldCheck,
       children: [
-        { label: "Add Role", href: "/admin/roles/create-roles" },
+        // { label: "Add Role", href: "/admin/roles/create-roles" },
         { label: "All Roles", href: "/admin/roles/all-roles" },
       ],
     },
@@ -140,7 +155,7 @@ export default function Sidebar() {
           type="multiple"
           className="w-full h-full flex  flex-col gap-1"
         >
-          {menuItems.map((item) => {
+          {/* {menuItems.map((item) => {
             const pathnameWithoutLocale = pathname.replace(/^\/(en|bn)/, "");
             const isActive = item.href === pathnameWithoutLocale;
 
@@ -184,12 +199,84 @@ export default function Sidebar() {
                 )}
               </AccordionItem>
             );
+          })} */}
+          {menuItems.map((item) => {
+            const pathnameWithoutLocale = pathname.replace(/^\/(en|bn)/, "");
+            // Check active for both parent and children
+            const isActiveParent =
+              item.href && pathnameWithoutLocale.startsWith(item.href);
+            const isActiveChild = item.children?.some((child) =>
+              pathnameWithoutLocale.startsWith(child.href)
+            );
+            const isActive = isActiveChild || isActiveParent;
+
+            return (
+              <AccordionItem
+                key={item.label}
+                value={item.label}
+                className="border-b-0"
+              >
+                {item.children ? (
+                  <>
+                    <AccordionTrigger
+                      className={`px-4 h-[46px] hover:no-underline leading-none flex items-left font-inter  ${
+                        isActive
+                          ? "bg-dashboard-primary text-white"
+                          : "text-[#8C8C8C]"
+                      }`}
+                    >
+                      <div className="flex items-center">
+                        <item.icon
+                        className={`mr-2 h-4 w-4${
+                          isActive ? "text-white" : ""
+                        }`}
+                      />
+                      {item.label}
+                      </div>
+                    </AccordionTrigger>
+                    <AccordionContent className="flex flex-col w-full pl-6 mt-1">
+                      {item.children.map((child) => {
+                        const isChildActive = pathnameWithoutLocale.startsWith(
+                          child.href
+                        );
+                        return (
+                          <Link
+                            key={child.label}
+                            href={child.href}
+                            className={`w-full h-[46px] flex items-center gap-2 px-4 text-sm rounded-xl font-inter ${
+                              isChildActive
+                                ? "bg-dashboard-primary text-white"
+                                : "text-[#8C8C8C] hover:bg-[#EAF6FB] hover:text-dashboard-primary"
+                            }`}
+                          >
+                            {child.label}
+                          </Link>
+                        );
+                      })}
+                    </AccordionContent>
+                  </>
+                ) : (
+                  <Link
+                    href={item.href ?? "#"}
+                    className={`w-full h-[46px] flex items-center gap-2 px-4 text-sm rounded-md font-inter ${
+                      isActive
+                        ? "bg-dashboard-primary text-white"
+                        : "text-[#8C8C8C] hover:bg-[#EAF6FB] hover:text-dashboard-primary"
+                    }`}
+                  >
+                    <item.icon className="h-4 w-4" /> {item.label}
+                  </Link>
+                )}
+              </AccordionItem>
+            );
           })}
         </Accordion>
         <Button
           onClick={() => {
             dispatch(logoutUser());
             dispatch(clearOrganization());
+            dispatch(setPermission(false));
+            dispatch(setAdminOrganizationPermission(false));
           }}
           className="w-full bg-[#F0F0F0] hover:bg-[#FDECEC] text-[#A8A8A8] hover:text-[#EB5757]  flex items-center justify-start gap-2 h-12 !px-4"
         >

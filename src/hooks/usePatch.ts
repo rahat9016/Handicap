@@ -14,7 +14,6 @@ export const usePatch = <T>(
       return postService.patch(params.url, params.data);
     },
     onSuccess: (data) => {
-      toast.success(data.message || "Updated successfully!");
       if (invalidateQueriesKeys) {
         invalidateQueriesKeys.forEach((key) => {
           queryClient.invalidateQueries({ queryKey: key });

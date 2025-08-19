@@ -26,7 +26,7 @@ export default function OrganizationList() {
       setOrganization({
         roleId: roleId.toString(),
         roleName: roleName,
-        role: organizationId.toString(),
+        organizationId: organizationId.toString(),
         organizationName: organizationName,
       })
     );

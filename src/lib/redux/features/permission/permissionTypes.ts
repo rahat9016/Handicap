@@ -1,4 +1,5 @@
 
 export interface IInitialState {
-  hasPermission: boolean
+  hasPermission: boolean;
+  adminOrganizationPermission: boolean;
 }

@@ -17,7 +17,7 @@ export default function WelcomeDisability() {
   if (isLoading) {
     return <WelcomeSkeleton />;
   }
-  console.log(data?.data);
+  
   return (
     <div
       style={{

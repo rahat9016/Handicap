@@ -4,12 +4,11 @@ import { ColumnDef, DataTable } from "@/components/ui/data-table";
 import { useGet } from "@/hooks/useGet";
 import { usePagination } from "@/hooks/usePagination";
 
+import { format } from "date-fns";
 import { SquarePen } from "lucide-react";
 import { useEffect, useState } from "react";
 import CreateUpdatePageSectionModal from "./CreateUpdatePageSection";
 import { IPageSection } from "./types";
-
-
 
 export default function PageSections() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -65,7 +64,14 @@ export default function PageSections() {
         );
       },
     },
-    { header: "Created Date", accessorKey: "createdAt" },
+    {
+      header: "Created date",
+      accessorKey: "createdAt",
+      cell: (value) => {
+        const date = new Date(value as string);
+        return <span>{format(date, "dd MMM yyyy")}</span>;
+      },
+    },
 
     {
       header: "Action",

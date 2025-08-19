@@ -20,12 +20,14 @@ export default function AllOrganizerMapped() {
     totalItems,
     setTotalItems,
   } = usePagination();
+  // const { search, handleSearchChange, debouncedSearch } = useSearchDebounce(300);
   const { data, isLoading } = useGet(
     "/user-organization-role",
     ["user-organization-role", currentPage.toString()],
     {
       page: currentPage.toString(),
       limit: itemsPerPage.toString(),
+      // search: debouncedSearch,
     }
   );
 
@@ -47,10 +49,20 @@ export default function AllOrganizerMapped() {
     <div className="bg-white p-8 min-h-[85vh] border border-skeleton rounded-2xl">
       <div className="flex w-full items-center justify-between mb-6">
         <h1 className="text-xl font-bold text-erieBlack font-inter">Mapped Organizer</h1>
+        <div className="flex items-center gap-5">
+          {/* <div>
+          <Input
+            placeholder="Search..."
+            value={search}
+            onChange={handleSearchChange}
+            className="w-[300px]"
+          />
+        </div> */}
         <Button className="text-white font-inter text-sm font-medium bg-rose-600 hover:bg-rose-700 h-11" onClick={() => setIsModalOpen(true)}>
           {" "}
           Create User Role Organizer{" "}
         </Button>
+        </div>
       </div>
       <DataTable
         columns={columns}

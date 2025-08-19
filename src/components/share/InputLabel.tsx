@@ -19,7 +19,7 @@ export default function InputLabel({
           )}
         >
           {label}
-          {required && <span className="text-red-600">*</span>}
+          {required && <span className="text-rose-600">*</span>}
         </p>
       )}
     </div>

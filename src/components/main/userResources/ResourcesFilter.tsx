@@ -3,6 +3,13 @@ import { IResource } from "@/components/dashboard/resources/types/types";
 import Pagination from "@/components/share/Pagination";
 import SectionTopTitle from "@/components/share/SectionTopTitle";
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { useGet } from "@/hooks/useGet";
 import { usePagination } from "@/hooks/usePagination";
 import { useSearchDebounce } from "@/hooks/useSearchDebounce";
@@ -16,14 +23,14 @@ import ResourcesSorting from "./ResourcesSorting";
 
 export default function ResourcesFilter() {
   const { search, handleSearchChange, debouncedSearch } =
-      useSearchDebounce(300);
+    useSearchDebounce(300);
   const {
     setCurrentPage,
     itemsPerPage,
     currentPage,
     totalItems,
     setTotalItems,
-    setItemsPerPage
+    setItemsPerPage,
   } = usePagination();
   const { resourceTypes, languages, sortBy, keywords } = useAppSelector(
     (state) => state.filter
@@ -34,18 +41,20 @@ export default function ResourcesFilter() {
     categoryIds: resourceTypes,
     languageIds: languages,
     keywordIds: keywords,
-    search: debouncedSearch
+    search: debouncedSearch,
   };
 
   const queryString = buildQueryParams(filters, {
-    page: currentPage,
-    limit: itemsPerPage,
+    ...(itemsPerPage !== -1 && {
+      page: currentPage,
+      limit: itemsPerPage,
+    }),
   });
 
   // API call
   const { data, isLoading, refetch } = useGet<IResource[]>(
     `/resources?${queryString}`,
-    ["resources", currentPage.toString(), JSON.stringify(filters)]
+    ["resources", queryString]
   );
   useEffect(() => {
     if (data) {
@@ -66,14 +75,35 @@ export default function ResourcesFilter() {
             <ResourcesSorting />
           </div>
           <div className="w-10/12">
-            <div className="ml-auto flex items-center mb-4 w-[300px] border px-2 rounded-md">
-              <Search />
-              <Input
-                placeholder="Search here..."
-                value={search}
-                onChange={handleSearchChange}
-                className="border-none shadow-none"
-              />
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <span className="text-sm">Rows per page:</span>
+                <Select
+                  value={itemsPerPage === -1 ? "all" : itemsPerPage.toString()}
+                  onValueChange={(value) => setItemsPerPage?.(value)}
+                >
+                  <SelectTrigger className="w-[80px]">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All</SelectItem>
+                    {[10, 20, 30, 40, 50].map((size) => (
+                      <SelectItem key={size} value={size.toString()}>
+                        {size}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="ml-auto flex items-center mb-4 w-[300px] border px-2 rounded-md">
+                <Search />
+                <Input
+                  placeholder="Search here..."
+                  value={search}
+                  onChange={handleSearchChange}
+                  className="border-none shadow-none"
+                />
+              </div>
             </div>
             <div className="border-t pt-4">
               {isLoading ? (

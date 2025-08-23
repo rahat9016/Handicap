@@ -1,14 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
-import { Button } from "@/components/ui/button";
 import { ColumnDef, DataTable } from "@/components/ui/data-table";
-import { Input } from "@/components/ui/input";
 import { useGet } from "@/hooks/useGet";
 import { usePagination } from "@/hooks/usePagination";
 import { useSearchDebounce } from "@/hooks/useSearchDebounce";
 import { useAppSelector } from "@/lib/redux/hooks";
 import { format } from "date-fns";
-import { Eye, Plus, SquarePen } from "lucide-react";
+import { Eye, SlidersHorizontal, SquarePen } from "lucide-react";
 import { useEffect, useState } from "react";
 import { IResource } from "../types/types";
 import CreateUpdateResources from "./CreateUpdateResources";
@@ -40,10 +38,13 @@ export default function AllResources() {
     endpoint,
     ["resources", currentPage.toString(), organizationId ?? "all"],
     {
+    ...(itemsPerPage !== -1 && {
       page: currentPage.toString(),
       limit: itemsPerPage.toString(),
-      search: debouncedSearch,
-    },
+      
+    }),
+    search: debouncedSearch,
+  },
     { enabled: shouldFetch }
   );
 
@@ -115,7 +116,7 @@ export default function AllResources() {
     },
     {
       header: "Action",
-      accessorKey: "id",
+      accessorKey: "actions",
       cell: (_value, row: IResource) => {
         return (
           <div className="flex items-center gap-5">
@@ -142,38 +143,23 @@ export default function AllResources() {
   ];
   return (
     <div className="bg-white p-8 min-h-[85vh] border border-skeleton rounded-2xl">
-      <div className="flex w-full items-center justify-between mb-6">
-        <h1 className="text-xl font-bold text-erieBlack font-inter">
-          All Resources
-        </h1>
-        <div className="flex items-center gap-5">
-          <div>
-            <Input
-              placeholder="Search..."
-              value={search}
-              onChange={handleSearchChange}
-              className="w-[300px]"
-            />
-          </div>
-          {adminOrganizationPermission && (
-            <Button
-              className="text-white font-inter text-sm font-medium bg-rose-600 hover:bg-rose-700 h-11 gap-1"
-              onClick={() => setIsModalOpen(true)}
-            >
-              <Plus className="!text-2xl text-white" /> Create
-            </Button>
-          )}
-        </div>
-      </div>
       <DataTable
         columns={columns}
-        data={Array.isArray(data?.data) ? (data.data as IResource[]) : []}
+        data={Array.isArray(data?.data) ? data.data : []}
         isLoading={isLoading}
         totalItems={totalItems}
         currentPage={currentPage}
         itemsPerPage={itemsPerPage}
         onPageChange={setCurrentPage}
         setItemsPerPage={setItemsPerPage}
+        icon={<SlidersHorizontal />}
+        title="All Resources"
+        subtitle="Manage Resources"
+        showSearch
+        searchValue={search}
+        onSearchChange={handleSearchChange}
+        IsCreate={adminOrganizationPermission} // [If you need a create button, just pass true as a props]
+        setIsModalOpen={setIsModalOpen} // [create modal open state]
       />
       <CreateUpdateResources
         isOpen={isModalOpen}

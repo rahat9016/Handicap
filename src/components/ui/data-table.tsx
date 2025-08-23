@@ -1,8 +1,10 @@
 // components/ui/data-table.tsx
 import { Skeleton } from "@/components/ui/skeleton";
-
-import { Download, Eye, FileText, Plus, Sheet, UsersIcon } from "lucide-react";
-import { useState } from "react";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
+import { Download, Eye, FileText, Plus, Sheet } from "lucide-react";
+import Papa from "papaparse";
+import { ReactNode, useState } from "react";
 import Pagination from "../share/Pagination";
 import TableTopBarHeader from "../share/TableTopBarHeader";
 import { Button } from "./button";
@@ -36,7 +38,16 @@ interface DataTableProps<T> {
   currentPage: number;
   itemsPerPage: number;
   onPageChange: (page: number) => void;
-  setItemsPerPage: (page: number) => void;
+  setItemsPerPage: ((page: string | number) => void) | undefined
+  icon?: ReactNode;
+  title?: string;
+  subtitle?: string;
+  searchValue?: string;
+  onSearchChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  showSearch?: boolean;
+  searchPlaceholder?: string;
+  setIsModalOpen?: (isOpen: boolean) => void;
+  IsCreate?: boolean;
 }
 
 export function DataTable<T>({
@@ -48,6 +59,15 @@ export function DataTable<T>({
   itemsPerPage,
   onPageChange,
   setItemsPerPage,
+  icon,
+  title,
+  subtitle,
+  searchValue,
+  onSearchChange,
+  showSearch,
+  searchPlaceholder,
+  setIsModalOpen,
+  IsCreate = false,
 }: DataTableProps<T>) {
   const totalPages = Math.ceil(totalItems / itemsPerPage);
 
@@ -63,16 +83,71 @@ export function DataTable<T>({
       return newSet;
     });
   };
+
+  function exportToCSV() {
+    const visibleCols = columns.filter(
+      (col) =>
+        col.accessorKey &&
+        visibleColumns.has(col.accessorKey as string) &&
+        col.accessorKey !== "actions"
+    );
+
+    const headers = visibleCols.map((col) => col.header as string);
+
+    const rows = data.map((row) =>
+      visibleCols.map((col) => {
+        if (col.accessorKey) {
+          return row[col.accessorKey] ?? "";
+        }
+        return "";
+      })
+    );
+
+    // ✅ export with PapaParse
+    const csv = Papa.unparse({ fields: headers, data: rows });
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.setAttribute("download", "table-data.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
+  function exportToPDF() {
+    const visibleCols = columns.filter(
+      (col) =>
+        col.accessorKey &&
+        visibleColumns.has(col.accessorKey as string) &&
+        col.accessorKey !== "actions"
+    );
+
+    const headers = visibleCols.map((col) => col.header);
+    const rows = data.map((row) =>
+      visibleCols.map((col) => {
+        if (col.accessorKey) return row[col.accessorKey] ?? "";
+        return "";
+      })
+    );
+
+    const doc = new jsPDF();
+    autoTable(doc, {
+      head: [headers],
+      body: rows,
+    });
+    doc.save("table-data.pdf");
+  }
   return (
     <>
       <div className="flex items-center gap-3 mb-6">
         <TableTopBarHeader
-          icon={<UsersIcon />}
-          title="Users"
-          subtitle="Manage user accounts"
-          showSearch
-          // searchValue={search}
-          // onSearchChange={handleSearchChange}
+          icon={icon}
+          title={title}
+          subtitle={subtitle}
+          searchValue={searchValue}
+          onSearchChange={onSearchChange}
+          showSearch={showSearch}
+          searchPlaceholder={searchPlaceholder}
         />
 
         <DropdownMenu>
@@ -103,93 +178,119 @@ export function DataTable<T>({
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-40 flex flex-col gap-1">
-            <Button size="sm" className="w-full h-10 bg-slate-100 hover:bg-slate-200"><Sheet />Export CSV</Button>
-            <Button size="sm" className="w-full h-10 bg-slate-100 hover:bg-slate-200"><FileText />Export PDF</Button>
+            <Button
+              size="sm"
+              className="w-full h-10 bg-slate-100 hover:bg-slate-200"
+              onClick={exportToCSV}
+            >
+              <Sheet />
+              Export CSV
+            </Button>
+            <Button
+              size="sm"
+              className="w-full h-10 bg-slate-100 hover:bg-slate-200"
+              onClick={exportToPDF}
+            >
+              <FileText />
+              Export PDF
+            </Button>
           </DropdownMenuContent>
         </DropdownMenu>
-        <Button
-          className="text-white font-inter text-sm font-medium bg-rose-600 hover:bg-rose-700 h-11 gap-1 !px-6"
-          // onClick={() => setIsModalOpen(true)}
-        >
-          <Plus className="!text-2xl text-white" /> Create
-        </Button>
+        {IsCreate && setIsModalOpen && (
+          <Button
+            className="text-white font-inter text-sm font-medium bg-rose-600 hover:bg-rose-700 h-11 gap-1 !px-6"
+            onClick={() => setIsModalOpen(true)}
+          >
+            <Plus className="!text-2xl text-white" /> Create
+          </Button>
+        )}
       </div>
       <div className="rounded-md border">
-        <Table>
-          <TableHeader>
-            <TableRow className="bg-[#C6DFF8] h-[62px]">
+        <div className="w-full overflow-x-auto">
+          <Table className="min-w-full border-collapse">
+            <TableHeader>
+              <TableRow className="bg-[#C6DFF8] h-[62px]">
+                {visibleColumns.size === 0 ? (
+                  <TableHead className="text-center w-full">
+                    No columns selected
+                  </TableHead>
+                ) : (
+                  columns
+                    .filter((c) => visibleColumns.has(c.accessorKey as string))
+                    .map((column, index) => (
+                      <TableHead
+                        key={index}
+                        className="font-medium font-inter text-base text-erieBlack max-w-[200px] truncate whitespace-nowrap"
+                      >
+                        <span className="block truncate">{column.header}</span>
+                      </TableHead>
+                    ))
+                )}
+              </TableRow>
+            </TableHeader>
+                
+            <TableBody>
               {visibleColumns.size === 0 ? (
-                <TableHead className="text-center w-full">
-                  No columns selected
-                </TableHead>
-              ) : (
-                columns
-                  .filter((c) => visibleColumns.has(c.accessorKey as string))
-                  .map((column, index) => (
-                    <TableHead
-                      key={index}
-                      className="font-medium font-inter text-base text-erieBlack"
-                    >
-                      {column.header}
-                    </TableHead>
-                  ))
-              )}
-            </TableRow>
-          </TableHeader>
-
-          <TableBody>
-            {visibleColumns.size === 0 ? (
-              <TableRow>
-                <TableCell colSpan={1} className="text-center h-24">
-                  No columns selected
-                </TableCell>
-              </TableRow>
-            ) : isLoading ? (
-              Array.from({ length: itemsPerPage }).map((_, rowIndex) => (
-                <TableRow className="h-[62px]" key={`skeleton-${rowIndex}`}>
-                  {columns
-                    .filter((c) => visibleColumns.has(c.accessorKey as string))
-                    .map((column, colIndex) => (
-                      <TableCell key={`skeleton-${rowIndex}-${colIndex}`}>
-                        <Skeleton className="h-4 w-full" />
-                      </TableCell>
-                    ))}
+                <TableRow>
+                  <TableCell colSpan={1} className="text-center h-24">
+                    No columns selected
+                  </TableCell>
                 </TableRow>
-              ))
-            ) : data.length === 0 ? (
-              <TableRow>
-                <TableCell
-                  colSpan={visibleColumns.size}
-                  className="h-24 text-center"
-                >
-                  No data found
-                </TableCell>
-              </TableRow>
-            ) : (
-              data.map((row, rowIndex) => (
-                <TableRow
-                  className="h-[62px] text-darkLiver font-inter font-normal text-sm"
-                  key={rowIndex}
-                >
-                  {columns
-                    .filter((c) => visibleColumns.has(c.accessorKey as string))
-                    .map((column) => {
-                      const value = row[column.accessorKey];
-                      return (
+              ) : isLoading ? (
+                Array.from({ length: itemsPerPage }).map((_, rowIndex) => (
+                  <TableRow className="h-[62px]" key={`skeleton-${rowIndex}`}>
+                    {columns
+                      .filter((c) =>
+                        visibleColumns.has(c.accessorKey as string)
+                      )
+                      .map((column, colIndex) => (
                         <TableCell
-                          key={`${rowIndex}-${String(column.accessorKey)}`}
+                          key={`skeleton-${rowIndex}-${colIndex}`}
+                          className="max-w-[200px]"
                         >
-                          {column?.cell
-                            ? column.cell(value, row)
-                            : (value as React.ReactNode)}
+                          <Skeleton className="h-4 w-full" />
                         </TableCell>
-                      );
-                    })}
+                      ))}
+                  </TableRow>
+                ))
+              ) : data.length === 0 ? (
+                <TableRow>
+                  <TableCell
+                    colSpan={visibleColumns.size}
+                    className="h-24 text-center"
+                  >
+                    No data found
+                  </TableCell>
                 </TableRow>
-              ))
-            )}
-          </TableBody>
-        </Table>
+              ) : (
+                data.map((row, rowIndex) => (
+                  <TableRow
+                    className="h-[62px] text-darkLiver font-inter font-normal text-sm"
+                    key={rowIndex}
+                  >
+                    {columns
+                      .filter((c) =>
+                        visibleColumns.has(c.accessorKey as string)
+                      )
+                      .map((column) => {
+                        const value = row[column.accessorKey];
+                        return (
+                          <TableCell
+                            key={`${rowIndex}-${String(column.accessorKey)}`}
+                            className="max-w-[200px] truncate whitespace-nowrap"
+                          >
+                            {column?.cell
+                              ? column.cell(value, row)
+                              : (value as React.ReactNode)}
+                          </TableCell>
+                        );
+                      })}
+                  </TableRow>
+                ))
+              )}
+            </TableBody>
+          </Table>
+        </div>
 
         <Pagination
           currentPage={currentPage}

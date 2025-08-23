@@ -3,8 +3,9 @@
 import { ColumnDef, DataTable } from "@/components/ui/data-table";
 import { useGet } from "@/hooks/useGet";
 import { usePagination } from "@/hooks/usePagination";
+import { useSearchDebounce } from "@/hooks/useSearchDebounce";
 import { format } from "date-fns";
-import { EllipsisVertical, FilePenLine } from "lucide-react";
+import { EllipsisVertical, FilePenLine, UserCog } from "lucide-react";
 import { useEffect, useState } from "react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../../ui/dropdown-menu";
 import CreateUpdateRole from "./CreateUpdateRoles";
@@ -12,20 +13,26 @@ import { IRole } from "./types/Role";
 export default function Roles() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [role, setRole] = useState<IRole>();
+  const { search, handleSearchChange, debouncedSearch } =
+      useSearchDebounce(300);
   const {
     setCurrentPage,
     itemsPerPage,
     currentPage,
     totalItems,
     setTotalItems,
+    setItemsPerPage
   } = usePagination();
   const { data, isLoading } = useGet<IRole[]>(
     "/roles",
     ["roles", currentPage.toString()],
     {
+    ...(itemsPerPage !== -1 && {
       page: currentPage.toString(),
       limit: itemsPerPage.toString(),
-    }
+    }),
+    search: debouncedSearch,
+  }
   );
 
   // Update total items whenever data changes
@@ -108,9 +115,6 @@ export default function Roles() {
   ];
   return (
     <div className="bg-white p-8 min-h-[85vh] border border-skeleton rounded-2xl">
-      <div className="flex w-full items-center justify-between mb-6">
-        <h1 className="text-xl font-bold text-erieBlack font-inter">Users</h1>
-      </div>
       <DataTable
         columns={columns}
         data={Array.isArray(data?.data) ? data.data : []}
@@ -119,6 +123,15 @@ export default function Roles() {
         currentPage={currentPage}
         itemsPerPage={itemsPerPage}
         onPageChange={setCurrentPage}
+        setItemsPerPage={setItemsPerPage}
+        icon={<UserCog />}
+        title="Roles"
+        subtitle="Manage role accounts"
+        showSearch
+        searchValue={search}
+        onSearchChange={handleSearchChange}
+        // IsCreate // [If you need a create button, just pass true as a props]
+        // setIsModalOpen={setIsModalOpen} // [create modal open state]
       />
       <CreateUpdateRole
         isOpen={isModalOpen}

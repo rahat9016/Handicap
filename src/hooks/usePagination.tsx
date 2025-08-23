@@ -22,8 +22,21 @@ export const usePagination = () => {
     setPagination((prev) => ({ ...prev, totalItems: total }));
   };
 
-  const setItemsPerPage = (items: number) => {
-    setPagination((prev) => ({ ...prev, itemsPerPage: items }));
+  const setItemsPerPage = (value: string | number) => {
+    if (value === "all") {
+      setPagination((prev) => ({
+        ...prev,
+        itemsPerPage: -1,
+        currentPage: 1,
+      }));
+    } else {
+      const num = typeof value === "string" ? parseInt(value, 10) : value;
+      setPagination((prev) => ({
+        ...prev,
+        itemsPerPage: num,
+        currentPage: 1,
+      }));
+    }
   };
   return {
     ...pagination,

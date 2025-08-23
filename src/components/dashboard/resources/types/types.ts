@@ -44,6 +44,7 @@ interface IOrganization {
 export interface IResource {
   id: number;
   name?: string;
+  actions?: string;
   isPrivate?: boolean;
   title: string;
   description: string;

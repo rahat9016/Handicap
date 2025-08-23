@@ -1,14 +1,12 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import { ColumnDef, DataTable } from "@/components/ui/data-table";
-import { Input } from "@/components/ui/input";
 import { useGet } from "@/hooks/useGet";
 import { usePagination } from "@/hooks/usePagination";
 import { useSearchDebounce } from "@/hooks/useSearchDebounce";
 import { useAppSelector } from "@/lib/redux/hooks";
 import { format } from "date-fns";
-import { SquarePen } from "lucide-react";
+import { FileCog, SquarePen } from "lucide-react";
 import { useEffect, useState } from "react";
 import CreateUpdateCategories from "./CreateUpdateCategories";
 import { IResource } from "./types/Categories";
@@ -24,21 +22,24 @@ export default function ResourceCategories() {
     currentPage,
     totalItems,
     setTotalItems,
+    setItemsPerPage,
   } = usePagination();
   const { search, handleSearchChange, debouncedSearch } =
     useSearchDebounce(300);
+
   const { data, isLoading } = useGet<IResource[]>(
-    "/resource-categories",
-    ["resource-categories", currentPage.toString()],
-    {
+  "/resource-categories",
+  ["resource-categories", currentPage.toString(), itemsPerPage.toString(), debouncedSearch],
+  {
+    ...(itemsPerPage !== -1 && {
       page: currentPage.toString(),
       limit: itemsPerPage.toString(),
-      search: debouncedSearch,
-    }
-  );
-  const { hasPermission } = useAppSelector(
-    (state) => state.permission
-  );
+    }),
+    search: debouncedSearch,
+  }
+);
+  const { hasPermission } = useAppSelector((state) => state.permission);
+
   // Update total items whenever data changes
   useEffect(() => {
     if (data) {
@@ -100,34 +101,9 @@ export default function ResourceCategories() {
         }
       : undefined,
   ].filter(Boolean) as ColumnDef<IResource>[];
+
   return (
     <div className="bg-white p-8 min-h-[85vh] border border-skeleton rounded-2xl">
-      <div className="flex w-full items-center justify-between mb-6">
-        <h1 className="text-xl font-bold text-erieBlack font-inter">
-          Resource Categories
-        </h1>
-        <div className="flex items-center gap-5">
-          {hasPermission && (
-            <div>
-              <Input
-                placeholder="Search..."
-                value={search}
-                onChange={handleSearchChange}
-                className="w-[300px]"
-              />
-            </div>
-          )}
-          {hasPermission && (
-            <Button
-              className="text-white font-inter text-sm font-medium bg-rose-600 hover:bg-rose-700 h-11"
-              onClick={() => setIsModalOpen(true)}
-            >
-              {" "}
-              Create Category{" "}
-            </Button>
-          )}
-        </div>
-      </div>
       <DataTable
         columns={columns}
         data={Array.isArray(data?.data) ? data.data : []}
@@ -136,6 +112,15 @@ export default function ResourceCategories() {
         currentPage={currentPage}
         itemsPerPage={itemsPerPage}
         onPageChange={setCurrentPage}
+        setItemsPerPage={setItemsPerPage}
+        icon={<FileCog />}
+        title="Resource Categories"
+        subtitle="Manage resource categories"
+        showSearch
+        searchValue={search}
+        onSearchChange={handleSearchChange}
+        IsCreate={hasPermission} // [If you need a create button, just pass true as a props]
+        setIsModalOpen={setIsModalOpen} // [create modal open state]
       />
       <CreateUpdateCategories
         isOpen={isModalOpen}

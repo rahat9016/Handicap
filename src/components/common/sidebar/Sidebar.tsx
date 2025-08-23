@@ -3,7 +3,7 @@ import {
   Accordion,
   AccordionContent,
   AccordionItem,
-  AccordionTrigger
+  AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { Link, useRouter } from "@/i18n/navigation";
@@ -202,13 +202,16 @@ export default function Sidebar() {
           })} */}
           {menuItems.map((item) => {
             const pathnameWithoutLocale = pathname.replace(/^\/(en|bn)/, "");
-            // Check active for both parent and children
+
+            // ✅ active logic
             const isActiveParent =
-              item.href && pathnameWithoutLocale.startsWith(item.href);
-            const isActiveChild = item.children?.some((child) =>
-              pathnameWithoutLocale.startsWith(child.href)
+              item.href && pathnameWithoutLocale === item.href;
+
+            const isActiveChild = item.children?.some(
+              (child) => pathnameWithoutLocale === child.href
             );
-            const isActive = isActiveChild || isActiveParent;
+
+            const isActive = isActiveParent || isActiveChild;
 
             return (
               <AccordionItem
@@ -221,29 +224,34 @@ export default function Sidebar() {
                     <AccordionTrigger
                       className={`px-4 h-[46px] hover:no-underline leading-none flex items-left font-inter  ${
                         isActive
-                          ? "bg-dashboard-primary text-white"
-                          : "text-[#8C8C8C]"
+                          ? "bg-dashboard-primary text-white "
+                          : "text-[#8C8C8C] hover:bg-[#EAF6FB] hover:text-dashboard-primary"
                       }`}
                     >
                       <div className="flex items-center">
                         <item.icon
-                        className={`mr-2 h-4 w-4${
-                          isActive ? "text-white" : ""
-                        }`}
-                      />
-                      {item.label}
+                          className={`mr-2 h-4 w-4 ${
+                            isActive ? "text-white" : ""
+                          }`}
+                        />
+                        {item.label}
                       </div>
                     </AccordionTrigger>
-                    <AccordionContent className="flex flex-col w-full pl-6 mt-1">
+
+                    <AccordionContent
+                      className={`flex flex-col w-full mt-1 ${
+                        isActiveChild ? "block" : ""
+                      }`}
+                    >
                       {item.children.map((child) => {
-                        const isChildActive = pathnameWithoutLocale.startsWith(
-                          child.href
-                        );
+                        const isChildActive =
+                          pathnameWithoutLocale === child.href;
+
                         return (
                           <Link
                             key={child.label}
                             href={child.href}
-                            className={`w-full h-[46px] flex items-center gap-2 px-4 text-sm rounded-xl font-inter ${
+                            className={`w-full h-[46px] flex items-center gap-2 px-4 text-sm rounded-md font-inter pl-6 ${
                               isChildActive
                                 ? "bg-dashboard-primary text-white"
                                 : "text-[#8C8C8C] hover:bg-[#EAF6FB] hover:text-dashboard-primary"

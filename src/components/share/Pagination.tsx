@@ -14,7 +14,7 @@ interface IPaginationProps {
   onPageChange: (page: number) => void;
   itemsPerPage: number;
   totalItems: number;
-  setItemsPerPage?: (page: number) => void
+  setItemsPerPage?: (page: string | number) => void;
 }
 
 const Pagination = ({
@@ -23,7 +23,7 @@ const Pagination = ({
   onPageChange,
   itemsPerPage,
   totalItems,
-  setItemsPerPage
+  setItemsPerPage,
 }: IPaginationProps) => {
   const pages = [];
 
@@ -72,15 +72,14 @@ const Pagination = ({
         <div className="flex items-center gap-2">
           <span className="text-sm">Rows per page:</span>
           <Select
-            value={itemsPerPage.toString()}
-            onValueChange={(value) =>
-              setItemsPerPage?.(Number(value))
-            }
+            value={itemsPerPage === -1 ? "all" : itemsPerPage.toString()}
+            onValueChange={(value) => setItemsPerPage?.(value)}
           >
             <SelectTrigger className="w-[80px]">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
+              <SelectItem value="all">All</SelectItem>
               {[10, 20, 30, 40, 50].map((size) => (
                 <SelectItem key={size} value={size.toString()}>
                   {size}

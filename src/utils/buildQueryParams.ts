@@ -11,8 +11,8 @@ export interface QueryFilters {
 }
 
 export interface Pagination {
-  page: number;
-  limit: number;
+  page?: number;
+  limit?: number;
 }
 
 export const buildQueryParams = (
@@ -53,8 +53,13 @@ export const buildQueryParams = (
   }
   
   // pagination
-  params.append("page", pagination.page.toString());
-  params.append("limit", pagination.limit.toString());
+  if (pagination?.page !== undefined) {
+    params.append("page", pagination.page.toString());
+  }
+  if (pagination?.limit !== undefined) {
+    params.append("limit", pagination.limit.toString());
+  }
+
 
   return params.toString();
 };

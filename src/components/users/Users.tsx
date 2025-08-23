@@ -4,7 +4,7 @@ import { ColumnDef, DataTable } from "@/components/ui/data-table";
 import { useGet } from "@/hooks/useGet";
 import { usePagination } from "@/hooks/usePagination";
 import { useSearchDebounce } from "@/hooks/useSearchDebounce";
-import { Eye, SquarePen } from "lucide-react";
+import { Eye, SquarePen, UsersIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { IUser } from "../organizer/types";
 import CreateUpdateUser from "./CreateUpdateUsers";
@@ -27,10 +27,12 @@ export default function Users() {
     "/user",
     ["user", currentPage.toString()],
     {
+    ...(itemsPerPage !== -1 && {
       page: currentPage.toString(),
       limit: itemsPerPage.toString(),
-      search: debouncedSearch,
-    }
+    }),
+    search: debouncedSearch,
+  }
   );
 
   // Update total items whenever data changes
@@ -101,14 +103,6 @@ export default function Users() {
   ];
   return (
     <div className="bg-white p-8 min-h-[85vh] border border-skeleton rounded-2xl">
-      {/* <TableHeader
-        icon={<UsersIcon />}
-        title="Users"
-        subtitle="Manage user accounts"
-        showSearch
-        searchValue={search}
-        onSearchChange={handleSearchChange}
-      /> */}
       <DataTable
         columns={columns}
         data={Array.isArray(data?.data) ? data.data : []}
@@ -118,6 +112,14 @@ export default function Users() {
         itemsPerPage={itemsPerPage}
         onPageChange={setCurrentPage}
         setItemsPerPage={setItemsPerPage}
+        icon={<UsersIcon />}
+        title="Users"
+        subtitle="Manage user accounts"
+        showSearch
+        searchValue={search}
+        onSearchChange={handleSearchChange}
+        // IsCreate // [If you need a create button, just pass true as a props]
+        // setIsModalOpen={setIsModalOpen} // [create modal open state]
       />
       <CreateUpdateUser
         isOpen={isModalOpen}

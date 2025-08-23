@@ -1,34 +1,37 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import { ColumnDef, DataTable } from "@/components/ui/data-table";
-import { Input } from "@/components/ui/input";
 import { useGet } from "@/hooks/useGet";
 import { usePagination } from "@/hooks/usePagination";
+import { useSearchDebounce } from "@/hooks/useSearchDebounce";
 import { format } from "date-fns";
-import { Plus, SquarePen } from "lucide-react";
+import { Languages, SquarePen } from "lucide-react";
 import { useEffect, useState } from "react";
 import { ILanguage } from "../types/setup";
 import CreateUpdateLanguageSetup from "./CreateUpdateLanguageSetup";
 export default function LanguageSetup() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [language, setLanguage] = useState<ILanguage | undefined>(undefined);
-
+  const { search, handleSearchChange, debouncedSearch } =
+    useSearchDebounce(300);
   const {
     setCurrentPage,
     itemsPerPage,
     currentPage,
     totalItems,
     setTotalItems,
+    setItemsPerPage,
   } = usePagination();
   const { data, isLoading } = useGet<ILanguage[]>(
     "/languages",
     ["languages", currentPage.toString()],
     {
+    ...(itemsPerPage !== -1 && {
       page: currentPage.toString(),
       limit: itemsPerPage.toString(),
-      // query: debouncedSearch,
-    }
+    }),
+    search: debouncedSearch,
+  }
   );
 
   // Update total items whenever data changes
@@ -64,7 +67,7 @@ export default function LanguageSetup() {
         return <span>{format(date, "dd MMM yyyy")}</span>;
       },
     },
-    
+
     {
       header: "Is Active",
       accessorKey: "isActive",
@@ -102,20 +105,6 @@ export default function LanguageSetup() {
   ];
   return (
     <div className="bg-white p-8 min-h-[85vh] border border-skeleton rounded-2xl">
-      <div className="flex w-full items-center justify-between mb-6">
-        <h1 className="text-xl font-bold text-erieBlack font-inter">
-          Language Setup
-        </h1>
-        <div className="flex items-center gap-4">
-          <Input placeholder="Search languages..." className="w-[300px]" />
-          <Button
-            className="text-white font-inter text-sm font-medium bg-rose-600 hover:bg-rose-700 h-11 gap-1"
-            onClick={() => setIsModalOpen(true)}
-          >
-            <Plus className="!text-2xl text-white"/> Create 
-          </Button>
-        </div>
-      </div>
       <DataTable
         columns={columns}
         data={Array.isArray(data?.data) ? data.data : []}
@@ -124,6 +113,15 @@ export default function LanguageSetup() {
         currentPage={currentPage}
         itemsPerPage={itemsPerPage}
         onPageChange={setCurrentPage}
+        setItemsPerPage={setItemsPerPage}
+        icon={<Languages />}
+        title="Language Setup"
+        subtitle="Manage Language Setup"
+        showSearch
+        searchValue={search}
+        onSearchChange={handleSearchChange}
+        IsCreate // [If you need a create button, just pass true as a props]
+        setIsModalOpen={setIsModalOpen} // [create modal open state]
       />
       <CreateUpdateLanguageSetup
         isOpen={isModalOpen}

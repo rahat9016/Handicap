@@ -52,9 +52,9 @@ export default function Users() {
   };
   const columns: ColumnDef<IUser>[] = [
     { header: "ID", accessorKey: "id" },
-    { header: "First Name", accessorKey: "firstName" },
+    { header: "First Name", accessorKey: "firstName",  sortable: true },
     { header: "Last Name", accessorKey: "lastName" },
-    { header: "Email", accessorKey: "email" },
+    { header: "Email", accessorKey: "email", sortable: true },
     { header: "Phone", accessorKey: "phone" },
     { header: "User Role", accessorKey: "roleName" },
     {

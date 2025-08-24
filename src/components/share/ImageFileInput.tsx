@@ -1,3 +1,4 @@
+import { cn } from "@/lib/utils";
 import { isValidUrl } from "@/utils/isValidUrl";
 import { FileText, X } from "lucide-react";
 import Image from "next/image";
@@ -12,10 +13,12 @@ const ImageFileInput = ({
   name,
   supportedImageTypes,
   supportedPdfType,
+  className,
 }: {
   name: string;
   supportedImageTypes?: string[];
   supportedPdfType?: string | null;
+  className?: string;
 }) => {
   const { control, getValues, setValue, watch } = useFormContext();
   const initialValue = getValues(name);
@@ -29,29 +32,21 @@ const ImageFileInput = ({
 
   useEffect(() => {
     if (fileValue instanceof File) {
-      // File object from upload
-      if (supportedPdfType && fileValue.type === supportedPdfType) {
+      if (supportedPdfType && fileValue.type === "application/pdf") {
         setIsPdf(true);
-        setPreview(null);
+        setPreview(null); 
       } else if (supportedImageTypes?.includes(fileValue.type)) {
         setIsPdf(false);
         setPreview(URL.createObjectURL(fileValue));
-      } else {
-        setIsPdf(false);
-        setPreview(null);
       }
     } else if (typeof fileValue === "string" && fileValue) {
-      // String from backend (URL)
-      if (supportedPdfType && fileValue.toLowerCase().endsWith(".pdf")) {
+      if (fileValue.toLowerCase().includes(".pdf")) {
         setIsPdf(true);
-        setPreview(null);
+        setPreview(null); 
       } else {
         setIsPdf(false);
         setPreview(fileValue);
       }
-    } else {
-      setIsPdf(false);
-      setPreview(null);
     }
   }, [fileValue, supportedImageTypes, supportedPdfType]);
 
@@ -76,7 +71,7 @@ const ImageFileInput = ({
     setIsPdf(false);
     setValue(field.name, null);
   };
-
+  console.log(supportedPdfType, isPdf, preview);
   return (
     <Controller
       name={name}
@@ -85,7 +80,12 @@ const ImageFileInput = ({
       render={({ field, fieldState }) => {
         return (
           <div>
-            <div className="w-[244px] h-[132px] border-[1px] border-dashed hover:border-dashboard-primary bg-[#F5F5F5] border-[#B0B0B0] rounded-lg cursor-pointer block relative">
+            <div
+              className={cn(
+                `w-[244px] h-[132px] border-[1px] border-dashed hover:border-dashboard-primary bg-[#F5F5F5] border-[#B0B0B0] rounded-lg cursor-pointer block relative`,
+                className
+              )}
+            >
               {preview && !isPdf ? (
                 <div className="w-full h-full relative group">
                   <button
@@ -113,7 +113,7 @@ const ImageFileInput = ({
                   )}
                 </div>
               ) : isPdf ? (
-                <div className="w-full h-full flex flex-col items-center justify-center text-gray-600">
+                <div className="w-full h-full relative group flex flex-col items-center justify-center">
                   <button
                     onClick={() => handleDelete(field)}
                     onKeyDown={(e) => e.key === "Enter" && handleDelete(field)}
@@ -123,8 +123,8 @@ const ImageFileInput = ({
                   >
                     <X className="w-4 h-4 text-white" />
                   </button>
-                  <FileText className="w-10 h-10 mb-2" />
-                  <p className="text-sm font-semibold">PDF file selected</p>
+
+                  <FileText className="w-10 h-10 mb-2 text-rose-500" /> <p className="text-sm font-semibold">PDF file selected</p>
                 </div>
               ) : (
                 <label

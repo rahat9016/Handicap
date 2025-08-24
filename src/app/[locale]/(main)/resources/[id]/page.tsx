@@ -22,10 +22,10 @@ import {
   ZoomOut,
 } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
+import { IResource } from "@/components/dashboard/resources/types/types";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -45,6 +45,8 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { useGet } from "@/hooks/useGet";
+import { Link } from "@/i18n/navigation";
 import { CheckedState } from "@radix-ui/react-checkbox";
 import { Separator } from "@radix-ui/react-dropdown-menu";
 type FileResource = {
@@ -303,7 +305,11 @@ export default function ResourceDetailPage() {
   const [selectedFiles, setSelectedFiles] = useState(new Set());
   const [selectAll, setSelectAll] = useState(false);
   // const { toast } = useToast()
-  console.log(params);
+  const { data } = useGet<IResource>(
+    `/resources/${resourceId}`,
+    ["resources", resourceId]
+  );
+  console.log(data);
   useEffect(() => {
     // In a real app, this would fetch from an API
     const resourceData = resourcesData[resourceId];
@@ -447,24 +453,6 @@ export default function ResourceDetailPage() {
     // })
   };
 
-  if (!resource) {
-    return (
-      <div className="flex min-h-screen items-center justify-center">
-        <div className="text-center">
-          <h2 className="text-2xl font-bold">Resource not found</h2>
-          <p className="text-muted-foreground mt-2">
-            The requested resource could not be found.
-          </p>
-          <Link href="/resources">
-            <Button className="mt-4">
-              <ArrowLeft className="mr-2 h-4 w-4" />
-              Back to Resources
-            </Button>
-          </Link>
-        </div>
-      </div>
-    );
-  }
 
   const getFileIcon = (type: string) => {
     switch (type) {
@@ -677,12 +665,12 @@ export default function ResourceDetailPage() {
               <Separator className="h-6" />
               <div className="flex items-center gap-2">
                 <Badge variant="outline" className="capitalize">
-                  {resource.category}
+                  {resource?.category}
                 </Badge>
                 <Badge variant="outline" className="capitalize">
-                  {resource.sector}
+                  {resource?.sector}
                 </Badge>
-                {resource.featured && (
+                {resource?.featured && (
                   <Badge className="bg-inclusion-orange">Featured</Badge>
                 )}
               </div>
@@ -712,34 +700,34 @@ export default function ResourceDetailPage() {
           {/* Resource Header */}
           <div className="space-y-6 mb-8">
             <h1 className="text-4xl font-bold tracking-tight">
-              {resource.title}
+              {resource?.title}
             </h1>
             <p className="text-xl text-muted-foreground leading-relaxed">
-              {resource.description}
+              {resource?.description}
             </p>
 
             {/* Metadata */}
             <div className="flex flex-wrap gap-8 text-sm text-muted-foreground">
               <div className="flex items-center gap-2">
                 <User className="h-4 w-4" />
-                <span>{resource.author}</span>
+                <span>{resource?.author}</span>
               </div>
               <div className="flex items-center gap-2">
                 <Calendar className="h-4 w-4" />
                 <span>
                   Published{" "}
-                  {new Date(resource.datePublished).toLocaleDateString()}
+                  {new Date(resource?.datePublished).toLocaleDateString()}
                 </span>
               </div>
               <div className="flex items-center gap-2">
                 <Clock className="h-4 w-4" />
                 <span>
-                  Updated {new Date(resource.dateUpdated).toLocaleDateString()}
+                  Updated {new Date(resource?.dateUpdated).toLocaleDateString()}
                 </span>
               </div>
               <div className="flex items-center gap-2">
                 <Globe className="h-4 w-4" />
-                <span>{resource.organization}</span>
+                <span>{resource?.organization}</span>
               </div>
             </div>
 
@@ -748,29 +736,29 @@ export default function ResourceDetailPage() {
               <div className="flex items-center gap-2">
                 <Download className="h-4 w-4 text-muted-foreground" />
                 <span className="font-medium">
-                  {resource.downloads.toLocaleString()}
+                  {resource?.downloads.toLocaleString()}
                 </span>
                 <span className="text-muted-foreground">downloads</span>
               </div>
               <div className="flex items-center gap-2">
                 <Eye className="h-4 w-4 text-muted-foreground" />
                 <span className="font-medium">
-                  {resource.views.toLocaleString()}
+                  {resource?.views.toLocaleString()}
                 </span>
                 <span className="text-muted-foreground">views</span>
               </div>
               <div className="flex items-center gap-2">
                 <Star className="h-4 w-4 text-yellow-500" />
-                <span className="font-medium">{resource.rating}</span>
+                <span className="font-medium">{resource?.rating}</span>
                 <span className="text-muted-foreground">
-                  ({resource.ratingCount} ratings)
+                  ({resource?.ratingCount} ratings)
                 </span>
               </div>
             </div>
 
             {/* Tags */}
             <div className="flex flex-wrap gap-2">
-              {resource.tags.map((tag) => (
+              {resource?.tags.map((tag) => (
                 <Badge
                   key={tag}
                   variant="secondary"
@@ -793,13 +781,13 @@ export default function ResourceDetailPage() {
                 value={activeFile?.id.toString()}
                 onValueChange={(value) => {
                   const file =
-                    resource.files.find((f) => f.id.toString() === value) ||
+                    resource?.files.find((f) => f.id.toString() === value) ||
                     null;
                   setActiveFile(file);
                 }}
               >
                 <TabsList className="grid w-full grid-cols-2 md:grid-cols-3 lg:grid-cols-5 h-12">
-                  {resource.files.map((file) => (
+                  {resource?.files.map((file) => (
                     <TabsTrigger
                       key={file.id}
                       value={file.id.toString()}
@@ -813,7 +801,7 @@ export default function ResourceDetailPage() {
                   ))}
                 </TabsList>
 
-                {resource.files.map((file) => (
+                {resource?.files.map((file) => (
                   <TabsContent
                     key={file.id}
                     value={file.id.toString()}
@@ -884,7 +872,7 @@ export default function ResourceDetailPage() {
                     <h4 className="font-semibold text-lg">Individual Files</h4>
                     <TooltipProvider>
                       <div className="space-y-3">
-                        {resource.files.map((file) => (
+                        {resource?.files.map((file) => (
                           <div
                             key={file.id}
                             className="flex items-center space-x-3 p-3 border rounded-lg hover:bg-muted/30 transition-colors"

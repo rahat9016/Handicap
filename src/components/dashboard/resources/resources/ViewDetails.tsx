@@ -83,11 +83,11 @@ export default function ViewResourceDetails({
             <div className="flex items-center gap-4 text-xs text-gray-500">
               <span className="flex items-center gap-1">
                 <Download className="w-3 h-3 text-green" />
-                {resource?.downloadCount} downloads
+                {resource?.totalDownloadCount} downloads
               </span>
               <span className="flex items-center gap-1">
                 <Eye className="w-3 h-3 text-blue" />
-                {resource?.viewCount} views
+                {resource?.totalViewCount} views
               </span>
             </div>
           </div>

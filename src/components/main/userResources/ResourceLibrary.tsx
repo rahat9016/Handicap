@@ -36,8 +36,8 @@ export default function ResourceLibrary({
                 isPdf
                 fileType={resource.fileType}
                 filePath={resource.filePath}
-                downloadCount={resource.downloadCount}
-                viewCount={resource.viewCount}
+                downloadCount={resource.totalDownloadCount}
+                viewCount={resource.totalViewCount}
                 isPrivate={resource.isPrivate && !!id}
                 organizerName={resource.organization.name}
                 refetch={refetch}

@@ -10,6 +10,7 @@ import { ProfileDropdown } from "./ProfileDropdown";
 export default function Header() {
   const { userInformation: {email} } = useAppSelector(state => state.auth)
   const pathname = usePathname();
+  
   return (
     <header className="pb-32">
       <div className="fixed w-full top-0 z-50">
@@ -76,16 +77,6 @@ export default function Header() {
               );
             })}
           </nav>
-          {/* <div className="flex items-center gap-2 border-b border-gray-300 pb-1">
-            <Input
-              type="text"
-              placeholder="I'am looking for..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="outline-none px-2 py-1 text-sm border-none  shadow-none"
-            />
-            <FaSearch className="text-gray-500 mr-2" />
-          </div> */}
         </div>
       </div>
       </div>

@@ -1,6 +1,19 @@
 {
-  "HomePage": {
-    "title": "হ্যালো বিশ্ব!",
-    "about": "অ্যাবাউট পৃষ্ঠায় যান"
+  "Header": {
+    "wcag": "WCAG 2.1 AA অনুপালনযোগ্য",
+    "gdpr": "GDPR অনুপালনযোগ্য",
+    "colorBlind": "রঙ-অন্ধ মোড উপলব্ধ",
+    "accessibility": "প্রবেশযোগ্যতা বিবৃতি",
+    "eventCalendar": "ইভেন্ট ক্যালেন্ডার",
+    "privacyPolicy": "গোপনীয়তা নীতি",
+    "login": "লগইন",
+    "disabilityHub": "প্রতিবন্ধী অন্তর্ভুক্তি হাব",
+    "humanity": "হিউম্যানিটি & ইনক্লুশন | DFAT"
+  },
+  "Nav": {
+    "home": "হোম",
+    "about": "পরিচিতি",
+    "services": "সেবা",
+    "contact": "যোগাযোগ"
   }
 }

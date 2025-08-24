@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import ErrorMessage from "@/components/common/Errors/ErrorMessage";
 import ControlledInputField from "@/components/share/ControlledInputField";
 import ControlledMultiSelectField from "@/components/share/ControlledMultiSelectField";
@@ -19,8 +20,9 @@ import { usePost } from "@/hooks/usePost";
 import { useAppSelector } from "@/lib/redux/hooks";
 import { mapToSelectOptions } from "@/utils/mapToSelectOptions";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { Trash } from "lucide-react";
 import { useEffect } from "react";
-import { FormProvider, useForm } from "react-hook-form";
+import { FormProvider, useFieldArray, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { ILanguage } from "../../setup/types/setup";
 import { IResource } from "../types/types";
@@ -57,39 +59,47 @@ export default function CreateUpdateResources({
     [["resources"]]
   );
   const {
-    mutateAsync: patchAsync,
+    // mutateAsync: patchAsync,
     error: patchError,
     reset: patchReset,
-  } = usePatch(
-    (data) => console.log("Success", data),
-    [["resources"]]
-  );
+  } = usePatch((data) => console.log("Success", data), [["resources"]]);
 
-  const { organizationId } = useAppSelector(state => state.organizer)
+  const { organizationId } = useAppSelector((state) => state.organizer);
   // Initialize form methods
   const methods = useForm({
     resolver: yupResolver(resourcesSchema),
     defaultValues: {
-      keywordIds: [],
       organizationId: organizationId || "",
+      title: "",
+      description: "",
+      isPrivate: false,
+      languageId: "",
+      categoryId: "",
+      keywordIds: [],
+      files: [{ title: "", description: "", languageId: "", file: undefined }],
     },
+  });
+  const { control, trigger, getValues, watch } = methods;
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "files",
   });
 
   useEffect(() => {
     if (initialValues) {
       methods.reset({
-        file: initialValues.filePath,
+        // file: initialValues.filePath,
         title: initialValues.title,
         description: initialValues.description,
         isPrivate: initialValues.isPrivate,
         languageId: String(initialValues.language.id),
         categoryId: String(initialValues.category.id),
-        organizationId: String(initialValues.organization.id) || organizationId ,
-        keywordIds: initialValues.keywords?.map((k) => k.keyword.id) || []
+        organizationId: String(initialValues.organization.id) || organizationId,
+        keywordIds: initialValues.keywords?.map((k) => k.keyword.id) || [],
       });
     }
   }, [initialValues, methods, organizationId]);
-  
+
   // Open the dialog when isOpen changes
   useEffect(() => {
     if (!isOpen) {
@@ -101,15 +111,37 @@ export default function CreateUpdateResources({
         categoryId: "",
         organizationId: "",
         keywordIds: [],
-        file: "",
+        files: [{ title: "", description: "", languageId: "", file: undefined }],
       });
       postReset();
       patchReset();
     }
   }, [isOpen, methods, patchReset, postReset]);
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const addAnotherFile = async () => {
+    const valid = await trigger();
+    const values = getValues("files");
+
+    values?.forEach((_file, idx) => {
+      const currentFile = watch(`files.${idx}` as const);
+      ["title", "description", "languageId", "file"].every(
+        (field) => !!currentFile?.[field as keyof typeof currentFile]
+      );
+    });
+
+    if (valid) {
+      append({
+        title: "",
+        description: "",
+        languageId: "",
+        file: "",
+      });
+    }
+  };
+
+   
   const onSubmit = (data: any) => {
+    console.log({ data });
     const formData = new FormData();
 
     formData.append("title", data.title);
@@ -132,6 +164,16 @@ export default function CreateUpdateResources({
         formData.append("file", data.file);
       }
     }
+
+    // ✅ handle files with metadata
+    data.files.forEach((f:any , idx:number) => {
+      if (f.file) {
+        formData.append(`files[${idx}][file]`, f.file);
+      }
+      formData.append(`files[${idx}][title]`, f.title);
+      formData.append(`files[${idx}][description]`, f.description);
+      formData.append(`files[${idx}][languageId]`, f.languageId);
+    });
     if (!initialValues) {
       mutateAsync(formData).then(() => {
         toast.success("Resource created successfully");
@@ -140,17 +182,17 @@ export default function CreateUpdateResources({
       });
       return;
     }
-    // If initialValues is provided, it means we are updating an existing resource
-    patchAsync({
-      url: `/resources/${initialValues.id}`,
-      data: formData,
-    }).then(() => {
-      toast.success("Resource updated successfully");
-      patchReset();
-      onClose();
-      // Reset the form after successful submission
-      methods.reset();
-    });
+    // // If initialValues is provided, it means we are updating an existing resource
+    // patchAsync({
+    //   url: `/resources/${initialValues.id}`,
+    //   data: formData,
+    // }).then(() => {
+    //   toast.success("Resource updated successfully");
+    //   patchReset();
+    //   onClose();
+    //   // Reset the form after successful submission
+    //   methods.reset();
+    // });
   };
 
   const resourceCategoryOptions = mapToSelectOptions(
@@ -164,7 +206,10 @@ export default function CreateUpdateResources({
     "name",
     "id"
   );
-
+  useEffect(() => {
+    if (fields.length === 0)
+      append({ title: "", description: "", languageId: "", file: "" });
+  }, [fields, append]);
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="bg-white max-h-[95vh]  w-[800px] !max-w-none overflow-y-auto">
@@ -175,14 +220,6 @@ export default function CreateUpdateResources({
         </DialogHeader>
         <FormProvider {...methods}>
           <form onSubmit={methods.handleSubmit(onSubmit)} className="w-full">
-            <div className="border-b pb-8">
-              <InputLabel label="Image" />
-              <ImageFileInput
-                name="file"
-                supportedPdfType="application/pdf"
-                supportedImageTypes={SUPPORTED_FORMATS}
-              />
-            </div>
             <div className="flex flex-col gap-6 mt-8">
               <div className="grid grid-cols-1 gap-3 lg:gap-5">
                 <div>
@@ -221,7 +258,6 @@ export default function CreateUpdateResources({
                 </div>
               </div>
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 lg:gap-5">
-                
                 <div>
                   <InputLabel label="Keywords" required />
                   <ControlledMultiSelectField
@@ -239,6 +275,92 @@ export default function CreateUpdateResources({
                   />
                 </div>
               </div>
+              <div>
+                {
+                  <div className="flex flex-col gap-3">
+                    {fields.map((resources, index) => {
+                      return (
+                        <div
+                          id={`files-${resources.id}`}
+                          key={resources.id}
+                          className="bg-slate-50 p-4 border rounded-lg flex flex-row gap-4"
+                        >
+                          <div>
+                            <div className="flex items-center justify-between">
+                              <InputLabel
+                                label="File"
+                                required
+                                className="text-black lg:mt-2"
+                              />
+                            </div>
+                            <ImageFileInput
+                              name={`files.${index}.file`}
+                              supportedImageTypes={SUPPORTED_FORMATS}
+                              className="h-[224px]"
+                              supportedPdfType="application/pdf"
+                            />
+                          </div>
+                          <div className="w-8/12 relative">
+                            <Button
+                              type="button"
+                              onClick={() => remove(index)}
+                              className="text-red-500 w-7 h-7 flex items-center justify-center rounded-sm ml-auto absolute right-0 bg-rose-100 hover:bg-rose-200"
+                            >
+                              <Trash />
+                            </Button>
+                            <div className="mt-4 lg:mt-3 pb-4 lg:pb-0 border-b lg:border-none border-[#E4E4E4]">
+                              <InputLabel
+                                className="lg:text-smokyBlack lg:mb-1 lg:mt-2"
+                                label="Title"
+                                required
+                              />
+                              <ControlledInputField
+                                name={`files.${index}.title`}
+                                placeholder="Enter book title"
+                                className="rounded-md lg:border-gray"
+                              />
+                            </div>
+                            <div className="mt-4 lg:mt-3 pb-4 border-b lg:border-none border-[#E4E4E4]">
+                              <InputLabel
+                                label="Language"
+                                required
+                                className="lg:text-smokyBlack lg:mb-1"
+                              />
+                              <ControlledSelectField
+                                name={`files.${index}.languageId`}
+                                placeholder="Select language"
+                                options={languageOptions}
+                              />
+                            </div>
+                            <div className="mt-4 lg:mt-3 pb-4 lg:pb-0 border-b lg:border-none border-[#E4E4E4]">
+                              <InputLabel
+                                className="lg:text-smokyBlack lg:mb-2 lg:mt-2"
+                                label="Description"
+                                required
+                              />
+                              <ControlledInputField
+                                name={`files.${index}.description`}
+                                placeholder="Enter description name"
+                                className="rounded-md lg:border-gray"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                    <div className="mt-4">
+                      <Button
+                        type="button"
+                        onClick={addAnotherFile}
+                        className="bg-dashboard-primary text-white"
+                      >
+                        + Add Another File
+                      </Button>
+                    </div>
+                  </div>
+                }
+              </div>
+
               <ErrorMessage error={error} />
               <ErrorMessage error={patchError} />
             </div>

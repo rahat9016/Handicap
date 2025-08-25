@@ -13,10 +13,10 @@ import {
   FileText,
   FileType,
   Globe,
+  Hash,
   ImageIcon,
   RotateCw,
   Share2,
-  Star,
   User,
   ZoomIn,
   ZoomOut,
@@ -26,6 +26,8 @@ import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import { IResource } from "@/components/dashboard/resources/types/types";
+import PDFModal from "@/components/main/userResources/PDFModal";
+import { useDownloadResource } from "@/components/main/userResources/useDownloadResource";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -46,413 +48,357 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useGet } from "@/hooks/useGet";
+import { usePreview } from "@/hooks/usePreview";
 import { Link } from "@/i18n/navigation";
-import { CheckedState } from "@radix-ui/react-checkbox";
+import { formatFileSize } from "@/utils/formatFileSize";
 import { Separator } from "@radix-ui/react-dropdown-menu";
-type FileResource = {
-  id: number;
-  name: string;
-  type: string;
-  size: string;
-  url: string;
-  description: string;
-  pages?: number;
-  language: string;
-  accessible: boolean;
-  content?: string;
-  dimensions?: string;
-  altText?: string;
-};
-type Resource = {
+import { toast } from "react-toastify";
+import ResourceDetailSkeleton from "./ResourceDetailSkeleton";
+// type FileResource = {
+//   id: number;
+//   name: string;
+//   type: string;
+//   size: string;
+//   url: string;
+//   description: string;
+//   pages?: number;
+//   language: string;
+//   accessible: boolean;
+//   content?: string;
+//   dimensions?: string;
+//   altText?: string;
+// };
+// type Resource = {
+//   id: number;
+//   title: string;
+//   description: string;
+//   category: string;
+//   sector: string;
+//   language: string[];
+//   author: string;
+//   organization: string;
+//   datePublished: string;
+//   dateUpdated: string;
+//   version: string;
+//   downloads: number;
+//   views: number;
+//   rating: number;
+//   ratingCount: number;
+//   tags: string[];
+//   featured: boolean;
+//   files: {
+//     id: number;
+//     name: string;
+//     type: string;
+//     size: string;
+//     url: string;
+//     description: string;
+//     pages?: number;
+//     language: string;
+//     accessible: boolean;
+//     content?: string;
+//     dimensions?: string;
+//     altText?: string;
+//   }[];
+// };
+// Sample resource data with real downloadable files
+// const resourcesData: Record<string, Resource> = {
+//   1: {
+//     id: 1,
+//     title: "Comprehensive Disability Inclusion Guidelines for WASH Programs",
+//     description:
+//       "This comprehensive resource package provides detailed guidelines, templates, and training materials for implementing disability-inclusive WASH programs in humanitarian settings. The package includes policy documents, practical implementation guides, assessment tools, and multimedia training content.",
+//     category: "guidelines",
+//     sector: "wash",
+//     language: ["english", "bangla"],
+//     author: "WASH Disability Inclusion Working Group",
+//     organization: "Global WASH Cluster",
+//     datePublished: "2024-01-15",
+//     dateUpdated: "2024-02-20",
+//     version: "2.1",
+//     downloads: 1247,
+//     views: 3456,
+//     rating: 4.8,
+//     ratingCount: 156,
+//     tags: ["accessibility", "WASH", "humanitarian", "inclusion", "guidelines"],
+//     featured: true,
+//     files: [
+//       {
+//         id: 1,
+//         name: "Main Guidelines Document",
+//         type: "pdf",
+//         size: "3.2 MB",
+//         url: "https://www.w3.org/WAI/WCAG21/wcag2.1.pdf",
+//         description:
+//           "Complete guidelines for disability-inclusive WASH programming",
+//         pages: 45,
+//         language: "english",
+//         accessible: true,
+//       },
+//       {
+//         id: 2,
+//         name: "Quick Reference Guide",
+//         type: "doc",
+//         size: "1.1 MB",
+//         url: "https://www.w3.org/WAI/WCAG21/wcag2.1.pdf",
+//         description: "Condensed checklist and quick reference for field staff",
+//         pages: 8,
+//         language: "english",
+//         accessible: true,
+//       },
+//       {
+//         id: 3,
+//         name: "Implementation Checklist",
+//         type: "text",
+//         size: "45 KB",
+//         url:
+//           "data:text/plain;charset=utf-8," +
+//           encodeURIComponent(`# WASH Disability Inclusion Implementation Checklist
+
+// ## Pre-Implementation Phase
+
+// ### 1. Needs Assessment
+// - [ ] Conduct disability-inclusive needs assessment
+// - [ ] Use Washington Group Questions for data collection
+// - [ ] Identify barriers to WASH access for persons with disabilities
+// - [ ] Map existing accessible WASH facilities
+// - [ ] Consult with disability organizations and advocates
+
+// ### 2. Planning and Design
+// - [ ] Include accessibility requirements in facility design
+// - [ ] Plan for assistive devices and adaptive equipment
+// - [ ] Ensure pathways to facilities are accessible
+// - [ ] Design gender-segregated accessible facilities
+// - [ ] Plan for different types of disabilities (physical, sensory, intellectual)
+
+// ### 3. Community Engagement
+// - [ ] Engage persons with disabilities in planning process
+// - [ ] Conduct focus group discussions with disability community
+// - [ ] Establish feedback mechanisms
+// - [ ] Train community volunteers on disability inclusion
+// - [ ] Create awareness campaigns on inclusive WASH
+
+// ## Implementation Phase
+
+// ### 4. Construction and Setup
+// - [ ] Follow universal design principles
+// - [ ] Install appropriate handrails and support structures
+// - [ ] Ensure adequate lighting for persons with visual impairments
+// - [ ] Create tactile indicators and signage
+// - [ ] Test accessibility with persons with disabilities
+
+// ### 5. Service Delivery
+// - [ ] Train staff on disability awareness and etiquette
+// - [ ] Provide assistance when requested
+// - [ ] Ensure hygiene materials are accessible
+// - [ ] Adapt information materials for different communication needs
+// - [ ] Monitor usage by persons with disabilities
+
+// ## Monitoring and Evaluation
+
+// ### 6. Data Collection
+// - [ ] Disaggregate data by disability status
+// - [ ] Track accessibility improvements
+// - [ ] Monitor satisfaction levels
+// - [ ] Document lessons learned
+// - [ ] Report on inclusion indicators
+
+// ### 7. Continuous Improvement
+// - [ ] Regular accessibility audits
+// - [ ] Update facilities based on feedback
+// - [ ] Strengthen partnerships with disability organizations
+// - [ ] Share best practices with other programs
+// - [ ] Advocate for policy changes when needed`),
+//         description: "Step-by-step checklist for program implementation",
+//         content: `# WASH Disability Inclusion Implementation Checklist
+
+// ## Pre-Implementation Phase
+
+// ### 1. Needs Assessment
+// - [ ] Conduct disability-inclusive needs assessment
+// - [ ] Use Washington Group Questions for data collection
+// - [ ] Identify barriers to WASH access for persons with disabilities
+// - [ ] Map existing accessible WASH facilities
+// - [ ] Consult with disability organizations and advocates
+
+// ### 2. Planning and Design
+// - [ ] Include accessibility requirements in facility design
+// - [ ] Plan for assistive devices and adaptive equipment
+// - [ ] Ensure pathways to facilities are accessible
+// - [ ] Design gender-segregated accessible facilities
+// - [ ] Plan for different types of disabilities (physical, sensory, intellectual)
+
+// ### 3. Community Engagement
+// - [ ] Engage persons with disabilities in planning process
+// - [ ] Conduct focus group discussions with disability community
+// - [ ] Establish feedback mechanisms
+// - [ ] Train community volunteers on disability inclusion
+// - [ ] Create awareness campaigns on inclusive WASH
+
+// ## Implementation Phase
+
+// ### 4. Construction and Setup
+// - [ ] Follow universal design principles
+// - [ ] Install appropriate handrails and support structures
+// - [ ] Ensure adequate lighting for persons with visual impairments
+// - [ ] Create tactile indicators and signage
+// - [ ] Test accessibility with persons with disabilities
+
+// ### 5. Service Delivery
+// - [ ] Train staff on disability awareness and etiquette
+// - [ ] Provide assistance when requested
+// - [ ] Ensure hygiene materials are accessible
+// - [ ] Adapt information materials for different communication needs
+// - [ ] Monitor usage by persons with disabilities
+
+// ## Monitoring and Evaluation
+
+// ### 6. Data Collection
+// - [ ] Disaggregate data by disability status
+// - [ ] Track accessibility improvements
+// - [ ] Monitor satisfaction levels
+// - [ ] Document lessons learned
+// - [ ] Report on inclusion indicators
+
+// ### 7. Continuous Improvement
+// - [ ] Regular accessibility audits
+// - [ ] Update facilities based on feedback
+// - [ ] Strengthen partnerships with disability organizations
+// - [ ] Share best practices with other programs
+// - [ ] Advocate for policy changes when needed`,
+//         language: "english",
+//         accessible: true,
+//       },
+//       {
+//         id: 4,
+//         name: "Accessible Facility Design Examples",
+//         type: "image",
+//         size: "2.8 MB",
+//         url: "/placeholder.svg?height=800&width=1200&text=Accessible+WASH+Facility+Design",
+//         description:
+//           "Visual examples of accessible WASH facility designs and layouts",
+//         dimensions: "1200x800",
+//         language: "visual",
+//         accessible: true,
+//         altText:
+//           "Diagram showing accessible WASH facility design with ramps, handrails, and appropriate dimensions for wheelchair access",
+//       },
+//       {
+//         id: 5,
+//         name: "বাংলা নির্দেশিকা",
+//         type: "pdf",
+//         size: "3.5 MB",
+//         url: "https://www.w3.org/WAI/WCAG21/wcag2.1.pdf",
+//         description:
+//           "প্রতিবন্ধী-অন্তর্ভুক্তিমূলক ওয়াশ প্রোগ্রামের জন্য বাংলা নির্দেশিকা",
+//         pages: 48,
+//         language: "bangla",
+//         accessible: true,
+//       },
+//     ],
+//   },
+// };
+type FileInfo = {
   id: number;
   title: string;
-  description: string;
-  category: string;
-  sector: string;
-  language: string[];
-  author: string;
-  organization: string;
-  datePublished: string;
-  dateUpdated: string;
-  version: string;
-  downloads: number;
-  views: number;
-  rating: number;
-  ratingCount: number;
-  tags: string[];
-  featured: boolean;
-  files: {
-    id: number;
-    name: string;
-    type: string;
-    size: string;
-    url: string;
-    description: string;
-    pages?: number;
-    language: string;
-    accessible: boolean;
-    content?: string;
-    dimensions?: string;
-    altText?: string;
-  }[];
+  filePath: string;
 };
-// Sample resource data with real downloadable files
-const resourcesData: Record<string, Resource> = {
-  1: {
-    id: 1,
-    title: "Comprehensive Disability Inclusion Guidelines for WASH Programs",
-    description:
-      "This comprehensive resource package provides detailed guidelines, templates, and training materials for implementing disability-inclusive WASH programs in humanitarian settings. The package includes policy documents, practical implementation guides, assessment tools, and multimedia training content.",
-    category: "guidelines",
-    sector: "wash",
-    language: ["english", "bangla"],
-    author: "WASH Disability Inclusion Working Group",
-    organization: "Global WASH Cluster",
-    datePublished: "2024-01-15",
-    dateUpdated: "2024-02-20",
-    version: "2.1",
-    downloads: 1247,
-    views: 3456,
-    rating: 4.8,
-    ratingCount: 156,
-    tags: ["accessibility", "WASH", "humanitarian", "inclusion", "guidelines"],
-    featured: true,
-    files: [
-      {
-        id: 1,
-        name: "Main Guidelines Document",
-        type: "pdf",
-        size: "3.2 MB",
-        url: "https://www.w3.org/WAI/WCAG21/wcag2.1.pdf",
-        description:
-          "Complete guidelines for disability-inclusive WASH programming",
-        pages: 45,
-        language: "english",
-        accessible: true,
-      },
-      {
-        id: 2,
-        name: "Quick Reference Guide",
-        type: "doc",
-        size: "1.1 MB",
-        url: "https://www.w3.org/WAI/WCAG21/wcag2.1.pdf",
-        description: "Condensed checklist and quick reference for field staff",
-        pages: 8,
-        language: "english",
-        accessible: true,
-      },
-      {
-        id: 3,
-        name: "Implementation Checklist",
-        type: "text",
-        size: "45 KB",
-        url:
-          "data:text/plain;charset=utf-8," +
-          encodeURIComponent(`# WASH Disability Inclusion Implementation Checklist
-
-## Pre-Implementation Phase
-
-### 1. Needs Assessment
-- [ ] Conduct disability-inclusive needs assessment
-- [ ] Use Washington Group Questions for data collection
-- [ ] Identify barriers to WASH access for persons with disabilities
-- [ ] Map existing accessible WASH facilities
-- [ ] Consult with disability organizations and advocates
-
-### 2. Planning and Design
-- [ ] Include accessibility requirements in facility design
-- [ ] Plan for assistive devices and adaptive equipment
-- [ ] Ensure pathways to facilities are accessible
-- [ ] Design gender-segregated accessible facilities
-- [ ] Plan for different types of disabilities (physical, sensory, intellectual)
-
-### 3. Community Engagement
-- [ ] Engage persons with disabilities in planning process
-- [ ] Conduct focus group discussions with disability community
-- [ ] Establish feedback mechanisms
-- [ ] Train community volunteers on disability inclusion
-- [ ] Create awareness campaigns on inclusive WASH
-
-## Implementation Phase
-
-### 4. Construction and Setup
-- [ ] Follow universal design principles
-- [ ] Install appropriate handrails and support structures
-- [ ] Ensure adequate lighting for persons with visual impairments
-- [ ] Create tactile indicators and signage
-- [ ] Test accessibility with persons with disabilities
-
-### 5. Service Delivery
-- [ ] Train staff on disability awareness and etiquette
-- [ ] Provide assistance when requested
-- [ ] Ensure hygiene materials are accessible
-- [ ] Adapt information materials for different communication needs
-- [ ] Monitor usage by persons with disabilities
-
-## Monitoring and Evaluation
-
-### 6. Data Collection
-- [ ] Disaggregate data by disability status
-- [ ] Track accessibility improvements
-- [ ] Monitor satisfaction levels
-- [ ] Document lessons learned
-- [ ] Report on inclusion indicators
-
-### 7. Continuous Improvement
-- [ ] Regular accessibility audits
-- [ ] Update facilities based on feedback
-- [ ] Strengthen partnerships with disability organizations
-- [ ] Share best practices with other programs
-- [ ] Advocate for policy changes when needed`),
-        description: "Step-by-step checklist for program implementation",
-        content: `# WASH Disability Inclusion Implementation Checklist
-
-## Pre-Implementation Phase
-
-### 1. Needs Assessment
-- [ ] Conduct disability-inclusive needs assessment
-- [ ] Use Washington Group Questions for data collection
-- [ ] Identify barriers to WASH access for persons with disabilities
-- [ ] Map existing accessible WASH facilities
-- [ ] Consult with disability organizations and advocates
-
-### 2. Planning and Design
-- [ ] Include accessibility requirements in facility design
-- [ ] Plan for assistive devices and adaptive equipment
-- [ ] Ensure pathways to facilities are accessible
-- [ ] Design gender-segregated accessible facilities
-- [ ] Plan for different types of disabilities (physical, sensory, intellectual)
-
-### 3. Community Engagement
-- [ ] Engage persons with disabilities in planning process
-- [ ] Conduct focus group discussions with disability community
-- [ ] Establish feedback mechanisms
-- [ ] Train community volunteers on disability inclusion
-- [ ] Create awareness campaigns on inclusive WASH
-
-## Implementation Phase
-
-### 4. Construction and Setup
-- [ ] Follow universal design principles
-- [ ] Install appropriate handrails and support structures
-- [ ] Ensure adequate lighting for persons with visual impairments
-- [ ] Create tactile indicators and signage
-- [ ] Test accessibility with persons with disabilities
-
-### 5. Service Delivery
-- [ ] Train staff on disability awareness and etiquette
-- [ ] Provide assistance when requested
-- [ ] Ensure hygiene materials are accessible
-- [ ] Adapt information materials for different communication needs
-- [ ] Monitor usage by persons with disabilities
-
-## Monitoring and Evaluation
-
-### 6. Data Collection
-- [ ] Disaggregate data by disability status
-- [ ] Track accessibility improvements
-- [ ] Monitor satisfaction levels
-- [ ] Document lessons learned
-- [ ] Report on inclusion indicators
-
-### 7. Continuous Improvement
-- [ ] Regular accessibility audits
-- [ ] Update facilities based on feedback
-- [ ] Strengthen partnerships with disability organizations
-- [ ] Share best practices with other programs
-- [ ] Advocate for policy changes when needed`,
-        language: "english",
-        accessible: true,
-      },
-      {
-        id: 4,
-        name: "Accessible Facility Design Examples",
-        type: "image",
-        size: "2.8 MB",
-        url: "/placeholder.svg?height=800&width=1200&text=Accessible+WASH+Facility+Design",
-        description:
-          "Visual examples of accessible WASH facility designs and layouts",
-        dimensions: "1200x800",
-        language: "visual",
-        accessible: true,
-        altText:
-          "Diagram showing accessible WASH facility design with ramps, handrails, and appropriate dimensions for wheelchair access",
-      },
-      {
-        id: 5,
-        name: "বাংলা নির্দেশিকা",
-        type: "pdf",
-        size: "3.5 MB",
-        url: "https://www.w3.org/WAI/WCAG21/wcag2.1.pdf",
-        description:
-          "প্রতিবন্ধী-অন্তর্ভুক্তিমূলক ওয়াশ প্রোগ্রামের জন্য বাংলা নির্দেশিকা",
-        pages: 48,
-        language: "bangla",
-        accessible: true,
-      },
-    ],
-  },
-};
-
 export default function ResourceDetailPage() {
   const params = useParams();
   const resourceId = params.id as string;
-  const [resource, setResource] = useState<Resource | null>(null);
-  const [activeFile, setActiveFile] = useState<FileResource | null>(null);
+  const [activeFile, setActiveFile] = useState<FileInfo | null>(null);
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [imageZoom, setImageZoom] = useState(100);
   const [imageRotation, setImageRotation] = useState(0);
-  const [selectedFiles, setSelectedFiles] = useState(new Set());
+  const [selectedFiles, setSelectedFiles] = useState<FileInfo[]>([]);
   const [selectAll, setSelectAll] = useState(false);
-  // const { toast } = useToast()
-  const { data } = useGet<IResource>(
-    `/resources/${resourceId}`,
-    ["resources", resourceId]
-  );
-  console.log(data);
+  const [pdfBlobUrl, setPdfBlobUrl] = useState<string | null>(null);
+  const [open, setOpen] = useState(false);
+  const { download } = useDownloadResource();
+  const { mutateAsync: previewFile } = usePreview();
+  const { data, isLoading } = useGet<IResource>(`/resources/${resourceId}`, [
+    "resources",
+    resourceId,
+  ]);
+  const resourceData = data?.data;
+
   useEffect(() => {
-    // In a real app, this would fetch from an API
-    const resourceData = resourcesData[resourceId];
     if (resourceData) {
-      setResource(resourceData);
-      setActiveFile(resourceData?.files[0]);
-      // Initialize with all files selected
-      setSelectedFiles(new Set(resourceData.files.map((f) => f.id)));
+      setActiveFile(resourceData?.resourceFiles[0] || null);
+      setSelectedFiles(
+        resourceData?.resourceFiles.map((f: any) => ({
+          id: f.id,
+          title: f.title,
+          filePath: f.filePath,
+        })) || []
+      );
       setSelectAll(true);
     }
-  }, [resourceId]);
+  }, [resourceData, resourceId]);
 
-  const handleFileSelect = (fileId: unknown, checked: string | boolean) => {
-    const newSelected = new Set(selectedFiles);
+  const handleFileSelect = (file: FileInfo, checked: boolean) => {
+    let newSelected: FileInfo[];
     if (checked) {
-      newSelected.add(fileId);
+      newSelected = [...selectedFiles, file].filter(
+        (f, i, arr) => arr.findIndex((x) => x.id === f.id) === i
+      );
     } else {
-      newSelected.delete(fileId);
+      newSelected = selectedFiles.filter((f) => f.id !== file.id);
     }
     setSelectedFiles(newSelected);
-    setSelectAll(newSelected.size === resource?.files.length);
+    setSelectAll(
+      newSelected.length === (resourceData?.resourceFiles?.length || 0)
+    );
   };
 
-  const handleSelectAll = (checked: CheckedState) => {
-    const isChecked = checked === true; // normalize
-
-    if (isChecked) {
-      setSelectedFiles(new Set(resource?.files.map((f) => f.id)));
+  const handleSelectAll = (checked: boolean) => {
+    if (checked) {
+      setSelectedFiles(
+        resourceData?.resourceFiles.map((f: any) => ({
+          id: f.id as number,
+          title: f.title,
+          filePath: f.filePath,
+        })) || []
+      );
+      setSelectAll(true);
     } else {
-      setSelectedFiles(new Set());
-    }
-
-    setSelectAll(isChecked);
-  };
-
-  const handleDownloadFile = async (file: {
-    id?: number;
-    name: any;
-    type?: string;
-    size?: string;
-    url: any;
-    description?: string;
-    pages?: number | undefined;
-    language?: string;
-    accessible?: boolean;
-    content?: string | undefined;
-    dimensions?: string | undefined;
-    altText?: string | undefined;
-  }) => {
-    try {
-      // toast({
-      //   title: "Download Started",
-      //   description: `Downloading ${file.name}...`,
-      // })
-
-      // Create a temporary link element
-      const link = document.createElement("a");
-      link.href = file.url;
-      link.download = file.name;
-      link.target = "_blank";
-
-      // For data URLs (like our text file), we can download directly
-      if (file.url.startsWith("data:")) {
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-      } else {
-        // For external URLs, open in new tab
-        window.open(file.url, "_blank");
-      }
-
-      // toast({
-      //   title: "Download Complete",
-      //   description: `${file.name} has been downloaded successfully.`,
-      // })
-    } catch (error) {
-      console.log(error);
-      // toast({
-      //   title: "Download Failed",
-      //   description: "There was an error downloading the file. Please try again.",
-      //   variant: "destructive",
-      // })
+      setSelectedFiles([]);
+      setSelectAll(false);
     }
   };
 
-  const handleOpenFile = (file: FileResource) => {
+  const handlePreview = async (filePath: string) => {
     try {
-      if (file.type === "text") {
-        const newWindow = window.open("", "_blank");
-        newWindow?.document.write(`
-        <html>
-          <head>
-            <title>${file.name}</title>
-            <style>
-              body { font-family: monospace; padding: 20px; line-height: 1.6; }
-              pre { white-space: pre-wrap; }
-            </style>
-          </head>
-          <body>
-            <h1>${file.name}</h1>
-            <pre>${file.content ?? ""}</pre>
-          </body>
-        </html>
-      `);
-        newWindow?.document.close();
-      } else {
-        window.open(file.url, "_blank");
-      }
-    } catch (error) {
-      console.error(error);
+      const blob = await previewFile(filePath);
+      const url = URL.createObjectURL(
+        new Blob([blob], { type: "application/pdf" })
+      );
+      setPdfBlobUrl(url);
+      setOpen(true);
+    } catch (err) {
+      console.error("PDF preview failed:", err);
+      toast.error("PDF preview failed");
     }
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+    if (pdfBlobUrl) {
+      URL.revokeObjectURL(pdfBlobUrl);
+      setPdfBlobUrl(null);
+    }
+  };
+
+  const handleDownload = (id: number, title: string, filePath: string) => {
+    download(id, title, filePath);
   };
 
   const handleDownloadSelected = async () => {
-    const selectedFilesList =
-      resource?.files.filter((f) => selectedFiles.has(f.id)) || [];
-
-    if (selectedFilesList.length === 0) {
-      // toast({
-      //   title: "No Files Selected",
-      //   description: "Please select at least one file to download.",
-      //   variant: "destructive",
-      // })
-      return;
+    for (const file of selectedFiles) {
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      handleDownload(file.id, file.title, file.filePath);
     }
-
-    // toast({
-    //   title: "Download Started",
-    //   description: `Downloading ${selectedFilesList.length} file(s)...`,
-    // })
-
-    // Download each selected file
-    for (const file of selectedFilesList) {
-      await new Promise((resolve) => setTimeout(resolve, 500)); // Small delay between downloads
-      await handleDownloadFile(file);
-    }
-
-    // toast({
-    //   title: "Bulk Download Complete",
-    //   description: `Successfully downloaded ${selectedFilesList.length} file(s).`,
-    // })
   };
-
 
   const getFileIcon = (type: string) => {
     switch (type) {
@@ -483,13 +429,15 @@ export default function ResourceDetailPage() {
               {file.pages} pages • {file.size} • {file.language}
             </div>
             <div className="flex gap-2">
-              <Button onClick={() => handleOpenFile(file)}>
+              <Button onClick={() => handlePreview(file.filePath)}>
                 <Eye className="mr-2 h-4 w-4" />
                 Open PDF
               </Button>
               <Button
                 variant="outline"
-                onClick={() => handleDownloadFile(file)}
+                onClick={() =>
+                  handleDownload(file.id, file.name, file.filePath)
+                }
               >
                 <Download className="mr-2 h-4 w-4" />
                 Download
@@ -510,13 +458,15 @@ export default function ResourceDetailPage() {
               {file.pages} pages • {file.size} • {file.language}
             </div>
             <div className="flex gap-2">
-              <Button onClick={() => handleOpenFile(file)}>
+              <Button onClick={() => handlePreview(file.filePath)}>
                 <Eye className="mr-2 h-4 w-4" />
                 Open Document
               </Button>
               <Button
                 variant="outline"
-                onClick={() => handleDownloadFile(file)}
+                onClick={() =>
+                  handleDownload(file.id, file.name, file.filePath)
+                }
               >
                 <Download className="mr-2 h-4 w-4" />
                 Download
@@ -534,14 +484,14 @@ export default function ResourceDetailPage() {
                 <span className="font-medium">{file.name}</span>
               </div>
               <div className="flex gap-2">
-                <Button size="sm" onClick={() => handleOpenFile(file)}>
+                <Button size="sm">
                   <ExternalLink className="mr-2 h-4 w-4" />
                   Open
                 </Button>
                 <Button
                   size="sm"
                   variant="outline"
-                  onClick={() => handleDownloadFile(file)}
+                  // onClick={() => handleDownloadFile(file)}
                 >
                   <Download className="mr-2 h-4 w-4" />
                   Download
@@ -586,14 +536,14 @@ export default function ResourceDetailPage() {
                 >
                   <RotateCw className="h-4 w-4" />
                 </Button>
-                <Button size="sm" onClick={() => handleOpenFile(file)}>
+                <Button size="sm">
                   <ExternalLink className="mr-2 h-4 w-4" />
                   Open
                 </Button>
                 <Button
                   size="sm"
                   variant="outline"
-                  onClick={() => handleDownloadFile(file)}
+                  // onClick={() => handleDownloadFile(file)}
                 >
                   <Download className="mr-2 h-4 w-4" />
                   Download
@@ -638,21 +588,27 @@ export default function ResourceDetailPage() {
             <p className="text-muted-foreground text-center mb-4">
               Preview not available for this file type
             </p>
-            <Button onClick={() => handleDownloadFile(file)}>
-              <Download className="mr-2 h-4 w-4" />
-              Download File
+            <Button
+              onClick={() => handlePreview(file.filePath)}
+              className="bg-dashboard-primary text-white hover:bg-dashboard-primary"
+            >
+              <Eye className="h-4 w-4" />
+              Preview
             </Button>
           </div>
         );
     }
   };
-
+  if (isLoading) return <ResourceDetailSkeleton />;
   return (
     <div className="flex min-h-screen flex-col">
-      {/* <AccessibilityControls /> */}
-
+      <PDFModal
+        open={open}
+        onClose={handleClose}
+        filePath={pdfBlobUrl}
+        fileType={"application/pdf"}
+      />
       <main className="flex-1">
-        {/* Header */}
         <div className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
           <div className="container px-4 md:px-6 py-4">
             <div className="flex items-center gap-4">
@@ -662,17 +618,11 @@ export default function ResourceDetailPage() {
                   Back to Resources
                 </Button>
               </Link>
-              <Separator className="h-6" />
+
               <div className="flex items-center gap-2">
                 <Badge variant="outline" className="capitalize">
-                  {resource?.category}
+                  {resourceData?.category?.name}
                 </Badge>
-                <Badge variant="outline" className="capitalize">
-                  {resource?.sector}
-                </Badge>
-                {resource?.featured && (
-                  <Badge className="bg-inclusion-orange">Featured</Badge>
-                )}
               </div>
               <div className="ml-auto flex items-center gap-2">
                 <Button
@@ -700,73 +650,78 @@ export default function ResourceDetailPage() {
           {/* Resource Header */}
           <div className="space-y-6 mb-8">
             <h1 className="text-4xl font-bold tracking-tight">
-              {resource?.title}
+              {resourceData?.title}
             </h1>
             <p className="text-xl text-muted-foreground leading-relaxed">
-              {resource?.description}
+              {resourceData?.description}
             </p>
 
             {/* Metadata */}
-            <div className="flex flex-wrap gap-8 text-sm text-muted-foreground">
+            <div className="flex flex-wrap gap-8 text-sm text-black">
               <div className="flex items-center gap-2">
                 <User className="h-4 w-4" />
-                <span>{resource?.author}</span>
+                <span>
+                  {resourceData?.uploader?.firstName +
+                    " " +
+                    resourceData?.uploader?.lastName}
+                </span>
               </div>
               <div className="flex items-center gap-2">
                 <Calendar className="h-4 w-4" />
                 <span>
                   Published{" "}
-                  {new Date(resource?.datePublished).toLocaleDateString()}
+                  {new Date(
+                    resourceData?.createdAt as string
+                  ).toLocaleDateString()}
                 </span>
               </div>
               <div className="flex items-center gap-2">
                 <Clock className="h-4 w-4" />
                 <span>
-                  Updated {new Date(resource?.dateUpdated).toLocaleDateString()}
+                  Updated{" "}
+                  {new Date(
+                    resourceData?.updatedAt as string
+                  ).toLocaleDateString()}
                 </span>
               </div>
               <div className="flex items-center gap-2">
                 <Globe className="h-4 w-4" />
-                <span>{resource?.organization}</span>
+                <span>{resourceData?.organization?.name}</span>
               </div>
             </div>
-
-            {/* Stats */}
             <div className="flex gap-8 text-sm">
               <div className="flex items-center gap-2">
                 <Download className="h-4 w-4 text-muted-foreground" />
                 <span className="font-medium">
-                  {resource?.downloads.toLocaleString()}
+                  {resourceData?.totalDownloadCount?.toLocaleString()}
                 </span>
                 <span className="text-muted-foreground">downloads</span>
               </div>
               <div className="flex items-center gap-2">
                 <Eye className="h-4 w-4 text-muted-foreground" />
                 <span className="font-medium">
-                  {resource?.views.toLocaleString()}
+                  {resourceData?.totalViewCount?.toLocaleString()}
                 </span>
                 <span className="text-muted-foreground">views</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Star className="h-4 w-4 text-yellow-500" />
-                <span className="font-medium">{resource?.rating}</span>
-                <span className="text-muted-foreground">
-                  ({resource?.ratingCount} ratings)
-                </span>
               </div>
             </div>
 
             {/* Tags */}
-            <div className="flex flex-wrap gap-2">
-              {resource?.tags.map((tag) => (
-                <Badge
-                  key={tag}
-                  variant="secondary"
-                  className="text-sm px-3 py-1"
-                >
-                  {tag}
-                </Badge>
-              ))}
+            <div className="mt-4 pt-4 border-t">
+              <h3 className="font-medium text-gray-800 flex items-center gap-2 mb-3">
+                <Hash className="w-4 h-4 text-green" />
+                Keywords
+              </h3>
+              <div className="flex flex-wrap gap-2">
+                {resourceData?.keywords?.map((keywordObj) => (
+                  <Badge
+                    key={keywordObj.keyword.id}
+                    className="text-xs bg-[#bfffbb5d] text-green border-green"
+                  >
+                    {keywordObj.keyword.name}
+                  </Badge>
+                ))}
+              </div>
             </div>
           </div>
 
@@ -781,27 +736,28 @@ export default function ResourceDetailPage() {
                 value={activeFile?.id.toString()}
                 onValueChange={(value) => {
                   const file =
-                    resource?.files.find((f) => f.id.toString() === value) ||
-                    null;
+                    resourceData?.resourceFiles.find(
+                      (f) => f.id.toString() === value
+                    ) || null;
                   setActiveFile(file);
                 }}
               >
                 <TabsList className="grid w-full grid-cols-2 md:grid-cols-3 lg:grid-cols-5 h-12">
-                  {resource?.files.map((file) => (
+                  {resourceData?.resourceFiles.map((file) => (
                     <TabsTrigger
                       key={file.id}
                       value={file.id.toString()}
                       className="flex items-center gap-2 text-sm"
                     >
-                      {getFileIcon(file.type)}
+                      {getFileIcon(file.fileType)}
                       <span className="hidden sm:inline truncate">
-                        {file.name}
+                        {file.title}
                       </span>
                     </TabsTrigger>
                   ))}
                 </TabsList>
 
-                {resource?.files.map((file) => (
+                {resourceData?.resourceFiles.map((file) => (
                   <TabsContent
                     key={file.id}
                     value={file.id.toString()}
@@ -811,15 +767,19 @@ export default function ResourceDetailPage() {
                       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                         <div>
                           <h3 className="text-2xl font-semibold">
-                            {file.name}
+                            {file.title}
                           </h3>
                           <p className="text-muted-foreground text-lg mt-2">
                             {file.description}
                           </p>
                         </div>
                         <div className="text-left sm:text-right text-base text-muted-foreground">
-                          <div className="font-medium">{file.size}</div>
-                          <div className="capitalize mt-1">{file.language}</div>
+                          <div className="font-medium">
+                            {formatFileSize(file.fileSize)}
+                          </div>
+                          <div className="capitalize mt-1">
+                            {file.language.name}
+                          </div>
                         </div>
                       </div>
                       {renderFilePreview(file)}
@@ -856,12 +816,12 @@ export default function ResourceDetailPage() {
                     </div>
                     <Button
                       onClick={handleDownloadSelected}
-                      disabled={selectedFiles.size === 0}
+                      disabled={selectedFiles.length === 0}
                       className="w-full bg-inclusion-teal hover:bg-inclusion-teal/90"
                       size="lg"
                     >
                       <Download className="mr-2 h-5 w-5" />
-                      Download Selected ({selectedFiles.size})
+                      Download Selected ({selectedFiles.length})
                     </Button>
                   </div>
 
@@ -872,31 +832,40 @@ export default function ResourceDetailPage() {
                     <h4 className="font-semibold text-lg">Individual Files</h4>
                     <TooltipProvider>
                       <div className="space-y-3">
-                        {resource?.files.map((file) => (
+                        {resourceData?.resourceFiles.map((file) => (
                           <div
                             key={file.id}
                             className="flex items-center space-x-3 p-3 border rounded-lg hover:bg-muted/30 transition-colors"
                           >
                             <Checkbox
                               id={`file-${file.id}`}
-                              checked={selectedFiles.has(file.id)}
+                              checked={selectedFiles.some(
+                                (f) => f.id === file.id
+                              )}
                               onCheckedChange={(checked) =>
-                                handleFileSelect(file.id, checked)
+                                handleFileSelect(
+                                  {
+                                    id: file.id,
+                                    title: file.title,
+                                    filePath: file.filePath,
+                                  },
+                                  checked === true
+                                )
                               }
                             />
                             <div className="flex-1 min-w-0">
                               <div className="flex items-center gap-2 mb-1">
-                                {getFileIcon(file.type)}
+                                {getFileIcon(file.fileType)}
                                 <div className="font-medium text-sm truncate">
-                                  {file.name}
+                                  {file.title}
                                 </div>
                               </div>
                               <div className="text-xs text-muted-foreground mb-2 line-clamp-2">
                                 {file.description}
                               </div>
                               <div className="text-xs text-muted-foreground">
-                                {file.size} • {file.language}{" "}
-                                {file.pages && `• ${file.pages} pages`}
+                                {formatFileSize(file.fileSize)} •{" "}
+                                {file.language.name}{" "}
                               </div>
                             </div>
                             <div className="flex gap-1">
@@ -904,11 +873,10 @@ export default function ResourceDetailPage() {
                                 <TooltipTrigger asChild>
                                   <Button
                                     size="sm"
-                                    variant="ghost"
-                                    onClick={() => handleOpenFile(file)}
-                                    className="h-8 w-8 p-0"
+                                    onClick={() => handlePreview(file.filePath)}
+                                    className="h-8 w-8 p-0 bg-dashboard-primary hover:bg-dashboard-primary text-white"
                                   >
-                                    <Eye className="h-4 w-4" />
+                                    <Eye className="h-4 w-4 bg-dashboard-primary text-white" />
                                   </Button>
                                 </TooltipTrigger>
                                 <TooltipContent>
@@ -919,9 +887,14 @@ export default function ResourceDetailPage() {
                                 <TooltipTrigger asChild>
                                   <Button
                                     size="sm"
-                                    variant="ghost"
-                                    onClick={() => handleDownloadFile(file)}
-                                    className="h-8 w-8 p-0"
+                                    onClick={() =>
+                                      download(
+                                        file.id,
+                                        file.title,
+                                        file.filePath
+                                      )
+                                    }
+                                    className="h-8 w-8 p-0 bg-dashboard-primary hover:bg-dashboard-primary text-white"
                                   >
                                     <Download className="h-4 w-4" />
                                   </Button>

@@ -9,6 +9,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useGet } from "@/hooks/useGet";
 import {
@@ -19,6 +20,7 @@ import {
 } from "@/lib/redux/features/filter/filterSlice";
 import { useAppDispatch } from "@/lib/redux/hooks";
 import { mapToSelectOptions } from "@/utils/mapToSelectOptions";
+import { Trash } from "lucide-react";
 import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 
@@ -47,7 +49,7 @@ export default function ResourcesSorting() {
       sortBy: [],
       resourceTypes: [],
       languages: [],
-      keywords:[]
+      keywords: [],
     },
   });
 
@@ -71,11 +73,7 @@ export default function ResourcesSorting() {
     "name",
     "id"
   );
-  const keywordOptions = mapToSelectOptions(
-    keywordsData?.data,
-    "name",
-    "id"
-  );
+  const keywordOptions = mapToSelectOptions(keywordsData?.data, "name", "id");
 
   return (
     <div>
@@ -84,11 +82,21 @@ export default function ResourcesSorting() {
           <Accordion
             type="multiple"
             defaultValue={["sort", "resourceType", "language", "keyword"]}
-            className="w-full space-y-5"
+            className="w-full space-y-0"
           >
+            <Button
+              onClick={(e) => {
+                e.preventDefault();
+                methods.reset();
+              }}
+              className="border text-black hover:text-white flex items-center bg-transparent hover:bg-dashboard-primary ml-auto"
+            >
+              <Trash />
+              Clear
+            </Button>
             {/* ── Sort By ───────────────────────────────────── */}
             <AccordionItem value="sort" className="border-b-0">
-              <AccordionTrigger className="font-bold hover:no-underline text-black text-sm border-b rounded-none mb-6">
+              <AccordionTrigger className="font-bold hover:no-underline text-black text-sm border-b rounded-none mb-3">
                 Sort by
               </AccordionTrigger>
               <AccordionContent>
@@ -109,7 +117,7 @@ export default function ResourcesSorting() {
 
             {/* ── Resource Type ─────────────────────────────── */}
             <AccordionItem value="resourceType" className="border-b-0">
-              <AccordionTrigger className="font-bold hover:no-underline text-black text-sm border-b rounded-none mb-6">
+              <AccordionTrigger className="font-bold hover:no-underline text-black text-sm border-b rounded-none mb-3">
                 Resource Type
               </AccordionTrigger>
               <AccordionContent>
@@ -133,7 +141,7 @@ export default function ResourcesSorting() {
 
             {/* ── Language ─────────────────────────────────── */}
             <AccordionItem value="language" className="border-b-0">
-              <AccordionTrigger className="font-bold hover:no-underline text-black text-sm border-b rounded-none mb-6">
+              <AccordionTrigger className="font-bold hover:no-underline text-black text-sm border-b rounded-none mb-3">
                 Language
               </AccordionTrigger>
               <AccordionContent>
@@ -152,7 +160,7 @@ export default function ResourcesSorting() {
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="keyword" className="border-b-0">
-              <AccordionTrigger className="font-bold hover:no-underline text-black text-sm border-b rounded-none mb-6">
+              <AccordionTrigger className="font-bold hover:no-underline text-black text-sm border-b rounded-none mb-3">
                 Keywords
               </AccordionTrigger>
               <AccordionContent>

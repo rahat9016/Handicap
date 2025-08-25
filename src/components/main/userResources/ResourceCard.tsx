@@ -5,10 +5,8 @@ import Title from "@/components/share/Title";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "@/i18n/navigation";
 import { formatFileSize } from "@/utils/formatFileSize";
-import { isValidUrl } from "@/utils/isValidUrl";
 import { format } from "date-fns";
-import { Building2, Eye, FileText } from "lucide-react";
-import Image from "next/image";
+import { Building2, Eye, NotebookText } from "lucide-react";
 import { useEffect, useState } from "react";
 import PDFModal from "./PDFModal";
 
@@ -35,7 +33,7 @@ export default function ResourceCard({
   id,
   title,
   description,
-  imageUrl,
+  // imageUrl,
   date,
   size,
   isFeatured,
@@ -91,8 +89,8 @@ export default function ResourceCard({
     }
   };
   const createdDate = new Date(date as string);
-  const isImage = fileType?.startsWith("image/");
-  const isPdf = fileType === "application/pdf";
+  // const isImage = fileType?.startsWith("image/");
+  // const isPdf = fileType === "application/pdf";
   return (
     <div className="rounded-lg overflow-hidden border bg-white shadow-sm flex flex-col">
       <PDFModal
@@ -101,8 +99,8 @@ export default function ResourceCard({
         filePath={pdfBlobUrl}
         fileType={fileType}
       />
-      <div className="relative w-full h-56 flex items-center justify-center">
-        {isImage ? (
+      <div className="relative w-full h-40 flex items-center justify-center">
+        {/* {isImage ? (
           <Image
             src={
               isValidUrl(imageUrl)
@@ -117,7 +115,9 @@ export default function ResourceCard({
           <FileText className="w-32 h-32 text-red-500 " />
         ) : (
           <span className="text-gray-500">No preview available</span>
-        )}
+        )} */}
+        
+        <NotebookText className="w-24 h-24 text-red-500 " />
         {isFeatured && (
           <Badge className="bg-[#F26419] text-white absolute left-3 top-5">
             Featured

@@ -44,6 +44,25 @@ interface IOrganization {
   name: string;
   code: string;
 }
+export interface ILanguage {
+  id: number;
+  code: string;
+  name: string;
+  nativeName: string;
+}
+
+export interface IResourceFile {
+  id: number;
+  title: string;
+  description: string | null;
+  filePath: string;
+  fileType: string;
+  fileSize: number;
+  isActive: boolean;
+  downloadCount: number;
+  viewCount: number;
+  language: ILanguage;
+}
 export interface IResource {
   id: number;
   name?: string;
@@ -64,6 +83,7 @@ export interface IResource {
   category: Category;
   uploader: Uploader;
   keywords: Keyword[];
+  resourceFiles: IResourceFile[];
   organization: IOrganization;
   _count: ResourceCount;
 }

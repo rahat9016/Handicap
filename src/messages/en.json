@@ -12,8 +12,9 @@
   },
   "Nav": {
     "home": "Home",
+    "resources": "Resources",
+    "training": "Training",
     "about": "About",
-    "services": "Services",
     "contact": "Contact"
   }
 }

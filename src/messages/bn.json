@@ -12,8 +12,9 @@
   },
   "Nav": {
     "home": "হোম",
+    "resources": "সম্পদসমূহ",
+    "training": "প্রশিক্ষণ",
     "about": "পরিচিতি",
-    "services": "সেবা",
     "contact": "যোগাযোগ"
   }
 }

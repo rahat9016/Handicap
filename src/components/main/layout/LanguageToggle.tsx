@@ -1,20 +1,32 @@
 'use client'
 
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
-import { useState } from "react"
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { usePathname, useRouter } from "@/i18n/navigation";
+import { Locale } from "@/i18n/routing";
+import { useLocale } from "next-intl";
+import { useParams } from "next/navigation";
 
 export function LanguageToggle() {
-  // const local:string = useLocale()
-  const [language, setLanguage] = useState<"en" | "bn">("en")
-  console.log(language)
+  const params = useParams();
+  const locale = useLocale();
+  const router = useRouter();
+  const pathname = usePathname();
+
+  function onSelectChange(nextLocale: string) {
+    router.replace(
+      // @ts-expect-error -- TypeScript will validate that only known `params`
+      // are used in combination with a given `pathname`. Since the two will
+      // always match for the current route, we can skip runtime checks.
+      { pathname, params },
+      { locale: nextLocale as Locale }
+    );
+  }
   return (
-    <ToggleGroup
+     <ToggleGroup
       type="single"
-      value={language}
-      onValueChange={(val) => {
-        if (val) setLanguage(val as "en" | "bn")
-      }}
-      className="inline-flex items-center bg-white rounded-full bg-gray-100 transition-colors duration-200"
+      value={locale}
+      onValueChange={onSelectChange}
+      className="inline-flex items-center bg-white rounded-full"
     >
       <ToggleGroupItem
         value="en"

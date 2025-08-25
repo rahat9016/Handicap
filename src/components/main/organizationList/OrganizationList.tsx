@@ -36,10 +36,7 @@ export default function OrganizationList() {
       organizationId: organizationId.toString(),
       organizationName: organizationName,
     };
-    Cookie.set('organizationData', JSON.stringify(organizationData), {
-      secure: true,
-      sameSite: 'Strict',
-    });
+    Cookie.set('organizationData', JSON.stringify(organizationData));
     // Navigate to the organization details page
 
     navigate.push("/admin");

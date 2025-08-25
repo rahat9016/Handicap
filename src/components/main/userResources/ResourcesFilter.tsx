@@ -65,16 +65,16 @@ export default function ResourcesFilter() {
   const totalPages = Math.ceil(totalItems / itemsPerPage);
   return (
     <div>
-      <div className="container py-10 lg:py-20">
+      <div className="container py-10 lg:py-20 ">
         <SectionTopTitle
           title="Resource Library"
           desc="Access our comprehensive collection of disability inclusion resources, including guidelines, training materials, research reports, and tools."
         />
-        <div className="flex items-start gap-28 mt-14">
-          <div className="w-2/12">
+        <div className="flex items-start gap-20 mt-14">
+          <div className="w-[300px] sticky top-40 self-start overflow-y-auto h-[75vh] bg-white border p-4 rounded-md">
             <ResourcesSorting />
           </div>
-          <div className="w-10/12">
+          <div className="w-10/12 ml-auto">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <span className="text-sm">Rows per page:</span>

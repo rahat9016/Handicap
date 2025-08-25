@@ -2,9 +2,17 @@
 import { Skeleton } from "@/components/ui/skeleton";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
-import { Download, Eye, FileText, Plus, Sheet } from "lucide-react";
+import {
+  ArrowDownNarrowWide,
+  ArrowUpNarrowWide,
+  Download,
+  Eye,
+  FileText,
+  Plus,
+  Sheet,
+} from "lucide-react";
 import Papa from "papaparse";
-import { ReactNode, useState } from "react";
+import { ReactNode, useMemo, useState } from "react";
 import Pagination from "../share/Pagination";
 import TableTopBarHeader from "../share/TableTopBarHeader";
 import { Button } from "./button";
@@ -27,6 +35,7 @@ import {
 export interface ColumnDef<T> {
   header: string;
   accessorKey: keyof T;
+  sortable?: boolean;
   cell?: (value: T[keyof T], row: T) => React.ReactNode;
 }
 
@@ -38,7 +47,7 @@ interface DataTableProps<T> {
   currentPage: number;
   itemsPerPage: number;
   onPageChange: (page: number) => void;
-  setItemsPerPage: ((page: string | number) => void) | undefined
+  setItemsPerPage: ((page: string | number) => void) | undefined;
   icon?: ReactNode;
   title?: string;
   subtitle?: string;
@@ -83,6 +92,11 @@ export function DataTable<T>({
       return newSet;
     });
   };
+
+  const [sortConfig, setSortConfig] = useState<{
+    key: string | null;
+    direction: "asc" | "desc";
+  }>({ key: null, direction: "asc" });
 
   function exportToCSV() {
     const visibleCols = columns.filter(
@@ -137,6 +151,50 @@ export function DataTable<T>({
     });
     doc.save("table-data.pdf");
   }
+
+  const handleSort = (key: string, sortable?: boolean) => {
+    if (!sortable) return;
+
+    setSortConfig((prev) => {
+      if (prev.key === key) {
+        return {
+          key,
+          direction: prev.direction === "asc" ? "desc" : "asc",
+        };
+      }
+      return { key, direction: "asc" };
+    });
+  };
+
+  const sortedData = useMemo(() => {
+  if (!sortConfig.key) return data;
+
+  return [...data].sort((a, b) => {
+    const aVal = a[sortConfig.key as keyof T];
+    const bVal = b[sortConfig.key as keyof T];
+
+    if (aVal == null) return 1;
+    if (bVal == null) return -1;
+
+    // Convert numeric-looking strings into numbers
+    const isNumeric =
+      !isNaN(Number(aVal)) && !isNaN(Number(bVal));
+
+    if (isNumeric) {
+      const numA = Number(aVal);
+      const numB = Number(bVal);
+      return sortConfig.direction === "asc" ? numA - numB : numB - numA;
+    }
+
+    // String comparison (case-insensitive)
+    const aStr = String(aVal).toLowerCase();
+    const bStr = String(bVal).toLowerCase();
+    return sortConfig.direction === "asc"
+      ? aStr.localeCompare(bStr)
+      : bStr.localeCompare(aStr);
+  });
+}, [data, sortConfig]);
+
   return (
     <>
       <div className="flex items-center gap-3 mb-6">
@@ -220,15 +278,41 @@ export function DataTable<T>({
                     .map((column, index) => (
                       <TableHead
                         key={index}
-                        className="font-medium font-inter text-base text-erieBlack max-w-[200px] truncate whitespace-nowrap"
+                        onClick={() =>
+                          handleSort(
+                            column.accessorKey as string,
+                            column.sortable
+                          )
+                        }
+                        className={`font-medium font-inter text-base text-erieBlack max-w-[200px] truncate whitespace-nowrap select-none ${
+                          columns.length - 1 !== index ? "border-r" : ""
+                        } ${column.sortable ? "cursor-pointer" : ""}`}
                       >
-                        <span className="block truncate">{column.header}</span>
+                        <span className="flex items-center justify-between">
+                          {column.header}
+                          {column.sortable && (
+                            <span>
+                              {sortConfig.key === column.accessorKey ? (
+                                sortConfig.direction === "asc" ? (
+                                  <ArrowDownNarrowWide size={16} />
+                                ) : (
+                                  <ArrowUpNarrowWide size={16} />
+                                )
+                              ) : (
+                                <ArrowUpNarrowWide
+                                  size={16}
+                                  className="opacity-50"
+                                />
+                              )}
+                            </span>
+                          )}
+                        </span>
                       </TableHead>
                     ))
                 )}
               </TableRow>
             </TableHeader>
-                
+
             <TableBody>
               {visibleColumns.size === 0 ? (
                 <TableRow>
@@ -253,7 +337,7 @@ export function DataTable<T>({
                       ))}
                   </TableRow>
                 ))
-              ) : data.length === 0 ? (
+              ) : sortedData.length === 0 ? (
                 <TableRow>
                   <TableCell
                     colSpan={visibleColumns.size}
@@ -263,7 +347,7 @@ export function DataTable<T>({
                   </TableCell>
                 </TableRow>
               ) : (
-                data.map((row, rowIndex) => (
+                sortedData.map((row, rowIndex) => (
                   <TableRow
                     className="h-[62px] text-darkLiver font-inter font-normal text-sm"
                     key={rowIndex}

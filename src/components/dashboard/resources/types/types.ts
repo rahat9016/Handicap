@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { Dispatch, SetStateAction } from "react";
+
 export interface IUserRole { 
   id: number;
   organizationId: number;
@@ -41,6 +44,25 @@ interface IOrganization {
   name: string;
   code: string;
 }
+export interface ILanguage {
+  id: number;
+  code: string;
+  name: string;
+  nativeName: string;
+}
+
+export interface IResourceFile {
+  id: number;
+  title: string;
+  description: string | null;
+  filePath: string;
+  fileType: string;
+  fileSize: number;
+  isActive: boolean;
+  downloadCount: number;
+  viewCount: number;
+  language: ILanguage;
+}
 export interface IResource {
   id: number;
   name?: string;
@@ -53,14 +75,30 @@ export interface IResource {
   fileSize: number;
   version: string;
   isCurrent: boolean;
-  downloadCount: number;
-  viewCount: number;
+  totalDownloadCount: number;
+  totalViewCount: number;
   createdAt: string; 
   updatedAt: string; 
   language: Language;
   category: Category;
   uploader: Uploader;
   keywords: Keyword[];
+  resourceFiles: IResourceFile[];
   organization: IOrganization;
   _count: ResourceCount;
+}
+export interface IResourceProps {
+  data: IResource[] | null;
+  isLoading: boolean;
+  handleEdit: (resource: IResource) => void;
+  handleView: (resource: IResource) => void;
+  setIsModalOpen: Dispatch<SetStateAction<boolean>>;
+  search: string;
+  onSearchChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  currentPage: number;
+  setCurrentPage: any;
+  totalPages: number;
+  totalItems: number;
+  itemsPerPage: number;
+  setItemsPerPage: any;
 }

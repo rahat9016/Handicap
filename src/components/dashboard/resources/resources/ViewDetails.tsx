@@ -58,7 +58,7 @@ export default function ViewResourceDetails({
           </DialogTitle>
         </DialogHeader>
         <div className="flex items-start space-x-4 pb-4 border-b font-inter">
-          <div className="w-16 h-16 rounded-lg bg-gradient-to-br from-blue to-purple-100 flex items-center justify-center text-2xl overflow-hidden">
+          <div className="w-16 h-16 rounded-lg bg-gradient-to-br from-blue to-purple-100 flex items-center justify-center text-2xl overflow-hidden p-2">
             {resource?.fileType === "application/pdf" ? (
               <FileText className="w-10 h-10 mb-2 text-white" />
             ) : (
@@ -83,11 +83,11 @@ export default function ViewResourceDetails({
             <div className="flex items-center gap-4 text-xs text-gray-500">
               <span className="flex items-center gap-1">
                 <Download className="w-3 h-3 text-green" />
-                {resource?.downloadCount} downloads
+                {resource?.totalDownloadCount} downloads
               </span>
               <span className="flex items-center gap-1">
                 <Eye className="w-3 h-3 text-blue" />
-                {resource?.viewCount} views
+                {resource?.totalViewCount} views
               </span>
             </div>
           </div>

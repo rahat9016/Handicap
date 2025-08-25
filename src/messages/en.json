@@ -1,6 +1,20 @@
 {
-  "HomePage": {
-    "title": "Hello world!",
-    "about": "Go to the about page"
+  "Header": {
+    "wcag": "WCAG 2.1 AA Compliant",
+    "gdpr": "GDPR Compliant",
+    "colorBlind": "Color Blind Mode Available",
+    "accessibility": "Accessibility Statement",
+    "eventCalendar": "Event Calendar",
+    "privacyPolicy": "Privacy Policy",
+    "login": "Login",
+    "disabilityHub": "Disability Inclusion Hub",
+    "humanity": "Humanity & Inclusion | DFAT"
+  },
+  "Nav": {
+    "home": "Home",
+    "resources": "Resources",
+    "training": "Training",
+    "about": "About",
+    "contact": "Contact"
   }
 }

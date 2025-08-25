@@ -3,18 +3,12 @@
 import Paragraph from "@/components/share/Paragraph";
 import Title from "@/components/share/Title";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { useGet } from "@/hooks/useGet";
-import { usePreview } from "@/hooks/usePreview";
+import { Link } from "@/i18n/navigation";
 import { formatFileSize } from "@/utils/formatFileSize";
-import { isValidUrl } from "@/utils/isValidUrl";
 import { format } from "date-fns";
-import { Building2, Download, Eye, FileText } from "lucide-react";
-import Image from "next/image";
+import { Building2, Eye, NotebookText } from "lucide-react";
 import { useEffect, useState } from "react";
-import { toast } from "react-toastify";
 import PDFModal from "./PDFModal";
-import { useDownloadResource } from "./useDownloadResource";
 
 interface ResourceCardProps {
   id: number;
@@ -39,30 +33,31 @@ export default function ResourceCard({
   id,
   title,
   description,
-  imageUrl,
+  // imageUrl,
   date,
   size,
   isFeatured,
   fileType,
-  filePath,
+  // filePath,
   downloadCount,
-  isPrivate,
+  // isPrivate,
   viewCount,
   organizerName,
-  refetch: refetchResources
+  // refetch: refetchResources
 }: ResourceCardProps) {
   const [open, setOpen] = useState(false);
   const [pdfBlobUrl, setPdfBlobUrl] = useState<string | null>(null);
-  const { download, loading,  } = useDownloadResource(refetchResources);
-  const { mutateAsync: previewFile } = usePreview();
-  const { refetch } = useGet(
-    `/resources/${id}/view`,
-    ["resources"],
-    {},
-    {
-      enabled: false,
-    }
-  );
+  // const { download, loading,  } = useDownloadResource(refetchResources);
+  // const { mutateAsync: previewFile } = usePreview();
+  
+  // const { refetch } = useGet(
+  //   `/resources/${id}/view`,
+  //   ["resources"],
+  //   {},
+  //   {
+  //     enabled: false,
+  //   }
+  // );
 
   useEffect(() => {
     return () => {
@@ -70,21 +65,21 @@ export default function ResourceCard({
     };
   }, [pdfBlobUrl]);
 
-  const handlePreview = async (filePath: string) => {
-    try {
-      const blob = await previewFile(filePath);
-      const url = URL.createObjectURL(
-        new Blob([blob], { type: "application/pdf" })
-      );
-      setPdfBlobUrl(url);
-      setOpen(true);
-      refetch();
-      refetchResources()
-    } catch (err) {
-      console.error("PDF preview failed:", err);
-      toast.error("PDF preview failed");
-    }
-  };
+  // const handlePreview = async (filePath: string) => {
+  //   try {
+  //     const blob = await previewFile(filePath);
+  //     const url = URL.createObjectURL(
+  //       new Blob([blob], { type: "application/pdf" })
+  //     );
+  //     setPdfBlobUrl(url);
+  //     setOpen(true);
+  //     refetch();
+  //     refetchResources()
+  //   } catch (err) {
+  //     console.error("PDF preview failed:", err);
+  //     toast.error("PDF preview failed");
+  //   }
+  // };
 
   const handleClose = () => {
     setOpen(false);
@@ -94,8 +89,8 @@ export default function ResourceCard({
     }
   };
   const createdDate = new Date(date as string);
-  const isImage = fileType?.startsWith("image/");
-  const isPdf = fileType === "application/pdf";
+  // const isImage = fileType?.startsWith("image/");
+  // const isPdf = fileType === "application/pdf";
   return (
     <div className="rounded-lg overflow-hidden border bg-white shadow-sm flex flex-col">
       <PDFModal
@@ -104,8 +99,8 @@ export default function ResourceCard({
         filePath={pdfBlobUrl}
         fileType={fileType}
       />
-      <div className="relative w-full h-56 flex items-center justify-center">
-        {isImage ? (
+      <div className="relative w-full h-40 flex items-center justify-center">
+        {/* {isImage ? (
           <Image
             src={
               isValidUrl(imageUrl)
@@ -120,7 +115,9 @@ export default function ResourceCard({
           <FileText className="w-32 h-32 text-red-500 " />
         ) : (
           <span className="text-gray-500">No preview available</span>
-        )}
+        )} */}
+        
+        <NotebookText className="w-24 h-24 text-red-500 " />
         {isFeatured && (
           <Badge className="bg-[#F26419] text-white absolute left-3 top-5">
             Featured
@@ -150,20 +147,13 @@ export default function ResourceCard({
         </div>
 
         <div className="flex flex-col gap-2 mt-3">
-          <Button
-            className="w-full h-10 bg-primary text-white"
-            onClick={() => download(id, title, filePath)}
-            disabled={isPrivate || loading}
+          
+          <Link
+          href={`/resources/${id}`}
+            className="w-full h-10 bg-transparent hover:bg-transparent border border-[#00A896] text-[#00A896] flex items-center justify-center text-center"
           >
-            <Download className="w-4 h-4 mr-1" /> Download
-          </Button>
-          <Button
-            disabled={isPrivate}
-            onClick={() => filePath && handlePreview(filePath)}
-            className="w-full h-10 bg-transparent hover:bg-transparent border border-[#00A896] text-[#00A896]"
-          >
-            <Eye className="w-4 h-4 mr-1" /> Preview
-          </Button>
+            <Eye className="w-4 h-4 mr-1" /> View Details
+          </Link>
         </div>
       </div>
     </div>

@@ -2,6 +2,7 @@
 import { useGet } from "@/hooks/useGet";
 import { usePagination } from "@/hooks/usePagination";
 import { useSearchDebounce } from "@/hooks/useSearchDebounce";
+import { useRouter } from "@/i18n/navigation";
 import { useAppSelector } from "@/lib/redux/hooks";
 import { useEffect, useState } from "react";
 import { IResource } from "../types/types";
@@ -14,7 +15,7 @@ export default function AllResources() {
   const [resource, setResource] = useState<IResource | undefined>(undefined);
   const [isView, setIsView] = useState<boolean>(false);
   const { organizationId } = useAppSelector((state) => state.organizer);
-
+  const navigate = useRouter();
   const {
     setCurrentPage,
     itemsPerPage,
@@ -45,8 +46,7 @@ export default function AllResources() {
   );
 
   const handleEdit = (row: IResource) => {
-    setResource(row);
-    setIsModalOpen(true);
+    navigate.push(`/admin/resources/${row.id}`)
   };
   const handleView = (row: IResource) => {
     setResource(row);

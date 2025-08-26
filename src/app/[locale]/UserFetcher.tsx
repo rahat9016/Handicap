@@ -12,7 +12,7 @@ export const UserFetcher = () => {
   const userId = Cookies.get("userId");
   const roleId = Cookies.get("roleId");
   const organizationData = Cookies.get("organizationData");
-
+  
   const { data, isSuccess, isLoading } = useGet(
   `/user/${userId}`,
   ["user", userId || ""],

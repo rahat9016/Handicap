@@ -215,7 +215,7 @@ export default function CreateUpdateResources({
       <DialogContent className="bg-white max-h-[95vh]  w-[800px] !max-w-none overflow-y-auto">
         <DialogHeader>
           <DialogTitle>
-            {initialValues ? "Update Organization" : "Create Organization"}
+            {initialValues ? "Update Resources" : "Create Resources"}
           </DialogTitle>
         </DialogHeader>
         <FormProvider {...methods}>

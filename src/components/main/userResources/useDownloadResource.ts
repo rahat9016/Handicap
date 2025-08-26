@@ -1,7 +1,7 @@
 import { getBaseUrl } from "@/config/envConfig";
 import Cookies from "js-cookie";
 import { useState } from "react";
-
+import { toast } from "react-toastify";
 
 function getFileExtension(filePath?: string) {
   if (!filePath) return "";
@@ -18,16 +18,29 @@ function ensureExtension(filename: string, ext: string) {
 export function useDownloadResource(onSuccess?: () => void) {
   const [loading, setLoading] = useState(false);
 
-  const download = async (id: number, filename: string, filePath?: string) => {
+  const download = async (
+    id: number,
+    filename: string,
+    filePath?: string,
+    resourcesId?: number | string
+  ) => {
+    const fileId = Number(id);
     setLoading(true);
     try {
-      const res = await fetch(`${getBaseUrl()}/resources/${id}/download`, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${Cookies.get("accessToken")}`,
-          Accept: "application/octet-stream",
-        },
-      });
+      const res = await fetch(
+        `${getBaseUrl()}/resources/download/${resourcesId}`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${Cookies.get("accessToken")}`,
+            Accept: "*/*",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            resourceFileIds: [fileId],
+          }),
+        }
+      );
 
       if (!res.ok) throw new Error("Failed to fetch file");
 
@@ -61,7 +74,8 @@ export function useDownloadResource(onSuccess?: () => void) {
       if (onSuccess) onSuccess();
     } catch (err) {
       console.error("Download error:", err);
-      alert("Download failed");
+      toast.error("PDF download failed");
+      // alert("Download failed");
     } finally {
       setLoading(false);
     }

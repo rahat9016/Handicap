@@ -321,6 +321,13 @@ export default function ResourceDetailPage() {
     resourceId,
   ]);
   const resourceData = data?.data;
+  // const { mutateAsync } = usePost(
+  //   `/resources/view/${resourceId}`,
+  //   (data) => {
+  //     console.log("POST success", data);
+  //   },
+  //   [["resources"]]
+  // );
 
   useEffect(() => {
     if (resourceData) {
@@ -367,7 +374,7 @@ export default function ResourceDetailPage() {
     }
   };
 
-  const handlePreview = async (filePath: string) => {
+  const handlePreview = async (id: number, filePath: string) => {
     try {
       const blob = await previewFile(filePath);
       const url = URL.createObjectURL(
@@ -390,7 +397,7 @@ export default function ResourceDetailPage() {
   };
 
   const handleDownload = (id: number, title: string, filePath: string) => {
-    download(id, title, filePath);
+    download(id, title, filePath, resourceId);
   };
 
   const handleDownloadSelected = async () => {
@@ -414,191 +421,183 @@ export default function ResourceDetailPage() {
         return <FileText className="h-4 w-4" />;
     }
   };
-
   const renderFilePreview = (file: any) => {
-    switch (file.type) {
-      case "pdf":
-        return (
-          <div className="bg-muted rounded-lg p-8 flex flex-col items-center justify-center min-h-[500px]">
-            <FileText className="h-20 w-20 text-red-500 mb-4" />
-            <h3 className="text-xl font-semibold mb-2">PDF Document</h3>
-            <p className="text-muted-foreground text-center mb-4 max-w-md">
-              {file.description}
-            </p>
-            <div className="text-sm text-muted-foreground mb-6">
-              {file.pages} pages • {file.size} • {file.language}
-            </div>
-            <div className="flex gap-2">
-              <Button onClick={() => handlePreview(file.filePath)}>
-                <Eye className="mr-2 h-4 w-4" />
-                Open PDF
-              </Button>
-              <Button
-                variant="outline"
-                onClick={() =>
-                  handleDownload(file.id, file.name, file.filePath)
-                }
-              >
-                <Download className="mr-2 h-4 w-4" />
-                Download
-              </Button>
-            </div>
+  switch (file.fileType) {
+    case "pdf":
+      return (
+        <div className="bg-muted rounded-lg p-8 flex flex-col items-center justify-center min-h-[500px]">
+          <FileText className="h-20 w-20 text-red-500 mb-4" />
+          <h3 className="text-xl font-semibold mb-2">PDF Document</h3>
+          <p className="text-muted-foreground text-center mb-4 max-w-md">
+            {file.description}
+          </p>
+          <div className="text-sm text-muted-foreground mb-6">
+             {formatFileSize(file.fileSize)} • {file.language?.name}
           </div>
-        );
-
-      case "doc":
-        return (
-          <div className="bg-muted rounded-lg p-8 flex flex-col items-center justify-center min-h-[500px]">
-            <FileType className="h-20 w-20 text-blue-500 mb-4" />
-            <h3 className="text-xl font-semibold mb-2">Word Document</h3>
-            <p className="text-muted-foreground text-center mb-4 max-w-md">
-              {file.description}
-            </p>
-            <div className="text-sm text-muted-foreground mb-6">
-              {file.pages} pages • {file.size} • {file.language}
-            </div>
-            <div className="flex gap-2">
-              <Button onClick={() => handlePreview(file.filePath)}>
-                <Eye className="mr-2 h-4 w-4" />
-                Open Document
-              </Button>
-              <Button
-                variant="outline"
-                onClick={() =>
-                  handleDownload(file.id, file.name, file.filePath)
-                }
-              >
-                <Download className="mr-2 h-4 w-4" />
-                Download
-              </Button>
-            </div>
-          </div>
-        );
-
-      case "text":
-        return (
-          <div className="bg-background rounded-lg border">
-            <div className="p-4 border-b flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <FileText className="h-5 w-5 text-green-500" />
-                <span className="font-medium">{file.name}</span>
-              </div>
-              <div className="flex gap-2">
-                <Button size="sm">
-                  <ExternalLink className="mr-2 h-4 w-4" />
-                  Open
-                </Button>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  // onClick={() => handleDownloadFile(file)}
-                >
-                  <Download className="mr-2 h-4 w-4" />
-                  Download
-                </Button>
-              </div>
-            </div>
-            <ScrollArea className="h-[500px] p-6">
-              <pre className="whitespace-pre-wrap text-sm leading-relaxed">
-                {file.content}
-              </pre>
-            </ScrollArea>
-          </div>
-        );
-
-      case "image":
-        return (
-          <div className="bg-background rounded-lg border">
-            <div className="p-4 border-b flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <ImageIcon className="h-5 w-5 text-purple-500" />
-                <span className="font-medium">{file.name}</span>
-              </div>
-              <div className="flex gap-2">
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => setImageZoom(Math.max(50, imageZoom - 25))}
-                >
-                  <ZoomOut className="h-4 w-4" />
-                </Button>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => setImageZoom(Math.min(200, imageZoom + 25))}
-                >
-                  <ZoomIn className="h-4 w-4" />
-                </Button>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => setImageRotation((imageRotation + 90) % 360)}
-                >
-                  <RotateCw className="h-4 w-4" />
-                </Button>
-                <Button size="sm">
-                  <ExternalLink className="mr-2 h-4 w-4" />
-                  Open
-                </Button>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  // onClick={() => handleDownloadFile(file)}
-                >
-                  <Download className="mr-2 h-4 w-4" />
-                  Download
-                </Button>
-              </div>
-            </div>
-            <div className="p-6 flex items-center justify-center min-h-[500px] bg-muted/30">
-              <div
-                className="transition-transform duration-200"
-                style={{
-                  transform: `scale(${
-                    imageZoom / 100
-                  }) rotate(${imageRotation}deg)`,
-                }}
-              >
-                <Image
-                  src={file.url || "/placeholder.svg"}
-                  alt={file.altText || file.description}
-                  width={600}
-                  height={400}
-                  className="rounded-lg border bg-background"
-                />
-              </div>
-            </div>
-            <div className="p-4 border-t bg-muted/30">
-              <p className="text-sm text-muted-foreground">
-                <strong>Alt Text:</strong> {file.altText || file.description}
-              </p>
-              <p className="text-sm text-muted-foreground mt-1">
-                <strong>Dimensions:</strong> {file.dimensions} •{" "}
-                <strong>Size:</strong> {file.size}
-              </p>
-            </div>
-          </div>
-        );
-
-      default:
-        return (
-          <div className="bg-muted rounded-lg p-8 flex flex-col items-center justify-center min-h-[500px]">
-            <FileText className="h-20 w-20 text-muted-foreground mb-4" />
-            <h3 className="text-xl font-semibold mb-2">File Preview</h3>
-            <p className="text-muted-foreground text-center mb-4">
-              Preview not available for this file type
-            </p>
-            <Button
-              onClick={() => handlePreview(file.filePath)}
-              className="bg-dashboard-primary text-white hover:bg-dashboard-primary"
-            >
+          <div className="flex gap-2">
+            <Button onClick={() => handlePreview(file.id, file.filePath)} className="bg-dashboard-primary text-white">
               <Eye className="h-4 w-4" />
-              Preview
+              Open PDF
+            </Button>
+            <Button
+              variant="outline"
+              onClick={() => handleDownload(file.id, file.name, file.filePath)}
+            >
+              <Download className="h-4 w-4" />
+              Download
             </Button>
           </div>
-        );
-    }
-  };
+        </div>
+      );
+
+    case "doc":
+    case "docs":
+      return (
+        <div className="bg-muted rounded-lg p-8 flex flex-col items-center justify-center min-h-[500px]">
+          <FileType className="h-20 w-20 text-blue-500 mb-4" />
+          <h3 className="text-xl font-semibold mb-2">Word Document</h3>
+          <p className="text-muted-foreground text-center mb-4 max-w-md">
+            {file.description}
+          </p>
+          <div className="text-sm text-muted-foreground mb-6">
+             •  {formatFileSize(file.fileSize)} • {file.language?.name}
+          </div>
+          <div className="flex gap-2">
+            <Button onClick={() => handlePreview(file.id, file.filePath)}>
+              <Eye className="mr-2 h-4 w-4" />
+              Open Document
+            </Button>
+            <Button
+              variant="outline"
+              onClick={() => handleDownload(file.id, file.name, file.filePath)}
+            >
+              <Download className="mr-2 h-4 w-4" />
+              Download
+            </Button>
+          </div>
+        </div>
+      );
+
+    case "text":
+      return (
+        <div className="bg-background rounded-lg border">
+          <div className="p-4 border-b flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <FileText className="h-5 w-5 text-green-500" />
+              <span className="font-medium">{file.name}</span>
+            </div>
+            <div className="flex gap-2">
+              <Button size="sm">
+                <ExternalLink className="mr-2 h-4 w-4" />
+                Open
+              </Button>
+              <Button size="sm" variant="outline">
+                <Download className="mr-2 h-4 w-4" />
+                Download
+              </Button>
+            </div>
+          </div>
+          <ScrollArea className="h-[500px] p-6">
+            <pre className="whitespace-pre-wrap text-sm leading-relaxed">
+              {file.content}
+            </pre>
+          </ScrollArea>
+        </div>
+      );
+
+    case "image":
+case "jpeg":
+case "jpg":
+case "png":
+      return (
+        <div className="bg-background rounded-lg border">
+          <div className="p-4 border-b flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <ImageIcon className="h-5 w-5 text-purple-500" />
+              <span className="font-medium">{file.name}</span>
+            </div>
+            <div className="flex gap-2 overflow-hidden">
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => setImageZoom(Math.max(50, imageZoom - 25))}
+              >
+                <ZoomOut className="h-4 w-4" />
+              </Button>
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => setImageZoom(Math.min(200, imageZoom + 25))}
+              >
+                <ZoomIn className="h-4 w-4" />
+              </Button>
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => setImageRotation((imageRotation + 90) % 360)}
+              >
+                <RotateCw className="h-4 w-4" />
+              </Button>
+              <Button size="sm">
+                <ExternalLink className="mr-2 h-4 w-4" />
+                Open
+              </Button>
+              <Button size="sm" variant="outline">
+                <Download className="mr-2 h-4 w-4" />
+                Download
+              </Button>
+            </div>
+          </div>
+          <div className="p-6 flex items-center justify-center min-h-[500px] bg-muted/30 overflow-hidden">
+            <div
+              className="transition-transform duration-200"
+              style={{
+                transform: `scale(${imageZoom / 100}) rotate(${imageRotation}deg)`,
+              }}
+            >
+              <Image
+                src={file.filePath || "/file.svg"}
+                alt={file.altText || file.description}
+                width={600}
+                height={400}
+                className="rounded-lg border bg-background"
+              />
+            </div>
+          </div>
+          <div className="p-4 border-t bg-muted/30">
+            <p className="text-sm text-muted-foreground">
+              <strong>Alt Text:</strong> {file.altText || file.description}
+            </p>
+            <p className="text-sm text-muted-foreground mt-1">
+              <strong>Dimensions:</strong> {file.dimensions} •{" "}
+              <strong>Size:</strong>  {formatFileSize(file.fileSize)}
+            </p>
+            <p className="text-sm text-muted-foreground mt-1">
+              <strong>Language:</strong> {file.language?.name}
+            </p>
+          </div>
+        </div>
+      );
+
+    default:
+      return (
+        <div className="bg-muted rounded-lg p-8 flex flex-col items-center justify-center min-h-[500px]">
+          <FileText className="h-20 w-20 text-muted-foreground mb-4" />
+          <h3 className="text-xl font-semibold mb-2">File Preview</h3>
+          <p className="text-muted-foreground text-center mb-4">
+            Preview not available
+          </p>
+          <Button
+            onClick={() => handlePreview(file.id, file.filePath)}
+            className="bg-dashboard-primary text-white hover:bg-dashboard-primary"
+          >
+            <Eye className="h-4 w-4" />
+            Preview
+          </Button>
+        </div>
+      );
+  }
+};
   if (isLoading) return <ResourceDetailSkeleton />;
   return (
     <div className="flex min-h-screen flex-col">
@@ -695,7 +694,7 @@ export default function ResourceDetailPage() {
                 <span className="font-medium">
                   {resourceData?.totalDownloadCount?.toLocaleString()}
                 </span>
-                <span className="text-muted-foreground">downloads</span>
+                <span className="text-muted-foreground">Total Files Download</span>
               </div>
               <div className="flex items-center gap-2">
                 <Eye className="h-4 w-4 text-muted-foreground" />
@@ -757,7 +756,9 @@ export default function ResourceDetailPage() {
                   ))}
                 </TabsList>
 
-                {resourceData?.resourceFiles.map((file) => (
+                {resourceData?.resourceFiles.map((file) => {
+                  // console.log(file)
+                  return (
                   <TabsContent
                     key={file.id}
                     value={file.id.toString()}
@@ -785,7 +786,8 @@ export default function ResourceDetailPage() {
                       {renderFilePreview(file)}
                     </div>
                   </TabsContent>
-                ))}
+                )
+                })}
               </Tabs>
             </div>
 
@@ -873,7 +875,7 @@ export default function ResourceDetailPage() {
                                 <TooltipTrigger asChild>
                                   <Button
                                     size="sm"
-                                    onClick={() => handlePreview(file.filePath)}
+                                    onClick={() => handlePreview(file?.id, file.filePath)}
                                     className="h-8 w-8 p-0 bg-dashboard-primary hover:bg-dashboard-primary text-white"
                                   >
                                     <Eye className="h-4 w-4 bg-dashboard-primary text-white" />
@@ -891,7 +893,8 @@ export default function ResourceDetailPage() {
                                       download(
                                         file.id,
                                         file.title,
-                                        file.filePath
+                                        file.filePath,
+                                        resourceId
                                       )
                                     }
                                     className="h-8 w-8 p-0 bg-dashboard-primary hover:bg-dashboard-primary text-white"

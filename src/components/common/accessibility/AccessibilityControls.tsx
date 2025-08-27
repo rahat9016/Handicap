@@ -7,7 +7,8 @@ import { useEffect, useState } from "react";
 export function AccessibilityControls() {
   const [fontSize, setFontSize] = useState("base");
   const [highContrast, setHighContrast] = useState(false);
-  const [speechSynthesisAvailable, setSpeechSynthesisAvailable] = useState(false);
+  const [speechSynthesisAvailable, setSpeechSynthesisAvailable] =
+    useState(false);
   const [isSpeaking, setIsSpeaking] = useState(true);
 
   useEffect(() => {
@@ -28,10 +29,10 @@ export function AccessibilityControls() {
 
   useEffect(() => {
     if (typeof window === "undefined" || !("speechSynthesis" in window)) return;
-
     const handleFocus = (e: FocusEvent) => {
       if (!isSpeaking) return;
       const target = e.target as HTMLElement;
+      // console.log("target", target);
       const mainContent = document.getElementById("main-content");
       if (!mainContent || !mainContent.contains(target)) return;
 
@@ -63,12 +64,16 @@ export function AccessibilityControls() {
       }
     };
 
-    document.addEventListener("focusin", handleFocus);
-    return () => document.removeEventListener("focusin", handleFocus);
+    document.addEventListener("mouseenter", handleFocus, true);
+    return () => document.removeEventListener("mouseenter", handleFocus, true);
   }, [isSpeaking]);
 
   const applySettings = (newFontSize: string, newHighContrast: boolean) => {
-    document.documentElement.classList.remove("text-size-base", "text-size-large", "text-size-larger");
+    document.documentElement.classList.remove(
+      "text-size-base",
+      "text-size-large",
+      "text-size-larger"
+    );
     document.documentElement.classList.add(`text-size-${newFontSize}`);
 
     if (newHighContrast) {
@@ -79,10 +84,13 @@ export function AccessibilityControls() {
   };
 
   const changeFontSize = (increase: boolean) => {
-    const newFontSize =
-      increase
-        ? fontSize === "base" ? "large" : "larger"
-        : fontSize === "larger" ? "large" : "base";
+    const newFontSize = increase
+      ? fontSize === "base"
+        ? "large"
+        : "larger"
+      : fontSize === "larger"
+      ? "large"
+      : "base";
 
     if (newFontSize !== fontSize) {
       setFontSize(newFontSize);
@@ -151,8 +159,10 @@ export function AccessibilityControls() {
         size="icon"
         onClick={toggleHighContrast}
         aria-pressed={highContrast}
-        aria-label={highContrast ? "Disable high contrast" : "Enable high contrast"}
-         className={highContrast ? "bg-primary" : ""}
+        aria-label={
+          highContrast ? "Disable high contrast" : "Enable high contrast"
+        }
+        className={highContrast ? "bg-primary" : ""}
       >
         <Contrast className={`h-4 w-4 ${highContrast && "text-white"}`} />
       </Button>
@@ -163,10 +173,12 @@ export function AccessibilityControls() {
           size="icon"
           onClick={toggleTextToSpeech}
           aria-pressed={isSpeaking}
-          aria-label={isSpeaking ? "Stop text-to-speech" : "Start text-to-speech"}
+          aria-label={
+            isSpeaking ? "Stop text-to-speech" : "Start text-to-speech"
+          }
           className={isSpeaking ? "bg-primary text-primary-foreground" : ""}
         >
-          <Volume2 className={`h-4 w-4 ${isSpeaking  && "text-white"}`} />
+          <Volume2 className={`h-4 w-4 ${isSpeaking && "text-white"}`} />
         </Button>
       )}
     </div>

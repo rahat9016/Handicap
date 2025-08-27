@@ -79,7 +79,7 @@ export function DataTable<T>({
   IsCreate = false,
 }: DataTableProps<T>) {
   const totalPages = Math.ceil(totalItems / itemsPerPage);
-
+  const [selectedRows, setSelectedRows] = useState<Set<number>>(new Set());
   const [visibleColumns, setVisibleColumns] = useState<Set<string>>(
     new Set(columns.map((c) => c.accessorKey as string))
   );
@@ -98,6 +98,23 @@ export function DataTable<T>({
     direction: "asc" | "desc";
   }>({ key: null, direction: "asc" });
 
+  const toggleRow = (rowIndex: number) => {
+    setSelectedRows((prev) => {
+      const newSet = new Set(prev);
+      if (newSet.has(rowIndex)) newSet.delete(rowIndex);
+      else newSet.add(rowIndex);
+      return newSet;
+    });
+  };
+
+  const toggleAllRows = () => {
+    if (selectedRows.size === sortedData.length) {
+      setSelectedRows(new Set());
+    } else {
+      setSelectedRows(new Set(sortedData.map((_, idx) => idx)));
+    }
+  };
+
   function exportToCSV() {
     const visibleCols = columns.filter(
       (col) =>
@@ -108,16 +125,17 @@ export function DataTable<T>({
 
     const headers = visibleCols.map((col) => col.header as string);
 
-    const rows = data.map((row) =>
-      visibleCols.map((col) => {
-        if (col.accessorKey) {
-          return row[col.accessorKey] ?? "";
-        }
-        return "";
-      })
+    const rowsSource =
+      selectedRows.size > 0
+        ? sortedData.filter((_, idx) => selectedRows.has(idx))
+        : sortedData;
+
+    const rows = rowsSource.map((row) =>
+      visibleCols.map((col) =>
+        col.accessorKey ? row[col.accessorKey] ?? "" : ""
+      )
     );
 
-    // ✅ export with PapaParse
     const csv = Papa.unparse({ fields: headers, data: rows });
     const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
     const link = document.createElement("a");
@@ -137,20 +155,23 @@ export function DataTable<T>({
     );
 
     const headers = visibleCols.map((col) => col.header);
-    const rows = data.map((row) =>
-      visibleCols.map((col) => {
-        if (col.accessorKey) return row[col.accessorKey] ?? "";
-        return "";
-      })
+
+    const rowsSource =
+      selectedRows.size > 0
+        ? sortedData.filter((_, idx) => selectedRows.has(idx))
+        : sortedData;
+
+    const rows = rowsSource.map((row) =>
+      visibleCols.map((col) =>
+        col.accessorKey ? row[col.accessorKey] ?? "" : ""
+      )
     );
 
     const doc = new jsPDF();
-    autoTable(doc, {
-      head: [headers],
-      body: rows,
-    });
+    autoTable(doc, { head: [headers], body: rows });
     doc.save("table-data.pdf");
   }
+
 
   const handleSort = (key: string, sortable?: boolean) => {
     if (!sortable) return;
@@ -167,33 +188,32 @@ export function DataTable<T>({
   };
 
   const sortedData = useMemo(() => {
-  if (!sortConfig.key) return data;
+    if (!sortConfig.key) return data;
 
-  return [...data].sort((a, b) => {
-    const aVal = a[sortConfig.key as keyof T];
-    const bVal = b[sortConfig.key as keyof T];
+    return [...data].sort((a, b) => {
+      const aVal = a[sortConfig.key as keyof T];
+      const bVal = b[sortConfig.key as keyof T];
 
-    if (aVal == null) return 1;
-    if (bVal == null) return -1;
+      if (aVal == null) return 1;
+      if (bVal == null) return -1;
 
-    // Convert numeric-looking strings into numbers
-    const isNumeric =
-      !isNaN(Number(aVal)) && !isNaN(Number(bVal));
+      // Convert numeric-looking strings into numbers
+      const isNumeric = !isNaN(Number(aVal)) && !isNaN(Number(bVal));
 
-    if (isNumeric) {
-      const numA = Number(aVal);
-      const numB = Number(bVal);
-      return sortConfig.direction === "asc" ? numA - numB : numB - numA;
-    }
+      if (isNumeric) {
+        const numA = Number(aVal);
+        const numB = Number(bVal);
+        return sortConfig.direction === "asc" ? numA - numB : numB - numA;
+      }
 
-    // String comparison (case-insensitive)
-    const aStr = String(aVal).toLowerCase();
-    const bStr = String(bVal).toLowerCase();
-    return sortConfig.direction === "asc"
-      ? aStr.localeCompare(bStr)
-      : bStr.localeCompare(aStr);
-  });
-}, [data, sortConfig]);
+      // String comparison (case-insensitive)
+      const aStr = String(aVal).toLowerCase();
+      const bStr = String(bVal).toLowerCase();
+      return sortConfig.direction === "asc"
+        ? aStr.localeCompare(bStr)
+        : bStr.localeCompare(aStr);
+    });
+  }, [data, sortConfig]);
 
   return (
     <>
@@ -268,6 +288,17 @@ export function DataTable<T>({
           <Table className="min-w-full border-collapse">
             <TableHeader>
               <TableRow className="bg-[#C6DFF8] h-[62px]">
+                <TableHead className="w-10">
+                  <input
+                    type="checkbox"
+                    checked={
+                      selectedRows.size === sortedData.length &&
+                      sortedData.length > 0
+                    }
+                    onChange={toggleAllRows}
+                  />{" "}
+                  All
+                </TableHead>
                 {visibleColumns.size === 0 ? (
                   <TableHead className="text-center w-full">
                     No columns selected
@@ -352,6 +383,13 @@ export function DataTable<T>({
                     className="h-[62px] text-darkLiver font-inter font-normal text-sm"
                     key={rowIndex}
                   >
+                    <TableCell className="w-10">
+                      <input
+                        type="checkbox"
+                        checked={selectedRows.has(rowIndex)}
+                        onChange={() => toggleRow(rowIndex)}
+                      />
+                    </TableCell>
                     {columns
                       .filter((c) =>
                         visibleColumns.has(c.accessorKey as string)

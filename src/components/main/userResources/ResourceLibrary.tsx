@@ -12,6 +12,7 @@ export default function ResourceLibrary({
   const {
     userInformation: { id },
   } = useAppSelector((state) => state.auth);
+  
   return (
     <div>
       {resources.length === 0 ? (
@@ -41,6 +42,7 @@ export default function ResourceLibrary({
                 isPrivate={resource.isPrivate && !!id}
                 organizerName={resource.organization.name}
                 refetch={refetch}
+                filesCount={resource.filesCount}
               />
             );
           })}

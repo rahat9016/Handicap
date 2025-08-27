@@ -22,9 +22,17 @@ export default function TableView({
   const { adminOrganizationPermission } = useAppSelector(
     (state) => state.permission
   );
+  
   const columns: ColumnDef<IResource>[] = [
     { header: "Resource Title", accessorKey: "title" },
-    { header: "Description", accessorKey: "description" },
+    { header: "Description", accessorKey: "description" }, 
+{
+      header: "organization",
+      accessorKey: "organization",
+      cell: (_value, row) => {
+        return <span>{row?.organization?.name}</span>; 
+      },
+    },
     { header: "Download Count", accessorKey: "totalDownloadCount" },
     { header: "View Count", accessorKey: "totalViewCount" },
     {

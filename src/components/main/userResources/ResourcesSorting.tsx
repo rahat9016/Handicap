@@ -25,7 +25,7 @@ import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 
 const sortOptions = [
-  { label: "Most Downloads", value: "downloadCount:desc" },
+  { label: "Most Downloads", value: "totalDownloadCount:desc" },
   { label: "Most View", value: "viewCount:desc" },
   { label: "Oldest First", value: "createdAt:desc" },
 ];

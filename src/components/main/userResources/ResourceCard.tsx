@@ -27,13 +27,13 @@ interface ResourceCardProps {
   viewCount: number;
   organizerName?: string;
   refetch: () => void;
+  filesCount: number
 }
 
 export default function ResourceCard({
   id,
   title,
   description,
-  // imageUrl,
   date,
   size,
   isFeatured,
@@ -43,21 +43,11 @@ export default function ResourceCard({
   // isPrivate,
   viewCount,
   organizerName,
-  // refetch: refetchResources
+  filesCount
 }: ResourceCardProps) {
   const [open, setOpen] = useState(false);
   const [pdfBlobUrl, setPdfBlobUrl] = useState<string | null>(null);
-  // const { download, loading,  } = useDownloadResource(refetchResources);
-  // const { mutateAsync: previewFile } = usePreview();
-  
-  // const { refetch } = useGet(
-  //   `/resources/${id}/view`,
-  //   ["resources"],
-  //   {},
-  //   {
-  //     enabled: false,
-  //   }
-  // );
+
 
   useEffect(() => {
     return () => {
@@ -65,21 +55,6 @@ export default function ResourceCard({
     };
   }, [pdfBlobUrl]);
 
-  // const handlePreview = async (filePath: string) => {
-  //   try {
-  //     const blob = await previewFile(filePath);
-  //     const url = URL.createObjectURL(
-  //       new Blob([blob], { type: "application/pdf" })
-  //     );
-  //     setPdfBlobUrl(url);
-  //     setOpen(true);
-  //     refetch();
-  //     refetchResources()
-  //   } catch (err) {
-  //     console.error("PDF preview failed:", err);
-  //     toast.error("PDF preview failed");
-  //   }
-  // };
 
   const handleClose = () => {
     setOpen(false);
@@ -89,34 +64,15 @@ export default function ResourceCard({
     }
   };
   const createdDate = new Date(date as string);
-  // const isImage = fileType?.startsWith("image/");
-  // const isPdf = fileType === "application/pdf";
   return (
-    <div className="rounded-lg overflow-hidden border bg-white shadow-sm flex flex-col">
+    <div className="rounded-lg overflow-hidden border bg-white shadow-sm flex flex-col justify-between p-3">
       <PDFModal
         open={open}
         onClose={handleClose}
         filePath={pdfBlobUrl}
         fileType={fileType}
       />
-      <div className="relative w-full h-40 flex items-center justify-center">
-        {/* {isImage ? (
-          <Image
-            src={
-              isValidUrl(imageUrl)
-                ? (imageUrl as string)
-                : "/images/dashboard/gallery-add.svg"
-            }
-            alt={title}
-            fill
-            className="object-cover"
-          />
-        ) : isPdf ? (
-          <FileText className="w-32 h-32 text-red-500 " />
-        ) : (
-          <span className="text-gray-500">No preview available</span>
-        )} */}
-        
+      <div className="relative w-full flex items-center justify-center mb-2">
         <NotebookText className="w-24 h-24 text-red-500 " />
         {isFeatured && (
           <Badge className="bg-[#F26419] text-white absolute left-3 top-5">
@@ -130,7 +86,7 @@ export default function ResourceCard({
         )}
       </div>
 
-      <div className="p-3 flex flex-col justify-between flex-1">
+      <div className="flex flex-col justify-between gap-2">
         <div>
           <Title className="lg:text-lg mb-3 line-clamp-1 text-black">
             {title}
@@ -142,12 +98,11 @@ export default function ResourceCard({
             <Paragraph>{viewCount} Views</Paragraph>
             <Paragraph>Date: {format(createdDate, "dd MMM yyyy")}</Paragraph>
             <Paragraph>File Size: {formatFileSize(size || 0)}</Paragraph>
+            <Paragraph>Total Resource Files: {filesCount}</Paragraph>
           </div>
-          
         </div>
 
-        <div className="flex flex-col gap-2 mt-3">
-          
+        <div className="flex flex-col gap-2">
           <Link
           href={`/resources/${id}`}
             className="w-full h-10 bg-transparent hover:bg-transparent border border-[#00A896] text-[#00A896] flex items-center justify-center text-center"

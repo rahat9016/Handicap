@@ -78,6 +78,7 @@ export default function CreateUpdateResources({
       keywordIds: [],
       files: [{ title: "", description: "", languageId: "", file: undefined }],
     },
+    mode: "onChange",
   });
   const { control, trigger, getValues, watch } = methods;
   const { fields, append, remove } = useFieldArray({

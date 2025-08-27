@@ -68,6 +68,7 @@ export interface IResource {
   name?: string;
   actions?: string;
   isPrivate?: boolean;
+
   title: string;
   description: string;
   filePath: string;
@@ -77,6 +78,7 @@ export interface IResource {
   isCurrent: boolean;
   totalDownloadCount: number;
   totalViewCount: number;
+  filesCount: number;
   createdAt: string; 
   updatedAt: string; 
   language: Language;

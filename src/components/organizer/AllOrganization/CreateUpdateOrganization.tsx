@@ -72,7 +72,7 @@ export default function CreateUpdateOrganization({
     }
   }, [initialValues, methods]);
 
-  console.log(initialValues)
+
   // Open the dialog when isOpen changes
   useEffect(() => {
     if (!isOpen) {

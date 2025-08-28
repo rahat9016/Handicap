@@ -1,6 +1,7 @@
 "use client";
 
 import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
 import { Calendar, Clock, Download, Eye, Globe, Hash, User } from "lucide-react";
 import { BsFileText } from "react-icons/bs";
 
@@ -23,6 +24,7 @@ type ResourceHeaderDetailsProps = {
       name: string;
     };
   }[];
+  className?: string;
 };
 
 export default function ResourceHeaderDetails({
@@ -36,9 +38,10 @@ export default function ResourceHeaderDetails({
   totalViewCount,
   filesCount,
   keywords,
+  className
 }: ResourceHeaderDetailsProps) {
   return (
-    <div className="space-y-6 mb-8 bg-slate-50 border p-6 rounded-lg">
+    <div className={cn("space-y-6 mb-8 bg-slate-50 border p-6 rounded-lg", className)}>
       <h1 className="text-4xl font-bold tracking-tight font-inter">{title}</h1>
       <p className="text-xl text-muted-foreground leading-relaxed">{description}</p>
 

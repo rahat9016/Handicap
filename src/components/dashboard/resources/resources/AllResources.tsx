@@ -12,6 +12,7 @@ import ViewResourceDetails from "./ViewDetails";
 
 export default function AllResources() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [selectedId, setSelectedId] = useState<string | undefined>(undefined);
   const [resource, setResource] = useState<IResource | undefined>(undefined);
   const [isView, setIsView] = useState<boolean>(false);
   const { organizationId } = useAppSelector((state) => state.organizer);
@@ -24,17 +25,20 @@ export default function AllResources() {
     setItemsPerPage,
     setTotalItems,
   } = usePagination();
-
+  
   const { search, handleSearchChange, debouncedSearch } =
     useSearchDebounce(300);
-  const endpoint = organizationId
+  const endpoint = selectedId
+  ? `/resources/organization/${selectedId}`
+  : organizationId
     ? `/resources/organization/${organizationId}`
     : "/resources";
-  const shouldFetch = organizationId !== undefined;
+
+  const shouldFetch = selectedId !== undefined || organizationId !== undefined;
 
   const { data, isLoading } = useGet(
     endpoint,
-    ["resources", currentPage.toString(), organizationId ?? "all"],
+    ["resources",currentPage.toString(), selectedId ?? organizationId ?? "all"],
     {
       ...(itemsPerPage !== -1 && {
         page: currentPage.toString(),
@@ -46,7 +50,7 @@ export default function AllResources() {
   );
 
   const handleEdit = (row: IResource) => {
-    navigate.push(`/admin/resources/${row.id}`)
+    navigate.push(`/admin/resources/${row.id}`);
   };
   const handleView = (row: IResource) => {
     setResource(row);
@@ -60,6 +64,7 @@ export default function AllResources() {
   }, [data]);
 
   const totalPages = Math.ceil(totalItems / itemsPerPage);
+  
   return (
     <div className="bg-white p-8 min-h-[85vh] border border-skeleton rounded-2xl">
       <ResourceTabs
@@ -76,6 +81,7 @@ export default function AllResources() {
         totalItems={totalItems}
         itemsPerPage={itemsPerPage}
         setItemsPerPage={setItemsPerPage}
+        setSelectedId={setSelectedId}
       />
       <CreateUpdateResources
         isOpen={isModalOpen}

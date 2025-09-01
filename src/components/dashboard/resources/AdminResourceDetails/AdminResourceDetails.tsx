@@ -3,7 +3,7 @@ import ResourceHeaderDetails from "@/components/common/ResourceDetails/ResourceH
 import { Button } from "@/components/ui/button";
 import { useGet } from "@/hooks/useGet";
 import { useRouter } from "@/i18n/navigation";
-import { Pencil } from "lucide-react";
+import { ArrowLeft, Pencil } from "lucide-react";
 import { useParams } from "next/navigation";
 import { useState } from "react";
 import { IResource } from "../types/types";
@@ -51,7 +51,7 @@ export default function AdminResourceDetails() {
           onClick={() => router.push("/admin/resources/resources-list")}
           className="bg-dashboard-primary text-white h-10 mb-3"
         >
-          <Pencil /> Back
+          <ArrowLeft /> Back
         </Button>
         <div className="relative">
           <Button

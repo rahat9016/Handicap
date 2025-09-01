@@ -5,7 +5,9 @@ import ControlledTextareaField from "@/components/share/ControlledTextareaField"
 import InputLabel from "@/components/share/InputLabel";
 import { Button } from "@/components/ui/button";
 import { useGet } from "@/hooks/useGet";
+import { usePost } from "@/hooks/usePost";
 import { mapToSelectOptions } from "@/utils/mapToSelectOptions";
+import urlToFile from "@/utils/urlToFile";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Trash } from "lucide-react";
 import { useEffect } from "react";
@@ -23,6 +25,15 @@ export default function UpdateResourceFiles({
   const { data: languages } = useGet<ILanguage[]>("/languages", [
     "resource-languages",
   ]);
+
+  const { mutateAsync } = usePost(
+    "/resources",
+    (data) => {
+      console.log("POST success", data);
+    },
+    [["resources"]]
+  );
+
   const methods = useForm({
     resolver: yupResolver(resourcesFileUpdateSchema),
     defaultValues: {
@@ -48,7 +59,7 @@ export default function UpdateResourceFiles({
       });
     }
   }, [initialValues, methods]);
-//   console.log({initialValues},getValues("files"))
+  //   console.log({initialValues},getValues("files"))
   const addAnotherFile = async () => {
     const valid = await trigger();
     const values = getValues("files");
@@ -70,26 +81,35 @@ export default function UpdateResourceFiles({
     }
   };
 
-  const onSubmit = (data: any) => {
-    console.log(data)
+  const onSubmit = async (data: any) => {
     const formData = new FormData();
 
-    data.files.forEach((f: any, idx: number) => {
+    const filePromises = data.files.map(async (f: any, idx: number) => {
+      let fileToAppend: File | null = null;
+
       if (f.file) {
-        formData.append(`files[${idx}][file]`, f.file);
+        if (f.file instanceof File) {
+          fileToAppend = f.file;
+        } else if (typeof f.file === "string" && f.file.startsWith("http")) {
+          const filename = f.title || `file-${idx}`;
+          fileToAppend = await urlToFile(f.file, filename);
+        }
       }
+
+      if (fileToAppend) {
+        formData.append(`files[${idx}][file]`, fileToAppend);
+      }
+
+      // Always append meta fields
       formData.append(`files[${idx}][title]`, f.title);
       formData.append(`files[${idx}][description]`, f.description);
       formData.append(`files[${idx}][languageId]`, f.languageId);
     });
-    //   if (!initialValues) {
-    //     mutateAsync(formData).then(() => {
-    //       toast.success("Resource created successfully");
-    //       onClose();
-    //       methods.reset();
-    //     });
-    //     return;
-    //   }
+
+    // Run all conversions in parallel
+    await Promise.all(filePromises);
+
+    mutateAsync(formData);
   };
 
   const languageOptions = mapToSelectOptions(languages?.data, "name", "id");
@@ -119,7 +139,10 @@ export default function UpdateResourceFiles({
                           className="text-black lg:mt-2"
                         />
                       </div>
-                      <FileUploadController name={`files.${index}.file`} className="h-[224px]" />
+                      <FileUploadController
+                        name={`files.${index}.file`}
+                        className="h-[224px]"
+                      />
                     </div>
                     <div className="w-[80%] relative ">
                       <Button
@@ -131,29 +154,29 @@ export default function UpdateResourceFiles({
                       </Button>
                       <div className="grid grid-cols-2 gap-4 items-center mt-3">
                         <div className="border-b lg:border-none border-[#E4E4E4]">
-                        <InputLabel
-                          className="text-black lg:mb-1 "
-                          label="Title"
-                          required
-                        />
-                        <ControlledInputField
-                          name={`files.${index}.title`}
-                          placeholder="Enter book title"
-                          className="rounded-md lg:border-gray"
-                        />
-                      </div>
-                      <div className=" lg:border-none border-[#E4E4E4]">
-                        <InputLabel
-                          label="Language"
-                          required
-                          className="text-black lg:mb-1"
-                        />
-                        <ControlledSelectField
-                          name={`files.${index}.languageId`}
-                          placeholder="Select language"
-                          options={languageOptions}
-                        />
-                      </div>
+                          <InputLabel
+                            className="text-black lg:mb-1 "
+                            label="Title"
+                            required
+                          />
+                          <ControlledInputField
+                            name={`files.${index}.title`}
+                            placeholder="Enter book title"
+                            className="rounded-md lg:border-gray"
+                          />
+                        </div>
+                        <div className=" lg:border-none border-[#E4E4E4]">
+                          <InputLabel
+                            label="Language"
+                            required
+                            className="text-black lg:mb-1"
+                          />
+                          <ControlledSelectField
+                            name={`files.${index}.languageId`}
+                            placeholder="Select language"
+                            options={languageOptions}
+                          />
+                        </div>
                       </div>
                       <div className="mt-4 lg:mt-3 pb-4 lg:pb-0 border-b lg:border-none border-[#E4E4E4]">
                         <InputLabel
@@ -183,7 +206,7 @@ export default function UpdateResourceFiles({
                   type="submit"
                   className="bg-dashboard-primary text-white"
                 >
-                   Update Resource
+                  Update Resource
                 </Button>
               </div>
             </div>

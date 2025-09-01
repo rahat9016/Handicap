@@ -1,5 +1,6 @@
 // components/ui/data-table.tsx
 import { Skeleton } from "@/components/ui/skeleton";
+import { useRouter } from "@/i18n/navigation";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import {
@@ -57,6 +58,7 @@ interface DataTableProps<T> {
   searchPlaceholder?: string;
   setIsModalOpen?: (isOpen: boolean) => void;
   IsCreate?: boolean;
+  routeURL?: string;
 }
 
 export function DataTable<T>({
@@ -77,7 +79,9 @@ export function DataTable<T>({
   searchPlaceholder,
   setIsModalOpen,
   IsCreate = false,
+  routeURL,
 }: DataTableProps<T>) {
+  const router = useRouter()
   const totalPages = Math.ceil(totalItems / itemsPerPage);
   const [selectedRows, setSelectedRows] = useState<Set<number>>(new Set());
   const [visibleColumns, setVisibleColumns] = useState<Set<string>>(
@@ -171,7 +175,6 @@ export function DataTable<T>({
     autoTable(doc, { head: [headers], body: rows });
     doc.save("table-data.pdf");
   }
-
 
   const handleSort = (key: string, sortable?: boolean) => {
     if (!sortable) return;
@@ -274,10 +277,16 @@ export function DataTable<T>({
             </Button>
           </DropdownMenuContent>
         </DropdownMenu>
-        {IsCreate && setIsModalOpen && (
+        {IsCreate && (
           <Button
             className="text-white font-inter text-sm font-medium bg-rose-600 hover:bg-rose-700 h-11 gap-1 !px-6"
-            onClick={() => setIsModalOpen(true)}
+            onClick={() => {
+              if (routeURL) {
+                router.push(routeURL);
+              } else if (setIsModalOpen) {
+                setIsModalOpen(true); 
+              }
+            }}
           >
             <Plus className="!text-2xl text-white" /> Create
           </Button>
@@ -290,6 +299,7 @@ export function DataTable<T>({
               <TableRow className="bg-[#C6DFF8] h-[62px]">
                 <TableHead className="w-10">
                   <input
+                    className="cursor-pointer"
                     type="checkbox"
                     checked={
                       selectedRows.size === sortedData.length &&
@@ -383,11 +393,12 @@ export function DataTable<T>({
                     className="h-[62px] text-darkLiver font-inter font-normal text-sm"
                     key={rowIndex}
                   >
-                    <TableCell className="w-10">
+                    <TableCell className="w-10 ">
                       <input
                         type="checkbox"
                         checked={selectedRows.has(rowIndex)}
                         onChange={() => toggleRow(rowIndex)}
+                        className="cursor-pointer"
                       />
                     </TableCell>
                     {columns

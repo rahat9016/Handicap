@@ -14,7 +14,10 @@ import {
   setUserId,
   setUserInformation,
 } from "@/lib/redux/features/auth/authSlice";
-import { setAdminOrganizationPermission, setPermission } from "@/lib/redux/features/permission/permissionSlice";
+import {
+  setAdminOrganizationPermission,
+  setPermission,
+} from "@/lib/redux/features/permission/permissionSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
 import { LoginFormData } from "@/schemas/auth";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -54,9 +57,8 @@ export default function Login() {
       staleTime: 5 * 60 * 1000,
     }
   );
-  const callbackUrl = decodeURIComponent(
-    searchParams.get("callbackUrl") || `/admin`
-  );
+  const rawCallback = searchParams.get("callbackUrl");
+  const callbackUrl = rawCallback ? decodeURIComponent(rawCallback) : "/";
 
   const onSubmit: SubmitHandler<LoginFormData> = (data) => {
     login(data)
@@ -64,12 +66,21 @@ export default function Login() {
         if (res?.id) {
           dispatch(setUserId(res.id));
           if (res?.roleId === 1) dispatch(setPermission(true));
-          else if (res?.roleId === 2) dispatch(setAdminOrganizationPermission(true));
+          else if (res?.roleId === 2)
+            dispatch(setAdminOrganizationPermission(true));
           else dispatch(setPermission(false));
         }
+        let destination = callbackUrl;
 
-        const destination =
-          res?.parentRoleId === 2 ? "/organization-list" : callbackUrl;
+        if (res?.parentRoleId === 2) {
+          destination = "/organization-list";
+        } else if (res?.parentRoleId === null) {
+          // 🚫 no permission → send back to callback (not /admin!)
+          destination = callbackUrl;
+        } else if (!rawCallback) {
+          // If no callback was passed, allow only permitted users to land in /admin
+          destination = "/admin";
+        }
 
         router.push(destination);
       })
@@ -77,7 +88,7 @@ export default function Login() {
         console.error("Login failed:", error);
       });
   };
-  
+
   useEffect(() => {
     if (isSuccess && data?.data) {
       dispatch(setUserInformation(data.data));

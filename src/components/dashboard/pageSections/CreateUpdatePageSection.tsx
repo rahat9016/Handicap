@@ -100,7 +100,7 @@ export default function CreateSectionModal({
   });
 
   // const sectionType = methods.watch("sectionType");
-console.log(methods.formState.errors)
+
   // useEffect(() => {
   //   if (sectionType) {
   //     // Set default configuration based on section type

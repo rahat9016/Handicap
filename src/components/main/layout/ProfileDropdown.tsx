@@ -8,17 +8,22 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useRouter } from "@/i18n/navigation";
 import { logoutUser } from "@/lib/redux/features/auth/authSlice";
 import { clearOrganization } from "@/lib/redux/features/organizer/organizationSlice";
-import { setAdminOrganizationPermission, setPermission } from "@/lib/redux/features/permission/permissionSlice";
+import {
+  setAdminOrganizationPermission,
+  setPermission,
+} from "@/lib/redux/features/permission/permissionSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
 import { ChevronDown, User } from "lucide-react";
 
 export function ProfileDropdown() {
   const dispatch = useAppDispatch();
   const {
-    userInformation: { firstName },
+    userInformation: { firstName, roleName },
   } = useAppSelector((state) => state.auth);
+  const router = useRouter();
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
@@ -30,13 +35,23 @@ export function ProfileDropdown() {
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuLabel>My Account</DropdownMenuLabel>
+        {roleName === "ADMIN" && (
+          <DropdownMenuLabel
+            className="cursor-pointer"
+            onClick={() => router.push("/admin")}
+          >
+            Admin
+          </DropdownMenuLabel>
+        )}
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={() => {
-          dispatch(logoutUser());
-          dispatch(clearOrganization());
-          dispatch(setPermission(false))
-          dispatch(setAdminOrganizationPermission(false))
-        }}>
+        <DropdownMenuItem
+          onClick={() => {
+            dispatch(logoutUser());
+            dispatch(clearOrganization());
+            dispatch(setPermission(false));
+            dispatch(setAdminOrganizationPermission(false));
+          }}
+        >
           Logout
         </DropdownMenuItem>
       </DropdownMenuContent>

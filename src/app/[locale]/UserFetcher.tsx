@@ -4,6 +4,7 @@ import { setLoading, setUserId, setUserInformation } from "@/lib/redux/features/
 import { setOrganization } from "@/lib/redux/features/organizer/organizationSlice";
 import { setAdminOrganizationPermission, setPermission } from "@/lib/redux/features/permission/permissionSlice";
 import { useAppDispatch } from "@/lib/redux/hooks";
+import { decryptData } from "@/utils/cryptoHelper";
 import Cookies from "js-cookie";
 import { useEffect } from "react";
 
@@ -12,33 +13,35 @@ export const UserFetcher = () => {
   const userId = Cookies.get("userId");
   const roleId = Cookies.get("roleId");
   const organizationData = Cookies.get("organizationData");
-  
+  const decryptedUserId = decryptData(userId ?? "", "ABC123!@#");
+  const decryptedRoleId = decryptData(roleId ?? "", "ABC123!@#");
+
   const { data, isSuccess, isLoading } = useGet(
-  `/user/${userId}`,
-  ["user", userId || ""],
+  `/user/${decryptedUserId}`,
+  ["user", decryptedUserId || ""],
   undefined,
   {
-    enabled: !!userId,
+    enabled: !!decryptedUserId,
     staleTime: 5 * 60 * 1000,
   }
 );
 
   // If userId is available, set it in the store
   useEffect(() => {
-    if (userId) {
-      dispatch(setUserId(userId));
+    if (decryptedUserId) {
+      dispatch(setUserId(decryptedUserId));
     }
-  }, [userId, dispatch]);
+  }, [decryptedUserId, dispatch]);
 
   // If roleId is available, set permission based on it
   // If roleId is "1", set permission to true
   useEffect(() => {
-    if (roleId === "1") {
+    if (decryptedRoleId === "1") {
       dispatch(setPermission(true));
-    }else if(roleId === "2"){
+    }else if(decryptedRoleId === "2"){
       dispatch(setAdminOrganizationPermission(true))
     }
-  }, [roleId, dispatch]);
+  }, [decryptedRoleId, dispatch]);
 
 
   useEffect(() => {

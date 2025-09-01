@@ -5,7 +5,6 @@ import ControlledMultiSelectField from "@/components/share/ControlledMultiSelect
 import ControlledSelectField from "@/components/share/ControlledSelectField";
 import ControlledTextareaField from "@/components/share/ControlledTextareaField";
 import ControlledToggleField from "@/components/share/ControlledToggleField";
-import ImageFileInput from "@/components/share/ImageFileInput";
 import InputLabel from "@/components/share/InputLabel";
 import { Button } from "@/components/ui/button";
 import {
@@ -15,7 +14,6 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { useGet } from "@/hooks/useGet";
-import { usePatch } from "@/hooks/usePatch";
 import { usePost } from "@/hooks/usePost";
 import { useAppSelector } from "@/lib/redux/hooks";
 import { mapToSelectOptions } from "@/utils/mapToSelectOptions";
@@ -26,7 +24,8 @@ import { FormProvider, useFieldArray, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { ILanguage } from "../../setup/types/setup";
 import { IResource } from "../types/types";
-import { resourcesSchema, SUPPORTED_FORMATS } from "./Schema/Resources";
+import { FileUploadController } from "./FileUploadController";
+import { resourcesSchema } from "./Schema/Resources";
 
 export default function CreateUpdateResources({
   isOpen,
@@ -58,11 +57,6 @@ export default function CreateUpdateResources({
     },
     [["resources"]]
   );
-  const {
-    // mutateAsync: patchAsync,
-    error: patchError,
-    reset: patchReset,
-  } = usePatch((data) => console.log("Success", data), [["resources"]]);
 
   const { organizationId } = useAppSelector((state) => state.organizer);
   // Initialize form methods
@@ -86,21 +80,6 @@ export default function CreateUpdateResources({
     name: "files",
   });
 
-  useEffect(() => {
-    if (initialValues) {
-      methods.reset({
-        // file: initialValues.filePath,
-        title: initialValues.title,
-        description: initialValues.description,
-        isPrivate: initialValues.isPrivate,
-        languageId: String(initialValues.language.id),
-        categoryId: String(initialValues.category.id),
-        organizationId: String(initialValues.organization.id) || organizationId,
-        keywordIds: initialValues.keywords?.map((k) => k.keyword.id) || [],
-      });
-    }
-  }, [initialValues, methods, organizationId]);
-
   // Open the dialog when isOpen changes
   useEffect(() => {
     if (!isOpen) {
@@ -115,9 +94,8 @@ export default function CreateUpdateResources({
         files: [{ title: "", description: "", languageId: "", file: undefined }],
       });
       postReset();
-      patchReset();
     }
-  }, [isOpen, methods, patchReset, postReset]);
+  }, [isOpen, methods, postReset]);
 
   const addAnotherFile = async () => {
     const valid = await trigger();
@@ -183,17 +161,6 @@ export default function CreateUpdateResources({
       });
       return;
     }
-    // // If initialValues is provided, it means we are updating an existing resource
-    // patchAsync({
-    //   url: `/resources/${initialValues.id}`,
-    //   data: formData,
-    // }).then(() => {
-    //   toast.success("Resource updated successfully");
-    //   patchReset();
-    //   onClose();
-    //   // Reset the form after successful submission
-    //   methods.reset();
-    // });
   };
 
   const resourceCategoryOptions = mapToSelectOptions(
@@ -294,12 +261,7 @@ export default function CreateUpdateResources({
                                 className="text-black lg:mt-2"
                               />
                             </div>
-                            <ImageFileInput
-                              name={`files.${index}.file`}
-                              supportedImageTypes={SUPPORTED_FORMATS}
-                              className="h-[224px]"
-                              supportedPdfType="application/pdf"
-                            />
+                             <FileUploadController name={`files.${index}.file`} className="h-[224px]" />
                           </div>
                           <div className="w-8/12 relative">
                             <Button
@@ -363,7 +325,6 @@ export default function CreateUpdateResources({
               </div>
 
               <ErrorMessage error={error} />
-              <ErrorMessage error={patchError} />
             </div>
             <div className="flex justify-end gap-3 mt-4">
               <Button

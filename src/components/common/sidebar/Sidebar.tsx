@@ -22,9 +22,10 @@ import {
   LogOut,
   LucideIcon,
   Settings,
+  Shapes,
   ShieldCheck,
   Upload,
-  User2,
+  User2
 } from "lucide-react";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -91,6 +92,15 @@ export default function Sidebar() {
           label: "Resource Keywords",
           href: "/admin/resources/resource-keywords",
         },
+      ],
+    },
+    {
+      label: "Course's",
+      icon: Shapes,
+      children: [
+        { label: "Course List", href: "/admin/course/course-list" },
+        { label: "Course Categories", href: "/admin/course/course-categories" },
+        
       ],
     },
     {

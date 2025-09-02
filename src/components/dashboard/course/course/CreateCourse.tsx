@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import ErrorMessage from "@/components/common/Errors/ErrorMessage";
+import { ICourse } from "@/components/main/training/types/traning";
 import ControlledInputField from "@/components/share/ControlledInputField";
 import ControlledTextareaField from "@/components/share/ControlledTextareaField";
 import ControlledToggleField from "@/components/share/ControlledToggleField";
@@ -17,7 +18,6 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import { ICourse } from "../types/types";
 import { resourcesSchema } from "./Schema/Resources";
 
 export default function CreateUpdateResources({

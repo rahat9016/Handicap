@@ -4,36 +4,39 @@ import { useGet } from "@/hooks/useGet";
 import { usePagination } from "@/hooks/usePagination";
 
 import { useSearchDebounce } from "@/hooks/useSearchDebounce";
+import { useAppSelector } from "@/lib/redux/hooks";
 import { format } from "date-fns";
 import { NotebookText, SquarePen } from "lucide-react";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import CreateUpdatePageSectionModal from "./CreateUpdatePageSection";
 import { IPageSection } from "./types";
 
 export default function PageSections() {
+  const { hasPermission } = useAppSelector((state) => state.permission);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [section, setSection] = useState<IPageSection>();
   const { search, handleSearchChange, debouncedSearch } =
-      useSearchDebounce(300);
+    useSearchDebounce(300);
   const {
     setCurrentPage,
     itemsPerPage,
     currentPage,
     totalItems,
     setTotalItems,
-    setItemsPerPage
+    setItemsPerPage,
   } = usePagination();
 
   const { data, isLoading } = useGet(
     "/page-sections",
     ["page-sections", currentPage.toString()],
     {
-    ...(itemsPerPage !== -1 && {
-      page: currentPage.toString(),
-      limit: itemsPerPage.toString(),
-    }),
-    search: debouncedSearch,
-  }
+      ...(itemsPerPage !== -1 && {
+        page: currentPage.toString(),
+        limit: itemsPerPage.toString(),
+      }),
+      search: debouncedSearch,
+    }
   );
 
   useEffect(() => {
@@ -48,8 +51,25 @@ export default function PageSections() {
   };
 
   const columns: ColumnDef<IPageSection>[] = [
-    { header: "Section ID", accessorKey: "id" },
-    { header: "Page", accessorKey: "pageId" },
+    {
+      header: "Thumbnail",
+      accessorKey: "imageUrls",
+      cell: (_value: string | number | boolean | string[], row: IPageSection) => {
+        return (
+          <div className="w-14 h-14 p-1 border flex items-center justify-center rounded-md cursor-pointer hover:opacity-80">
+            {row?.imageUrls[0] && (
+              <Image
+                src={row.imageUrls[0]}
+                width={44}
+                height={44}
+                alt="thumbnail"
+                className="rounded"
+              />
+            )}
+          </div>
+        );
+      },
+    },
     { header: "Section Type", accessorKey: "sectionType" },
     { header: "Order", accessorKey: "order" },
     { header: "Title", accessorKey: "title" },
@@ -90,7 +110,7 @@ export default function PageSections() {
               className="text-darkLiver hover:underline text-sm flex items-center gap-1"
             >
               <SquarePen size={16} />
-              Edit Content
+              Edit
             </button>
           </div>
         );
@@ -114,7 +134,7 @@ export default function PageSections() {
         showSearch
         searchValue={search}
         onSearchChange={handleSearchChange}
-        IsCreate // [If you need a create button, just pass true as a props]
+        IsCreate={hasPermission} // [If you need a create button, just pass true as a props]
         setIsModalOpen={setIsModalOpen} // [create modal open state]
       />
 

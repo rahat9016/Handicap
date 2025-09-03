@@ -47,7 +47,6 @@ export default function LanguageSetup() {
   };
 
   const columns: ColumnDef<ILanguage>[] = [
-    { header: "ID", accessorKey: "id" },
     { header: "Code", accessorKey: "code" },
     { header: "Name", accessorKey: "name" },
     { header: "Native Name", accessorKey: "nativeName" },

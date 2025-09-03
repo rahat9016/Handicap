@@ -3,10 +3,12 @@
 import { ColumnDef, DataTable } from "@/components/ui/data-table";
 import { useGet } from "@/hooks/useGet";
 import { usePagination } from "@/hooks/usePagination";
+import { usePatch } from "@/hooks/usePatch";
 import { useSearchDebounce } from "@/hooks/useSearchDebounce";
 import { Eye, SquarePen, UsersIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { IUser } from "../organizer/types";
+import { StatusToggle } from "../share/StatusToggle";
 import CreateUpdateUser from "./CreateUpdateUsers";
 import ViewDetails from "./ViewDetails";
 export default function Users() {
@@ -15,6 +17,9 @@ export default function Users() {
   const [user, setUser] = useState<IUser>();
   const { search, handleSearchChange, debouncedSearch } =
     useSearchDebounce(300);
+
+  // const [selectedUser, setSelectedUser] = useState<any>(null); // row currently selected
+  // const [isDialogOpen, setIsDialogOpen] = useState(false);
   const {
     setCurrentPage,
     itemsPerPage,
@@ -27,12 +32,16 @@ export default function Users() {
     "/user",
     ["user", currentPage.toString()],
     {
-    ...(itemsPerPage !== -1 && {
-      page: currentPage.toString(),
-      limit: itemsPerPage.toString(),
-    }),
-    search: debouncedSearch,
-  }
+      ...(itemsPerPage !== -1 && {
+        page: currentPage.toString(),
+        limit: itemsPerPage.toString(),
+      }),
+      search: debouncedSearch,
+    }
+  );
+  const { mutateAsync } = usePatch<IUser[]>(
+    (data) => console.log("Success", data),
+    [["user"]]
   );
 
   // Update total items whenever data changes
@@ -51,31 +60,12 @@ export default function Users() {
     setIsView(true);
   };
   const columns: ColumnDef<IUser>[] = [
-    { header: "ID", accessorKey: "id" },
-    { header: "First Name", accessorKey: "firstName",  sortable: true },
+    { header: "First Name", accessorKey: "firstName", sortable: true },
     { header: "Last Name", accessorKey: "lastName" },
     { header: "Email", accessorKey: "email", sortable: true },
     { header: "Phone", accessorKey: "phone" },
     { header: "User Role", accessorKey: "roleName" },
-    {
-      header: "Is Active",
-      accessorKey: "accountStatus",
-      cell: (value) => {
-        const isActive = value;
 
-        return (
-          <span
-            className={`px-2 py-1 rounded-full text-xs font-medium ${
-              isActive == "ACTIVE"
-                ? "bg-[#bfffda] text-green"
-                : "bg-rose-200 text-rose-700"
-            }`}
-          >
-            {isActive}
-          </span>
-        );
-      },
-    },
     {
       header: "Action",
       accessorKey: "actions",
@@ -97,6 +87,24 @@ export default function Users() {
               View
             </button>
           </div>
+        );
+      },
+    },
+    {
+      header: "Is Active",
+      accessorKey: "accountStatus",
+      cell: (_value, row) => {
+        return (
+          <StatusToggle
+            id={row.id}
+            status={row.status}
+            onConfirm={async (id, newStatus) => {
+              await mutateAsync({
+                url: `/user/${id}/status`,
+                data: { status: newStatus },
+              });
+            }}
+          />
         );
       },
     },

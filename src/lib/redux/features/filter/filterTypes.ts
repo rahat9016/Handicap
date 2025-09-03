@@ -4,4 +4,5 @@ export interface IInitialState {
   resourceTypes: string[];
   languages: string[]
   keywords: string[]
+  courseCategories: string[];
 }

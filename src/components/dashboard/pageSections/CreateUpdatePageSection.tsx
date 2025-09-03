@@ -1,4 +1,5 @@
 // src/components/page-sections/CreateSectionModal.tsx
+import { ControlledCheckField } from "@/components/share/ControlledCheckField";
 import ControlledInputField from "@/components/share/ControlledInputField";
 import ControlledSelectField from "@/components/share/ControlledSelectField";
 import InputLabel from "@/components/share/InputLabel";
@@ -99,46 +100,22 @@ export default function CreateSectionModal({
     mode: "onChange",
   });
 
-  // const sectionType = methods.watch("sectionType");
-
-  // useEffect(() => {
-  //   if (sectionType) {
-  //     // Set default configuration based on section type
-  //     const defaults = getDefaultConfiguration(sectionType);
-  //     // setConfiguration(defaults);
-  //     methods.setValue("configuration", defaults);
-  //   }
-  // }, [sectionType, methods]);
-
   useEffect(() => {
     if (initialValues) {
       methods.reset({
         ...initialValues,
         images: initialValues?.imageUrls,
+        isActive: Boolean(initialValues?.isActive),
       });
     }
   }, [initialValues, methods]);
-  // const getDefaultConfiguration = (type: string) => {
-  //   switch (type) {
-  //     case SectionType.HERO:
-  //       return { theme: "light", layout: "centered" };
-  //     case SectionType.FEATURE_GRID:
-  //       return { columns: 3, showIcons: true };
-  //     case SectionType.TESTIMONIALS:
-  //       return { layout: "carousel", autoplay: true };
-  //     default:
-  //       return {};
-  //   }
-  // };
 
   const onSubmit = (data: PageSectionForm) => {
     const formData = new FormData();
-    console.log(data);
-    // Required fields
     formData.append("pageId", data.pageId);
     formData.append("sectionType", data.sectionType);
     formData.append("order", data.order.toString());
-    formData.append("isActive", data.isActive.toString());
+    formData.append("isActive", String(data.isActive));
 
     // Optional fields
     if (data.title) formData.append("title", data.title);
@@ -148,16 +125,25 @@ export default function CreateSectionModal({
     if (data.buttonUrl) formData.append("buttonUrl", data.buttonUrl);
 
     // Handle image
-    if (Array.isArray(data.images)) {
-      data.images.forEach((img) => {
-        if (img instanceof File) {
-          formData.append("images", img);
-        } else if (typeof img === "string" && img.trim() !== "") {
-          formData.append("images", img);
-        }
-      });
+    const currentImages = data.images || [];
+    const newFiles = currentImages.filter((img) => img instanceof File);
+    const existingUrls = currentImages.filter(
+      (img) => typeof img === "string"
+    ) as string[];
+
+    // Append new files
+    newFiles.forEach((file) => formData.append("images", file));
+
+    // Track deleted images
+    let imagesToDelete: string[] = [];
+    if (isEditMode && initialValues?.imageUrls) {
+      const oldUrls = initialValues.imageUrls as string[];
+      imagesToDelete = oldUrls.filter((url) => !existingUrls.includes(url));
     }
 
+    if (imagesToDelete.length > 0) {
+      formData.append("imagesToDelete", imagesToDelete.join(","));
+    }
     if (isEditMode) {
       patchAsync({
         url: `/page-sections/${initialValues?.id}`,
@@ -279,12 +265,10 @@ export default function CreateSectionModal({
 
               {/* Status Field */}
               <div className="col-span-2 flex items-center gap-2">
-                <ControlledInputField
+                <ControlledCheckField
                   name="isActive"
-                  type="checkbox"
-                  className="w-4 h-4"
+                  label="Active Section (Visible on website)"
                 />
-                <InputLabel label="Active Section (Visible on website)" />
               </div>
             </div>
             {error?.errors?.length ||

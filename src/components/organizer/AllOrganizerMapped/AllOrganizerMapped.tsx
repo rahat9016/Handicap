@@ -4,16 +4,22 @@ import { ColumnDef, DataTable } from "@/components/ui/data-table";
 import { useGet } from "@/hooks/useGet";
 import { usePagination } from "@/hooks/usePagination";
 import { useSearchDebounce } from "@/hooks/useSearchDebounce";
-import { UserRoundPlus } from "lucide-react";
+import { useAppSelector } from "@/lib/redux/hooks";
+import { SquarePen, UserRoundPlus } from "lucide-react";
 import { useEffect, useState } from "react";
-import CreateOrganizerMappedModal from "./CreateOrganizerMappedModal";
+import { UserOrganizationAssignment } from "../types";
+import CreateUpdateOrganizerMappedModal from "./CreateUpdateOrganizerMappedModal";
 interface IOrganization {
+  action?: string;
   organizationName: string;
   role: string;
   userName: string;
 }
 export default function AllOrganizerMapped() {
+  const { hasPermission } =useAppSelector(state => state.permission)
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [organizationTypes, setOrganizationTypes] =
+    useState<UserOrganizationAssignment>();
   const {
     setCurrentPage,
     itemsPerPage,
@@ -22,18 +28,24 @@ export default function AllOrganizerMapped() {
     setTotalItems,
     setItemsPerPage,
   } = usePagination();
-  const { search, handleSearchChange, debouncedSearch } = useSearchDebounce(300);
+  const { search, handleSearchChange, debouncedSearch } =
+    useSearchDebounce(300);
   const { data, isLoading } = useGet(
     "/user-organization-role",
     ["user-organization-role", currentPage.toString()],
     {
-    ...(itemsPerPage !== -1 && {
-      page: currentPage.toString(),
-      limit: itemsPerPage.toString(),
-    }),
-    search: debouncedSearch,
-  }
+      ...(itemsPerPage !== -1 && {
+        page: currentPage.toString(),
+        limit: itemsPerPage.toString(),
+      }),
+      search: debouncedSearch,
+    }
   );
+
+  const handleEdit = (row: UserOrganizationAssignment) => {
+    setOrganizationTypes(row);
+    setIsModalOpen(true);
+  };
 
   // Update total items whenever data changes
   useEffect(() => {
@@ -41,14 +53,30 @@ export default function AllOrganizerMapped() {
       setTotalItems(data.meta?.totalItems || 0);
     }
   }, [data]);
-
+  
   const columns: ColumnDef<IOrganization>[] = [
     { header: "User Name", accessorKey: "userName" },
     { header: "Organization Name", accessorKey: "organizationName" },
     { header: "Role", accessorKey: "role" },
-    
-    
-  ];
+
+    hasPermission ? {
+      header: "Action",
+      accessorKey: "action",
+      cell: (_value: unknown, row: UserOrganizationAssignment) => {
+        return (
+          <div className="flex items-center gap-5">
+            <button
+              onClick={() => handleEdit(row as UserOrganizationAssignment)}
+              className="text-darkLiver hover:underline text-sm flex items-center gap-1"
+            >
+              <SquarePen size={16} />
+              Edit
+            </button>
+          </div>
+        );
+      },
+    }: undefined,
+  ].filter(Boolean) as ColumnDef<IOrganization>[];
   return (
     <div className="bg-white p-8 min-h-[85vh] border border-skeleton rounded-2xl">
       <DataTable
@@ -66,10 +94,14 @@ export default function AllOrganizerMapped() {
         showSearch
         searchValue={search}
         onSearchChange={handleSearchChange}
-        IsCreate // [If you need a create button, just pass true as a props]
+        IsCreate={hasPermission} // [If you need a create button, just pass true as a props]
         setIsModalOpen={setIsModalOpen} // [create modal open state]
       />
-      <CreateOrganizerMappedModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      <CreateUpdateOrganizerMappedModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        initialValues={organizationTypes}
+      />
     </div>
   );
 }

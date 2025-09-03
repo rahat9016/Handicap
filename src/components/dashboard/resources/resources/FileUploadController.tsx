@@ -16,11 +16,13 @@ interface FileUploadControllerProps {
   name: string;
   className?: string;
   initialUrl?: string;
+  label?: string
 }
 
 export function FileUploadController({
   name,
   className,
+  label
 }: FileUploadControllerProps) {
   const { control, getValues } = useFormContext();
   const initialUrl = getValues(name);
@@ -147,7 +149,7 @@ export function FileUploadController({
                     alt="gallery"
                   />
                   <span className="text-grayDark lg:text-[#A6A6A6] text-xs font-poppins font-normal">
-                    Upload file (image, pdf, doc)
+                    {label || "Upload file (image, pdf, doc)"}
                   </span>
                   <input
                     id={`${name}-file`}

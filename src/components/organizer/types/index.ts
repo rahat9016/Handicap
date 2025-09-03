@@ -37,6 +37,7 @@ export interface IUser {
   accountStatus: "ACTIVE" | "INACTIVE" | string;
   roleId: number;
   roleName: string;
+  status: boolean;
   actions?: string
 }
 
@@ -64,3 +65,27 @@ export interface IOrganizationResponse {
   updatedAt: string; // ISO date string
   creatorId: number;
 }
+
+
+export enum UserRole {
+  ADMIN = "ADMIN",
+  MODERATOR = "MODERATOR",
+  USER = "USER",
+}
+
+export interface UserOrganizationAssignment {
+  id: number;
+  userId: number;
+  organizationId: number;
+  roleId: number;
+  assignedById: number;
+  isActive: boolean;
+  validFrom: string;
+  validTo: string | null;
+  createdAt: string;
+  updatedAt: string;
+  userName: string;
+  role: UserRole;
+  organizationName: string;
+}
+

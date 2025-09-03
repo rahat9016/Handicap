@@ -9,7 +9,7 @@ import { format } from "date-fns";
 import { GraduationCap, SquarePen } from "lucide-react";
 import { useEffect, useState } from "react";
 import CreateUpdateCategories from "./CreateUpdateCategories";
-import { ApiResponse, ICategory } from "./types/Categories";
+import { ICategory } from "./types/Categories";
 
 export default function CourseCategories() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -27,7 +27,7 @@ export default function CourseCategories() {
   const { search, handleSearchChange, debouncedSearch } =
     useSearchDebounce(300);
 
-  const { data, isLoading } = useGet<ApiResponse<ICategory[]>>(
+  const { data, isLoading } = useGet<ICategory[]>(
     "/course-category",
     [
       "course-category",
@@ -111,7 +111,7 @@ export default function CourseCategories() {
     <div className="bg-white p-8 min-h-[85vh] border border-skeleton rounded-2xl">
       <DataTable
         columns={columns}
-        data={Array.isArray(data?.data?.data) ? data.data?.data : []}
+        data={Array.isArray(data?.data) ? data.data: []}
         isLoading={isLoading}
         totalItems={totalItems}
         currentPage={currentPage}

@@ -4,10 +4,12 @@ import { ColumnDef, DataTable } from "@/components/ui/data-table";
 import { useGet } from "@/hooks/useGet";
 import { usePagination } from "@/hooks/usePagination";
 import { useSearchDebounce } from "@/hooks/useSearchDebounce";
-import { FileCog } from "lucide-react";
+import { FileCog, SquarePen } from "lucide-react";
 import { useEffect, useState } from "react";
+import { IOrganizationType } from "../types/setup";
 import CreateUpdateOrganizationTypeSetup from "./CreateUpdateOrganizationTypeSetup";
 interface IOrganization {
+  actions?: string
   id: number;
   name: string;
   description: string;
@@ -15,28 +17,38 @@ interface IOrganization {
 }
 export default function OrganizationTypeSetup() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-   const { search, handleSearchChange, debouncedSearch } =
-      useSearchDebounce(300);
+  const [organization, setOrganization] = useState<IOrganizationType | null>(null);
+  const { search, handleSearchChange, debouncedSearch } =
+    useSearchDebounce(300);
   const {
     setCurrentPage,
     itemsPerPage,
     currentPage,
     totalItems,
     setTotalItems,
-    setItemsPerPage
+    setItemsPerPage,
   } = usePagination();
   const { data, isLoading } = useGet(
     "/organization-types",
     ["organization-types", currentPage.toString()],
     {
-    ...(itemsPerPage !== -1 && {
-      page: currentPage.toString(),
-      limit: itemsPerPage.toString(),
-    }),
-    search: debouncedSearch,
-  }
+      ...(itemsPerPage !== -1 && {
+        page: currentPage.toString(),
+        limit: itemsPerPage.toString(),
+      }),
+      search: debouncedSearch,
+    }
   );
 
+  const handleEdit = (row: IOrganizationType) => {
+    setIsModalOpen(true);
+    setOrganization(row)
+  };
+
+  // const { mutateAsync } = usePatch(
+  //     (data) => console.log("Success", data),
+  //     [["user"]]
+  //   );
   // Update total items whenever data changes
   useEffect(() => {
     if (data) {
@@ -45,28 +57,43 @@ export default function OrganizationTypeSetup() {
   }, [data]);
 
   const columns: ColumnDef<IOrganization>[] = [
-    { header: "ID", accessorKey: "id" },
     { header: "Name", accessorKey: "name" },
     { header: "Description", accessorKey: "description" },
     {
-    header: "Is Active",
-    accessorKey: "isActive",
-    cell: (value) => {
-      const isActive = value
+      header: "Is Active",
+      accessorKey: "isActive",
+      cell: (value) => {
+        const isActive = value;
 
-      return (
-        <span
-          className={`px-2 py-1 rounded-full text-xs font-medium ${
-            isActive
-              ? "bg-[#bfffda] text-green"
-              : "bg-rose-200 text-rose-700"
-          }`}
-        >
-          {isActive ? "Active" : "Inactive"}
-        </span>
-      );
+        return (
+          <span
+            className={`px-2 py-1 rounded-full text-xs font-medium ${
+              isActive ? "bg-[#bfffda] text-green" : "bg-rose-200 text-rose-700"
+            }`}
+          >
+            {isActive ? "Active" : "Inactive"}
+          </span>
+        );
+      },
     },
-  },
+    {
+      header: "Action",
+      accessorKey: "actions",
+      cell: (_value, row) => {
+        return (
+          <div className="flex items-center gap-5">
+            <button
+              onClick={() => handleEdit(row)}
+              className="text-darkLiver hover:underline text-sm flex items-center gap-1"
+            >
+              <SquarePen size={16} />
+              Edit Role
+            </button>
+          </div>
+        );
+      },
+    },
+    
   ];
   return (
     <div className="bg-white p-8 min-h-[85vh] border border-skeleton rounded-2xl">
@@ -88,7 +115,11 @@ export default function OrganizationTypeSetup() {
         IsCreate // [If you need a create button, just pass true as a props]
         setIsModalOpen={setIsModalOpen} // [create modal open state]
       />
-      <CreateUpdateOrganizationTypeSetup isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      <CreateUpdateOrganizationTypeSetup
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        initialValues={organization}
+      />
     </div>
   );
 }

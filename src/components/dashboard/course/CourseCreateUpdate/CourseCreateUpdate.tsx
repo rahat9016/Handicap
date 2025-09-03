@@ -15,8 +15,8 @@ import { toast } from "react-toastify";
 import { FileUploadController } from "../../resources/resources/FileUploadController";
 import { ICategory } from "../CourseCategories/types/Categories";
 import {
-    courseInformationSchema,
-    resourcesInformationUpdateForm,
+  courseInformationSchema,
+  resourcesInformationUpdateForm,
 } from "./Schema/Course";
 
 export default function CourseCreateUpdate() {
@@ -63,7 +63,7 @@ export default function CourseCreateUpdate() {
       <FormProvider {...methods}>
         <form onSubmit={methods.handleSubmit(onSubmit)} className="w-full">
           <div className="flex flex-col gap-6">
-              <FileUploadController name={`thumbNail`} className="h-[224px] w-full" />
+              <FileUploadController name={`thumbNail`} className="h-[224px] w-full" label="Upload File only (JPEG, JPG)" />
             <div className="grid grid-cols-1 gap-3 lg:gap-5">
               <div>
                 <InputLabel label="Title" required />

@@ -11,19 +11,29 @@ import { useGet } from "@/hooks/useGet";
 import { usePost } from "@/hooks/usePost";
 import { mapToSelectOptions } from "@/utils/mapToSelectOptions";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { UserRoleForm, userRoleSchema } from "../schema/AddOrganizer";
-import { IOrganization, IRole, IUser } from "../types";
+import {
+  IOrganization,
+  IRole,
+  IUser,
+  UserOrganizationAssignment,
+} from "../types";
 
-export default function CreateOrganizerMappedModal({
+export default function CreateUpdateOrganizerMappedModal({
   isOpen,
   onClose,
+  initialValues,
 }: {
   isOpen: boolean;
   onClose: () => void;
+  initialValues: UserOrganizationAssignment | undefined;
 }) {
-  const { data: userData } = useGet<IUser[]>(`/user/users-for-organizations`, ["users-for-organizations"]);
+  const { data: userData } = useGet<IUser[]>(`/user/users-for-organizations`, [
+    "users-for-organizations",
+  ]);
   const { data: organizationData } = useGet<IOrganization[]>(`/organizations`, [
     "organizations",
   ]);
@@ -39,6 +49,27 @@ export default function CreateOrganizerMappedModal({
   const methods = useForm<UserRoleForm>({
     resolver: yupResolver(userRoleSchema),
   });
+
+  useEffect(() => {
+    if (initialValues) {
+      methods.reset({
+        ...initialValues,
+        organizationId: initialValues.organizationId.toString(),
+        userId: initialValues.userId.toString(),
+        roleId: initialValues.roleId.toString(),
+      });
+    }
+  }, [initialValues, methods]);
+
+  useEffect(() => {
+    if (!isOpen) {
+      methods.reset({
+        organizationId: "",
+        userId: "",
+        roleId: "",
+      });
+    }
+  }, [isOpen, methods]);
 
   const onSubmit = (data: UserRoleForm) => {
     const formattedData = {
@@ -67,7 +98,7 @@ export default function CreateOrganizerMappedModal({
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="bg-white min-h-[50vh] w-[80vw] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Create User Role</DialogTitle>
+          <DialogTitle>{initialValues ? "Update User Role" : "Create User Role"}</DialogTitle>
         </DialogHeader>
         <FormProvider {...methods}>
           <form onSubmit={methods.handleSubmit(onSubmit)} className="w-full">
@@ -105,7 +136,7 @@ export default function CreateOrganizerMappedModal({
                 type="submit"
                 className="bg-dashboard-primary hover:bg-dashboard-primary text-white"
               >
-                Create
+                {initialValues ? "Update" : "Create"}
               </Button>
             </div>
           </form>

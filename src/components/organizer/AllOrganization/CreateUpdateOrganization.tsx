@@ -1,3 +1,4 @@
+import { ControlledCheckField } from "@/components/share/ControlledCheckField";
 import ControlledInputField from "@/components/share/ControlledInputField";
 import ControlledSelectField from "@/components/share/ControlledSelectField";
 import ControlledTextareaField from "@/components/share/ControlledTextareaField";
@@ -17,7 +18,11 @@ import { mapToSelectOptions } from "@/utils/mapToSelectOptions";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { OrganizationForm, organizationSchema, SUPPORTED_FORMATS } from "../schema/AddOrganizer";
+import {
+  OrganizationForm,
+  organizationSchema,
+  SUPPORTED_FORMATS,
+} from "../schema/AddOrganizer";
 import { IOrganizationResponse, IOrganizationTypes } from "../types";
 
 export default function CreateUpdateOrganization({
@@ -30,7 +35,7 @@ export default function CreateUpdateOrganization({
   initialValues?: IOrganizationResponse | undefined;
 }) {
   const { data } = useGet<IOrganizationTypes[]>(
-    "/organization-types/all?isActive=true",
+    "/organization-types/all",
     ["organizations"]
   );
   const {
@@ -50,7 +55,7 @@ export default function CreateUpdateOrganization({
     reset: patchReset,
   } = usePatch<OrganizationForm>(
     (data) => console.log("Success", data),
-    [["languages"]]
+    [["organizations"]]
   );
 
   const methods = useForm<OrganizationForm>({
@@ -68,10 +73,10 @@ export default function CreateUpdateOrganization({
         address: initialValues.address,
         description: initialValues.description,
         logo: initialValues.logoUrl || "",
+        isActive: Boolean(initialValues?.isActive),
       });
     }
   }, [initialValues, methods]);
-
 
   // Open the dialog when isOpen changes
   useEffect(() => {
@@ -98,9 +103,10 @@ export default function CreateUpdateOrganization({
     formData.append("typeId", data.typeId);
 
     formData.append(
-        "code",
-        data.name.toLowerCase().replace(/\s+/g, "-") + data.typeId
-      );
+      "code",
+      data.name.toLowerCase().replace(/\s+/g, "-") + data.typeId
+    );
+    formData.append("isActive", String(data.isActive));
 
     // Append optional fields only if they are provided
     if (data.contactEmail) formData.append("contactEmail", data.contactEmail);
@@ -145,7 +151,10 @@ export default function CreateUpdateOrganization({
           <form onSubmit={methods.handleSubmit(onSubmit)} className="w-full">
             <div className="border-b pb-8">
               <InputLabel label="Logo" />
-              <ImageFileInput name="logo"  supportedImageTypes={SUPPORTED_FORMATS} />
+              <ImageFileInput
+                name="logo"
+                supportedImageTypes={SUPPORTED_FORMATS}
+              />
             </div>
             <div className="flex flex-col gap-6 mt-8">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 lg:gap-5">
@@ -204,6 +213,12 @@ export default function CreateUpdateOrganization({
                     className="bg-white"
                   />
                 </div>
+              </div>
+              <div className="col-span-2 flex items-center gap-2">
+                <ControlledCheckField
+                  name="isActive"
+                  label="Active (Visible on website)"
+                />
               </div>
             </div>
             {error?.errors && (

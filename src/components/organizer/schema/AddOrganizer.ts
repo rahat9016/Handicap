@@ -56,6 +56,7 @@ export const organizationSchema = Yup.object().shape({
         return value instanceof File;
       }
     ),
+    isActive: Yup.boolean().default(true),
 });
 
 export const userRoleSchema = Yup.object().shape({

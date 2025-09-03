@@ -81,7 +81,7 @@ export function DataTable<T>({
   IsCreate = false,
   routeURL,
 }: DataTableProps<T>) {
-  const router = useRouter()
+  const router = useRouter();
   const totalPages = Math.ceil(totalItems / itemsPerPage);
   const [selectedRows, setSelectedRows] = useState<Set<number>>(new Set());
   const [visibleColumns, setVisibleColumns] = useState<Set<string>>(
@@ -230,7 +230,6 @@ export function DataTable<T>({
           showSearch={showSearch}
           searchPlaceholder={searchPlaceholder}
         />
-
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="h-[44px]">
@@ -238,7 +237,35 @@ export function DataTable<T>({
               Columns
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-40">
+
+          <DropdownMenuContent align="end" className="w-48">
+            {/* Select All / Deselect All */}
+            <DropdownMenuCheckboxItem
+              checked={
+                visibleColumns.size === 0
+                  ? false
+                  : visibleColumns.size === columns.length
+                  ? true
+                  : "indeterminate"
+              }
+              onCheckedChange={() => {
+                if (visibleColumns.size === columns.length) {
+                  // Deselect all
+                  setVisibleColumns(new Set());
+                } else {
+                  // Select all
+                  setVisibleColumns(
+                    new Set(columns.map((c) => c.accessorKey as string))
+                  );
+                }
+              }}
+            >
+              {visibleColumns.size === columns.length
+                ? "Deselect All"
+                : "Select All"}
+            </DropdownMenuCheckboxItem>
+            <div className="h-px bg-slate-200 my-1" /> {/* separator */}
+            {/* Individual Columns */}
             {columns.map((col) => (
               <DropdownMenuCheckboxItem
                 key={String(col.accessorKey)}
@@ -284,7 +311,7 @@ export function DataTable<T>({
               if (routeURL) {
                 router.push(routeURL);
               } else if (setIsModalOpen) {
-                setIsModalOpen(true); 
+                setIsModalOpen(true);
               }
             }}
           >
@@ -295,6 +322,134 @@ export function DataTable<T>({
       <div className="rounded-md border">
         <div className="w-full overflow-x-auto">
           <Table className="min-w-full border-collapse">
+  <TableHeader>
+    <TableRow className="bg-[#C6DFF8] h-[62px]">
+      {/* All checkbox column */}
+      <TableHead className="w-10">
+        <input
+          className="cursor-pointer"
+          type="checkbox"
+          checked={selectedRows.size === sortedData.length && sortedData.length > 0}
+          onChange={toggleAllRows}
+        />{" "}
+        All
+      </TableHead>
+
+      {/* SL column */}
+      <TableHead className="w-16 text-center">SL</TableHead>
+
+      {/* Other dynamic columns */}
+      {visibleColumns.size === 0 ? (
+        <TableHead className="text-center w-full">No columns selected</TableHead>
+      ) : (
+        columns
+          .filter((c) => visibleColumns.has(c.accessorKey as string))
+          .map((column, index) => (
+            <TableHead
+              key={index}
+              onClick={() => handleSort(column.accessorKey as string, column.sortable)}
+              className={`font-medium font-inter text-base text-erieBlack max-w-[200px] truncate whitespace-nowrap select-none ${
+                columns.length - 1 !== index ? "border-r" : ""
+              } ${column.sortable ? "cursor-pointer" : ""}`}
+            >
+              <span className="flex items-center justify-between">
+                {column.header}
+                {column.sortable && (
+                  <span>
+                    {sortConfig.key === column.accessorKey ? (
+                      sortConfig.direction === "asc" ? (
+                        <ArrowDownNarrowWide size={16} />
+                      ) : (
+                        <ArrowUpNarrowWide size={16} />
+                      )
+                    ) : (
+                      <ArrowUpNarrowWide size={16} className="opacity-50" />
+                    )}
+                  </span>
+                )}
+              </span>
+            </TableHead>
+          ))
+      )}
+    </TableRow>
+  </TableHeader>
+
+  <TableBody>
+    {visibleColumns.size === 0 ? (
+      <TableRow>
+        <TableCell colSpan={1} className="text-center h-24">
+          No columns selected
+        </TableCell>
+      </TableRow>
+    ) : isLoading ? (
+      Array.from({ length: itemsPerPage }).map((_, rowIndex) => (
+        <TableRow className="h-[62px]" key={`skeleton-${rowIndex}`}>
+          {/* All checkbox skeleton */}
+          <TableCell className="w-10">
+            <Skeleton className="h-4 w-4 rounded-sm mx-auto" />
+          </TableCell>
+
+          {/* SL skeleton */}
+          <TableCell className="w-16 text-center">
+            <Skeleton className="h-4 w-6 mx-auto" />
+          </TableCell>
+
+          {/* Other dynamic column skeletons */}
+          {columns
+            .filter((c) => visibleColumns.has(c.accessorKey as string))
+            .map((column, colIndex) => (
+              <TableCell key={`skeleton-${rowIndex}-${colIndex}`} className="max-w-[200px]">
+                <Skeleton className="h-4 w-full" />
+              </TableCell>
+            ))}
+        </TableRow>
+      ))
+    ) : sortedData.length === 0 ? (
+      <TableRow>
+        <TableCell colSpan={visibleColumns.size + 2} className="h-24 text-center">
+          No data found
+        </TableCell>
+      </TableRow>
+    ) : (
+      sortedData.map((row, rowIndex) => (
+        <TableRow
+          className="h-[62px] text-darkLiver font-inter font-normal text-sm"
+          key={rowIndex}
+        >
+          {/* All checkbox actual */}
+          <TableCell className="w-10">
+            <input
+              type="checkbox"
+              checked={selectedRows.has(rowIndex)}
+              onChange={() => toggleRow(rowIndex)}
+              className="cursor-pointer"
+            />
+          </TableCell>
+
+          {/* SL actual */}
+          <TableCell className="w-16 text-center">{rowIndex + 1}</TableCell>
+
+          {/* Other dynamic columns */}
+          {columns
+            .filter((c) => visibleColumns.has(c.accessorKey as string))
+            .map((column) => {
+              const value = row[column.accessorKey];
+              return (
+                <TableCell
+                  key={`${rowIndex}-${String(column.accessorKey)}`}
+                  className="max-w-[200px] truncate whitespace-nowrap"
+                >
+                  {column?.cell ? column.cell(value, row) : (value as React.ReactNode)}
+                </TableCell>
+              );
+            })}
+        </TableRow>
+      ))
+    )}
+  </TableBody>
+</Table>
+
+          {/* <Table className="min-w-full border-collapse">
             <TableHeader>
               <TableRow className="bg-[#C6DFF8] h-[62px]">
                 <TableHead className="w-10">
@@ -309,6 +464,7 @@ export function DataTable<T>({
                   />{" "}
                   All
                 </TableHead>
+                 <TableHead className="w-16 text-center">SL</TableHead>
                 {visibleColumns.size === 0 ? (
                   <TableHead className="text-center w-full">
                     No columns selected
@@ -401,6 +557,9 @@ export function DataTable<T>({
                         className="cursor-pointer"
                       />
                     </TableCell>
+                    <TableCell className="w-16 text-center">
+                      {rowIndex + 1}
+                    </TableCell>
                     {columns
                       .filter((c) =>
                         visibleColumns.has(c.accessorKey as string)
@@ -422,7 +581,7 @@ export function DataTable<T>({
                 ))
               )}
             </TableBody>
-          </Table>
+          </Table> */}
         </div>
 
         <Pagination

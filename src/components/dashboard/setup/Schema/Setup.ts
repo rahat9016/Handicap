@@ -1,11 +1,15 @@
 import * as yup from "yup";
 import { InferType } from "yup";
 export const organizerTypeSetup = yup.object().shape({
-  name: yup.string()
-      .required("Organizer name is required")
-      .min(1, "Organizer name is required"),
+  name: yup
+    .string()
+    .required("Organizer name is required")
+    .min(1, "Organizer name is required"),
+  description: yup
+    .string()
+    .max(255, "Description must be at most 255 characters"),
+  isActive: yup.boolean().default(true),
 });
-
 
 export const languageSchema = yup.object({
   code: yup

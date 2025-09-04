@@ -61,17 +61,6 @@ const TrainingStepper = ({ steps }: { steps: IStepper[] }) => {
         })}
         </div>
       </div>
-
-      {/* {active > 0 && (
-        <button className="btn" onClick={handlePrev}>
-          Back
-        </button>
-      )}
-      {active < steps.length && (
-        <button className="btn" onClick={handleNext}>
-          {active === steps.length - 1 ? "Finish" : "Next"}
-        </button>
-      )} */}
     </>
   );
 };

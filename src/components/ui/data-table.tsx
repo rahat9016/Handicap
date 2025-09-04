@@ -59,6 +59,8 @@ interface DataTableProps<T> {
   setIsModalOpen?: (isOpen: boolean) => void;
   IsCreate?: boolean;
   routeURL?: string;
+  setSelectedId?: (id: string) => void;
+  options?: { value: string; label: string }[];
 }
 
 export function DataTable<T>({
@@ -80,6 +82,8 @@ export function DataTable<T>({
   setIsModalOpen,
   IsCreate = false,
   routeURL,
+  setSelectedId,
+  options,
 }: DataTableProps<T>) {
   const router = useRouter();
   const totalPages = Math.ceil(totalItems / itemsPerPage);
@@ -229,6 +233,8 @@ export function DataTable<T>({
           onSearchChange={onSearchChange}
           showSearch={showSearch}
           searchPlaceholder={searchPlaceholder}
+          setSelectedId={setSelectedId}
+          options={options}
         />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

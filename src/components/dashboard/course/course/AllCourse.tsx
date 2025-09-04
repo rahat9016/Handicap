@@ -1,18 +1,30 @@
 "use client";
 import { ICourse } from "@/components/main/training/types/traning";
+import { IOrganization } from "@/components/organizer/types";
 import { ColumnDef, DataTable } from "@/components/ui/data-table";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { useGet } from "@/hooks/useGet";
 import { usePagination } from "@/hooks/usePagination";
 import { useSearchDebounce } from "@/hooks/useSearchDebounce";
+import { useRouter } from "@/i18n/navigation";
 import { useAppSelector } from "@/lib/redux/hooks";
+import { mapToSelectOptions } from "@/utils/mapToSelectOptions";
 import { EllipsisVertical, Shapes, Video } from "lucide-react";
 import Image from "next/image";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export default function AllCourse() {
+  const router = useRouter();
   const { organizationId } = useAppSelector((state) => state.organizer);
-  const { adminOrganizationPermission } = useAppSelector((state) => state.permission);
+  const { adminOrganizationPermission, hasPermission } = useAppSelector(
+    (state) => state.permission
+  );
+  const [selectedId, setSelectedId] = useState<string | undefined>(undefined);
   const {
     setCurrentPage,
     itemsPerPage,
@@ -24,16 +36,22 @@ export default function AllCourse() {
 
   const { search, handleSearchChange, debouncedSearch } =
     useSearchDebounce(300);
-  // const endpoint = selectedId
-  //   ? `/resources/organization/${selectedId}`
-  //   : organizationId
-  //   ? `/resources/organization/${organizationId}`
-  //   : "/course";
-
+  const { data: organizationsData } = useGet<IOrganization[]>(
+    "/organizations",
+    ["organizations"],
+    {},
+    { enabled: hasPermission }
+  );
+  const endpoint = selectedId
+    ? `/course/organization/${selectedId}`
+    : organizationId
+    ? `/course/organization/${organizationId}`
+    : "/course";
+  console.log(selectedId);
   const shouldFetch = organizationId !== undefined;
 
   const { data, isLoading } = useGet<ICourse[]>(
-    "/course",
+    endpoint,
     ["courseList", currentPage.toString(), organizationId ?? "all"],
     {
       ...(itemsPerPage !== -1 && {
@@ -97,7 +115,7 @@ export default function AllCourse() {
     },
     { header: "Duration ", accessorKey: "durationMinutes" },
     { header: "Objectives", accessorKey: "objectives" },
-    
+
     {
       header: "Is Active",
       accessorKey: "isActive",
@@ -117,33 +135,34 @@ export default function AllCourse() {
     },
     adminOrganizationPermission ? {
       header: "Action",
-      accessorKey: "actions",
-      cell: () => {
+      accessorKey: "id",
+      cell: (value: string | number | undefined) => {
+        return (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button className="p-1 border border-skeleton rounded bg-[#F5F5F5] cursor-pointer">
+                <EllipsisVertical className="text-lg text-darkLiver" />
+              </button>
+            </DropdownMenuTrigger>
 
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <button className="p-1 border border-skeleton rounded bg-[#F5F5F5] cursor-pointer">
-              <EllipsisVertical className="text-lg text-darkLiver" />
-            </button>
-          </DropdownMenuTrigger>
-
-          <DropdownMenuContent align="end" className="w-32">
-            <DropdownMenuItem
-              onClick={() => {
-                // your edit logic here
-                console.log("Edit clicked:",);
-              }}
-              className="flex items-center gap-1 cursor-pointer text-darkLiver font-inter font-normal text-sm"
-            >
-              <Video />Add Video
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
-    },
+            <DropdownMenuContent align="end" className="w-32">
+              <DropdownMenuItem
+                onClick={() => {
+                  router.push(`/admin/course/course-video-upload/${value}`);
+                }}
+                className="flex items-center gap-1 cursor-pointer text-darkLiver font-inter font-normal text-sm"
+              >
+                <Video />
+                Add Video
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        );
+      },
     } : undefined,
   ].filter(Boolean) as ColumnDef<ICourse>[];
+
+  const options = mapToSelectOptions(organizationsData?.data, "name", "id");
 
   return (
     <div className="bg-white p-8 min-h-[85vh] border border-skeleton rounded-2xl">
@@ -165,26 +184,10 @@ export default function AllCourse() {
         IsCreate={adminOrganizationPermission} // [If you need a create button, just pass true as a props]
         // setIsModalOpen={setIsModalOpen} // [create modal open state]
         routeURL="/admin/course/course-create" // [If you need to navigate to a different page, just pass the route URL as a props]
+        options={options}
+        setSelectedId={setSelectedId}
       />
-      {/* <CreateUpdateResources
-        isOpen={isModalOpen}
-        onClose={() => {
-          setIsModalOpen(false);
-          // setResource(undefined);
-        }}
-        // initialValues={resource}
-      /> */}
-
-      {/* {resource && (
-        <ViewResourceDetails
-          isOpen={isView}
-          onClose={() => {
-            setIsView(false);
-            setResource(undefined);
-          }}
-          resource={resource}
-        />
-      )} */}
+      
     </div>
   );
 }

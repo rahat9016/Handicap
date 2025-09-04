@@ -7,9 +7,11 @@ import InputLabel from "@/components/share/InputLabel";
 import { Button } from "@/components/ui/button";
 import { useGet } from "@/hooks/useGet";
 import { usePost } from "@/hooks/usePost";
+import { Link } from "@/i18n/navigation";
 import { useAppSelector } from "@/lib/redux/hooks";
 import { mapToSelectOptions } from "@/utils/mapToSelectOptions";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { ArrowLeft } from "lucide-react";
 import { FormProvider, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { FileUploadController } from "../../resources/resources/FileUploadController";
@@ -60,10 +62,20 @@ export default function CourseCreateUpdate() {
   const categoryOptions = mapToSelectOptions(data?.data, "name", "id");
   return (
     <div className="bg-white p-7 border rounded-lg min-h-[80vh]">
+      <Link href={"/admin/course/course-list"} className="mb-6 inline-block ">
+        <Button className="bg-dashboard-primary text-white h-10 font-inter text-sm font-normal">
+          <ArrowLeft className="mr-2 h-4 w-4" />
+          Back to Course
+        </Button>
+      </Link>
       <FormProvider {...methods}>
         <form onSubmit={methods.handleSubmit(onSubmit)} className="w-full">
           <div className="flex flex-col gap-6">
-              <FileUploadController name={`thumbNail`} className="h-[224px] w-full" label="Upload File only (JPEG, JPG)" />
+            <FileUploadController
+              name={`thumbNail`}
+              className="h-[224px] w-full"
+              label="Upload File only (JPEG, JPG)"
+            />
             <div className="grid grid-cols-1 gap-3 lg:gap-5">
               <div>
                 <InputLabel label="Title" required />

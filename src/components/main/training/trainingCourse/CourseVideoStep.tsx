@@ -1,26 +1,77 @@
 import Paragraph from "@/components/share/Paragraph";
 import Title from "@/components/share/Title";
+import { useGet } from "@/hooks/useGet";
+import { getVideoUrl } from "@/utils/video";
+import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
+import { ICourseContentItem } from "../types/traning";
+
 import CoursePreview from "./CoursePreview";
-import CourseVideo from "./CourseVideo";
+import HlsPlayer from "./HlsPlayer";
+import { VideoItemSkeleton } from "./VideoItemSkeleton";
 
 export default function CourseVideoStep() {
+  const { id } = useParams();
+  const { data, isLoading } = useGet<ICourseContentItem[]>(
+    `/course/${id}/items`,
+    ["course"]
+  );
+  const [selectedVideo, setSelectedVideo] = useState<ICourseContentItem | null>(
+    null
+  );
+
+  useEffect(() => {
+    if (data?.data?.length && !selectedVideo) {
+      setSelectedVideo(data.data[0]);
+    }
+  }, [data, selectedVideo]);
+
+  const videoUrl =
+  selectedVideo && id && selectedVideo.contentId !== null
+    ? getVideoUrl(id, selectedVideo.contentId)
+    : null;
+
   return (
     <div>
-      <div className="container">
+      <div className="container ">
         <div className="w-3/4">
-          <Title className="mb-3">Creating an Inclusive Workplace</Title>
+          <Title className="mb-3">{selectedVideo?.content?.title}</Title>
           <Paragraph className="text-[#8F8F8F] mb-14">
-            Disability inclusion means ensuring that persons with disabilities
-            have equal opportunities to participate fully in all areas of life
+            {selectedVideo?.content?.description}
           </Paragraph>
         </div>
         <div className="flex items-start gap-4 mb-10">
           <div className="w-3/4 lg:h-[500px]">
-            <div></div>
-            <CourseVideo />
+            {videoUrl ? (
+              <HlsPlayer
+                src={videoUrl}
+                controls
+                autoPlay
+                width="100%"
+                height={520}
+                selectedVideo={selectedVideo}
+              />
+            ) : (
+              <p>Loading video...</p>
+            )}
           </div>
+
           <div className="w-1/4">
-            <CoursePreview />
+            {isLoading ? (
+              <div className="flex flex-col gap-4">
+                {Array.from({ length: 5 }, (_, index) => (
+                  <VideoItemSkeleton key={index} />
+                ))}
+              </div>
+            ) : (
+              <div>
+                <CoursePreview
+                  courses={data?.data || []}
+                  setSelectedVideo={setSelectedVideo}
+                  selectedVideo={selectedVideo}
+                />
+              </div>
+            )}
           </div>
         </div>
       </div>

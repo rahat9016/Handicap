@@ -3440,10 +3440,10 @@ hls-video-element@^1.5.5:
     hls.js "^1.6.5"
     media-tracks "^0.3.3"
 
-hls.js@^1.6.5:
-  version "1.6.5"
-  resolved "https://registry.npmjs.org/hls.js/-/hls.js-1.6.5.tgz"
-  integrity sha512-KMn5n7JBK+olC342740hDPHnGWfE8FiHtGMOdJPfUjRdARTWj9OB+8c13fnsf9sk1VtpuU2fKSgUjHvg4rNbzQ==
+hls.js@^1.6.11, hls.js@^1.6.5:
+  version "1.6.11"
+  resolved "https://registry.npmjs.org/hls.js/-/hls.js-1.6.11.tgz"
+  integrity sha512-tdDwOAgPGXohSiNE4oxGr3CI9Hx9lsGLFe6TULUvRk2TfHS+w1tSAJntrvxsHaxvjtr6BXsDZM7NOqJFhU4mmg==
 
 hls.js@~1.5.19:
   version "1.5.20"

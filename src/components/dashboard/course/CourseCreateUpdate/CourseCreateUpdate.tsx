@@ -6,23 +6,35 @@ import ControlledTextareaField from "@/components/share/ControlledTextareaField"
 import InputLabel from "@/components/share/InputLabel";
 import { Button } from "@/components/ui/button";
 import { useGet } from "@/hooks/useGet";
+import { usePatch } from "@/hooks/usePatch";
 import { usePost } from "@/hooks/usePost";
-import { Link } from "@/i18n/navigation";
+import { Link, useRouter } from "@/i18n/navigation";
 import { useAppSelector } from "@/lib/redux/hooks";
 import { mapToSelectOptions } from "@/utils/mapToSelectOptions";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { ArrowLeft } from "lucide-react";
+import { useParams } from "next/navigation";
+import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { FileUploadController } from "../../resources/resources/FileUploadController";
 import { ICategory } from "../CourseCategories/types/Categories";
+import { ICourseDetails } from "../types/types";
 import {
   courseInformationSchema,
   resourcesInformationUpdateForm,
 } from "./Schema/Course";
 
 export default function CourseCreateUpdate() {
+  const { id } = useParams();
+  const router = useRouter();
   const { data } = useGet<ICategory[]>("/course-category", ["course-category"]);
+  const { data: courseData } = useGet<ICourseDetails>(
+    `/course/${id}`,
+    ["courseList", id as string],
+    {},
+    { enabled: id !== undefined }
+  );
   const { mutateAsync, error } = usePost(
     "/course",
     (data) => {
@@ -30,14 +42,35 @@ export default function CourseCreateUpdate() {
     },
     [["courseList"]]
   );
+  const {
+    mutateAsync: patchAsync,
+    reset: patchReset,
+    error: patchError,
+  } = usePatch((data) => console.log("Success", data), [["courseList"]]);
+  
+
   const { organizationId } = useAppSelector((state) => state.organizer);
   const methods = useForm({
     resolver: yupResolver(courseInformationSchema),
     defaultValues: {},
     mode: "onChange",
   });
+
+  useEffect(() => {
+    if (id && courseData?.data) {
+      methods.reset({
+        title: courseData.data.title,
+        description: courseData.data.description,
+        objectives: courseData.data.objectives,
+        thumbNail: courseData.data.thumbnailUrl,
+        categoryId: String(courseData.data.CourseCategory?.id),
+        organizationId: organizationId,
+        // isPrivate: courseData.data.isPrivate,
+      });
+    }
+  }, [courseData?.data, id, methods, organizationId]);
+
   const onSubmit = (data: resourcesInformationUpdateForm) => {
-    console.log({ data });
     const formData = new FormData();
     formData.append("title", data.title);
     formData.append("categoryId", data.categoryId);
@@ -46,20 +79,29 @@ export default function CourseCreateUpdate() {
     if (data.objectives) formData.append("objectives", data.objectives);
     if (data.thumbNail instanceof File) {
       formData.append("thumbNail", data.thumbNail);
-    } else if (
-      typeof data.thumbNail === "string" &&
-      data.thumbNail.trim() !== ""
-    ) {
-      formData.append("thumbNail", data.thumbNail);
-    }
+    } 
 
+    if (id) {
+      patchAsync({
+        url: `/course/${id ? id : id}`,
+        data: formData,
+      }).then(() => {
+        toast.success("Course updated successfully");
+        patchReset();
+        // Reset the form after successful submission
+        methods.reset();
+      });
+      return;
+    }
     mutateAsync(formData).then(() => {
       toast.success("Course created successfully");
       methods.reset();
     });
+    router.push("/admin/course/course-list");
   };
 
   const categoryOptions = mapToSelectOptions(data?.data, "name", "id");
+
   return (
     <div className="bg-white p-7 border rounded-lg min-h-[80vh]">
       <Link href={"/admin/course/course-list"} className="mb-6 inline-block ">
@@ -115,13 +157,14 @@ export default function CourseCreateUpdate() {
               </div>
             </div>
             <ErrorMessage error={error} />
+            <ErrorMessage error={patchError} />
           </div>
           <div className="flex justify-end gap-3 mt-4">
             <Button
               type="submit"
               className="bg-dashboard-primary hover:bg-dashboard-primary text-white"
             >
-              Create
+              {id ? "Update" : "Create"}
             </Button>
           </div>
         </form>

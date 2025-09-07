@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import ErrorMessage from "@/components/common/Errors/ErrorMessage";
 import ControlledInputField from "@/components/share/ControlledInputField";
 import ControlledTextareaField from "@/components/share/ControlledTextareaField";
 import InputLabel from "@/components/share/InputLabel";
@@ -9,7 +10,13 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { Trash } from "lucide-react";
 import { useParams } from "next/navigation";
 import { useEffect } from "react";
-import { FormProvider, useFieldArray, useForm } from "react-hook-form";
+import {
+  Controller,
+  FormProvider,
+  useFieldArray,
+  useForm,
+} from "react-hook-form";
+import { toast } from "react-toastify";
 import { videoUploadSchema } from "../course/Schema/Resources";
 
 export default function CreateUpdateCourseVideoFiles({
@@ -18,18 +25,24 @@ export default function CreateUpdateCourseVideoFiles({
   initialValues?: any[] | undefined;
 }) {
   const { id } = useParams();
-  const { mutateAsync } = usePost(
+  const {
+    mutateAsync,
+    reset: patchReset,
+    error: patchError,
+  } = usePost(
     `/course/course-content-upload/${id}`,
     (data) => {
       console.log("POST success", data);
     },
-    [["resources"]]
+    [["allCourseList"]]
   );
 
   const methods = useForm({
     resolver: yupResolver(videoUploadSchema),
     defaultValues: {
-      files: [{ title: "", description: "", file: "" as string }],
+      files: [
+        { uploadType: "file", title: "", description: "", file: "", url: "" },
+      ],
     },
     mode: "onChange",
   });
@@ -38,7 +51,7 @@ export default function CreateUpdateCourseVideoFiles({
     control,
     name: "files",
   });
-  console.log(methods.formState.errors);
+
   useEffect(() => {
     if (initialValues) {
       methods.reset({
@@ -46,6 +59,8 @@ export default function CreateUpdateCourseVideoFiles({
           title: file.title ?? "",
           description: file.description ?? "",
           file: file.filePath ?? null,
+          url: file.url ?? "",
+          uploadType: file.uploadType ?? "file",
         })),
       });
     }
@@ -57,128 +72,186 @@ export default function CreateUpdateCourseVideoFiles({
 
     values?.forEach((_file, idx) => {
       const currentFile = watch(`files.${idx}` as const);
-      ["title", "description", "file"].every(
+      ["title", "description", "file", "url"].every(
         (field) => !!currentFile?.[field as keyof typeof currentFile]
       );
     });
 
     if (valid) {
       append({
+        uploadType: "file",
         title: "",
         description: "",
-        file: "" as string,
+        file: "",
+        url: "",
       });
     }
   };
 
   const onSubmit = async (data: any) => {
     const formData = new FormData();
+    console.log(data);
 
     if (data.files.length > 0) {
       const f = data.files[0];
-      let fileToAppend: File | null = null;
 
-      if (f.file instanceof File) {
-        fileToAppend = f.file;
+      // append meta fields
+      formData.append("title", f.title);
+      formData.append("description", f.description);
+
+      if (f.uploadType === "file" && f.file instanceof File) {
+        formData.append("video", f.file);
+        formData.append("contentType", "VIDEO");
+      } else if (f.uploadType === "url" && typeof f.file === "string") {
+        formData.append("link", f.url);
+        formData.append("contentType", "LINK");
       }
-
-      if (fileToAppend) {
-        formData.append(`video`, fileToAppend);
-      }
-
-      // Always append meta fields
-      formData.append(`title`, f.title);
-      formData.append(`description`, f.description);
     }
 
-    mutateAsync(formData);
+    mutateAsync(formData).then(() => {
+      toast.success("Video uploaded successfully");
+      patchReset();
+      // Reset the form after successful submission
+      methods.reset();
+    });
   };
 
   useEffect(() => {
-    if (fields.length === 0)
-      append({ title: "", description: "", file: "" as string });
+    if (fields.length === 0) {
+      append({
+        title: "",
+        description: "",
+        file: "",
+        url: "",
+        uploadType: "file" as const,
+      });
+    }
   }, [fields, append]);
+
   return (
     <div className="bg-white p-7 border rounded-lg">
       <FormProvider {...methods}>
         <form onSubmit={methods.handleSubmit(onSubmit)} className="w-full">
-          {
-            <div className="flex flex-col gap-3">
-              {fields.map((resources, index) => {
-                return (
-                  <div
-                    id={`files-${resources.id}`}
-                    key={resources.id}
-                    className="bg-slate-50 p-4 border rounded-lg flex flex-row gap-4 relative "
-                  >
-                    <div>
-                      <div className="w-4/12 flex items-center justify-between">
-                        <InputLabel
-                          label="Video File"
-                          required
-                          className="text-black lg:mt-2"
+          <div className="flex flex-col gap-3">
+            {fields.map((resources, index) => {
+              const uploadType = watch(`files.${index}.uploadType`);
+              return (
+                <div
+                  id={`files-${resources.id}`}
+                  key={resources.id}
+                  className="bg-slate-50 p-4 border rounded-lg flex flex-row gap-4 relative"
+                >
+                  <div className="w-4/12">
+                    <div className="flex gap-4 mt-2">
+                      <label className="flex items-center gap-2">
+                        <Controller
+                          name={`files.${index}.uploadType`}
+                          control={control}
+                          render={({ field }) => (
+                            <input
+                              type="radio"
+                              value="file"
+                              checked={field.value === "file"}
+                              onChange={(e) => {
+                                field.onChange(e);
+                                methods.setValue(`files.${index}.url`, "");
+                              }}
+                            />
+                          )}
                         />
-                      </div>
-                      <VideoUploadController
-                        name={`files.${index}.file`}
-                        className="h-[224px]"
-                      />
+                        File
+                      </label>
+                      <label className="flex items-center gap-2">
+                        <Controller
+                          name={`files.${index}.uploadType`}
+                          control={control}
+                          render={({ field }) => (
+                            <input
+                              type="radio"
+                              value="url"
+                              checked={field.value === "url"}
+                              onChange={(e) => {
+                                field.onChange(e);
+                                methods.setValue(`files.${index}.file`, "");
+                              }}
+                            />
+                          )}
+                        />
+                        YouTube URL
+                      </label>
                     </div>
-                    <div className="w-[80%] relative ">
-                      <Button
-                        type="button"
-                        onClick={() => remove(index)}
-                        className="text-red-500 w-7 h-7 flex items-center justify-center rounded-sm ml-auto absolute right-0 bg-rose-100 hover:bg-rose-200"
-                      >
-                        <Trash />
-                      </Button>
-                      <div className="grid grid-cols-1 gap-4 items-center mt-3">
-                        <div className="border-b lg:border-none border-[#E4E4E4]">
-                          <InputLabel
-                            className="text-black lg:mb-1 "
-                            label="Title"
-                            required
-                          />
-                          <ControlledInputField
-                            name={`files.${index}.title`}
-                            placeholder="Enter book title"
-                            className="rounded-md lg:border-gray"
-                          />
-                        </div>
-                      </div>
-                      <div className="mt-4 lg:mt-3 pb-4 lg:pb-0 border-b lg:border-none border-[#E4E4E4]">
-                        <InputLabel
-                          className="text-black lg:mb-2 lg:mt-2"
-                          label="Description"
-                          required
+
+                    <div className="mt-2">
+                      {uploadType === "file" ? (
+                        <VideoUploadController
+                          name={`files.${index}.file`}
+                          className="h-[224px] w-full"
                         />
-                        <ControlledTextareaField
-                          name={`files.${index}.description`}
-                          placeholder="Enter description name"
-                          className="rounded-md lg:border-gray h-[136px] bg-white"
+                      ) : (
+                        <ControlledInputField
+                          name={`files.${index}.url`}
+                          placeholder="Enter YouTube URL"
+                          className="rounded-md lg:border-gray "
                         />
-                      </div>
+                      )}
                     </div>
                   </div>
-                );
-              })}
-              <div className="mt-4 flex justify-between">
-                <Button
-                  type="button"
-                  onClick={addAnotherFile}
-                  className="bg-dashboard-primary text-white hidden"
-                >
-                  + Add Another video
-                </Button>
-                <Button
-                  type="submit"
-                  className="bg-dashboard-primary text-white"
-                >
-                  Save
-                </Button>
-              </div>
+
+                  {/* Right Side */}
+                  <div className="w-[80%] relative">
+                    <Button
+                      type="button"
+                      onClick={() => remove(index)}
+                      className="text-red-500 w-7 h-7 flex items-center justify-center rounded-sm ml-auto absolute right-0 bg-rose-100 hover:bg-rose-200"
+                    >
+                      <Trash />
+                    </Button>
+
+                    <div className="grid grid-cols-1 gap-4 items-center mt-3">
+                      <div className="border-b lg:border-none border-[#E4E4E4]">
+                        <InputLabel
+                          className="text-black lg:mb-1"
+                          label="Title"
+                          required
+                        />
+                        <ControlledInputField
+                          name={`files.${index}.title`}
+                          placeholder="Enter video title"
+                          className="rounded-md lg:border-gray"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="mt-4 lg:mt-3 pb-4 lg:pb-0 border-b lg:border-none border-[#E4E4E4]">
+                      <InputLabel
+                        className="text-black lg:mb-2 lg:mt-2"
+                        label="Description"
+                        required
+                      />
+                      <ControlledTextareaField
+                        name={`files.${index}.description`}
+                        placeholder="Enter description"
+                        className="rounded-md lg:border-gray h-[136px] bg-white"
+                      />
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+            <ErrorMessage error={patchError} />
+            <div className="mt-4 flex justify-between">
+              <Button
+                type="button"
+                onClick={addAnotherFile}
+                className="bg-dashboard-primary text-white"
+              >
+                + Add Another video
+              </Button>
+              <Button type="submit" className="bg-dashboard-primary text-white">
+                Save
+              </Button>
             </div>
-          }
+          </div>
         </form>
       </FormProvider>
     </div>

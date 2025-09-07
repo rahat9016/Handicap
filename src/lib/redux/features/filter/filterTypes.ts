@@ -5,4 +5,6 @@ export interface IInitialState {
   languages: string[]
   keywords: string[]
   courseCategories: string[];
+  level: string[];
+  organizationIds: string[];
 }

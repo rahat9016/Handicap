@@ -46,38 +46,61 @@ export interface IVideoVariant {
   playlistUrl: string;
 }
 
-// 📦 Video Content
-export interface IVideoContent {
+// 🎥 Video ContentData
+export interface IVideoContentData {
+  duration: number; // in seconds
+  variants: IVideoVariant[];
+  thumbnailUrl: string;
+  processingStatus: "PENDING" | "PROCESSING" | "COMPLETED" | "FAILED";
+  masterPlaylistUrl: string;
+}
+
+// 📦 Content Types
+export type ContentType = "VIDEO" | "LINK"; // extend later if needed
+
+// 📦 Base Content
+export interface IBaseContent {
   id: number;
   title: string;
   description: string;
-  contentType: "VIDEO"; // could be extended later
-  contentData: {
-    duration: number; // in seconds
-    variants: IVideoVariant[];
-    thumbnailUrl: string;
-    processingStatus: "PENDING" | "PROCESSING" | "COMPLETED" | "FAILED";
-    masterPlaylistUrl: string;
-  };
+  contentType: ContentType;
   createdAt: string; // ISO datetime
   updatedAt: string; // ISO datetime
-  filePath: string;
   courseId: number;
 }
 
-// 📝 Quiz (placeholder, extend when quiz data available)
+// 🎥 Video Content
+export interface IVideoContent extends IBaseContent {
+  contentType: "VIDEO";
+  contentData: IVideoContentData;
+  filePath: string; // uploaded file path
+  link: null; // not used for video
+}
+
+// 🔗 URL Content (e.g., YouTube)
+export interface IUrlContent extends IBaseContent {
+  contentType: "LINK";
+  contentData: null;
+  link: string; // YouTube link or external link
+  filePath: null;
+}
+
+// Union type for all content
+export type IContent = IVideoContent | IUrlContent;
+
+// 📝 Quiz (placeholder, extend later)
 export interface IQuiz {
   id: number;
   title: string;
   description?: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  questions?: any[]; // replace with proper type when known
+  questions?: any[];
 }
 
 // 📚 Course Content Item (wrapper)
 export interface ICourseContentItem {
   id: number;
-  type: "CONTENT" | "QUIZ"; // extend if more types are added
+  type: "CONTENT" | "QUIZ";
   order: number;
   courseId: number;
   contentId: number | null;
@@ -86,6 +109,6 @@ export interface ICourseContentItem {
   updatedAt: string;
 
   // relations
-  content: IVideoContent | null;
+  content: IContent | null;
   quiz: IQuiz | null;
 }

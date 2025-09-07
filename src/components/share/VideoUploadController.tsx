@@ -103,7 +103,7 @@ export function VideoUploadController({
                     src="/images/dashboard/video-add.png"
                     alt="video"
                   />
-                  <span className="text-grayDark lg:text-[#A6A6A6] text-xs font-poppins font-normal">
+                  <span className="text-grayDark lg:text-[#A6A6A6] text-xs font-poppins font-normal text-center">
                     Upload video (mp4, mov, avi, mkv, webm)
                   </span>
                   <input

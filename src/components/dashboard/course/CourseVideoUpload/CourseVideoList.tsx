@@ -1,0 +1,55 @@
+import { IVideoContent } from "@/components/main/training/types/traning";
+import { Card, CardContent } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
+
+import Image from "next/image";
+export default function CourseVideoList({
+  courseContentList,
+  className,
+}: {
+  courseContentList: IVideoContent[] | never[];
+  className?: string;
+}) {
+  console.log(courseContentList);
+  return (
+    <div
+      className={cn(
+        "space-y-6 mb-8 bg-slate-50 border p-6 rounded-lg shadow-sm",
+        className
+      )}
+    >
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      {courseContentList?.map((item) => (
+        <Card
+          key={item.id}
+          className="cursor-pointer hover:shadow-lg transition border rounded-xl"
+          
+        >
+          <CardContent className="flex items-center gap-4 p-4">
+            <div className="flex-shrink-0">
+              {item.contentType === "VIDEO" ? (
+                <div className="w-16 h-16 bg-gray rounded-full flex  items-center justify-center">
+                    <Image className="w-10 h-10 " src={"/video.png"} alt="" width={100} height={100} />
+                </div>
+              ) : (
+                <div className="w-16 h-16 bg-gray rounded-full flex  items-center justify-center">
+                    <Image className="w-10 h-10 " src={"/youtube_play.png"} alt="" width={100} height={100} />
+                </div>
+              )}
+            </div>
+
+            <div>
+              <h3 className="text-base font-semibold line-clamp-1">
+                {item.title}
+              </h3>
+              <p className="text-sm text-gray-500 line-clamp-2">
+                {item.description}
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+      ))}
+    </div>
+    </div>
+  );
+}

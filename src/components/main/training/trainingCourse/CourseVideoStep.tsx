@@ -1,14 +1,15 @@
 import Paragraph from "@/components/share/Paragraph";
 import Title from "@/components/share/Title";
 import { useGet } from "@/hooks/useGet";
+import extractYouTubeId from "@/utils/extractYouTubeId";
 import { getVideoUrl } from "@/utils/video";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ICourseContentItem } from "../types/traning";
-
 import CoursePreview from "./CoursePreview";
 import HlsPlayer from "./HlsPlayer";
 import { VideoItemSkeleton } from "./VideoItemSkeleton";
+import YoutubeVideoPlayer from "./YoutubeVideoPlayer";
 
 export default function CourseVideoStep() {
   const { id } = useParams();
@@ -27,9 +28,15 @@ export default function CourseVideoStep() {
   }, [data, selectedVideo]);
 
   const videoUrl =
-  selectedVideo && id && selectedVideo.contentId !== null
-    ? getVideoUrl(id, selectedVideo.contentId)
-    : null;
+    selectedVideo && id && selectedVideo.contentId !== null
+      ? getVideoUrl(id, selectedVideo.contentId)
+      : null;
+
+  const youtubeId =
+    selectedVideo?.content?.contentType === "LINK" &&
+    selectedVideo?.content?.link
+      ? extractYouTubeId(selectedVideo.content?.link)
+      : null;
 
   return (
     <div>
@@ -42,17 +49,23 @@ export default function CourseVideoStep() {
         </div>
         <div className="flex items-start gap-4 mb-10">
           <div className="w-3/4 lg:h-[500px]">
-            {videoUrl ? (
-              <HlsPlayer
-                src={videoUrl}
-                controls
-                autoPlay
-                width="100%"
-                height={520}
-                selectedVideo={selectedVideo}
-              />
+            {selectedVideo?.content?.contentType === "VIDEO" ? (
+              videoUrl ? (
+                <HlsPlayer
+                  src={videoUrl}
+                  controls
+                  autoPlay
+                  width="100%"
+                  height={520}
+                  selectedVideo={selectedVideo}
+                />
+              ) : (
+                <p>Loading video...</p>
+              )
+            ) : youtubeId ? (
+              <YoutubeVideoPlayer youtubeId={youtubeId} />
             ) : (
-              <p>Loading video...</p>
+              <p>No video available</p>
             )}
           </div>
 

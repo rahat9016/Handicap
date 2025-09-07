@@ -7,6 +7,8 @@ const initialState: IInitialState = {
   languages: [],
   keywords: [],
   courseCategories: [],
+  level: [],
+  organizationIds: [],
 };
 
 const filteringSlice = createSlice({
@@ -28,15 +30,31 @@ const filteringSlice = createSlice({
     setCourseCategories: (state, action) => {
       state.courseCategories = action.payload;
     },
+    setLevel: (state, action) => {
+      state.level = action.payload;
+    },
+    setOrganizationIds: (state, action) => {
+      state.organizationIds = action.payload;
+    },
     clearFilters: (state) => {
       state.sortBy = [];
       state.resourceTypes = [];
       state.languages = [];
       state.keywords = [];
       state.courseCategories = [];
+      state.level = [];
     },
   },
 });
 
-export const { setSortBy, setResourceTypes, setLanguages,setKeywords, setCourseCategories, clearFilters } = filteringSlice.actions;
+export const {
+  setSortBy,
+  setResourceTypes,
+  setLanguages,
+  setKeywords,
+  setCourseCategories,
+  setOrganizationIds,
+  setLevel,
+  clearFilters,
+} = filteringSlice.actions;
 export default filteringSlice.reducer;

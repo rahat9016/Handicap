@@ -3,11 +3,19 @@
 import Paragraph from "@/components/share/Paragraph";
 import Title from "@/components/share/Title";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { useRouter } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
-import { BookOpen, Calendar, Clock, Globe, User } from "lucide-react";
+import {
+  BookOpen,
+  Calendar,
+  ChevronLeft,
+  Clock,
+  Globe,
+  User,
+} from "lucide-react";
 import Image from "next/image";
 import { ICourseDetails } from "../types/types";
-
 
 export default function CourseVideoUploadDetails({
   title,
@@ -23,6 +31,7 @@ export default function CourseVideoUploadDetails({
   isActive,
   className,
 }: ICourseDetails) {
+  const router = useRouter();
   return (
     <div
       className={cn(
@@ -30,7 +39,12 @@ export default function CourseVideoUploadDetails({
         className
       )}
     >
-      {/* Thumbnail */}
+      <Button
+        onClick={() => router.push("/admin/course/course-list")}
+        className="bg-dashboard-primary text-white h-10 mb-3"
+      >
+        <ChevronLeft /> Back
+      </Button>
       {thumbnailUrl && (
         <div className="w-full h-60 relative rounded-lg overflow-hidden">
           <Image
@@ -44,9 +58,7 @@ export default function CourseVideoUploadDetails({
 
       {/* Title & Description */}
       <Title>{title}</Title>
-      <Paragraph>
-        {description}
-      </Paragraph>
+      <Paragraph>{description}</Paragraph>
 
       {/* Objectives */}
       {objectives && (
@@ -69,11 +81,15 @@ export default function CourseVideoUploadDetails({
         </div>
         <div className="flex items-center gap-2">
           <Calendar className="h-4 w-4" />
-          <span>Published {createdAt && new Date(createdAt).toLocaleDateString()}</span>
+          <span>
+            Published {createdAt && new Date(createdAt).toLocaleDateString()}
+          </span>
         </div>
         <div className="flex items-center gap-2">
           <Clock className="h-4 w-4" />
-          <span>Updated {updatedAt && new Date(updatedAt).toLocaleDateString()}</span>
+          <span>
+            Updated {updatedAt && new Date(updatedAt).toLocaleDateString()}
+          </span>
         </div>
         {organization?.name && (
           <div className="flex items-center gap-2">

@@ -14,7 +14,7 @@ import { useSearchDebounce } from "@/hooks/useSearchDebounce";
 import { useRouter } from "@/i18n/navigation";
 import { useAppSelector } from "@/lib/redux/hooks";
 import { mapToSelectOptions } from "@/utils/mapToSelectOptions";
-import { EllipsisVertical, Shapes, Video } from "lucide-react";
+import { EllipsisVertical, Shapes, SquarePen, Video } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
@@ -43,16 +43,15 @@ export default function AllCourse() {
     { enabled: hasPermission }
   );
   const endpoint = selectedId
-    ? `/course/organization/${selectedId}`
-    : organizationId
+  ? `/course/organization/${selectedId}`
+  : organizationId
     ? `/course/organization/${organizationId}`
     : "/course";
-  console.log(selectedId);
-  const shouldFetch = organizationId !== undefined;
+  const shouldFetch = selectedId !== undefined || organizationId !== undefined;
 
   const { data, isLoading } = useGet<ICourse[]>(
     endpoint,
-    ["courseList", currentPage.toString(), organizationId ?? "all"],
+    ["courseList",  currentPage.toString(), selectedId ?? organizationId ?? "all"],
     {
       ...(itemsPerPage !== -1 && {
         page: currentPage.toString(),
@@ -63,13 +62,6 @@ export default function AllCourse() {
     { enabled: shouldFetch }
   );
 
-  // const handleEdit = (row: IResource) => {
-  //   navigate.push(`/admin/resources/${row.id}`);
-  // };
-  // const handleView = (row: IResource) => {
-  //   setResource(row);
-  //   setIsView(true);
-  // };
   // // Update total items whenever data changes
   useEffect(() => {
     if (data) {
@@ -154,6 +146,15 @@ export default function AllCourse() {
               >
                 <Video />
                 Add Video
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => {
+                  router.push(`/admin/course/course-update/${value}`);
+                }}
+                className="flex items-center gap-1 cursor-pointer text-darkLiver font-inter font-normal text-sm"
+              >
+                <SquarePen />
+                Edit Course
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

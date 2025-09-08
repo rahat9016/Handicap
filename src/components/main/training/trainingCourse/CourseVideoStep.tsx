@@ -5,7 +5,8 @@ import extractYouTubeId from "@/utils/extractYouTubeId";
 import { getVideoUrl } from "@/utils/video";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { ICourseContentItem } from "../types/traning";
+
+import { ICourseContent } from "../types/traning";
 import CoursePreview from "./CoursePreview";
 import HlsPlayer from "./HlsPlayer";
 import { VideoItemSkeleton } from "./VideoItemSkeleton";
@@ -13,11 +14,11 @@ import YoutubeVideoPlayer from "./YoutubeVideoPlayer";
 
 export default function CourseVideoStep() {
   const { id } = useParams();
-  const { data, isLoading } = useGet<ICourseContentItem[]>(
+  const { data, isLoading } = useGet<ICourseContent[]>(
     `/course/${id}/items`,
     ["course"]
   );
-  const [selectedVideo, setSelectedVideo] = useState<ICourseContentItem | null>(
+  const [selectedVideo, setSelectedVideo] = useState<ICourseContent | null>(
     null
   );
 
@@ -57,7 +58,7 @@ export default function CourseVideoStep() {
                   autoPlay
                   width="100%"
                   height={520}
-                  selectedVideo={selectedVideo}
+                  variants={selectedVideo?.content?.contentData?.variants || []}
                 />
               ) : (
                 <p>Loading video...</p>

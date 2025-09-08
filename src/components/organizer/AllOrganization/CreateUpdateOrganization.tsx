@@ -141,7 +141,7 @@ export default function CreateUpdateOrganization({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="bg-white max-h-[95vh]  w-[800px] !max-w-none overflow-y-auto">
+      <DialogContent className="bg-white max-h-[95vh] w-[800px] !max-w-none overflow-y-auto">
         <DialogHeader>
           <DialogTitle>
             {initialValues ? "Update Organization" : "Create Organization"}

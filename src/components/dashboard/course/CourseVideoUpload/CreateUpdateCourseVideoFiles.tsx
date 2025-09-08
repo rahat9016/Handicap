@@ -17,7 +17,7 @@ import {
   useForm,
 } from "react-hook-form";
 import { toast } from "react-toastify";
-import { videoUploadSchema } from "../course/Schema/Resources";
+import { videoUploadSchema } from "../course/Schema/Course";
 
 export default function CreateUpdateCourseVideoFiles({
   initialValues,

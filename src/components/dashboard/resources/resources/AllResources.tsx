@@ -64,7 +64,7 @@ export default function AllResources() {
   }, [data]);
 
   const totalPages = Math.ceil(totalItems / itemsPerPage);
-  
+  console.log(resource)
   return (
     <div className="bg-white p-8 min-h-[85vh] border border-skeleton rounded-2xl">
       <ResourceTabs

@@ -67,7 +67,6 @@ export default function UpdateResources({
     },
     mode: "onChange",
   });
-
   
   useEffect(() => {
     if (initialValues) {

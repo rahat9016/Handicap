@@ -46,7 +46,7 @@ export default function CourseQuizUpload() {
           />
         )}
       </div>
-      {/* <CreateUpdateCourseVideoFiles /> */}
+      
     </div>
   );
 }

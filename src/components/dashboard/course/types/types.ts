@@ -5,6 +5,7 @@ export interface ICourseDetails {
   objectives: string;
   durationMinutes: number;
   isActive: boolean;
+  isPublished: boolean;
   createdAt: string;
   updatedAt: string;
   creator: {

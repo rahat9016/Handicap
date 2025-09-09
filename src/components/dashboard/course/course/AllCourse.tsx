@@ -16,6 +16,7 @@ import { useAppSelector } from "@/lib/redux/hooks";
 import { mapToSelectOptions } from "@/utils/mapToSelectOptions";
 import {
   EllipsisVertical,
+  Eye,
   MessageCircleQuestionMark,
   Shapes,
   SquarePen,
@@ -129,6 +130,21 @@ export default function AllCourse() {
         );
       },
     },
+    {
+      header: "Is Publish",
+      accessorKey: "isPublished",
+      cell: (value: boolean | undefined) => {
+        return (
+          <span
+            className={`px-2 py-1 rounded-full text-xs font-medium ${
+              value ? "bg-[#bfffda] text-green" : "bg-rose-200 text-rose-700"
+            }`}
+          >
+            {value ? "Published" : "Unpublished"}
+          </span>
+        );
+      },
+    },
     adminOrganizationPermission
       ? {
           header: "Action",
@@ -141,7 +157,13 @@ export default function AllCourse() {
                     <EllipsisVertical className="text-lg text-darkLiver" />
                   </button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-32">
+                <DropdownMenuContent align="end" className="w-40">
+                  <DropdownMenuItem
+                    onClick={() => router.push(`/admin/course/course-view-details/${value}`)}
+                    className="flex items-center gap-1 text-darkLiver font-inter font-normal text-sm"
+                  >
+                    <Eye /> View Course
+                  </DropdownMenuItem>
                   <DropdownMenuItem
                     onClick={() => router.push(`/admin/course/course-video-upload/${value}`)}
                     className="flex items-center gap-1 text-darkLiver font-inter font-normal text-sm"

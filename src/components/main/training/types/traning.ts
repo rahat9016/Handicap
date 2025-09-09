@@ -19,6 +19,7 @@ export interface ICourse {
   objectives: string;
   durationMinutes: number;
   isActive: boolean;
+  isPublished: boolean;
   createdAt: string;
   updatedAt: string;
   creator: ICreator;

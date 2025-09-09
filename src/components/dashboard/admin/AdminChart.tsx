@@ -1,26 +1,28 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
 } from "@/components/ui/select";
+import { useRouter } from "@/i18n/navigation";
+import { useAppSelector } from "@/lib/redux/hooks";
 import { ChevronRight } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 import {
-    Area,
-    AreaChart,
-    CartesianGrid,
-    Cell,
-    Pie,
-    PieChart,
-    ResponsiveContainer,
-    Tooltip,
-    XAxis,
-    YAxis,
+  Area,
+  AreaChart,
+  CartesianGrid,
+  Cell,
+  Pie,
+  PieChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
 } from "recharts";
 const chartData = [
   { month: "Jan", visitors: 3920 },
@@ -75,6 +77,8 @@ const trainingData = [
 ];
 const COLORS = ["#135393", "#83B9EF", "#27AE60", "#F2994A"];
 export default function AdminChart() {
+  const router = useRouter()
+  const { adminOrganizationPermission, hasPermission } = useAppSelector(state => state.permission)
   const [organization, setOrganization] = useState("all");
   const [timeRange, setTimeRange] = useState("24h");
   return (
@@ -150,7 +154,7 @@ export default function AdminChart() {
               </h2>
             </div>
             <div className="py-4 flex flex-col gap-2 px-[28px]">
-              <Button className="group bg-white hover:bg-dashboard-primary flex items-center justify-start gap-2 w-full h-[58px] border border-skeleton hover:text-white text-darkLiver font-inter font-medium text-base">
+              {/* <Button className="group bg-white hover:bg-dashboard-primary flex items-center justify-start gap-2 w-full h-[58px] border border-skeleton hover:text-white text-darkLiver font-inter font-medium text-base">
                 <Image
                   width={24}
                   height={24}
@@ -159,18 +163,18 @@ export default function AdminChart() {
                   className="group-hover:white-filter"
                 />{" "}
                 Add New Members
-              </Button>
-              <Button className="group bg-white hover:bg-dashboard-primary flex items-center justify-start gap-2 w-full h-[58px] border border-skeleton hover:text-white text-darkLiver font-inter font-medium text-base">
+              </Button> */}
+              { hasPermission &&<Button className="group bg-white hover:bg-dashboard-primary flex items-center justify-start gap-2 w-full h-[58px] border border-skeleton hover:text-white text-darkLiver font-inter font-medium text-base">
                 <Image
                   width={24}
                   height={24}
                   src="/images/dashboard/icon02.svg"
-                  alt="Add New Members"
+                  alt="Add Organization"
                   className="group-hover:white-filter"
                 />{" "}
                 Add Organization
-              </Button>
-              <Button className="group bg-white hover:bg-dashboard-primary flex items-center justify-start gap-2 w-full h-[58px] border border-skeleton hover:text-white text-darkLiver font-inter font-medium text-base">
+              </Button>}
+              {adminOrganizationPermission &&<Button onClick={() => router.push("/admin/course/course-create")} className="group bg-white hover:bg-dashboard-primary flex items-center justify-start gap-2 w-full h-[58px] border border-skeleton hover:text-white text-darkLiver font-inter font-medium text-base">
                 <Image
                   width={24}
                   height={24}
@@ -178,9 +182,9 @@ export default function AdminChart() {
                   alt="Add New Members"
                   className="group-hover:white-filter"
                 />{" "}
-                Create Training Module
-              </Button>
-              <Button className="group bg-white hover:bg-dashboard-primary flex items-center justify-start gap-2 w-full h-[58px] border border-skeleton hover:text-white text-darkLiver font-inter font-medium text-base">
+                Create Course Module
+              </Button>}
+              {adminOrganizationPermission &&<Button onClick={() => router.push("/admin/resources/resources-list")} className="group bg-white hover:bg-dashboard-primary flex items-center justify-start gap-2 w-full h-[58px] border border-skeleton hover:text-white text-darkLiver font-inter font-medium text-base">
                 <Image
                   width={24}
                   height={24}
@@ -189,7 +193,7 @@ export default function AdminChart() {
                   className="group-hover:white-filter"
                 />{" "}
                 Upload Resources
-              </Button>
+              </Button>}
             </div>
           </CardContent>
         </Card>

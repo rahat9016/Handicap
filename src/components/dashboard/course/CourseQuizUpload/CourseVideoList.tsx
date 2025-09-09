@@ -43,7 +43,7 @@ export default function CourseVideoList({
         {courseContentList?.map((item) => (
           <Card
             key={item.id}
-            className="relative cursor-pointer hover:shadow-lg transition border rounded-xl relative"
+            className="relative cursor-pointer hover:shadow-lg transition border rounded-xl"
           >
             <CardContent className="flex items-center gap-4 p-4">
               <div className="flex-shrink-0">

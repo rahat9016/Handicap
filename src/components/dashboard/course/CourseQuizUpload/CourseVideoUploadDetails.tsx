@@ -34,7 +34,7 @@ export default function CourseQuizUploadDetails({
   className,
 }: ICourseDetails) {
   const router = useRouter();
-   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   return (
     <div
       className={cn(
@@ -62,7 +62,7 @@ export default function CourseQuizUploadDetails({
       {/* Title & Description */}
       <div className="flex items-center justify-between">
         <Title>{title}</Title>
-        <Button onClick={() => setIsModalOpen(true)}>Add Quiz</Button>
+        <Button onClick={() => setIsModalOpen(true)} className="text-white">Add Quiz</Button>
       </div>
       <Paragraph>{description}</Paragraph>
 
@@ -129,11 +129,11 @@ export default function CourseQuizUploadDetails({
         )}
       </div>
       <CreateUpdateCourseQuiz
-              isOpen={isModalOpen}
-              onClose={() => {
-                setIsModalOpen(false);
-              }}
-            />
+        isOpen={isModalOpen}
+        onClose={() => {
+          setIsModalOpen(false);
+        }}
+      />
     </div>
   );
 }

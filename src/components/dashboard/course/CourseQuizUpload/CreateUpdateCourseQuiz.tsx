@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import ControlledInputField from "@/components/share/ControlledInputField";
 import ControlledTextareaField from "@/components/share/ControlledTextareaField";
 import InputLabel from "@/components/share/InputLabel";
@@ -8,6 +9,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { usePost } from "@/hooks/usePost";
 import {
   FormProvider,
   useFieldArray,
@@ -42,6 +44,17 @@ export default function CreateUpdateCourseQuiz({
   onClose: () => void;
   // initialValues?: ICategory | undefined;
 }) {
+  const {
+      mutateAsync,
+      // error,
+      // reset: postReset,
+    } = usePost(
+      "/quizzes",
+      (data) => {
+        console.log("POST success", data);
+      },
+      [["quizzes"]]
+    );
   const methods = useForm({
     mode: 'onChange',
     // resolver: yupResolver(quizFormSchema),
@@ -64,10 +77,35 @@ export default function CreateUpdateCourseQuiz({
   });
   console.log(methods.formState.errors)
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+   
   const onSubmit = (data:any) => {
-    console.log(data);
-    // Handle form submission
+    console.log(data)
+    try {
+    // Transform frontend form data into API format
+    const payload = {
+      title: data.name,
+      description: data.description,
+      passingScore: 50,
+      timeLimitMinutes: 15,
+      courseId: 33,
+      // contentId: data.contentId,
+      questions: data.questions.map((q: any, index: number) => ({
+        questionText: q.questionText,
+        questionType: q.questionType === "MULTIPLE_CHOICE" ? "MCQ" : q.questionType,
+        points: q.points,
+        sequenceNumber: index + 1,
+        options: q.options.map((o: any, oIndex: number) => ({
+          optionText: o.optionText,
+          isCorrect: o.isCorrect,
+          sequenceNumber: oIndex + 1,
+        })),
+      })),
+    };
+    mutateAsync(payload);
+    // onClose();
+  } catch (error) {
+    console.error("❌ Error creating quiz:", error);
+  }
   };
 
   const addQuestion = () => {

@@ -93,13 +93,27 @@ export default function Sidebar() {
         },
       ],
     },
+    hasPermission && {
+      label: "News",
+      icon: Folder,
+      children: [
+        { label: "News List", href: "/admin/news/news-list" },
+        {
+          label: "News Categories",
+          href: "/admin/news/news-categories",
+        },
+        {
+          label: "News Tags",
+          href: "/admin/news/news-tags",
+        },
+      ],
+    },
     {
       label: "Course's",
       icon: Shapes,
       children: [
         { label: "Course List", href: "/admin/course/course-list" },
         { label: "Course Categories", href: "/admin/course/course-categories" },
-        
       ],
     },
     {

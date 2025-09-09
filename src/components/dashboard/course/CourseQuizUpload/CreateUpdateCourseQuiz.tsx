@@ -10,6 +10,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { usePost } from "@/hooks/usePost";
+import { useParams } from "next/navigation";
 import {
   FormProvider,
   useFieldArray,
@@ -44,6 +45,7 @@ export default function CreateUpdateCourseQuiz({
   onClose: () => void;
   // initialValues?: ICategory | undefined;
 }) {
+  const {  id } = useParams()
   const {
       mutateAsync,
       // error,
@@ -87,7 +89,7 @@ export default function CreateUpdateCourseQuiz({
       description: data.description,
       passingScore: 50,
       timeLimitMinutes: 15,
-      courseId: 33,
+      courseId: id,
       // contentId: data.contentId,
       questions: data.questions.map((q: any, index: number) => ({
         questionText: q.questionText,

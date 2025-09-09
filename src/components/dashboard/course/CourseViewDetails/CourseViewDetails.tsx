@@ -20,6 +20,7 @@ export default function CourseViewDetails() {
   );
   const { data: allCourseContentList, isLoading: allCourseContentListLoading } =
     useGet<IVideoContent[]>(
+      
       `/course/all-course-content/${id}`,
       ["allCourseList"],
       {},

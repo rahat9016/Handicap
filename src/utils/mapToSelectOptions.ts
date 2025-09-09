@@ -10,6 +10,6 @@ export function mapToSelectOptions<T>(
       typeof labelKey === "function"
         ? labelKey(item)
         : String(item[labelKey]),
-    value: String(item[valueKey]), // 👈 force value to string
+    value: String(item[valueKey]),
   }));
 }

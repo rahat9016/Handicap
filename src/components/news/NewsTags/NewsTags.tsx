@@ -8,11 +8,11 @@ import { usePagination } from "@/hooks/usePagination";
 import { useSearchDebounce } from "@/hooks/useSearchDebounce";
 import { useAppSelector } from "@/lib/redux/hooks";
 import { format } from "date-fns";
-import { Hash, SquarePen, Trash2 } from "lucide-react";
+import { Hash, SquarePen } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { ITags } from "./types/Tags";
 import CreateUpdateTags from "./CreateUpdateTags";
+import { ITags } from "./types/Tags";
 
 export default function NewsTags() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -51,9 +51,9 @@ export default function NewsTags() {
     setTags(row);
     setIsModalOpen(true);
   };
-  const handleDelete = (row: ITags) => {
-    setDeleteTags(row);
-  };
+  // const handleDelete = (row: ITags) => {
+  //   setDeleteTags(row);
+  // };
 
   // Update total items whenever data changes
   useEffect(() => {
@@ -88,13 +88,13 @@ export default function NewsTags() {
                   <SquarePen size={16} />
                   Edit
                 </button>
-                <button
+                {/* <button
                   onClick={() => handleDelete(row)}
                   className="text-darkLiver hover:text-rose-600 hover:underline text-sm flex items-center gap-1"
                 >
                   <Trash2 size={16} className="text-rose-600" />
                   Delete
-                </button>
+                </button> */}
               </div>
             );
           },

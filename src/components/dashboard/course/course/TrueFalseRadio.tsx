@@ -1,5 +1,5 @@
 import { useFormContext } from "react-hook-form";
-import { QuizForm } from "./CreateUpdateCourseQuiz";
+import { QuizForm } from "../Quiz/CreateUpdateCourseQuiz";
 
 const TrueFalseRadio = ({ 
   questionIndex, 

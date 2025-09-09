@@ -10,9 +10,11 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { usePost } from "@/hooks/usePost";
+import { yupResolver } from "@hookform/resolvers/yup";
 import { useParams } from "next/navigation";
 import { FormProvider, useFieldArray, useForm } from "react-hook-form";
 import QuestionField from "./QuestionField";
+import { quizFormSchema } from "./Schema/Quiz";
 
 export type Option = {
   optionText: string;
@@ -48,7 +50,7 @@ export default function CreateUpdateCourseQuiz({
   );
   const methods = useForm({
     mode: "onChange",
-    // resolver: yupResolver(quizFormSchema),
+    resolver: yupResolver(quizFormSchema),
     defaultValues: {
       questions: [
         {

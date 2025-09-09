@@ -19,14 +19,14 @@ export interface ICourse {
   objectives: string;
   durationMinutes: number;
   isActive: boolean;
+  isPublished: boolean;
   createdAt: string;
   updatedAt: string;
   creator: ICreator;
   organization: IOrganization;
   thumbnailUrl: string;
-  CourseCategory: ICategory
+  CourseCategory: ICategory;
 }
-
 
 export interface ICategory {
   id: number;
@@ -37,8 +37,26 @@ export interface ICategory {
   updatedAt: string; // ISO Date string
 }
 
-// 🎥 Video Variant
-export interface IVideoVariant {
+export interface IVideoContent {
+  id: number;
+  title: string;
+  description: string;
+  contentType: "VIDEO" | "LINK";
+  contentData?: {
+    duration?: number;
+    variants?: IVariant[];
+    thumbnailUrl?: string;
+    processingStatus?: string;
+    masterPlaylistUrl?: string;
+  };
+  link?: string | null;
+  filePath?: string | null;
+  courseId: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface IVariant {
   codec: string;
   width: number;
   height: number;
@@ -46,59 +64,21 @@ export interface IVideoVariant {
   playlistUrl: string;
 }
 
-// 🎥 Video ContentData
-export interface IVideoContentData {
-  duration: number; // in seconds
-  variants: IVideoVariant[];
-  thumbnailUrl: string;
-  processingStatus: "PENDING" | "PROCESSING" | "COMPLETED" | "FAILED";
-  masterPlaylistUrl: string;
-}
-
-// 📦 Content Types
-export type ContentType = "VIDEO" | "LINK"; // extend later if needed
-
-// 📦 Base Content
-export interface IBaseContent {
-  id: number;
-  title: string;
-  description: string;
-  contentType: ContentType;
-  createdAt: string; // ISO datetime
-  updatedAt: string; // ISO datetime
-  courseId: number;
-}
-
-// 🎥 Video Content
-export interface IVideoContent extends IBaseContent {
-  contentType: "VIDEO";
-  contentData: IVideoContentData;
-  filePath: string; // uploaded file path
-  link: null; // not used for video
-}
-
-// 🔗 URL Content (e.g., YouTube)
-export interface IUrlContent extends IBaseContent {
-  contentType: "LINK";
-  contentData: null;
-  link: string; // YouTube link or external link
-  filePath: null;
-}
-
-// Union type for all content
-export type IContent = IVideoContent | IUrlContent;
-
-// 📝 Quiz (placeholder, extend later)
+// 📝 Quiz
 export interface IQuiz {
   id: number;
   title: string;
-  description?: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  questions?: any[];
+  description: string;
+  passingScore: number;
+  timeLimitMinutes: number;
+  isActive: boolean;
+  createdAt: string;
+  courseId: number;
+  contentId: number | null;
 }
 
-// 📚 Course Content Item (wrapper)
-export interface ICourseContentItem {
+// 📦 Wrapper Item (can be either CONTENT or QUIZ)
+export interface ICourseContent {
   id: number;
   type: "CONTENT" | "QUIZ";
   order: number;
@@ -108,7 +88,7 @@ export interface ICourseContentItem {
   createdAt: string;
   updatedAt: string;
 
-  // relations
-  content: IContent | null;
+  // nested
+  content: IVideoContent | null;
   quiz: IQuiz | null;
 }

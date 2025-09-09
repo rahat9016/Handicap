@@ -14,7 +14,7 @@ export const ConfirmToggleDialog = ({ isOpen, setIsOpen, isActive, onConfirm }: 
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>{isActive ? "Deactivate User?" : "Activate User?"}</DialogTitle>
+          <DialogTitle>{isActive ? "Deactivate Record?" : "Activate Record?"}</DialogTitle>
         </DialogHeader>
         <div className="py-5 flex flex-col items-center gap-4">
           <p className="text-sm text-gray-dark text-center">

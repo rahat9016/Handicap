@@ -17,7 +17,6 @@ import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
 import {
   BarChart3,
   Folder,
-  GraduationCap,
   LayoutDashboard,
   LogOut,
   LucideIcon,
@@ -51,7 +50,7 @@ export default function Sidebar() {
       icon: Upload,
       children: [{ label: "Page Sections", href: "/admin/page-sections" }],
     },
-    {
+    hasPermission && {
       label: "Organization Manage",
       icon: Settings,
       children: [
@@ -65,7 +64,7 @@ export default function Sidebar() {
         },
       ],
     },
-    {
+    hasPermission && {
       label: "Setup",
       icon: Settings,
       children: [
@@ -115,14 +114,6 @@ export default function Sidebar() {
       children: [
         { label: "Course List", href: "/admin/course/course-list" },
         { label: "Course Categories", href: "/admin/course/course-categories" },
-      ],
-    },
-    {
-      label: "Training Management",
-      icon: GraduationCap,
-      children: [
-        { label: "Add Training", href: "#" },
-        { label: "All Trainings", href: "#" },
       ],
     },
     {

@@ -26,6 +26,7 @@ export default function CourseVideoUpload() {
       {},
       { enabled: id !== undefined }
     );
+  console.log(allCourseContentList);
   return (
     <div>
       {isLoading ? (
@@ -33,15 +34,19 @@ export default function CourseVideoUpload() {
       ) : (
         data?.data && <CourseVideoUploadDetails {...data?.data} />
       )}
-      {allCourseContentListLoading
-        ? <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {Array.from({ length: 6 }).map((_, i) => (
-            <CourseContentCardSkeleton key={i} />
-          ))}
-        </div>
-        : <CourseVideoList 
+      <div className="mb-8">
+        {allCourseContentListLoading ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <CourseContentCardSkeleton key={i} />
+            ))}
+          </div>
+        ) : (
+          <CourseVideoList
             courseContentList={allCourseContentList?.data || []}
-          />}
+          />
+        )}
+      </div>
       <CreateUpdateCourseVideoFiles />
     </div>
   );

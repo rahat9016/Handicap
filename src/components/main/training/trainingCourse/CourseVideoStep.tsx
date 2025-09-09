@@ -5,19 +5,20 @@ import extractYouTubeId from "@/utils/extractYouTubeId";
 import { getVideoUrl } from "@/utils/video";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { ICourseContentItem } from "../types/traning";
+
+import { ICourseContent } from "../types/traning";
 import CoursePreview from "./CoursePreview";
 import HlsPlayer from "./HlsPlayer";
+import { Quiz } from "./Quiz";
 import { VideoItemSkeleton } from "./VideoItemSkeleton";
 import YoutubeVideoPlayer from "./YoutubeVideoPlayer";
 
 export default function CourseVideoStep() {
   const { id } = useParams();
-  const { data, isLoading } = useGet<ICourseContentItem[]>(
-    `/course/${id}/items`,
-    ["course"]
-  );
-  const [selectedVideo, setSelectedVideo] = useState<ICourseContentItem | null>(
+  const { data, isLoading } = useGet<ICourseContent[]>(`/course/${id}/items`, [
+    "course",
+  ]);
+  const [selectedVideo, setSelectedVideo] = useState<ICourseContent | null>(
     null
   );
 
@@ -37,7 +38,7 @@ export default function CourseVideoStep() {
     selectedVideo?.content?.link
       ? extractYouTubeId(selectedVideo.content?.link)
       : null;
-
+  console.log(data);
   return (
     <div>
       <div className="container ">
@@ -49,7 +50,9 @@ export default function CourseVideoStep() {
         </div>
         <div className="flex items-start gap-4 mb-10">
           <div className="w-3/4 lg:h-[500px]">
-            {selectedVideo?.content?.contentType === "VIDEO" ? (
+            {selectedVideo?.type === "QUIZ" && selectedVideo?.quiz ? (
+              <Quiz quiz={selectedVideo.quiz} />
+            ) : selectedVideo?.content?.contentType === "VIDEO" ? (
               videoUrl ? (
                 <HlsPlayer
                   src={videoUrl}
@@ -57,7 +60,7 @@ export default function CourseVideoStep() {
                   autoPlay
                   width="100%"
                   height={520}
-                  selectedVideo={selectedVideo}
+                  variants={selectedVideo?.content?.contentData?.variants || []}
                 />
               ) : (
                 <p>Loading video...</p>

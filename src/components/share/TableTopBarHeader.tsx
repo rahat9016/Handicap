@@ -33,35 +33,37 @@ export default function TableTopBarHeader({
   setSelectedId,
   options,
 }: TableHeaderProps) {
-  const { hasPermission } = useAppSelector(state => state.permission)
+  const { hasPermission } = useAppSelector((state) => state.permission);
   return (
     <div className="flex w-full items-center justify-between">
       <div className="flex items-center gap-3">
         <div className="flex items-center gap-2">
-        {icon && (
-          <div className="w-12 h-12 bg-dashboard-primary rounded-lg flex items-center justify-center text-white">
-            {icon}
+          {icon && (
+            <div className="w-12 h-12 bg-dashboard-primary rounded-lg flex items-center justify-center text-white">
+              {icon}
+            </div>
+          )}
+          <div>
+            <h1 className="text-2xl font-bold text-erieBlack font-inter">
+              {title}
+            </h1>
+            {subtitle && <p className="font-inter text-xs">{subtitle}</p>}
           </div>
-        )}
-        <div>
-          <h1 className="text-2xl font-bold text-erieBlack font-inter">
-            {title}
-          </h1>
-          {subtitle && <p className="font-inter text-xs">{subtitle}</p>}
         </div>
-      </div>
-      {hasPermission && setSelectedId &&  <Select onValueChange={(val) => setSelectedId(val)}>
-        <SelectTrigger className="w-[200px] h-12">
-          <SelectValue placeholder="Select organization" />
-        </SelectTrigger>
-        <SelectContent>
-          {options?.map((opt) => (
-            <SelectItem key={opt.value} value={opt.value}>
-              {opt.label}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>}
+        {hasPermission && setSelectedId && (
+          <Select onValueChange={(val) => setSelectedId(val)}>
+            <SelectTrigger className="w-[200px] h-12">
+              <SelectValue placeholder="Select organization" />
+            </SelectTrigger>
+            <SelectContent>
+              {options?.map((opt) => (
+                <SelectItem key={opt.value} value={opt.value}>
+                  {opt.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        )}
       </div>
       {showSearch && (
         <div className="ml-auto flex items-center w-[300px] border px-2 rounded-md">

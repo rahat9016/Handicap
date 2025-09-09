@@ -2,16 +2,16 @@ import Paragraph from "@/components/share/Paragraph";
 import Title from "@/components/share/Title";
 import { Play } from "lucide-react";
 import { Dispatch, SetStateAction } from "react";
-import { ICourseContentItem } from "../types/traning";
+import { ICourseContent } from "../types/traning";
 
 export default function CoursePreview({
   courses,
   setSelectedVideo,
   selectedVideo
 }: {
-  selectedVideo: ICourseContentItem | null;
-  courses: ICourseContentItem[];
-  setSelectedVideo: Dispatch<SetStateAction<ICourseContentItem | null>>;
+  selectedVideo: ICourseContent | null;
+  courses: ICourseContent[];
+  setSelectedVideo: Dispatch<SetStateAction<ICourseContent | null>>;
 }) {
 
   return (
@@ -33,6 +33,7 @@ export default function CoursePreview({
         <Paragraph>No course content available.</Paragraph>
       ) : (
         courses.map((course, idx) => {
+          console.log(course)
           const isActive = selectedVideo?.id === course.id;
           return (
           <div

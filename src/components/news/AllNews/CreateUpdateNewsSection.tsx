@@ -1,5 +1,6 @@
 import { ControlledCheckField } from "@/components/share/ControlledCheckField";
 import ControlledInputField from "@/components/share/ControlledInputField";
+import ControlledMultiSelectField from "@/components/share/ControlledMultiSelectField";
 import InputLabel from "@/components/share/InputLabel";
 import MultipleImageFileInput from "@/components/share/MultipleImageFileInput";
 import { Button } from "@/components/ui/button";
@@ -9,20 +10,19 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { useGet } from "@/hooks/useGet";
 import { usePatch } from "@/hooks/usePatch";
 import { usePost } from "@/hooks/usePost";
+import { mapToSelectOptions } from "@/utils/mapToSelectOptions";
 import { yupResolver } from "@hookform/resolvers/yup";
 import dynamic from "next/dynamic";
 import { useEffect } from "react";
-import { FieldError, FormProvider, useForm, useWatch } from "react-hook-form";
+import { FieldError, FormProvider, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
+import { INews } from "../NewsCategories/types/Categories";
+import { ITags } from "../NewsTags/types/Tags";
 import { NewsSectionForm, newsSectionSchema } from "./schema";
 import { INewsSection } from "./types";
-import ControlledMultiSelectField from "@/components/share/ControlledMultiSelectField";
-import { INews } from "../NewsCategories/types/Categories";
-import { useGet } from "@/hooks/useGet";
-import { mapToSelectOptions } from "@/utils/mapToSelectOptions";
-import { ITags } from "../NewsTags/types/Tags";
 const EditorWrapper = dynamic(
   () => import("@/components/share/EditorWrapper"),
   { ssr: false }
@@ -51,7 +51,7 @@ export default function CreateUpdateNewsSectionModal({
   );
   console.log(newsCategoryOptions);
 
-  const { mutateAsync, error } = usePost(
+  const { mutateAsync, error, reset: postReset } = usePost(
     "/news/upload",
     (data) => {
       console.log("POST success", data);
@@ -71,8 +71,8 @@ export default function CreateUpdateNewsSectionModal({
     },
     mode: "onChange",
   });
-const formValues = useWatch({ control: methods.control });
-console.log(formValues);
+// const formValues = useWatch({ control: methods.control });
+
 
   useEffect(() => {
     if (initialValues) {
@@ -92,6 +92,22 @@ console.log(formValues);
     const categoryIds = initialValues;
     console.log("categoryIds", categoryIds);
   }, [initialValues, methods]);
+
+  useEffect(() => {
+    if (!isOpen) {
+      methods.reset({
+        title: "",
+        summary: "",
+        content: "",
+        isPublished: false,
+        isActive: false,
+        images: [],
+        categoryIds: [],
+        tagIds: [],
+      });
+      postReset();
+    }
+  }, [isOpen, methods, postReset]);
 
   const onSubmit = (data: NewsSectionForm) => {
     const formData = new FormData();

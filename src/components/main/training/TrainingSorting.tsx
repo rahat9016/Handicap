@@ -1,9 +1,20 @@
+import { IOrganization } from "@/components/organizer/types";
 import ControlledCheckboxField from "@/components/share/ControlledCheckboxField";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useGet } from "@/hooks/useGet";
-import { setCourseCategories, setSortBy } from "@/lib/redux/features/filter/filterSlice";
+import {
+  setCourseCategories,
+  setLevel,
+  setOrganizationIds,
+  setSortBy,
+} from "@/lib/redux/features/filter/filterSlice";
 import { useAppDispatch } from "@/lib/redux/hooks";
 import { mapToSelectOptions } from "@/utils/mapToSelectOptions";
 import { Trash } from "lucide-react";
@@ -12,9 +23,13 @@ import { FormProvider, useForm } from "react-hook-form";
 import { ICategory } from "./types/traning";
 
 const sortOptions = [
-  { label: "Most Downloads", value: "totalDownloadCount:desc" },
   { label: "Most View", value: "viewCount:desc" },
   { label: "Oldest First", value: "createdAt:desc" },
+];
+const levelOptions = [
+  { label: "Beginner", value: "BEGINNER" },
+  { label: "Intermediate", value: "INTERMEDIATE" },
+  { label: "Advanced", value: "ADVANCED" },
 ];
 
 export default function TrainingSorting() {
@@ -22,11 +37,16 @@ export default function TrainingSorting() {
   const { data: courseCategoryData, isLoading: isResourceLoading } = useGet<
     ICategory[]
   >("/course-category", ["course-category"]);
+  const { data: organizationData, isLoading: isOrganizationLoading } = useGet<
+    IOrganization[]
+  >("/organizations", ["organizations"]);
 
   const methods = useForm({
     defaultValues: {
       sortBy: [],
-      courseTypes: []
+      courseTypes: [],
+      level: [],
+      organizationIds: [],
     },
   });
 
@@ -34,12 +54,19 @@ export default function TrainingSorting() {
     const subscription = methods.watch((values) => {
       dispatch(setSortBy(values.sortBy));
       dispatch(setCourseCategories(values.courseTypes));
+      dispatch(setLevel(values.level));
+      dispatch(setOrganizationIds(values.organizationIds));
     });
     return () => subscription.unsubscribe();
   }, [methods, dispatch]);
 
   const resourceCategoryOptions = mapToSelectOptions(
     courseCategoryData?.data,
+    "name",
+    "id"
+  );
+  const organizationOptions = mapToSelectOptions(
+    organizationData?.data,
     "name",
     "id"
   );
@@ -50,7 +77,7 @@ export default function TrainingSorting() {
         <form className="space-y-8 text-sm">
           <Accordion
             type="multiple"
-            defaultValue={["sort", "courseCategory", "language", "keyword"]}
+            defaultValue={["sort", "courseCategory", "level", "organization"]}
             className="w-full space-y-0"
           >
             <Button
@@ -83,6 +110,26 @@ export default function TrainingSorting() {
                 )}
               </AccordionContent>
             </AccordionItem>
+            {/* ── Level ─────────────────────────────────────── */}
+            <AccordionItem value="level" className="border-b-0">
+              <AccordionTrigger className="font-bold hover:no-underline text-black text-sm border-b rounded-none mb-3">
+                Levels
+              </AccordionTrigger>
+              <AccordionContent>
+                {isResourceLoading ? (
+                  <div className="space-y-2">
+                    <Skeleton className="h-4 w-52" />
+                    <Skeleton className="h-4 w-52" />
+                    <Skeleton className="h-4 w-52" />
+                  </div>
+                ) : (
+                  <ControlledCheckboxField
+                    name="level"
+                    options={levelOptions}
+                  />
+                )}
+              </AccordionContent>
+            </AccordionItem>
 
             {/* ── Resource Type ─────────────────────────────── */}
             <AccordionItem value="courseCategory" className="border-b-0">
@@ -103,6 +150,29 @@ export default function TrainingSorting() {
                   <ControlledCheckboxField
                     name="courseTypes"
                     options={resourceCategoryOptions}
+                  />
+                )}
+              </AccordionContent>
+            </AccordionItem>
+            {/* ── Organization ─────────────────────────────── */}
+            <AccordionItem value="organization" className="border-b-0">
+              <AccordionTrigger className="font-bold hover:no-underline text-black text-sm border-b rounded-none mb-3">
+                Organization
+              </AccordionTrigger>
+              <AccordionContent>
+                {isOrganizationLoading ? (
+                  <div className="space-y-2">
+                    <Skeleton className="h-4 w-52" />
+                    <Skeleton className="h-4 w-52" />
+                    <Skeleton className="h-4 w-52" />
+                    <Skeleton className="h-4 w-52" />
+                    <Skeleton className="h-4 w-52" />
+                    <Skeleton className="h-4 w-52" />
+                  </div>
+                ) : (
+                  <ControlledCheckboxField
+                    name="organizationIds"
+                    options={organizationOptions}
                   />
                 )}
               </AccordionContent>

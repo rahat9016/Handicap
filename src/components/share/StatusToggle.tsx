@@ -7,9 +7,11 @@ interface StatusToggleProps {
   id: string | number
   status: boolean
   onConfirm: (id: string | number, newStatus: boolean) => Promise<void> | void
+  levelValue_1?: string 
+  levelValue_2?: string
 }
 
-export function StatusToggle({ id, status, onConfirm }: StatusToggleProps) {
+export function StatusToggle({ id, status, onConfirm, levelValue_1 = "Active", levelValue_2 = "Inactive" }: StatusToggleProps) {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [pendingStatus, setPendingStatus] = useState<boolean | null>(null)
 
@@ -35,7 +37,7 @@ export function StatusToggle({ id, status, onConfirm }: StatusToggleProps) {
   return (
     <div className="flex items-center gap-2">
       {/* Left label */}
-      <span className="text-xs text-gray-600">Inactive</span>
+      <span className="text-xs text-gray-600">{levelValue_2}</span>
 
       <TooltipProvider>
         <Tooltip>
@@ -54,13 +56,13 @@ export function StatusToggle({ id, status, onConfirm }: StatusToggleProps) {
             </label>
           </TooltipTrigger>
           <TooltipContent>
-            <p>{status ? "Click to deactivate" : "Click to activate"}</p>
+            <p>{status ? `Click to ${levelValue_2}` : `Click to ${levelValue_1}`}</p>
           </TooltipContent>
         </Tooltip>
       </TooltipProvider>
 
       {/* Right label */}
-      <span className="text-xs text-gray-600">Active</span>
+      <span className="text-xs text-gray-600">{levelValue_1}</span>
 
       {/* Confirmation Dialog */}
       {isDialogOpen && (

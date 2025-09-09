@@ -1,7 +1,7 @@
+import { IUser } from "@/components/organizer/types";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { BadgeCheck, Mail, Phone, User } from "lucide-react";
 import Image from "next/image";
-import { IUser } from "../organizer/types";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
 
 export default function ViewDetails({
   isOpen,

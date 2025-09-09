@@ -19,14 +19,14 @@ export interface ICourse {
   objectives: string;
   durationMinutes: number;
   isActive: boolean;
+  isPublished: boolean;
   createdAt: string;
   updatedAt: string;
   creator: ICreator;
   organization: IOrganization;
   thumbnailUrl: string;
-  CourseCategory: ICategory
+  CourseCategory: ICategory;
 }
-
 
 export interface ICategory {
   id: number;
@@ -37,8 +37,26 @@ export interface ICategory {
   updatedAt: string; // ISO Date string
 }
 
-// 🎥 Video Variant
-export interface IVideoVariant {
+export interface IVideoContent {
+  id: number;
+  title: string;
+  description: string;
+  contentType: "VIDEO" | "LINK";
+  contentData?: {
+    duration?: number;
+    variants?: IVariant[];
+    thumbnailUrl?: string;
+    processingStatus?: string;
+    masterPlaylistUrl?: string;
+  };
+  link?: string | null;
+  filePath?: string | null;
+  courseId: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface IVariant {
   codec: string;
   width: number;
   height: number;
@@ -46,38 +64,23 @@ export interface IVideoVariant {
   playlistUrl: string;
 }
 
-// 📦 Video Content
-export interface IVideoContent {
-  id: number;
-  title: string;
-  description: string;
-  contentType: "VIDEO"; // could be extended later
-  contentData: {
-    duration: number; // in seconds
-    variants: IVideoVariant[];
-    thumbnailUrl: string;
-    processingStatus: "PENDING" | "PROCESSING" | "COMPLETED" | "FAILED";
-    masterPlaylistUrl: string;
-  };
-  createdAt: string; // ISO datetime
-  updatedAt: string; // ISO datetime
-  filePath: string;
-  courseId: number;
-}
-
-// 📝 Quiz (placeholder, extend when quiz data available)
+// 📝 Quiz
 export interface IQuiz {
   id: number;
   title: string;
-  description?: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  questions?: any[]; // replace with proper type when known
+  description: string;
+  passingScore: number;
+  timeLimitMinutes: number;
+  isActive: boolean;
+  createdAt: string;
+  courseId: number;
+  contentId: number | null;
 }
 
-// 📚 Course Content Item (wrapper)
-export interface ICourseContentItem {
+// 📦 Wrapper Item (can be either CONTENT or QUIZ)
+export interface ICourseContent {
   id: number;
-  type: "CONTENT" | "QUIZ"; // extend if more types are added
+  type: "CONTENT" | "QUIZ";
   order: number;
   courseId: number;
   contentId: number | null;
@@ -85,7 +88,7 @@ export interface ICourseContentItem {
   createdAt: string;
   updatedAt: string;
 
-  // relations
+  // nested
   content: IVideoContent | null;
   quiz: IQuiz | null;
 }

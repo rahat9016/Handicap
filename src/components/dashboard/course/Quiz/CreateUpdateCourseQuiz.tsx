@@ -1,0 +1,162 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import ControlledInputField from "@/components/share/ControlledInputField";
+import ControlledTextareaField from "@/components/share/ControlledTextareaField";
+import InputLabel from "@/components/share/InputLabel";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { usePost } from "@/hooks/usePost";
+import { useParams } from "next/navigation";
+import { FormProvider, useFieldArray, useForm } from "react-hook-form";
+import QuestionField from "./QuestionField";
+
+export type Option = {
+  optionText: string;
+  isCorrect: boolean;
+  sequenceNumber: number;
+};
+
+export type Question = {
+  questionText: string;
+  questionType: "MULTIPLE_CHOICE" | "TRUE_FALSE" | "SHORT_ANSWER" | "ESSAY";
+  points: number;
+  sequenceNumber: number;
+  options: Option[];
+};
+
+export type QuizForm = {
+  questions: Question[];
+};
+export default function CreateUpdateCourseQuiz({
+  isOpen,
+  onClose,
+}: {
+  isOpen: boolean;
+  onClose: () => void;
+}) {
+  const { id } = useParams();
+  const { mutateAsync } = usePost(
+    "/quizzes",
+    (data) => {
+      console.log("POST success", data);
+    },
+    [["quizzes"]]
+  );
+  const methods = useForm({
+    mode: "onChange",
+    // resolver: yupResolver(quizFormSchema),
+    defaultValues: {
+      questions: [
+        {
+          questionText: "",
+          questionType: "MULTIPLE_CHOICE",
+          points: 1,
+          sequenceNumber: 1,
+          options: [{ optionText: "", isCorrect: false, sequenceNumber: 1 }],
+        },
+      ],
+    },
+  });
+
+  const { fields, append, remove } = useFieldArray({
+    control: methods.control,
+    name: "questions",
+  });
+  console.log(methods.formState.errors);
+
+  const onSubmit = (data: any) => {
+    console.log(data);
+    try {
+      // Transform frontend form data into API format
+      const payload = {
+        title: data.name,
+        description: data.description,
+        passingScore: 50,
+        timeLimitMinutes: 15,
+        courseId: id,
+        // contentId: data.contentId,
+        questions: data.questions.map((q: any, index: number) => ({
+          questionText: q.questionText,
+          questionType:
+            q.questionType === "MULTIPLE_CHOICE" ? "MCQ" : q.questionType,
+          points: q.points,
+          sequenceNumber: index + 1,
+          options: q.options.map((o: any, oIndex: number) => ({
+            optionText: o.optionText,
+            isCorrect: o.isCorrect,
+            sequenceNumber: oIndex + 1,
+          })),
+        })),
+      };
+      mutateAsync(payload);
+      // onClose();
+    } catch (error) {
+      console.error("❌ Error creating quiz:", error);
+    }
+  };
+
+  const addQuestion = () => {
+    append({
+      questionText: "",
+      questionType: "MULTIPLE_CHOICE",
+      points: 1,
+      sequenceNumber: fields.length + 1,
+      options: [{ optionText: "", isCorrect: false, sequenceNumber: 1 }],
+    });
+  };
+  return (
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent
+        className="bg-white !max-w-[60vw] w-[60vw] max-h-[90vh] overflow-y-auto"
+        onInteractOutside={(event) => event.preventDefault()}
+      >
+        <DialogHeader>
+          <DialogTitle>Create Quiz</DialogTitle>
+        </DialogHeader>
+        <FormProvider {...methods}>
+          <form
+            onSubmit={methods.handleSubmit(onSubmit)}
+            className="w-full space-y-6"
+          >
+            <div className="mb-4">
+              <InputLabel label="Name" required />
+              <ControlledInputField
+                name="name"
+                placeholder="Enter the quiz name..."
+              />
+            </div>
+
+            <div className="mb-4">
+              <InputLabel label="Description" />
+              <ControlledTextareaField
+                name="description"
+                placeholder="Write down here the description..."
+              />
+            </div>
+            {fields.map((field, questionIndex) => (
+              <QuestionField
+                key={field.id}
+                questionIndex={questionIndex}
+                remove={remove}
+                isFirst={questionIndex === 0}
+              />
+            ))}
+
+            <div className="flex justify-between mt-6">
+              <Button onClick={addQuestion} className="text-white">
+                Add Question
+              </Button>
+              <Button type="submit" className="text-white">
+                Save Quiz
+              </Button>
+            </div>
+          </form>
+        </FormProvider>
+      </DialogContent>
+    </Dialog>
+  );
+}

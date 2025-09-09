@@ -1,3 +1,5 @@
+import { IUser } from "@/components/organizer/types";
+import ControlledSelectField from "@/components/share/ControlledSelectField";
 import InputLabel from "@/components/share/InputLabel";
 import { Button } from "@/components/ui/button";
 import {
@@ -13,8 +15,6 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import { IUser } from "../organizer/types";
-import ControlledSelectField from "../share/ControlledSelectField";
 import { roleChange, RoleChangeForm } from "./Schema/Setup";
 import { IRole } from "./types/Role";
 

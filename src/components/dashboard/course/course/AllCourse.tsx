@@ -14,9 +14,16 @@ import { useSearchDebounce } from "@/hooks/useSearchDebounce";
 import { useRouter } from "@/i18n/navigation";
 import { useAppSelector } from "@/lib/redux/hooks";
 import { mapToSelectOptions } from "@/utils/mapToSelectOptions";
-import { EllipsisVertical, Shapes, Video } from "lucide-react";
+import {
+  EllipsisVertical,
+  Eye,
+  MessageCircleQuestionMark,
+  Shapes,
+  SquarePen,
+  Video,
+} from "lucide-react";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 export default function AllCourse() {
   const router = useRouter();
@@ -47,12 +54,15 @@ export default function AllCourse() {
     : organizationId
     ? `/course/organization/${organizationId}`
     : "/course";
-  console.log(selectedId);
-  const shouldFetch = organizationId !== undefined;
+  const shouldFetch = selectedId !== undefined || organizationId !== undefined;
 
   const { data, isLoading } = useGet<ICourse[]>(
     endpoint,
-    ["courseList", currentPage.toString(), organizationId ?? "all"],
+    [
+      "courseList",
+      currentPage.toString(),
+      selectedId ?? organizationId ?? "all",
+    ],
     {
       ...(itemsPerPage !== -1 && {
         page: currentPage.toString(),
@@ -63,13 +73,6 @@ export default function AllCourse() {
     { enabled: shouldFetch }
   );
 
-  // const handleEdit = (row: IResource) => {
-  //   navigate.push(`/admin/resources/${row.id}`);
-  // };
-  // const handleView = (row: IResource) => {
-  //   setResource(row);
-  //   setIsView(true);
-  // };
   // // Update total items whenever data changes
   useEffect(() => {
     if (data) {
@@ -77,90 +80,118 @@ export default function AllCourse() {
     }
   }, [data]);
 
-  const columns: ColumnDef<ICourse>[] = [
+  const columns: ColumnDef<ICourse>[] = useMemo(() => {
+  return [
     {
       header: "Thumbnail",
       accessorKey: "thumbnailUrl",
-      cell: (_value: string | number | undefined, row: ICourse) => {
-        return (
-          <div className="w-14 h-14 p-1 border flex items-center justify-center rounded-md cursor-pointer hover:opacity-80">
-            {row?.thumbnailUrl && (
-              <Image
-                src={row.thumbnailUrl}
-                width={44}
-                height={44}
-                alt="thumbnail"
-                className="rounded"
-              />
-            )}
-          </div>
-        );
-      },
+      cell: (_value: string | number | undefined, row: ICourse) => (
+        <div className="w-14 h-14 p-1 border flex items-center justify-center rounded-md cursor-pointer hover:opacity-80">
+          {row?.thumbnailUrl && (
+            <Image
+              src={row.thumbnailUrl}
+              width={44}
+              height={44}
+              alt="thumbnail"
+              className="rounded"
+            />
+          )}
+        </div>
+      ),
     },
     { header: "Resource Title", accessorKey: "title" },
     { header: "Description", accessorKey: "description" },
     {
       header: "Category",
       accessorKey: "CourseCategory",
-      cell: (_value: string | number | undefined, row: ICourse) => {
-        return <span>{row?.CourseCategory?.name}</span>;
-      },
+      cell: (_value: string | number | undefined, row: ICourse) => <span>{row?.CourseCategory?.name}</span>,
     },
     {
-      header: "organization",
+      header: "Organization",
       accessorKey: "organization",
-      cell: (_value: string | number | undefined, row: ICourse) => {
-        return <span>{row?.organization?.name}</span>;
-      },
+      cell: (_value: string | number | undefined, row: ICourse) => <span>{row?.organization?.name}</span>,
     },
     { header: "Duration ", accessorKey: "durationMinutes" },
     { header: "Objectives", accessorKey: "objectives" },
-
     {
       header: "Is Active",
       accessorKey: "isActive",
       cell: (value: boolean | undefined) => {
-        const isActive = value;
-
         return (
           <span
             className={`px-2 py-1 rounded-full text-xs font-medium ${
-              isActive ? "bg-[#bfffda] text-green" : "bg-rose-200 text-rose-700"
+              value ? "bg-[#bfffda] text-green" : "bg-rose-200 text-rose-700"
             }`}
           >
-            {isActive ? "Active" : "Inactive"}
+            {value ? "Active" : "Inactive"}
           </span>
         );
       },
     },
-    adminOrganizationPermission ? {
-      header: "Action",
-      accessorKey: "id",
-      cell: (value: string | number | undefined) => {
+    {
+      header: "Is Publish",
+      accessorKey: "isPublished",
+      cell: (value: boolean | undefined) => {
         return (
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <button className="p-1 border border-skeleton rounded bg-[#F5F5F5] cursor-pointer">
-                <EllipsisVertical className="text-lg text-darkLiver" />
-              </button>
-            </DropdownMenuTrigger>
-
-            <DropdownMenuContent align="end" className="w-32">
-              <DropdownMenuItem
-                onClick={() => {
-                  router.push(`/admin/course/course-video-upload/${value}`);
-                }}
-                className="flex items-center gap-1 cursor-pointer text-darkLiver font-inter font-normal text-sm"
-              >
-                <Video />
-                Add Video
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <span
+            className={`px-2 py-1 rounded-full text-xs font-medium ${
+              value ? "bg-[#bfffda] text-green" : "bg-rose-200 text-rose-700"
+            }`}
+          >
+            {value ? "Published" : "Unpublished"}
+          </span>
         );
       },
-    } : undefined,
+    },
+    adminOrganizationPermission
+      ? {
+          header: "Action",
+          accessorKey: "id",
+          cell: (value: string | number | undefined) => {
+            return (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button className="p-1 border border-skeleton rounded bg-[#F5F5F5] cursor-pointer">
+                    <EllipsisVertical className="text-lg text-darkLiver" />
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-40">
+                  <DropdownMenuItem
+                    onClick={() => router.push(`/admin/course/course-view-details/${value}`)}
+                    className="flex items-center gap-1 text-darkLiver font-inter font-normal text-sm"
+                  >
+                    <Eye /> View Course
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() => router.push(`/admin/course/course-video-upload/${value}`)}
+                    className="flex items-center gap-1 text-darkLiver font-inter font-normal text-sm"
+                  >
+                    <Video />
+                    Add Video
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() => router.push(`/admin/course/course-quiz-upload/${value}`)}
+                    className="flex items-center gap-1 text-darkLiver font-inter font-normal text-sm"
+                  >
+                    <MessageCircleQuestionMark />
+                    Add Quiz
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() => router.push(`/admin/course/course-update/${value}`)}
+                    className="flex items-center gap-1 text-darkLiver font-inter font-normal text-sm"
+                  >
+                    <SquarePen />
+                    Edit Course
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            );
+          },
+        }
+      : undefined,
   ].filter(Boolean) as ColumnDef<ICourse>[];
+}, [adminOrganizationPermission, router]);
+
 
   const options = mapToSelectOptions(organizationsData?.data, "name", "id");
 
@@ -187,7 +218,12 @@ export default function AllCourse() {
         options={options}
         setSelectedId={setSelectedId}
       />
-      
+      {/* <CreateUpdateCourseQuiz
+        isOpen={isModalOpen}
+        onClose={() => {
+          setIsModalOpen(false);
+        }}
+      /> */}
     </div>
   );
 }

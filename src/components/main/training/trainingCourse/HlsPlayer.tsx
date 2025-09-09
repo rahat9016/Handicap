@@ -9,15 +9,15 @@ import {
 import Hls, { Level } from "hls.js";
 import { Settings } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { ICourseContentItem } from "../types/traning";
+import { IVariant } from "../types/traning";
 
 interface HlsPlayerProps {
-  src: string; // master.m3u8 URL
+  src: string;
   width?: string | number;
   height?: string | number;
   controls?: boolean;
   autoPlay?: boolean;
-  selectedVideo?: ICourseContentItem | null;
+  variants: IVariant[]
 }
 
 export default function HlsPlayer({
@@ -26,20 +26,17 @@ export default function HlsPlayer({
   height = "100%",
   controls = true,
   autoPlay = false,
-  selectedVideo,
+  variants
 }: HlsPlayerProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const hlsRef = useRef<Hls | null>(null);
 
+  const [isPlaying, setIsPlaying] = useState(false);
   const [levels, setLevels] = useState<Level[]>([]);
   const [selectedLevel, setSelectedLevel] = useState<number>(-1);
 
-  const [isPlaying, setIsPlaying] = useState(false);
-  const variants = selectedVideo?.content?.contentData?.variants || [];
   console.log(isPlaying);
-  // const [showSettings, setShowSettings] = useState(false);
 
-  // Handle play/pause for running indicator
   useEffect(() => {
     if (!videoRef.current) return;
     const video = videoRef.current;
@@ -124,8 +121,8 @@ export default function HlsPlayer({
             <DropdownMenuContent
               align="end"
               side="top"
-              sideOffset={8} // offset from the trigger
-              collisionPadding={0} // prevents it from going outside viewport
+              sideOffset={8} 
+              collisionPadding={0}
               className="bg-black/80 text-white"
             >
               <DropdownMenuItem

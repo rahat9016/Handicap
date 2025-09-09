@@ -18,7 +18,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import { resourcesSchema } from "./Schema/Resources";
+import { resourcesSchema } from "./Schema/Course";
 
 export default function CreateUpdateResources({
   isOpen,

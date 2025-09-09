@@ -1,5 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
+import { IUser } from "@/components/organizer/types";
+import { StatusToggle } from "@/components/share/StatusToggle";
 import { ColumnDef, DataTable } from "@/components/ui/data-table";
 import { useGet } from "@/hooks/useGet";
 import { usePagination } from "@/hooks/usePagination";
@@ -7,8 +9,6 @@ import { usePatch } from "@/hooks/usePatch";
 import { useSearchDebounce } from "@/hooks/useSearchDebounce";
 import { Eye, SquarePen, UsersIcon } from "lucide-react";
 import { useEffect, useState } from "react";
-import { IUser } from "../organizer/types";
-import { StatusToggle } from "../share/StatusToggle";
 import CreateUpdateUser from "./CreateUpdateUsers";
 import ViewDetails from "./ViewDetails";
 export default function Users() {

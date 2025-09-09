@@ -31,13 +31,15 @@ export default function Courses() {
     setTotalItems,
     setItemsPerPage,
   } = usePagination();
-  const { courseCategories, sortBy, } = useAppSelector(
+  const { courseCategories, sortBy, level, organizationIds } = useAppSelector(
     (state) => state.filter
   );
 
   const filters = {
     sort: sortBy,
     categoryIds: courseCategories,
+    level: level,
+    organizationIds: organizationIds,
     search: debouncedSearch,
   };
 
@@ -50,8 +52,8 @@ export default function Courses() {
 
   // API call
   const { data, isLoading } = useGet<ICourse[]>(
-    `/course?${queryString}`,
-    ["course", queryString]
+    `/course/published?${queryString}`,
+    ["course-published", queryString]
   );
   useEffect(() => {
     if (data) setTotalItems(data.meta?.totalItems || 0);

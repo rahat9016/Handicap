@@ -4,7 +4,6 @@ import InputLabel from "@/components/share/InputLabel";
 import { Button } from "@/components/ui/button";
 import { useFieldArray, useFormContext } from "react-hook-form";
 import ControlledRadioField from "../course/ControlledRadioField";
-import CorrectAnswerRadio from "../course/CorrectAnswerRadio";
 import { QuizForm } from "./CreateUpdateCourseQuiz";
 
 const QuestionField = ({
@@ -19,32 +18,19 @@ const QuestionField = ({
   const { control, watch } = useFormContext<QuizForm>();
   const questionType = watch(`questions.${questionIndex}.questionType`);
 
-  const {
-    fields,
-    append,
-    remove: removeOption,
-  } = useFieldArray({
-
+  const { fields, append, remove: removeOption } = useFieldArray({
     control,
     name: `questions.${questionIndex}.options`,
   });
 
-  const addOption = () => {
-    append({
-      optionText: "",
-      isCorrect: false,
-      sequenceNumber: fields.length + 1,
-    });
-  };
-
   return (
-    <div className="p-6 border rounded-lg bg-white shadow-sm">
+    <div className="p-6 border rounded-lg bg-gray-50 shadow-sm">
       <div className="flex justify-between items-center mb-4">
         <h3 className="text-lg font-semibold">Question {questionIndex + 1}</h3>
         {!isFirst && (
-          <Button 
-            type="button" 
-            onClick={() => remove(questionIndex)} 
+          <Button
+            type="button"
+            onClick={() => remove(questionIndex)}
             variant="destructive"
             size="sm"
           >
@@ -57,7 +43,7 @@ const QuestionField = ({
         <InputLabel label="Question Text" required />
         <ControlledInputField
           name={`questions.${questionIndex}.questionText`}
-          placeholder="Enter your question here..."
+          placeholder="Enter your question..."
         />
       </div>
 
@@ -67,8 +53,8 @@ const QuestionField = ({
           <ControlledSelectField
             name={`questions.${questionIndex}.questionType`}
             options={[
-              { value: 'MULTIPLE_CHOICE', label: 'Multiple Choice' },
-              { value: 'TRUE_FALSE', label: 'True/False' }
+              { value: "MULTIPLE_CHOICE", label: "Multiple Choice" },
+              { value: "TRUE_FALSE", label: "True / False" },
             ]}
           />
         </div>
@@ -81,24 +67,22 @@ const QuestionField = ({
         </div>
       </div>
 
-      {/* Options for Multiple Choice */}
-      {questionType === 'MULTIPLE_CHOICE' && (
-        <div className="mt-4">
+      {/* MULTIPLE CHOICE */}
+      {questionType === "MULTIPLE_CHOICE" && (
+        <div>
           <InputLabel label="Options" required />
-          <div className="space-y-3">
+          <div className="space-y-2">
             {fields.map((field, optionIndex) => (
               <div key={field.id} className="flex items-center gap-2">
                 <ControlledInputField
                   name={`questions.${questionIndex}.options.${optionIndex}.optionText`}
                   placeholder={`Option ${optionIndex + 1}`}
                 />
-                <div className="flex items-center">
-                  <CorrectAnswerRadio 
-                    questionIndex={questionIndex} 
-                    optionIndex={optionIndex} 
-                  />
-                  <span className="text-sm ml-1">Correct</span>
-                </div>
+                <ControlledRadioField
+                  name={`questions.${questionIndex}.options.${optionIndex}.isCorrect`}
+                  value="true"
+                  label="Correct"
+                />
                 {fields.length > 1 && (
                   <Button
                     type="button"
@@ -112,35 +96,42 @@ const QuestionField = ({
               </div>
             ))}
           </div>
-          <Button type="button" onClick={addOption} variant="outline" className="mt-2">
-            Add Option
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            className="mt-2"
+            onClick={() =>
+              append({
+                optionText: "",
+                isCorrect: false,
+                sequenceNumber: fields.length + 1,
+              })
+            }
+          >
+            ➕ Add Option
           </Button>
         </div>
       )}
 
-      {/* Options for True/False */}
-      {questionType === 'TRUE_FALSE' && (
-        <div className="mt-4">
+      {/* TRUE/FALSE */}
+      {questionType === "TRUE_FALSE" && (
+        <div>
           <InputLabel label="Correct Answer" required />
           <div className="flex gap-4">
-            <label className="flex items-center">
-              <ControlledRadioField
-                name={`questions.${questionIndex}.correctAnswer`}
-                value="true"
-                label="True"
-              />
-            </label>
-            <label className="flex items-center">
-              <ControlledRadioField
-                name={`questions.${questionIndex}.correctAnswer`}
-                value="false"
-                label="False"
-              />
-            </label>
+            <ControlledRadioField
+              name={`questions.${questionIndex}.correctAnswer`}
+              value="true"
+              label="True"
+            />
+            <ControlledRadioField
+              name={`questions.${questionIndex}.correctAnswer`}
+              value="false"
+              label="False"
+            />
           </div>
         </div>
       )}
-
     </div>
   );
 };

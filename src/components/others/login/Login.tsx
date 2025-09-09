@@ -74,10 +74,12 @@ export default function Login() {
 
         if (res?.parentRoleId === 2) {
           destination = "/organization-list";
-        } else if (res?.parentRoleId === null) {
+        } 
+        else if (res?.parentRoleId === null) {
           // 🚫 no permission → send back to callback (not /admin!)
           destination = callbackUrl;
-        } else if (!rawCallback) {
+        } 
+        else if (!rawCallback) {
           // If no callback was passed, allow only permitted users to land in /admin
           destination = "/admin";
         }

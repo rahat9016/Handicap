@@ -50,7 +50,7 @@ export default function Sidebar() {
       icon: Upload,
       children: [{ label: "Page Sections", href: "/admin/page-sections" }],
     },
-    {
+    hasPermission && {
       label: "Organization Manage",
       icon: Settings,
       children: [
@@ -64,7 +64,7 @@ export default function Sidebar() {
         },
       ],
     },
-    {
+    hasPermission && {
       label: "Setup",
       icon: Settings,
       children: [

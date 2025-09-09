@@ -3,8 +3,8 @@ import ControlledSelectField from "@/components/share/ControlledSelectField";
 import InputLabel from "@/components/share/InputLabel";
 import { Button } from "@/components/ui/button";
 import { useFieldArray, useFormContext } from "react-hook-form";
-import ControlledRadioField from "./ControlledRadioField";
-import CorrectAnswerRadio from "./CorrectAnswerRadio";
+import ControlledRadioField from "../course/ControlledRadioField";
+import CorrectAnswerRadio from "../course/CorrectAnswerRadio";
 import { QuizForm } from "./CreateUpdateCourseQuiz";
 
 const QuestionField = ({
@@ -68,9 +68,7 @@ const QuestionField = ({
             name={`questions.${questionIndex}.questionType`}
             options={[
               { value: 'MULTIPLE_CHOICE', label: 'Multiple Choice' },
-              { value: 'TRUE_FALSE', label: 'True/False' },
-              { value: 'SHORT_ANSWER', label: 'Short Answer' },
-              { value: 'ESSAY', label: 'Essay' },
+              { value: 'TRUE_FALSE', label: 'True/False' }
             ]}
           />
         </div>

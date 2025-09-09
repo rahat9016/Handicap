@@ -16,8 +16,8 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
+import CreateUpdateCourseQuiz from "../Quiz/CreateUpdateCourseQuiz";
 import { ICourseDetails } from "../types/types";
-import CreateUpdateCourseQuiz from "./CreateUpdateCourseQuiz";
 
 export default function CourseQuizUploadDetails({
   title,

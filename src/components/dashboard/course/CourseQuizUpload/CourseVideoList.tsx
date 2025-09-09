@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 import { MessageCircleQuestionMark } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
-import CreateUpdateCourseQuiz from "./CreateUpdateCourseQuiz";
+import CreateUpdateCourseQuiz from "../Quiz/CreateUpdateCourseQuiz";
 import EditVideoModal from "./EditVideoModal";
 import VideoModal from "./VideoModal";
 

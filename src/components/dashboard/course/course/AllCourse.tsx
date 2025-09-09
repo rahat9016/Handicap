@@ -24,11 +24,9 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
-import CreateUpdateCourseQuiz from "./CreateUpdateCourseQuiz";
 
 export default function AllCourse() {
   const router = useRouter();
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const { organizationId } = useAppSelector((state) => state.organizer);
   const { adminOrganizationPermission, hasPermission } = useAppSelector(
     (state) => state.permission
@@ -173,7 +171,6 @@ export default function AllCourse() {
                   </DropdownMenuItem>
                   <DropdownMenuItem
                     onClick={() => router.push(`/admin/course/course-quiz-upload/${value}`)}
-                    // onClick={() => setIsModalOpen(true)}
                     className="flex items-center gap-1 text-darkLiver font-inter font-normal text-sm"
                   >
                     <MessageCircleQuestionMark />
@@ -221,12 +218,12 @@ export default function AllCourse() {
         options={options}
         setSelectedId={setSelectedId}
       />
-      <CreateUpdateCourseQuiz
+      {/* <CreateUpdateCourseQuiz
         isOpen={isModalOpen}
         onClose={() => {
           setIsModalOpen(false);
         }}
-      />
+      /> */}
     </div>
   );
 }

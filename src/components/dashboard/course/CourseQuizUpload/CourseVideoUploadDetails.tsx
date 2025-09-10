@@ -32,6 +32,7 @@ export default function CourseQuizUploadDetails({
   thumbnailUrl,
   isActive,
   className,
+  courseId
 }: ICourseDetails) {
   const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -133,6 +134,7 @@ export default function CourseQuizUploadDetails({
         onClose={() => {
           setIsModalOpen(false);
         }}
+        id={courseId}
       />
     </div>
   );

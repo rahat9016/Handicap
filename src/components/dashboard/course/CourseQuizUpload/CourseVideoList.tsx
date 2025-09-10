@@ -12,10 +12,13 @@ import VideoModal from "./VideoModal";
 export default function CourseVideoList({
   courseContentList,
   className,
+  courseId
 }: {
   courseContentList: IVideoContent[] | never[];
   className?: string;
+  courseId: string;
 }) {
+  const [contentId, setContentId] = useState<number | null>(null);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [selectedVideo, setSelectedVideo] = useState<IVideoContent | null>(
     null
@@ -75,7 +78,10 @@ export default function CourseVideoList({
                     {item.title}
                   </h3>
                   <button
-                    onClick={() => setIsModalOpen(true)}
+                    onClick={() => {
+                      setIsModalOpen(true);
+                      setContentId(item?.id);
+                    }}
                     className="absolute top-4 right-4 flex items-center text-white bg-dashboard-primary p-1 rounded-md text-sm"
                   >
                     <MessageCircleQuestionMark size={16} /> Add Quiz
@@ -103,7 +109,10 @@ export default function CourseVideoList({
         isOpen={isModalOpen}
         onClose={() => {
           setIsModalOpen(false);
+          setContentId(null);
         }}
+        id={courseId}
+        contentId={contentId}
       />
     </div>
   );

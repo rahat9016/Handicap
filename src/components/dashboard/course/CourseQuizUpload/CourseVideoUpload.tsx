@@ -11,7 +11,6 @@ import CourseVideoUploadSkeleton from "./CourseVideoUploadSkeleton";
 
 export default function CourseQuizUpload() {
   const { id } = useParams();
-
   const { data, isLoading } = useGet<ICourseDetails>(
     `/course/${id}`,
     ["courseList"],
@@ -31,7 +30,7 @@ export default function CourseQuizUpload() {
       {isLoading ? (
         <CourseVideoUploadSkeleton />
       ) : (
-        data?.data && <CourseQuizUploadDetails {...data?.data} />
+        data?.data && <CourseQuizUploadDetails {...data?.data} courseId={id as string} />
       )}
       <div className="mb-8">
         {allCourseContentListLoading ? (
@@ -43,6 +42,7 @@ export default function CourseQuizUpload() {
         ) : (
           <CourseVideoList
             courseContentList={allCourseContentList?.data || []}
+            courseId={id as string}
           />
         )}
       </div>

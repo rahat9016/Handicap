@@ -13,7 +13,7 @@ export const SUPPORTED_FORMATS = [
   "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
 ];
 
-const FILE_SIZE = 10 * 1024 * 1024;
+const FILE_SIZE = 50 * 1024 * 1024;
 
 export const resourcesSchema = Yup.object().shape({
   title: Yup.string()
@@ -59,7 +59,7 @@ export const resourcesSchema = Yup.object().shape({
               return false;
             }
           )
-          .test("fileSize", "File size must be less than 10MB.", (value) => {
+          .test("fileSize", "File size must be less than 50MB.", (value) => {
             if (typeof value === "string") return true;
             if (value instanceof File) {
               return value.size <= FILE_SIZE;

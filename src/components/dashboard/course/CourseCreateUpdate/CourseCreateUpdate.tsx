@@ -47,7 +47,6 @@ export default function CourseCreateUpdate() {
     reset: patchReset,
     error: patchError,
   } = usePatch((data) => console.log("Success", data), [["courseList"]]);
-  
 
   const { organizationId } = useAppSelector((state) => state.organizer);
   const methods = useForm({
@@ -79,7 +78,7 @@ export default function CourseCreateUpdate() {
     if (data.objectives) formData.append("objectives", data.objectives);
     if (data.thumbNail instanceof File) {
       formData.append("thumbNail", data.thumbNail);
-    } 
+    }
 
     if (id) {
       patchAsync({

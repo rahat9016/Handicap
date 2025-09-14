@@ -92,3 +92,39 @@ export interface ICourseContent {
   content: IVideoContent | null;
   quiz: IQuiz | null;
 }
+
+
+
+// ====================== QUIZ =======================
+export interface IQuiz {
+  id: number;
+  title: string;
+  description: string;
+  passingScore: number;
+  timeLimitMinutes: number;
+  isActive: boolean;
+  createdAt: string;
+  courseId: number;
+  contentId: number | null;
+  questions: IQuestion[];
+}
+
+interface IQuestion {
+  id: number;
+  questionText: string;
+  questionType: "MCQ" | "TRUE_FALSE" | "FILL_IN_BLANK" | string;
+  points: number;
+  sequenceNumber: number;
+  createdAt: string;
+  quizId: number;
+  options: IOption[];
+}
+
+interface IOption {
+  id: number;
+  optionText: string;
+  isCorrect: boolean;
+  sequenceNumber: number;
+  createdAt: string;
+  questionId: number;
+}

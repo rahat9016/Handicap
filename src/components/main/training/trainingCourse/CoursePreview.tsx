@@ -33,7 +33,6 @@ export default function CoursePreview({
         <Paragraph>No course content available.</Paragraph>
       ) : (
         courses.map((course, idx) => {
-          console.log(course)
           const isActive = selectedVideo?.id === course.id;
           return (
           <div

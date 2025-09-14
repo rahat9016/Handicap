@@ -1,8 +1,15 @@
-"use client"
+"use client";
 import { useGet } from "@/hooks/useGet";
-import { setLoading, setUserId, setUserInformation } from "@/lib/redux/features/auth/authSlice";
+import {
+  setLoading,
+  setUserId,
+  setUserInformation,
+} from "@/lib/redux/features/auth/authSlice";
 import { setOrganization } from "@/lib/redux/features/organizer/organizationSlice";
-import { setAdminOrganizationPermission, setPermission } from "@/lib/redux/features/permission/permissionSlice";
+import {
+  setAdminOrganizationPermission,
+  setPermission,
+} from "@/lib/redux/features/permission/permissionSlice";
 import { useAppDispatch } from "@/lib/redux/hooks";
 import { decryptData } from "@/utils/cryptoHelper";
 import Cookies from "js-cookie";
@@ -17,14 +24,14 @@ export const UserFetcher = () => {
   const decryptedRoleId = decryptData(roleId ?? "", "ABC123!@#");
 
   const { data, isSuccess, isLoading } = useGet(
-  `/user/${decryptedUserId}`,
-  ["user", decryptedUserId || ""],
-  undefined,
-  {
-    enabled: !!decryptedUserId,
-    staleTime: 5 * 60 * 1000,
-  }
-);
+    `/user/${decryptedUserId}`,
+    ["user", decryptedUserId || ""],
+    undefined,
+    {
+      enabled: !!decryptedUserId,
+      staleTime: 5 * 60 * 1000,
+    }
+  );
 
   // If userId is available, set it in the store
   useEffect(() => {
@@ -38,11 +45,10 @@ export const UserFetcher = () => {
   useEffect(() => {
     if (decryptedRoleId === "1") {
       dispatch(setPermission(true));
-    }else if(decryptedRoleId === "2"){
-      dispatch(setAdminOrganizationPermission(true))
+    } else if (decryptedRoleId === "2") {
+      dispatch(setAdminOrganizationPermission(true));
     }
   }, [decryptedRoleId, dispatch]);
-
 
   useEffect(() => {
     dispatch(setLoading(isLoading));
@@ -55,7 +61,7 @@ export const UserFetcher = () => {
       dispatch(setUserInformation(data.data));
     }
   }, [isSuccess, data, dispatch, isLoading]);
-  
+
   // If organization data is available in cookies, parse and set it in the store
   useEffect(() => {
     if (organizationData) {
@@ -64,5 +70,5 @@ export const UserFetcher = () => {
     }
   }, [organizationData, dispatch]);
 
-  return null; 
+  return null;
 };

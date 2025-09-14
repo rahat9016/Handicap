@@ -38,6 +38,7 @@ export default function CourseVideoStep() {
     selectedVideo?.content?.link
       ? extractYouTubeId(selectedVideo.content?.link)
       : null;
+  console.log({selectedVideo})
   return (
     <div>
       <div className="container ">

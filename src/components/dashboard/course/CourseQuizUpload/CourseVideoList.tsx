@@ -42,7 +42,14 @@ export default function CourseVideoList({
         className
       )}
     >
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      {
+        courseContentList.length === 0 ? (
+          <Card className="border rounded-xl">
+            <CardContent className="flex items-center justify-center gap-4 p-4">
+              <p className="text-sm text-black font-inter text-center">No course video content available</p>
+            </CardContent>
+          </Card>
+        ): <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
         {courseContentList?.map((item) => (
           <Card
             key={item.id}
@@ -95,6 +102,7 @@ export default function CourseVideoList({
           </Card>
         ))}
       </div>
+      }
       {modalType === "view" && selectedVideo && (
         <VideoModal video={selectedVideo} onClose={handleClose} />
       )}

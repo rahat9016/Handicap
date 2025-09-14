@@ -98,7 +98,7 @@ export default function CreateUpdateCourseQuiz({
           if (q.questionType === "MULTIPLE_CHOICE") {
             return {
               questionText: q.questionType,
-              questionType: "MCQ",
+              questionType: q.questionType,
               points: q.points,
               sequenceNumber: index + 1,
               options: q.options.map((o: any, oIndex: number) => ({
@@ -111,7 +111,7 @@ export default function CreateUpdateCourseQuiz({
           if (q.questionType === "MCQ") {
             return {
               questionText: q.questionText,
-              questionType: "MCQ",
+              questionType: q.questionType,
               points: q.points,
               sequenceNumber: index + 1,
               options: q.options.map((o: any, oIndex: number) => ({

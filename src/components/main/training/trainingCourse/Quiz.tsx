@@ -27,7 +27,7 @@ export function Quiz({ quiz }: QuizProps) {
   const handleAnswer = (questionId: number, optionId: number) => {
     setAnswers((prev) => ({ ...prev, [questionId]: optionId }));
   };
-  console.log(data);
+  // console.log(data);
   const handleSubmit = () => {
     console.log("User Answers:", answers);
     // 👉 Call API here if you need to submit results

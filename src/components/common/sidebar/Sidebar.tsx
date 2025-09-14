@@ -14,6 +14,7 @@ import {
   setPermission,
 } from "@/lib/redux/features/permission/permissionSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
+import { cn } from "@/lib/utils";
 import {
   BarChart3,
   Folder,
@@ -29,7 +30,7 @@ import {
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 
-export default function Sidebar() {
+export default function Sidebar({className}:{className?: string}) {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const { hasPermission } = useAppSelector((state) => state.permission);
@@ -109,6 +110,16 @@ export default function Sidebar() {
       ],
     },
     {
+      label: "Events",
+      icon: Folder,
+      children: [
+        {
+          label: "Events Categories",
+          href: "/admin/events/events-categories",
+        }
+      ],
+    },
+    {
       label: "Course's",
       icon: Shapes,
       children: [
@@ -150,7 +161,7 @@ export default function Sidebar() {
 
   const pathname = usePathname();
   return (
-    <aside className="w-[300px] bg-white h-screen border-r border-skeleton flex flex-col px-[22px] fixed top-0 overflow-y-auto py-6">
+    <aside className={cn("w-[300px] bg-white h-screen border-r border-skeleton flex flex-col px-[22px] fixed top-0 overflow-y-auto py-6", className)}>
       <nav className="flex flex-col h-full">
         <div
           onClick={() => router.push("/")}

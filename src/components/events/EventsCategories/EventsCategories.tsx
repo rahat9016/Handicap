@@ -87,7 +87,7 @@ export default function EventsCategories() {
       ? {
           header: "Action",
           accessorKey: "id",
-          cell: (_value: string | number | undefined, row: INews) => {
+          cell: () => {
             return (
               <div className="flex items-center gap-5">
                 <button

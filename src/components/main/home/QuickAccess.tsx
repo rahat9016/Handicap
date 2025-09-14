@@ -4,8 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { MoveRight } from "lucide-react";
 import Image from "next/image";
-import QuickAccessCard from "./QuickAccessCard";
 import { useState } from "react";
+import QuickAccessCard from "./QuickAccessCard";
 
 export default function QuickAccess() {
   const resources = {
@@ -56,7 +56,7 @@ export default function QuickAccess() {
         <div className="py-10 lg:py-20">
           <SectionTopTitle
             title="Quick Access"
-            desc="Access vocational training and employment opportunities designed to empower persons with disabilities—gain practical skills, receive career guidance, and connect with inclusive"
+            // desc="Access vocational training and employment opportunities designed to empower persons with disabilities—gain practical skills, receive career guidance, and connect with inclusive"
           />
           <div
             className="w-full lg:w-9/12 mx-auto "

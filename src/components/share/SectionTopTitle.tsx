@@ -8,7 +8,7 @@ export default function SectionTopTitle({
   classDesc,
 }: {
   title: string;
-  desc: string;
+  desc?: string;
   className?: string;
   classTitle?: string;
   classDesc?: string;
@@ -24,7 +24,7 @@ export default function SectionTopTitle({
       >
         {title}
       </h1>
-      <p
+      {desc && <p
         className={cn(
           "text-sm font-inter text-[#666666] font-medium mt-3 lg:mt-6 leading-[28px] mx-auto w-full lg:w-6/12",
           classDesc
@@ -32,7 +32,7 @@ export default function SectionTopTitle({
         tabIndex={0}
       >
         {desc}
-      </p>
+      </p>}
     </div>
   );
 }

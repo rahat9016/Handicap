@@ -1,6 +1,7 @@
 import { cn } from "@/lib/utils";
 import { FileText, X } from "lucide-react";
 import Image from "next/image";
+import { useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 
 const SUPPORTED_FORMATS = [
@@ -22,10 +23,11 @@ interface FileUploadControllerProps {
 export function FileUploadController({
   name,
   className,
-  label
+  label,
 }: FileUploadControllerProps) {
   const { control, getValues } = useFormContext();
   const initialUrl = getValues(name);
+  const [touched, setTouched] = useState(false);
 
   return (
     <Controller
@@ -41,7 +43,7 @@ export function FileUploadController({
             ? fileValue.type.startsWith("image/")
             : typeof fileValue === "string"
             ? /\.(jpg|jpeg|png|gif|webp|svg)$/i.test(fileValue)
-            : initialUrl
+            : !touched && initialUrl
             ? /\.(jpg|jpeg|png|gif|webp|svg)$/i.test(initialUrl)
             : false;
 
@@ -53,44 +55,40 @@ export function FileUploadController({
               : null
             : typeof fileValue === "string"
             ? fileValue
-            : initialUrl || null;
+            : !touched
+            ? initialUrl
+            : null;
 
         const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
           const file = e.target.files?.[0];
           if (file) {
+            setTouched(true);
             field.onChange(file);
           }
         };
 
         const handleDelete = () => {
+          setTouched(true);
           field.onChange(null);
         };
 
         const renderFileIcon = () => {
           if (fileValue instanceof File) {
             if (fileValue.type === "application/pdf") {
-              return (
-                <FileText className="w-10 h-10 text-rose-600" />
-              );
+              return <FileText className="w-10 h-10 text-rose-600" />;
             }
             if (
               fileValue.type.includes("word") ||
               fileValue.name.endsWith(".docx")
             ) {
-              return (
-                <FileText className="w-10 h-10 text-blue" />
-              );
+              return <FileText className="w-10 h-10 text-blue-600" />;
             }
           } else if (typeof fileValue === "string" && !isImage) {
             if (fileValue.endsWith(".pdf")) {
-              return (
-                <FileText className="w-10 h-10 text-rose-600" />
-              );
+              return <FileText className="w-10 h-10 text-rose-600" />;
             }
             if (fileValue.endsWith(".doc") || fileValue.endsWith(".docx")) {
-              return (
-                <FileText className="w-10 h-10 text-blue-600" />
-              );
+              return <FileText className="w-10 h-10 text-blue-600" />;
             }
           }
           return (
@@ -124,7 +122,7 @@ export function FileUploadController({
                     className="w-full h-full object-contain rounded-lg"
                   />
                 </div>
-              ) : fileValue ? (
+              ) : preview ? (
                 <div className="w-full h-full flex flex-col items-center justify-center text-gray-600 relative">
                   <button
                     onClick={handleDelete}
@@ -135,7 +133,9 @@ export function FileUploadController({
                     <X className="w-4 h-4 text-white" />
                   </button>
                   {renderFileIcon()}
-                  <p className="text-sm font-normal font-inter mt-2">File selected</p>
+                  <p className="text-sm font-normal font-inter mt-2">
+                    File selected
+                  </p>
                 </div>
               ) : (
                 <label

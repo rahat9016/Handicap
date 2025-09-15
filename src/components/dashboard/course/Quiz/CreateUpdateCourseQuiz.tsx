@@ -39,19 +39,26 @@ export default function CreateUpdateCourseQuiz({
   onClose,
   id,
   contentId,
+  quizId,
 }: {
   isOpen: boolean;
   onClose: () => void;
   id: string;
   contentId?: number | null;
+  quizId?: number;
 }) {
-  // const { id } = useParams();
+  // const { data: quizData } = useGet<IQuiz>(
+  //   `/quizzes/${quizId}`,
+  //   ["", String(quizId)],
+  //   {},
+  //   { enabled: quizId !== undefined }
+  // );
   const { mutateAsync } = usePost(
     "/quizzes",
     (data) => {
       console.log("POST success", data);
     },
-    [["quizzes"]]
+    [["courseDetails"]]
   );
   const methods = useForm({
     mode: "onChange",
@@ -73,6 +80,29 @@ export default function CreateUpdateCourseQuiz({
       ],
     },
   });
+console.log(quizId)
+  // useEffect(() => {
+  //   if (quizData) {
+  //     methods.reset({
+  //       title: quizData.title,
+  //       description: quizData.description,
+  //       passingScore: quizData.passingScore,
+  //       timeLimitMinutes: quizData.timeLimitMinutes,
+  //       questions: quizData.questions.map((q, idx) => ({
+  //         questionText: q.questionText,
+  //         questionType: q.questionType,
+  //         points: q.points,
+  //         sequenceNumber: q.sequenceNumber ?? idx + 1,
+  //         options: q.options.map((opt, optIdx) => ({
+  //           optionText: opt.optionText,
+  //           isCorrect: opt.isCorrect,
+  //           sequenceNumber: opt.sequenceNumber ?? optIdx + 1,
+  //         })),
+  //         correctAnswer: q.options.find((o) => o.isCorrect)?.optionText ?? "",
+  //       })),
+  //     });
+  //   }
+  // }, [quizData, methods.reset, methods]);
 
   const { fields, append, remove } = useFieldArray({
     control: methods.control,
@@ -86,6 +116,7 @@ export default function CreateUpdateCourseQuiz({
       return sum + (Number(question.points) || 0);
     }, 0) || 0;
   const isPassingScoreValid = Number(passingScore) <= Number(totalPoints);
+
   const onSubmit = (data: any) => {
     try {
       const payload: IQuiz = {
@@ -97,7 +128,7 @@ export default function CreateUpdateCourseQuiz({
         questions: data?.questions.map((q: any, index: number) => {
           if (q.questionType === "MULTIPLE_CHOICE") {
             return {
-              questionText: q.questionType,
+              questionText: q.questionText,
               questionType: q.questionType,
               points: q.points,
               sequenceNumber: index + 1,
@@ -153,7 +184,6 @@ export default function CreateUpdateCourseQuiz({
         methods.reset();
         onClose();
       });
-      onClose();
     } catch (error) {
       console.error("❌ Error creating quiz:", error);
     }

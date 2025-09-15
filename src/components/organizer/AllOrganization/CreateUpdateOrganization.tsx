@@ -106,7 +106,7 @@ export default function CreateUpdateOrganization({
       "code",
       data.name.toLowerCase().replace(/\s+/g, "-") + data.typeId
     );
-    formData.append("isActive", String(data.isActive));
+    
 
     // Append optional fields only if they are provided
     if (data.contactEmail) formData.append("contactEmail", data.contactEmail);
@@ -118,6 +118,7 @@ export default function CreateUpdateOrganization({
     } else if (typeof data.logo === "string" && data.logo.trim() !== "") {
       formData.append("logo", data.logo);
     }
+    if(initialValues) formData.append("isActive", String(data.isActive));
     if (!initialValues) {
       mutateAsync(formData).then(() => {
         onClose();
@@ -214,12 +215,12 @@ export default function CreateUpdateOrganization({
                   />
                 </div>
               </div>
-              <div className="col-span-2 flex items-center gap-2">
+              {!!initialValues && <div className="col-span-2 flex items-center gap-2">
                 <ControlledCheckField
                   name="isActive"
                   label="Active (Visible on website)"
                 />
-              </div>
+              </div>}
             </div>
             {error?.errors && (
               <div className="text-rose-600 bg-rose-200 text-center py-2 rounded-sm font-inter capitalize text-sm mt-3">

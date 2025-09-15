@@ -54,6 +54,7 @@ export interface IVideoContent {
   courseId: number;
   createdAt: string;
   updatedAt: string;
+  quiz?:  IQuiz | null;
 }
 
 export interface IVariant {

@@ -32,7 +32,8 @@ export default function CourseQuizUploadDetails({
   thumbnailUrl,
   isActive,
   className,
-  courseId
+  courseId,
+  quiz,
 }: ICourseDetails) {
   const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -63,7 +64,9 @@ export default function CourseQuizUploadDetails({
       {/* Title & Description */}
       <div className="flex items-center justify-between">
         <Title>{title}</Title>
-        <Button onClick={() => setIsModalOpen(true)} className="text-white">Add Quiz</Button>
+        <Button onClick={() => setIsModalOpen(true)} className="text-white">
+          {quiz?.id ? "Update Quiz" : "Add Quiz"}
+        </Button>
       </div>
       <Paragraph>{description}</Paragraph>
 
@@ -134,7 +137,8 @@ export default function CourseQuizUploadDetails({
         onClose={() => {
           setIsModalOpen(false);
         }}
-        id={courseId}
+        id={courseId as string}
+        quizId={quiz?.id}
       />
     </div>
   );

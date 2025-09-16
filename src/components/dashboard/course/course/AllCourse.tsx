@@ -111,6 +111,10 @@ export default function AllCourse() {
       accessorKey: "organization",
       cell: (_value: string | number | undefined, row: ICourse) => <span>{row?.organization?.name}</span>,
     },
+    {
+      header: "Course Type",
+      accessorKey: "courseType",
+    },
     { header: "Duration ", accessorKey: "durationMinutes" },
     { header: "Objectives", accessorKey: "objectives" },
     {

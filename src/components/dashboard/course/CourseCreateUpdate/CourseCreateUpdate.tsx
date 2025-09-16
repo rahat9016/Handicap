@@ -25,6 +25,11 @@ import {
   resourcesInformationUpdateForm,
 } from "./Schema/Course";
 
+const levelOptions = [
+  { label: "Video", value: "VIDEO" },
+  { label: "Link", value: "LINK" },
+];
+
 export default function CourseCreateUpdate() {
   const { id } = useParams();
   const router = useRouter();
@@ -64,6 +69,7 @@ export default function CourseCreateUpdate() {
         thumbNail: courseData.data.thumbnailUrl,
         categoryId: String(courseData.data.CourseCategory?.id),
         organizationId: organizationId,
+        courseType: courseData.data.courseType
         // isPrivate: courseData.data.isPrivate,
       });
     }
@@ -74,6 +80,7 @@ export default function CourseCreateUpdate() {
     formData.append("title", data.title);
     formData.append("categoryId", data.categoryId);
     formData.append("organizationId", organizationId);
+    formData.append("courseType", data.courseType);
     if (data.description) formData.append("description", data.description);
     if (data.objectives) formData.append("objectives", data.objectives);
     if (data.thumbNail instanceof File) {
@@ -153,6 +160,14 @@ export default function CourseCreateUpdate() {
                   placeholder="Please enter your category"
                   options={categoryOptions}
                 />
+              </div>
+              <div>
+                <InputLabel label="Course Type" required />
+              <ControlledSelectField
+                name="courseType"
+                placeholder="Please select a course type"
+                options={levelOptions}
+              />
               </div>
             </div>
             <ErrorMessage error={error} />

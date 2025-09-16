@@ -1,9 +1,12 @@
 "use client";
 import { useGet } from "@/hooks/useGet";
+import { useAppSelector } from "@/lib/redux/hooks";
 import TotalCard from "./TotalCard";
+import { ITotalCard } from "./types/interface";
 
 export default function AdminTotalCardSection() {
   const { data: dashboardData } = useGet("/dashboard", ["dashboard"]);
+  const { hasPermission } = useAppSelector(state => state.permission)
   const lastData = (dashboardData?.data ?? {
     totalCourse: 0,
     totalOrganization: 0,
@@ -17,13 +20,13 @@ export default function AdminTotalCardSection() {
   };
 
   const data = [
-    {
+    hasPermission && {
       icon: "/images/dashboard/icon18.svg",
       shape: "/images/dashboard/cardShape2.svg",
       title: "Total Organization",
       count: lastData?.totalOrganization,
     },
-    {
+    hasPermission && {
       icon: "/images/dashboard/icon21.svg",
       shape: "/images/dashboard/cardShape1.svg",
       title: "Total User",
@@ -41,10 +44,11 @@ export default function AdminTotalCardSection() {
       title: "Total Training",
       count: lastData?.totalResources,
     },
-  ];
+  ].filter(Boolean) as ITotalCard[];
+
   return (
     <div>
-      <div className="grid grid-cols-4 gap-6">
+      <div className={`grid ${data.length === 2 ? "grid-cols-2" : "grid-cols-4"} gap-6`}>
         {data.map((item, index) => (
           <TotalCard key={index} {...item} />
         ))}

@@ -33,10 +33,6 @@ export default function CourseVideoList({
                 status={false}
                 onConfirm={async () => {
                   console.log("clicked");
-                  // await mutateAsync({
-                  //   url: `/course/${id}/publish`,
-                  //   data: { isPublished: newStatus },
-                  // });
                 }}
               />
             </div>

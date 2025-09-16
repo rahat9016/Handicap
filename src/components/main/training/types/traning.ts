@@ -19,6 +19,7 @@ export interface ICourse {
   objectives: string;
   durationMinutes: number;
   isActive: boolean;
+  courseType: string;
   isPublished: boolean;
   createdAt: string;
   updatedAt: string;
@@ -54,6 +55,7 @@ export interface IVideoContent {
   courseId: number;
   createdAt: string;
   updatedAt: string;
+  quiz?:  IQuiz | null;
 }
 
 export interface IVariant {

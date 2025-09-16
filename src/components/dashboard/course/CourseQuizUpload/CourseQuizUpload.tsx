@@ -8,12 +8,14 @@ import CourseContentCardSkeleton from "./CourseContentCardSkeleton";
 import CourseVideoList from "./CourseVideoList";
 import CourseQuizUploadDetails from "./CourseVideoUploadDetails";
 import CourseVideoUploadSkeleton from "./CourseVideoUploadSkeleton";
+import QuizDisplay from "./QuizDisplay";
+import QuizSkeleton from "./QuizSkeleton";
 
 export default function CourseQuizUpload() {
   const { id } = useParams();
   const { data, isLoading } = useGet<ICourseDetails>(
     `/course/${id}`,
-    ["courseList"],
+    ["courseDetails"],
     {},
     { enabled: id !== undefined }
   );
@@ -36,7 +38,7 @@ export default function CourseQuizUpload() {
       )}
       <div className="mb-8">
         {allCourseContentListLoading ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 ">
             {Array.from({ length: 6 }).map((_, i) => (
               <CourseContentCardSkeleton key={i} />
             ))}
@@ -46,6 +48,13 @@ export default function CourseQuizUpload() {
             courseContentList={allCourseContentList?.data || []}
             courseId={id as string}
           />
+        )}
+      </div>
+      <div className="mb-8">
+        {isLoading ? (
+          <QuizSkeleton />
+        ) : (
+          <QuizDisplay id={data?.data?.quiz?.id as number} />
         )}
       </div>
     </div>

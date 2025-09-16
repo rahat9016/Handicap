@@ -1,32 +1,39 @@
 export interface ICourseDetails {
-  courseId: string;
   id: number;
   title: string;
   description: string;
   objectives: string;
   durationMinutes: number;
   isActive: boolean;
-  isPublished: boolean;
-  createdAt: string;
+  createdAt: string; 
   updatedAt: string;
+  courseType: string;
+  isPublished: boolean;
+  isQuizExist: boolean;
   creator: {
     id: number;
     email: string;
     firstName: string;
     lastName: string;
   };
-  organization?: {
+  organization: {
     id: number;
     name: string;
     code: string;
   };
-  CourseCategory?: {
+  CourseCategory: {
     id: number;
     name: string;
     description: string | null;
   };
-  thumbnailUrl?: string;
+  quiz: {
+    id: number;
+    title: string;
+  };
+  thumbnailUrl: string;
+
   className?: string;
+  courseId?: string | undefined
 }
 
 
@@ -55,5 +62,6 @@ export interface IQuiz {
   courseId: string;
   contentId?: number;
   questions: Question[];
+  isActive?: boolean;
   [key: string]: unknown;
 }

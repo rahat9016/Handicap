@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -42,6 +43,11 @@ export function ProfileDropdown() {
           >
             Admin
           </DropdownMenuLabel>
+        )}
+        {roleName === "USER" && (
+          <Button onClick={() => router.push("/user-dashboard")}>
+            Dashboard
+          </Button>
         )}
         <DropdownMenuSeparator />
         <DropdownMenuItem

@@ -36,7 +36,7 @@ export default function Login() {
   const methods = useForm<LoginForm>({
     resolver: yupResolver(userLoginSchema),
     defaultValues: {
-      email: "",
+      email: "tanahac538@poesd.com",
       password: "12345678",
     },
   });
@@ -72,15 +72,14 @@ export default function Login() {
         }
         let destination = callbackUrl;
 
-        if (res?.parentRoleId === 2) {
+        if (res?.role === "USER") {
+          // ✅ Send USER to user dashboard
+          destination = "/user-dashboard";
+        } else if (res?.parentRoleId === 2) {
           destination = "/organization-list";
-        } 
-        else if (res?.parentRoleId === null) {
-          // 🚫 no permission → send back to callback (not /admin!)
+        } else if (res?.parentRoleId === null) {
           destination = callbackUrl;
-        } 
-        else if (!rawCallback) {
-          // If no callback was passed, allow only permitted users to land in /admin
+        } else if (!rawCallback) {
           destination = "/admin";
         }
 

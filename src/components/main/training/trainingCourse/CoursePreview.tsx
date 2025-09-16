@@ -13,7 +13,7 @@ export default function CoursePreview({
   courses: ICourseContent[];
   setSelectedVideo: Dispatch<SetStateAction<ICourseContent | null>>;
 }) {
-  console.log({selectedVideo})
+  
   return (
     <div>
       <div className="flex w-full bg-black px-4 py-5 rounded-t-xl items-center justify-between">

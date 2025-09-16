@@ -7,6 +7,7 @@ export interface ICourseDetails {
   isActive: boolean;
   createdAt: string; 
   updatedAt: string;
+  courseType: string;
   isPublished: boolean;
   isQuizExist: boolean;
   creator: {

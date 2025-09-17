@@ -89,6 +89,47 @@ html {
     @apply bg-background text-foreground;
   }
 }
+@layer utilities {
+  .glass {
+    background: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .glass-strong {
+    background: #1f77ce1a;
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  .animate-pulse-slow {
+    animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  .quiz-start-button {
+    background: #10b981 !important;
+    color: #ffffff !important;
+    border: none !important;
+  }
+
+  .quiz-start-button:hover {
+    background: #059669 !important;
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
 
 @keyframes moveUp {
   0%, 100% { transform: translateY(0); }

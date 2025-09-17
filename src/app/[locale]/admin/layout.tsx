@@ -8,7 +8,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
       <div className="">
         <Sidebar className="" />
       </div>
-      <div className="ml-[300px] w-full">
+      <div className="ml-[300px] w-full lg:w-10/12 xl:w-10/12 2xl:w-full">
         <div className="w-full sticky top-0 bg-white z-50">
           <DashboardHeader />
         </div>

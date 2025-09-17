@@ -1,11 +1,10 @@
-import { AccessibilityControls } from "@/components/common/accessibility/AccessibilityControls";
 import Footer from "@/components/main/layout/Footer";
 import Header from "@/components/main/layout/Header";
 export default function Layout({ children }: { children: React.ReactNode }) {
   // const isDev = process.env.NODE_ENV === "development";
   return (
     <section className="bg-background text-primary content-center">
-      <AccessibilityControls />
+      {/* <AccessibilityControls /> */}
       <Header />
       <div>
         {children}

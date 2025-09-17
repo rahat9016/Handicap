@@ -118,6 +118,7 @@ console.log(quizId)
   const isPassingScoreValid = Number(passingScore) <= Number(totalPoints);
 
   const onSubmit = (data: any) => {
+    console.log(data)
     try {
       const payload: IQuiz = {
         title: data.title,
@@ -147,7 +148,7 @@ console.log(quizId)
               sequenceNumber: index + 1,
               options: q.options.map((o: any, oIndex: number) => ({
                 optionText: o.optionText,
-                isCorrect: oIndex.toString() === q.correctAnswer,
+                isCorrect: o.isCorrect,
                 sequenceNumber: oIndex + 1,
               })),
             };

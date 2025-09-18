@@ -1,9 +1,10 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client"
-import { useEffect, useState } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { INewsSection } from "@/components/news/AllNews/types";
+import { Button } from "@/components/ui/button";
 import { Link } from "@/i18n/navigation";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useEffect, useState } from "react";
 interface NewsSliderProps {
   slides: INewsSection[];
 }

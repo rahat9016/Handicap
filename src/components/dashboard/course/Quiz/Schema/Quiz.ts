@@ -73,30 +73,60 @@ export const quizFormSchema = yup.object({
             is: "MULTIPLE_CHOICE",
             then: (schema) =>
               schema
-                .min(1, "At least two options are required")
+                .min(1, "At least one options are required")
                 .test(
                   "at-least-one-correct",
                   "At least one option must be correct",
                   (options) =>
                     options ? options.some((opt) => opt.isCorrect) : false
                 ),
-            otherwise: (schema) => schema.notRequired(),
+          })
+          .when("questionType", {
+            is: "MCQ",
+            then: (schema) =>
+              schema
+                .min(1, "At least one options are required")
+                .test(
+                  "exactly-one-correct",
+                  "Exactly one option must be marked as correct",
+                  (options) =>
+                    options
+                      ? options.filter((o) => o.isCorrect).length === 1
+                      : false
+                ),
+          })
+          .when("questionType", {
+            is: "TRUE_FALSE",
+            then: (schema) => schema.notRequired(),
           }),
-          // .when("questionType", {
-          //   is: "MCQ",
-          //   then: (schema) =>
-          //     schema
-          //       .min(1, "At least two options are required")
-          //       .test(
-          //         "exactly-one-correct",
-          //         "Exactly one option must be marked as correct",
-          //         (options) =>
-          //           options
-          //             ? options.filter((o) => o.isCorrect).length === 1
-          //             : false
-          //       ),
-          //   otherwise: (schema) => schema.notRequired(),
-          // }),
+        // .when("questionType", {
+        //   is: "MULTIPLE_CHOICE",
+        //   then: (schema) =>
+        //     schema
+        //       .min(1, "At least two options are required")
+        //       .test(
+        //         "at-least-one-correct",
+        //         "At least one option must be correct",
+        //         (options) =>
+        //           options ? options.some((opt) => opt.isCorrect) : false
+        //       ),
+        //   otherwise: (schema) => schema.notRequired(),
+        // }),
+        // .when("questionType", {
+        //   is: "MCQ",
+        //   then: (schema) =>
+        //     schema
+        //       .min(1, "At least two options are required")
+        //       .test(
+        //         "exactly-one-correct",
+        //         "Exactly one option must be marked as correct",
+        //         (options) =>
+        //           options
+        //             ? options.filter((o) => o.isCorrect).length === 1
+        //             : false
+        //       ),
+        //   otherwise: (schema) => schema.notRequired(),
+        // }),
 
         correctAnswer: yup.string().when("questionType", {
           is: "TRUE_FALSE",

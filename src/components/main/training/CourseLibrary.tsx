@@ -19,11 +19,11 @@ export default function CourseLibrary({
         </div>
       ) : (
         <div className="grid grid-cols-3 gap-6">
-          {courses?.map((course, index) => {
-            return (
-                <CourseCard key={index} {...course} />
-            );
-          })}
+          {courses
+            ?.filter((course): course is ICourse & { organization: NonNullable<ICourse["organization"]> } => !!course.organization)
+            .map((course, index) => (
+              <CourseCard key={index} {...course} location={`/training/${course.id}`} />
+            ))}
         </div>
       )}
     </div>

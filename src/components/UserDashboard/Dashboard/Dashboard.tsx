@@ -1,44 +1,39 @@
+"use client"
+import { ICourseEnrollment } from "@/app/[locale]/user-dashboard/my-courses/page";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
+import { useGet } from "@/hooks/useGet";
+import { useRouter } from "@/i18n/navigation";
+import { useAppSelector } from "@/lib/redux/hooks";
 import {
   BookOpen,
-  CheckCircle,
-  Clock,
-  Edit,
   FileText,
   Play,
-  Trophy,
+  Trophy
 } from "lucide-react";
 
 export default function Dashboard() {
+  const router = useRouter()
+  const { userInformation:{firstName, lastName} } = useAppSelector(state => state.auth)
+  const { data: courseData } = useGet<ICourseEnrollment[]>(
+      `/course-enrollment/my-enrollments`,
+      ["course-published"]
+    );
   const data = [
     {
       icon: BookOpen,
       shape: "/images/dashboard/cardShape2.svg",
       title: "Enrolled Courses",
-      count: 14,
+      count: courseData?.data?.length || 0,
     },
     {
       icon: FileText,
       shape: "/images/dashboard/cardShape1.svg",
       title: "Completed Quizzes ",
       count: 10,
-    },
-    {
-      icon: Clock,
-      shape: "/images/dashboard/cardShape1.svg",
-      title: "Study Time",
-      count: 10,
-    },
-    {
-      icon: Trophy,
-      shape: "/images/dashboard/cardShape1.svg",
-      title: "Average Score",
-      count: 10,
-    },
+    }
   ];
   return (
     <div>
@@ -47,7 +42,7 @@ export default function Dashboard() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold text-foreground">
-              Welcome back, John!
+              Welcome back, {firstName}!
             </h1>
             <p className="text-muted-foreground mt-1">
               Continue your learning journey
@@ -64,7 +59,7 @@ export default function Dashboard() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {data.map((item, index) => (
             <Card
               key={index}
@@ -97,7 +92,7 @@ export default function Dashboard() {
               <CardTitle className="flex items-center gap-2">
                 <Avatar className="h-6 w-6">
                   <AvatarImage src="/user-icon.png" />
-                  <AvatarFallback>JD</AvatarFallback>
+                  <AvatarFallback>{firstName.charAt(0).toUpperCase()}</AvatarFallback>
                 </Avatar>
                 Profile Overview
               </CardTitle>
@@ -106,26 +101,19 @@ export default function Dashboard() {
               <div className="flex items-center gap-4">
                 <Avatar className="h-16 w-16">
                   <AvatarImage src="/student-profile.png" />
-                  <AvatarFallback className="bg-primary text-primary-foreground text-lg">
-                    JD
+                  <AvatarFallback className="bg-dashboard-primary text-white text-lg">
+                    {firstName.charAt(0).toUpperCase()}
                   </AvatarFallback>
                 </Avatar>
                 <div className="flex-1">
                   <h3 className="font-semibold text-card-foreground">
-                    John Doe
+                    {firstName} {lastName}
                   </h3>
                   <p className="text-sm text-muted-foreground">
-                    Computer Science Student
-                  </p>
-                  <p className="text-xs text-muted-foreground">
-                    Joined March 2024
+                    Student
                   </p>
                 </div>
               </div>
-              <Button className="w-full bg-transparent" size="sm">
-                <Edit className="h-4 w-4 mr-2" />
-                Edit Profile
-              </Button>
             </CardContent>
           </Card>
 
@@ -139,23 +127,7 @@ export default function Dashboard() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {[
-                  {
-                    name: "Python Programming",
-                    progress: 75,
-                    instructor: "Dr. Smith",
-                  },
-                  {
-                    name: "Data Structures",
-                    progress: 60,
-                    instructor: "Prof. Johnson",
-                  },
-                  {
-                    name: "Web Development",
-                    progress: 90,
-                    instructor: "Ms. Davis",
-                  },
-                ].map((course, index) => (
+                {courseData?.data?.map((course, index) => (
                   <div
                     key={index}
                     className="flex items-center gap-4 p-3 rounded-lg border border-border"
@@ -165,20 +137,13 @@ export default function Dashboard() {
                     </div>
                     <div className="flex-1">
                       <h4 className="font-medium text-card-foreground">
-                        {course.name}
+                        {course?.course?.title}
                       </h4>
                       <p className="text-sm text-muted-foreground">
-                        by {course.instructor}
+                        by {course?.course?.organization?.name}
                       </p>
-                      <div className="mt-2">
-                        <div className="flex items-center justify-between text-xs text-muted-foreground mb-1">
-                          <span>Progress</span>
-                          <span>{course.progress}%</span>
-                        </div>
-                        <Progress value={course.progress} className="h-2" />
-                      </div>
                     </div>
-                    <Button size="sm" variant="outline">
+                    <Button onClick={() => router.push(`/user-dashboard/my-courses/${course?.course?.id}`)} size="sm" variant="outline">
                       <Play className="h-3 w-3 mr-1" />
                       Continue
                     </Button>
@@ -189,64 +154,6 @@ export default function Dashboard() {
           </Card>
         </div>
 
-        {/* Recent Quizzes */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <FileText className="h-5 w-5" />
-              Recent Quiz Results
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {[
-                {
-                  name: "Python Basics Quiz",
-                  score: 85,
-                  status: "completed",
-                  date: "2 days ago",
-                },
-                {
-                  name: "Data Types Assessment",
-                  score: 92,
-                  status: "completed",
-                  date: "1 week ago",
-                },
-                {
-                  name: "Functions & Modules",
-                  score: 78,
-                  status: "completed",
-                  date: "2 weeks ago",
-                },
-              ].map((quiz, index) => (
-                <div
-                  key={index}
-                  className="p-4 rounded-lg border border-border"
-                >
-                  <div className="flex items-start justify-between mb-2">
-                    <h4 className="font-medium text-card-foreground">
-                      {quiz.name}
-                    </h4>
-                    <CheckCircle className="h-4 w-4 text-green-500" />
-                  </div>
-                  <div className="space-y-2">
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-muted-foreground">
-                        Score
-                      </span>
-                      <Badge
-                        variant={quiz.score >= 80 ? "default" : "secondary"}
-                      >
-                        {quiz.score}%
-                      </Badge>
-                    </div>
-                    <p className="text-xs text-muted-foreground">{quiz.date}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
       </div>
     </div>
   );

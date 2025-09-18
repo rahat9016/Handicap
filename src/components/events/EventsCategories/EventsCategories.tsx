@@ -47,6 +47,7 @@ export default function EventsCategories() {
     if (data) {
       setTotalItems(data.meta?.totalItems || 0);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
   // const handleEdit = (row: INews) => {

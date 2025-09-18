@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
 import { ColumnDef, DataTable } from "@/components/ui/data-table";
@@ -48,6 +49,7 @@ export default function NewsCategories() {
     if (data) {
       setTotalItems(data.meta?.totalItems || 0);
     }
+   
   }, [data]);
 
   const handleEdit = (row: INews) => {

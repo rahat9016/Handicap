@@ -86,6 +86,7 @@ const QuestionField = ({
             name={`questions.${questionIndex}.questionType`}
             options={[
               { value: "MULTIPLE_CHOICE", label: "Multiple Choice" },
+              { value: "MCQ", label: "Single Choice (radio)" },
               { value: "TRUE_FALSE", label: "True / False" },
             ]}
           />
@@ -152,7 +153,58 @@ const QuestionField = ({
           </Button>
         </div>
       )}
+      {questionType === "MCQ" && (
+  <div>
+    <InputLabel label="Options" required />
+    <div className="space-y-2">
+      {fields.map((field, optionIndex) => (
+        <div key={field.id} className="flex items-center gap-2">
+          <ControlledInputField
+            name={`questions.${questionIndex}.options.${optionIndex}.optionText`}
+            placeholder={`Option ${optionIndex + 1}`}
+          />
 
+          <Controller
+            control={control}
+            name={`questions.${questionIndex}.options.${optionIndex}.isCorrect`}
+            render={({ field }) => (
+              <input
+                type="radio"
+                checked={field.value || false}
+                onChange={() => {
+                  // Reset all other options to false
+                  fields.forEach((_, idx) =>
+                    setValue(`questions.${questionIndex}.options.${idx}.isCorrect`, idx === optionIndex)
+                  );
+                }}
+              />
+            )}
+          />
+          <span>Correct</span>
+
+          {fields.length > 1 && (
+            <Button
+              type="button"
+              onClick={() => removeOption(optionIndex)}
+              className="w-5 h-5 bg-rose-200 hover:bg-rose-300 text-rose-700 p-0"
+            >
+              ×
+            </Button>
+          )}
+        </div>
+      ))}
+    </div>
+
+    {optionsError?.message && (
+      <p className="text-red-500 text-xs mt-2 font-inter flex items-center gap-1">
+        ⚠️ {optionsError.message}
+      </p>
+    )}
+    <Button type="button" variant="outline" size="sm" className="mt-2" onClick={addOption}>
+      ➕ Add Option
+    </Button>
+  </div>
+)}
       {/* TRUE/FALSE */}
       {questionType === "TRUE_FALSE" && (
         <div>

@@ -23,6 +23,7 @@ export default function ResourceLibrary({
       ) : (
         <div className="grid grid-cols-3 gap-6">
           {resources?.map((resource, index) => {
+            console.log(resource?.resourceFiles[0])
             return (
               <ResourceCard
                 id={resource.id}

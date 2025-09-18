@@ -109,6 +109,7 @@ export default function CreateUpdateCategories({
   };
 
   const options = mapToSelectOptions(data?.data, "name", "id");
+  console.log(initialValues)
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="bg-white min-h-[20vh] w-[80vw] overflow-y-auto">

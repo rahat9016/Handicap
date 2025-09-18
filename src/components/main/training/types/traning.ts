@@ -21,14 +21,41 @@ export interface ICourse {
   isActive: boolean;
   courseType: string;
   isPublished: boolean;
+  level: string; // e.g., BEGINNER, INTERMEDIATE, ADVANCED
+  isQuizExist: boolean;
+  linkUrl: string | null;
   createdAt: string;
   updatedAt: string;
-  creator: ICreator;
-  organization: IOrganization;
+  creatorId: number;
+  organizationId: number;
+  courseCategoryId: number;
+  creator?: ICreator;
+  organization?: IOrganization;
+  CourseCategory?: ICategory;
+  CourseEnrollment: ICourseEnrollment[];
   thumbnailUrl: string;
-  CourseCategory: ICategory;
+  intro?: ICourseIntro | null;
 }
-
+export interface ICourseEnrollment {
+  id: number;
+  userId: number;
+  courseId: number;
+  enrolledAt: string;
+  progress?: number;
+  completed?: boolean;
+}
+export interface ICourseIntro {
+  id: number;
+  type: string; // e.g., CONTENT, QUIZ
+  order: number;
+  courseId: number;
+  contentId: number | null;
+  quizId: number | null;
+  createdAt: string;
+  updatedAt: string;
+  content?: ICourseContent | null;
+  quiz?: IQuiz | null;
+}
 export interface ICategory {
   id: number;
   name: string;

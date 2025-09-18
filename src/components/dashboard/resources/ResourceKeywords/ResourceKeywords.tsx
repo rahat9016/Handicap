@@ -62,6 +62,7 @@ export default function ResourceKeywords() {
     if (data) {
       setTotalItems(data.meta?.totalItems || 0);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
   const columns: ColumnDef<IKeywords>[] = [
@@ -128,6 +129,7 @@ export default function ResourceKeywords() {
         isOpen={isModalOpen}
         onClose={() => {
           setIsModalOpen(false);
+          setKeywords(undefined);
         }}
         initialValues={keywords}
       />

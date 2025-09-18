@@ -38,6 +38,7 @@ export function QuizResults({ score, totalQuestions, passingScore, onRestart }: 
           text: shareText,
         })
       } catch (err) {
+        console.log(err)
         navigator.clipboard.writeText(shareText)
       }
     } else {

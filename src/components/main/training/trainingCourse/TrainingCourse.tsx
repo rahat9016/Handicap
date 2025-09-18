@@ -1,18 +1,10 @@
 "use client";
 
-import HeroSection from "@/components/share/HeroSection";
-import useActiveStepper from "@/hooks/useActiveStepper";
-
-import Training from "./Training";
-
+import { CourseDetails } from "./CourseDetails";
 export default function TrainingCourse() {
-  const { active, handleNext, handlePrev } = useActiveStepper();
-
   return (
     <div>
-      <HeroSection/>
-      {/* <TrainingStepper steps={steps} /> */}
-      <Training active={active} handleNext={handleNext} handlePrev={handlePrev}  />
+      <CourseDetails  />
     </div>
   );
 }

@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import { ColumnDef, DataTable } from "@/components/ui/data-table";
 import { useGet } from "@/hooks/useGet";
@@ -55,6 +54,8 @@ export default function AllOrganization() {
     if (data) {
       setTotalItems(data.meta?.totalItems || 0);
     }
+   
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
   const columns: ColumnDef<IOrganizationResponse>[] = [

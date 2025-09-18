@@ -45,6 +45,7 @@ export default function ResourceCategories() {
     if (data) {
       setTotalItems(data.meta?.totalItems || 0);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
   const handleEdit = (row: IResource) => {
@@ -126,6 +127,7 @@ export default function ResourceCategories() {
         isOpen={isModalOpen}
         onClose={() => {
           setIsModalOpen(false);
+          setResourceCategory(undefined);
         }}
         initialValues={resourceCategory}
       />

@@ -1,6 +1,7 @@
 "use client"
 import { Button } from "@/components/ui/button";
 import { useGet } from "@/hooks/useGet";
+import { useRouter } from "@/i18n/navigation";
 import { IPageSection } from "@/types";
 import Image from "next/image";
 import HeroSkeleton from "./Skeleton/HeroSkeleton";
@@ -9,6 +10,7 @@ import HeroSkeleton from "./Skeleton/HeroSkeleton";
 
 
 export default function HomeHeroSection() {
+  const router = useRouter()
   const { data, isLoading } = useGet<IPageSection>(
       "/page-sections/query/first?page=HOME&sectionType=HERO",
       ["user"]
@@ -32,11 +34,11 @@ export default function HomeHeroSection() {
           <p className="text-lg font-inter font-normal text-[#666666]" tabIndex={0}>
            {data?.data?.subtitle}
           </p>
-          <Button className="px-4 py-3 h-[46px] bg-[#2A53CD] hover:bg-[#0490EF] text-white border text-sm cursor-pointer font-inter font-medium">
+          <Button onClick={() => router.push("/resources")} className="px-4 py-3 h-[46px] bg-[#2A53CD] hover:bg-[#0490EF] text-white border text-sm cursor-pointer font-inter font-medium">
             Browse Resources
           </Button>
-          <Button className="ml-4 px-4 py-3 h-[46px] bg-transparent hover:bg-[#0490EF] text-[#2A53CD] hover:text-white border border-[#2A53CD52] text-sm cursor-pointer font-inter font-medium">
-           Start Training
+          <Button onClick={() => router.push("/training")} className="px-4 py-3 h-[46px] bg-[#2A53CD] hover:bg-[#0490EF] text-white border text-sm cursor-pointer font-inter font-medium">
+            Start Training
           </Button>
         </div>
         <div>

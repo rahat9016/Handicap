@@ -60,6 +60,7 @@ export default function ResourcesFilter() {
     if (data) {
       setTotalItems(data.meta?.totalItems || 0);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
   const totalPages = Math.ceil(totalItems / itemsPerPage);

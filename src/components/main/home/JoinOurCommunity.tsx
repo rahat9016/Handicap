@@ -11,7 +11,7 @@ export default function JoinOurCommunity() {
             classTitle="text-white"
             classDesc="text-white"
             title="Join Our Community"
-            desc="Whether you're a person with a disability, a family member, a professional, or an ally—there’s a place for you here. Connect, share, and grow with a community committed to inclusion, support, and positive change."
+            desc="Everyone has a place here whether you are a person with disability, a family member, a professional, or simply someone who cares about inclusion. Connect, share ideas, and be part of a vibrant community driving positive change and support for all."
           />
           <div className="w-full lg:w-7/12 mx-auto mt-[60px]">
             <div className="flex items-center gap-3">

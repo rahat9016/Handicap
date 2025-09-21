@@ -2,7 +2,6 @@
 import { Link } from "@/i18n/navigation";
 import { useAppSelector } from "@/lib/redux/hooks";
 import { useTranslations } from "next-intl";
-import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { LanguageToggle } from "./LanguageToggle";
 import { navLinks } from "./navLinks";
@@ -20,7 +19,7 @@ export default function Header() {
     <header className="pb-32">
       <div className="fixed w-full top-0 z-50">
         <div className="w-full pt-3  bg-pureBlack">
-          <div className="container"  aria-label="Nav bar" tabIndex={0}>
+          <div className="container" aria-label="Nav bar" tabIndex={0}>
             <div className="  text-white text-sm px-4 py-2 flex justify-between items-center">
               <div className="space-x-4">
                 <span tabIndex={0}>{t("wcag")}</span>
@@ -29,10 +28,14 @@ export default function Header() {
               </div>
               <div className="space-x-4">
                 <LanguageToggle />
-                <Link href="#">{t('accessibility')}</Link>
-                <Link href="#">{t('eventCalendar')}</Link>
-                <Link href="#">{t('privacyPolicy')}</Link>
-                {email ? <ProfileDropdown /> : <Link href="/login">{t('login')}</Link>}
+                <Link href="#">{t("accessibility")}</Link>
+                <Link href="#">{t("eventCalendar")}</Link>
+                <Link href="#">{t("privacyPolicy")}</Link>
+                {email ? (
+                  <ProfileDropdown />
+                ) : (
+                  <Link href="/login">{t("login")}</Link>
+                )}
               </div>
             </div>
           </div>
@@ -40,21 +43,13 @@ export default function Header() {
         <div className="bg-white shadow-lg">
           <div className="container flex items-center justify-between py-4">
             <div className="flex items-center gap-5">
-              <Link href="/" aria-label="logo of Humanity & inclusion">
-                <Image
-                  src="/logo.png"
-                  alt="Humanity & inclusion"
-                  width={86}
-                  height={40}
-                  className="w-auto h-10"
-                />
-              </Link>
-              <Link href="/" aria-label="Disability Inclusion Hub">
-                <h2 className="font-inter text-lg text-black font-semibold">
-                  Disability Inclusion Hub
+              <Link href="/" aria-label="Disability Inclusion Resource Hub">
+                <h2 className="font-inter text-lg text-[#0077CC] font-bold leading-none">
+                  Disability Inclusion
+                  <br /> Resource Hub
                 </h2>
                 <p className="font-inter font-medium text-sm text-[#666666]">
-                  Humanity & Inclusion | DFAT
+                  Bangladesh
                 </p>
               </Link>
             </div>

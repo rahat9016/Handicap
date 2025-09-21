@@ -109,16 +109,20 @@ export default function Sidebar({className}:{className?: string}) {
         },
       ],
     },
-    // {
-    //   label: "Events",
-    //   icon: Folder,
-    //   children: [
-    //     {
-    //       label: "Events Categories",
-    //       href: "/admin/events/events-categories",
-    //     }
-    //   ],
-    // },
+    {
+      label: "Events",
+      icon: Folder,
+      children: [
+        {
+          label: "Events Categories",
+          href: "/admin/events/events-categories",
+        },
+        {
+          label: "Events Tags",
+          href: "/admin/events/events-tags",
+        },
+      ],
+    },
     {
       label: "Course's",
       icon: Shapes,

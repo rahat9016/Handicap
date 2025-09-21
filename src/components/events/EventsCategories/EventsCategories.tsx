@@ -7,12 +7,13 @@ import { useSearchDebounce } from "@/hooks/useSearchDebounce";
 import { useAppSelector } from "@/lib/redux/hooks";
 import { format } from "date-fns";
 import { FileCog, SquarePen } from "lucide-react";
-import { useEffect } from "react";
-import { INews } from "./types/Categories";
+import { useEffect, useState } from "react";
+import { ICategory } from "./types/Categories";
+import CreateUpdateCategories from "./CreateUpdateCategories";
 
 export default function EventsCategories() {
-  // const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  // const [newsCategory, setNewsCategory] = useState<INews | undefined>();
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [newsCategory, setNewsCategory] = useState<ICategory | undefined>();
   const {
     setCurrentPage,
     itemsPerPage,
@@ -25,9 +26,9 @@ export default function EventsCategories() {
     useSearchDebounce(300);
 
   const { data, isLoading } = useGet(
-    "/news-category",
+    "/event-categories",
     [
-      "news-category",
+      "event-categories",
       currentPage.toString(),
       itemsPerPage.toString(),
       debouncedSearch,
@@ -50,12 +51,12 @@ export default function EventsCategories() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
-  // const handleEdit = (row: INews) => {
-  //   setNewsCategory(row);
-  //   setIsModalOpen(true);
-  // };
+  const handleEdit = (row: ICategory) => {
+    setNewsCategory(row);
+    setIsModalOpen(true);
+  };
 
-  const columns: ColumnDef<INews>[] = [
+  const columns: ColumnDef<ICategory>[] = [
     { header: "ID", accessorKey: "id" },
     { header: "Name", accessorKey: "name" },
     { header: "Description", accessorKey: "description" },
@@ -88,11 +89,11 @@ export default function EventsCategories() {
       ? {
           header: "Action",
           accessorKey: "id",
-          cell: () => {
+          cell: (_value: string | number | undefined, row: ICategory) => {
             return (
               <div className="flex items-center gap-5">
                 <button
-                  // onClick={() => handleEdit(row)}
+                  onClick={() => handleEdit(row)}
                   className="text-darkLiver hover:underline text-sm flex items-center gap-1"
                 >
                   <SquarePen size={16} />
@@ -103,7 +104,7 @@ export default function EventsCategories() {
           },
         }
       : undefined,
-  ].filter(Boolean) as ColumnDef<INews>[];
+  ].filter(Boolean) as ColumnDef<ICategory>[];
 
   return (
     <div className="bg-white p-8 min-h-[85vh] border border-skeleton rounded-2xl">
@@ -117,21 +118,21 @@ export default function EventsCategories() {
         onPageChange={setCurrentPage}
         setItemsPerPage={setItemsPerPage}
         icon={<FileCog />}
-        title="News Categories"
-        subtitle="Manage news categories"
+        title="Events Categories"
+        subtitle="Manage events categories"
         showSearch
         searchValue={search}
         onSearchChange={handleSearchChange}
         IsCreate={hasPermission} // [If you need a create button, just pass true as a props]
-        // setIsModalOpen={setIsModalOpen} // [create modal open state]
+        setIsModalOpen={setIsModalOpen} // [create modal open state]
       />
-      {/* <CreateUpdateCategories
+      <CreateUpdateCategories
         isOpen={isModalOpen}
         onClose={() => {
           setIsModalOpen(false);
         }}
         initialValues={newsCategory}
-      /> */}
+      />
     </div>
   );
 }

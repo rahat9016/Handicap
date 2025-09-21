@@ -5,9 +5,7 @@ export default function PlatformStatistics() {
   return (
     <div className="container">
       <div className="py-10 lg:py-20">
-        <SectionTopTitle title="Platform Statistics" desc="All resources are designed to be accessible and follow WCAG 2.1
-            guidelines, ensuring that persons with disabilities can access and
-            utilize these materials."/>
+        <SectionTopTitle title="Platform Statistics" />
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mt-[60px]">
           {[
             {

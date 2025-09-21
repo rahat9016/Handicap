@@ -71,6 +71,7 @@ export default function PageSections() {
         );
       },
     },
+    { header: "Page Name", accessorKey: "pageId" },
     { header: "Section Type", accessorKey: "sectionType" },
     { header: "Order", accessorKey: "order" },
     { header: "Title", accessorKey: "title" },

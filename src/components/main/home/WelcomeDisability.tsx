@@ -1,5 +1,4 @@
 "use client";
-import TitleTag from "@/components/share/TitleTag";
 import { Button } from "@/components/ui/button";
 import { useGet } from "@/hooks/useGet";
 import { IPageSection } from "@/types";
@@ -42,7 +41,7 @@ export default function WelcomeDisability() {
             />
           </div>
           <div className="w-full lg:w-1/2">
-            <TitleTag title="Welcome To The" />
+
             <h1
               className="text-2xl lg:text-4xl text-primary font-inter font-semibold mt-2 lg:mt-4"
               tabIndex={0}
@@ -51,25 +50,6 @@ export default function WelcomeDisability() {
             </h1>
             <div tabIndex={0}>
               <p className="text-sm font-inter text-[#353535] font-normal mt-3 lg:mt-5 leading-[28px]" dangerouslySetInnerHTML={{ __html: data?.data?.content || "" }}></p>
-              {/* <p className="text-sm font-inter text-[#353535] font-normal mt-3 lg:mt-5 leading-[28px]">
-                This platform serves as a centralized repository for disability
-                inclusion resources developed over the past six years of
-                humanitarian response in Cox&apos;s Bazar. It aims to support
-                humanitarian actors in implementing inclusive practices that
-                reach people with disabilities.
-              </p>
-              <p className="text-sm font-inter text-[#353535] font-normal mt-3 lg:mt-5 leading-[28px]">
-                Developed by Humanity & Inclusion in collaboration with the Age
-                and Disability Technical Working Group (ADTWG), this hub
-                provides access to guidelines, training materials, research
-                reports, and practical tools to support disability-inclusive
-                humanitarian action.
-              </p>
-              <p className="text-sm font-inter text-[#353535] font-normal mt-3 lg:mt-5 leading-[28px]">
-                All resources are designed to be accessible and follow WCAG 2.1
-                guidelines, ensuring that persons with disabilities can access
-                and utilize these materials.
-              </p> */}
             </div>
             <Button className="bg-transparent hover:bg-transparent text-pureBlack hover:text-[#01014E] shadow-none text-base font-inter font-semibold">
               See more <MoveRight />

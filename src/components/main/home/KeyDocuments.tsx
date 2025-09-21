@@ -66,7 +66,7 @@ export default function KeyDocuments() {
         <div className="py-10 lg:py-20">
           <SectionTopTitle
             title="Key Documents"
-            desc="Access vocational training and employment opportunities designed to empower persons with disabilities—gain practical skills, receive career guidance, and connect with inclusive"
+            desc="Access essential guidelines and resources to support disability inclusive practices in humanitarian and development programs."
           />
           <div className="mt-8 lg:mt-[60px]">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[2px]">

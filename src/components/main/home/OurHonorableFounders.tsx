@@ -8,7 +8,7 @@ export default function OurHonorableFounders() {
         <div className="py-10 lg:py-20">
           <SectionTopTitle
             title="With the sponsor of"
-            desc="Access vocational training and employment opportunities designed to empower persons with disabilities—gain practical skills, receive career guidance, and connect with inclusive"
+            desc="This hub is developed with funding from the Australian Department of Foreign Affairs and Trade (DFAT) and is supported by Humanity & Inclusion and the Age and Disability Technical Working Group (ADTWG) under the ISCG."
           />
           {/* <div className="w-full lg:w-8/12 mx-auto mt-[60px] grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
             {Array.from({ length: 12 }, (_, index) => (

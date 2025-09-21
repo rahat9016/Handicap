@@ -8,12 +8,6 @@ import {
   FaTwitter,
 } from "react-icons/fa";
 
-const slugify = (text: string) =>
-  text
-    .toLowerCase()
-    .replace(/ /g, "-")
-    .replace(/[^\w-]+/g, "");
-
 export default function Footer() {
   const sections = [
     {
@@ -66,7 +60,7 @@ export default function Footer() {
       <div className="container">
         <div className="flex items-start flex-col lg:flex-row gap-14 lg:gap-28">
           <div className="w-full lg:w-4/12">
-            <Image
+            {/* <Image
               src="/logo.png"
               alt="Logo"
               width={140}
@@ -74,25 +68,22 @@ export default function Footer() {
               className="white-filter mb-5"
               tabIndex={0}
               aria-label="logo of humanity and inclusive"
-            />
+            /> */}
             <p className="text-sm text-[#B7B7B7] font-inter mb-9"  tabIndex={0}>
-              Working together to build an inclusive, accessible, and empowered
-              future for persons with disabilities—where everyone has the
-              opportunity to participate fully, live with dignity, and
-              contribute meaningfully to society, regardless of ability.
+              Working together to build an inclusive, accessible, and empowered future for persons with disabilities where everyone has the opportunity to participate fully, live with dignity, and contribute meaningfully to society.
             </p>
             <div className="space-y-1 text-sm">
               <p className="flex items-start gap-3 text-[#B7B7B7]" tabIndex={0} aria-label="Email">
                 <Mail />
                 <Link
-                  href="mailto:info@disabilityinclusionhub.org"
+                  href="mailto:p.baidya@hi.org"
                   className="mt-1"
                 >
-                  info@disabilityinclusionhub.org
+                  p.baidya@hi.org
                 </Link>
               </p>
               <p className="flex items-start gap-3 text-[#B7B7B7]"tabIndex={0} aria-label="Contact Number">
-                <Phone /> <span tabIndex={0}>+880 1234 567890</span>
+                <Phone /> <span tabIndex={0}>+880 1825031014</span>
               </p>
             </div>
           </div>
@@ -106,7 +97,7 @@ export default function Footer() {
                       key={i}
                       className="text-[#BABABA] hover:text-white mt-2"
                     >
-                      <Link href={`/${slugify(linkText)}`}>
+                      <Link href={`#`}>
                         {linkText}
                         <span className="block w-full h-[1px] bg-[#535353] mt-2"></span>
                       </Link>
@@ -138,13 +129,13 @@ export default function Footer() {
       <div className="flex items-center justify-center w-full py-11 text-xs text-[#B3B3B3]">
         <div className="flex-grow border-t border-[#B3B3B3]"></div>
         <span className="px-4 text-center font-inter font-normal text-sm" tabIndex={0}>
-          © 2025 Humanity & Inclusion. All rights reserved. Funded by DFAT.
+          Copyright © 2025 ISCG & HI. All rights reserved.
         </span>
         <div className="flex-grow border-t border-[#B3B3B3]"></div>
       </div>
       <div className="container text-xs text-[#B3B3B3] flex justify-end pb-3">
         <p className="flex items-center gap-3">
-          <span className="px-4">|</span> Developed by{" "}
+          <span className="">|</span> Developed by{" "}
           <span className="text-white" tabIndex={0} aria-label="Developed By A T I Limited">
             <Image
               width={67}

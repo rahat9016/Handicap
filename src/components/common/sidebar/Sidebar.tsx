@@ -173,7 +173,7 @@ export default function Sidebar({className}:{className?: string}) {
               Handicap International{" "}
             </h3>
             <p className="font-inter text-sm font-normal text-[#4D4D4D]">
-              Disability Inclusion Hub
+              Disability Inclusion Resource Hub
             </p>
           </div>
         </div>

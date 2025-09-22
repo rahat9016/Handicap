@@ -5,6 +5,7 @@ import KeyDocuments from "./KeyDocuments";
 import OurHonorableFounders from "./OurHonorableFounders";
 import PlatformStatistics from "./PlatformStatistics";
 import QuickAccess from "./QuickAccess";
+import ThankyouSection from "./ThankyouSection";
 import TrainingModule from "./TrainingModule";
 import WelcomeDisability from "./WelcomeDisability";
 
@@ -19,6 +20,7 @@ export default function Home() {
         <TrainingModule />
         <KeyDocuments />
         <JoinOurCommunity />
+        <ThankyouSection />
         <OurHonorableFounders/>
     </div>
   );

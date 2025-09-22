@@ -9,7 +9,7 @@ export function AccessibilityControls() {
   const [highContrast, setHighContrast] = useState(false);
   const [speechSynthesisAvailable, setSpeechSynthesisAvailable] =
     useState(false);
-  const [isSpeaking, setIsSpeaking] = useState(true);
+  const [isSpeaking, setIsSpeaking] = useState(false);
 
   useEffect(() => {
     if (typeof window === "undefined") return;

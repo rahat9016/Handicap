@@ -118,7 +118,7 @@ export default function ResourcesSorting() {
             {/* ── Resource Type ─────────────────────────────── */}
             <AccordionItem value="resourceType" className="border-b-0">
               <AccordionTrigger className="font-bold hover:no-underline text-black text-sm border-b rounded-none mb-3">
-                Resource Type
+                Resource Sector
               </AccordionTrigger>
               <AccordionContent>
                 {isResourceLoading ? (

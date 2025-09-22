@@ -23,7 +23,6 @@ export default function ResourceLibrary({
       ) : (
         <div className="grid grid-cols-3 gap-6">
           {resources?.map((resource, index) => {
-            console.log(resource?.resourceFiles[0])
             return (
               <ResourceCard
                 id={resource.id}
@@ -36,8 +35,8 @@ export default function ResourceLibrary({
                 ratings={3.2}
                 isFeatured
                 isPdf
-                fileType={resource.fileType}
-                filePath={resource.filePath}
+                fileType={resource?.resourceFiles[0]?.fileType}
+                filePath={resource?.resourceFiles[0]?.filePath}
                 downloadCount={resource.totalDownloadCount}
                 viewCount={resource.totalViewCount}
                 isPrivate={resource.isPrivate && !!id}

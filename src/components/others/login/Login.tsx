@@ -144,6 +144,7 @@ export default function Login() {
                 )}
                 <div>
                   <Button
+                  disabled={isPending}
                     type="submit"
                     className="w-full rounded-[--radius] bg-dashboard-primary text-white hover:bg-dashboard-primary hover:text-white mt-3"
                   >

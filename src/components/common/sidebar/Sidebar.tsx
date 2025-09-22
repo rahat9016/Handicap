@@ -16,7 +16,6 @@ import {
 import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
 import { cn } from "@/lib/utils";
 import {
-  BarChart3,
   Folder,
   LayoutDashboard,
   LogOut,
@@ -131,12 +130,12 @@ export default function Sidebar({className}:{className?: string}) {
         { label: "Course Categories", href: "/admin/course/course-categories" },
       ],
     },
-    {
-      label: "Analytics",
-      icon: BarChart3,
-      href: "/admin/analytics",
-    },
-    {
+    // {
+    //   label: "Analytics",
+    //   icon: BarChart3,
+    //   href: "/admin/analytics",
+    // },
+    hasPermission &&{
       label: "Role Management",
       icon: ShieldCheck,
       children: [
@@ -144,18 +143,18 @@ export default function Sidebar({className}:{className?: string}) {
         { label: "All Roles", href: "/admin/roles/all-roles" },
       ],
     },
-    {
-      label: "System Settings",
-      icon: Settings,
-      href: "/settings",
-    },
-    {
-      label: "Modules Management",
-      icon: ShieldCheck,
-      children: [
-        { label: "Add Module", href: "/admin/modules/create-modules" },
-      ],
-    },
+    // {
+    //   label: "System Settings",
+    //   icon: Settings,
+    //   href: "/settings",
+    // },
+    // {
+    //   label: "Modules Management",
+    //   icon: ShieldCheck,
+    //   children: [
+    //     { label: "Add Module", href: "/admin/modules/create-modules" },
+    //   ],
+    // },
   ].filter(Boolean) as Array<{
     label: string;
     icon: LucideIcon;
@@ -185,51 +184,6 @@ export default function Sidebar({className}:{className?: string}) {
           type="multiple"
           className="w-full h-full flex  flex-col gap-1"
         >
-          {/* {menuItems.map((item) => {
-            const pathnameWithoutLocale = pathname.replace(/^\/(en|bn)/, "");
-            const isActive = item.href === pathnameWithoutLocale;
-
-            return (
-              <AccordionItem
-                key={item.label}
-                value={item.label}
-                className="border-b-0"
-              >
-                {item.children ? (
-                  <>
-                    <AccordionTrigger className="px-4 h-[46px] hover:no-underline text-[#8C8C8C] data-[state=open]:bg-dashboard-primary data-[state=open]:text-white leading-none">
-                      <div className="flex items-center font-inter">
-                        <item.icon className="mr-2 h-4 w-4  data-[state=open]:text-white flex items-center" />{" "}
-                        {item.label}
-                      </div>
-                    </AccordionTrigger>
-                    <AccordionContent className="flex flex-col w-full">
-                      {item.children.map((child) => (
-                        <Link
-                          key={child.label}
-                          href={child.href}
-                          className={`w-full h-[46px] flex items-center gap-2 px-4 text-sm hover:bg-[#EAF6FB] hover:text-dashboard-primary ${
-                            isActive ? "bg-dashboard-primary text-white" : ""
-                          } rounded-2xl font-inter text-[#8C8C8C]`}
-                        >
-                          {child.label}
-                        </Link>
-                      ))}
-                    </AccordionContent>
-                  </>
-                ) : (
-                  <Link
-                    href={item.href ?? "#"}
-                    className={`w-full h-[46px] flex items-center gap-2 px-4 text-sm hover:bg-[#EAF6FB] hover:text-dashboard-primary ${
-                      isActive ? "bg-dashboard-primary text-white" : ""
-                    } rounded-md font-inter text-[#8C8C8C]`}
-                  >
-                    <item.icon className="h-4 w-4" /> {item.label}
-                  </Link>
-                )}
-              </AccordionItem>
-            );
-          })} */}
           {menuItems.map((item) => {
             const pathnameWithoutLocale = pathname.replace(/^\/(en|bn)/, "");
 

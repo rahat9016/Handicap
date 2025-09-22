@@ -296,4 +296,34 @@ html {
   .hide-scrollbar::-webkit-scrollbar {
     display: none;             /* Chrome, Safari */
   }
+  
 }
+
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;     /* Firefox */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none; /* Chrome, Safari and Opera */
+}
+
+
+.scrollbar::-webkit-scrollbar {
+  width: 4px; /* Width of vertical scrollbar */
+  height: 4px; /* Height of horizontal scrollbar */
+}
+
+.scrollbar::-webkit-scrollbar-track {
+  background-color: #00286890; /* Track color */
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+  background-color: #002868; /* Scrollbar thumb color */
+  border-radius: 4px;
+}
+
+.scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: #002868; /* Darker color on hover */
+}
+

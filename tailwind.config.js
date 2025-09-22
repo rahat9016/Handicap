@@ -228,6 +228,17 @@ module.exports = {
         },
       });
     },
+    function ({ addUtilities }) {
+      addUtilities({
+        ".hide-scrollbar": {
+          "::-webkit-scrollbar": {
+            display: "none",
+          },
+          "scrollbar-width": "none",
+          "-ms-overflow-style": "none",
+        },
+      });
+    },
   ],
 }
 

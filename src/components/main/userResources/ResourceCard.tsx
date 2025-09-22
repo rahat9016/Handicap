@@ -7,8 +7,6 @@ import { Link } from "@/i18n/navigation";
 import { formatFileSize } from "@/utils/formatFileSize";
 import { format } from "date-fns";
 import { Building2, Eye, NotebookText } from "lucide-react";
-import { useEffect, useState } from "react";
-import PDFModal from "./PDFModal";
 
 interface ResourceCardProps {
   id: number;
@@ -27,7 +25,7 @@ interface ResourceCardProps {
   viewCount: number;
   organizerName?: string;
   refetch: () => void;
-  filesCount: number
+  filesCount: number;
 }
 
 export default function ResourceCard({
@@ -43,37 +41,15 @@ export default function ResourceCard({
   // isPrivate,
   viewCount,
   organizerName,
-  filesCount
+  filesCount,
 }: ResourceCardProps) {
-  const [open, setOpen] = useState(false);
-  const [pdfBlobUrl, setPdfBlobUrl] = useState<string | null>(null);
-
-
-  useEffect(() => {
-    return () => {
-      if (pdfBlobUrl) URL.revokeObjectURL(pdfBlobUrl);
-    };
-  }, [pdfBlobUrl]);
-
-
-  const handleClose = () => {
-    setOpen(false);
-    if (pdfBlobUrl) {
-      URL.revokeObjectURL(pdfBlobUrl);
-      setPdfBlobUrl(null);
-    }
-  };
   const createdDate = new Date(date as string);
+
   return (
     <div className="rounded-lg overflow-hidden border bg-white shadow-sm flex flex-col justify-between p-3">
-      <PDFModal
-        open={open}
-        onClose={handleClose}
-        filePath={pdfBlobUrl}
-        fileType={fileType}
-      />
       <div className="relative w-full flex items-center justify-center mb-2">
         <NotebookText className="w-24 h-24 text-red-500 " />
+        
         {isFeatured && (
           <Badge className="bg-[#F26419] text-white absolute left-3 top-5">
             Featured
@@ -91,8 +67,10 @@ export default function ResourceCard({
           <Title className="lg:text-lg mb-3 line-clamp-1 text-black">
             {title}
           </Title>
-          <Paragraph className="line-clamp-3">{description}</Paragraph>
-          <Paragraph className="flex items-center gap-2 mt-2"><Building2 /> {organizerName}</Paragraph>
+          <Paragraph className="line-clamp-1">{description}</Paragraph>
+          <Paragraph className="flex items-center gap-2 mt-2">
+            <Building2 /> {organizerName}
+          </Paragraph>
           <div className="grid grid-cols-2 mt-3">
             <Paragraph>{downloadCount} Downloads</Paragraph>
             <Paragraph>{viewCount} Views</Paragraph>
@@ -104,7 +82,7 @@ export default function ResourceCard({
 
         <div className="flex flex-col gap-2">
           <Link
-          href={`/resources/${id}`}
+            href={`/resources/${id}`}
             className="w-full h-10 bg-transparent hover:bg-transparent border border-[#00A896] text-[#00A896] flex items-center justify-center text-center"
           >
             <Eye className="w-4 h-4 mr-1" /> View Details

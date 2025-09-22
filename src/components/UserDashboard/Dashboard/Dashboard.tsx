@@ -1,7 +1,6 @@
 "use client"
 import { ICourseEnrollment } from "@/app/[locale]/user-dashboard/my-courses/page";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useGet } from "@/hooks/useGet";
@@ -9,9 +8,7 @@ import { useRouter } from "@/i18n/navigation";
 import { useAppSelector } from "@/lib/redux/hooks";
 import {
   BookOpen,
-  FileText,
-  Play,
-  Trophy
+  Play
 } from "lucide-react";
 
 export default function Dashboard() {
@@ -28,37 +25,16 @@ export default function Dashboard() {
       title: "Enrolled Courses",
       count: courseData?.data?.length || 0,
     },
-    {
-      icon: FileText,
-      shape: "/images/dashboard/cardShape1.svg",
-      title: "Completed Quizzes ",
-      count: 10,
-    }
+    // {
+    //   icon: FileText,
+    //   shape: "/images/dashboard/cardShape1.svg",
+    //   title: "Completed Quizzes ",
+    //   count: 10,
+    // }
   ];
   return (
     <div>
       <div className="space-y-6">
-        {/* Welcome Header */}
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold text-foreground">
-              Welcome back, {firstName}!
-            </h1>
-            <p className="text-muted-foreground mt-1">
-              Continue your learning journey
-            </p>
-          </div>
-          <div className="flex items-center gap-4">
-            <Badge
-              variant="secondary"
-              className="bg-accent text-accent-foreground"
-            >
-              <Trophy className="h-3 w-3 mr-1" />
-              Level 5
-            </Badge>
-          </div>
-        </div>
-
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {data.map((item, index) => (
             <Card

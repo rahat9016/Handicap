@@ -75,7 +75,7 @@ export default function ContactSupport() {
                   <Clock4 className="text-blue" />
                   <div>
                     <h4 className="leading-none text-blue font-semibold font-inter text-base mb-[6px]">
-                      Office Address
+                      Office Time
                     </h4>
                     <p className="text-[#353535] text-sm font-inter font-normal">
                       Sunday – Thursday: 8:30 AM – 5:00 PM <br />

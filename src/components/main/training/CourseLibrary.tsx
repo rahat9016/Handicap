@@ -14,7 +14,7 @@ export default function CourseLibrary({
     <div>
       {courses.length === 0 ? (
         <div className="h-[100vh] flex flex-col items-center justify-center bg-slate-50 rounded-sm">
-          <h1 className="font-inter text-xl text-black">Resource data not available </h1>
+          <h1 className="font-inter text-xl text-black">The training package will be available soon</h1>
           <p className="text-sm font-inter">Please select right resource type</p>
         </div>
       ) : (

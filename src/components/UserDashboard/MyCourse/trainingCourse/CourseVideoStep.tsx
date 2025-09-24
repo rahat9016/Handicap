@@ -23,46 +23,46 @@ export default function CourseVideoStep() {
   const { data, isLoading } = useGet<ICourseContent[]>(`/course/${id}/items`, [
     "course",
   ]);
-  const [selectedVideo, setSelectedVideo] = useState<ICourseContent | null>(
+  const [selectedCourseItem, setSelectedCourseItem] = useState<ICourseContent | null>(
     null
   );
 
   useEffect(() => {
-    if (data?.data?.length && !selectedVideo) {
-      setSelectedVideo(data.data[0]);
+    if (data?.data?.length && !selectedCourseItem) {
+      setSelectedCourseItem(data.data[0]);
     }
-  }, [data, selectedVideo]);
+  }, [data, selectedCourseItem]);
 
   const videoUrl =
-    selectedVideo && id && selectedVideo.contentId !== null
-      ? getVideoUrl(id, selectedVideo.contentId)
+    selectedCourseItem && id && selectedCourseItem.contentId !== null
+      ? getVideoUrl(id, selectedCourseItem.contentId)
       : null;
 
   const youtubeId =
-    selectedVideo?.content?.contentType === "LINK" &&
-    selectedVideo?.content?.link
-      ? extractYouTubeId(selectedVideo.content?.link)
+    selectedCourseItem?.content?.contentType === "LINK" &&
+    selectedCourseItem?.content?.link
+      ? extractYouTubeId(selectedCourseItem.content?.link)
       : null;
   return (
     <div>
       <div className="container">
         <Button
         onClick={() => router.push("/user-dashboard/my-courses")}
-        className="bg-dashboard-primary text-white h-10 mb-3"
+        className="bg-dashboard-primary text-white h-10"
       >
         <ChevronLeft /> Back
       </Button>
-        <div className="w-3/4">
-          <Title className="mb-3">{selectedVideo?.content?.title}</Title>
+        {selectedCourseItem?.content?.title && <div className="w-3/4">
+          <Title className="mb-3">{selectedCourseItem?.content?.title}</Title>
           <Paragraph className="text-[#8F8F8F] mb-14">
-            {selectedVideo?.content?.description}
+            {selectedCourseItem?.content?.description}
           </Paragraph>
-        </div>
-        <div className="flex items-start gap-4 mb-10">
+        </div>}
+        <div className="flex items-start gap-4 mb-10 mt-5">
           <div className="w-3/4 lg:min-h-[500px]">
-            {selectedVideo?.type === "QUIZ" && selectedVideo?.quiz ? (
-              <Quiz quiz={selectedVideo.quiz} />
-            ) : selectedVideo?.content?.contentType === "VIDEO" ? (
+            {selectedCourseItem?.type === "QUIZ" && selectedCourseItem?.quiz ? (
+              <Quiz quiz={selectedCourseItem.quiz} />
+            ) : selectedCourseItem?.content?.contentType === "VIDEO" ? (
               videoUrl ? (
                 <HlsPlayer
                   src={videoUrl}
@@ -70,7 +70,7 @@ export default function CourseVideoStep() {
                   autoPlay
                   width="100%"
                   height={520}
-                  variants={selectedVideo?.content?.contentData?.variants || []}
+                  variants={selectedCourseItem?.content?.contentData?.variants || []}
                 />
               ) : (
                 <p>Loading video...</p>
@@ -93,8 +93,8 @@ export default function CourseVideoStep() {
               <div>
                 <CoursePreview
                   courses={data?.data || []}
-                  setSelectedVideo={setSelectedVideo}
-                  selectedVideo={selectedVideo}
+                  setSelectedVideo={setSelectedCourseItem}
+                  selectedCourseItem={selectedCourseItem}
                 />
               </div>
             )}

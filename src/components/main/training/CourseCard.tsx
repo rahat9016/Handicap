@@ -1,10 +1,9 @@
 import Paragraph from "@/components/share/Paragraph";
 import Title from "@/components/share/Title";
-import { Badge } from "@/components/ui/badge";
 import { Link } from "@/i18n/navigation";
 import { isValidUrl } from "@/utils/isValidUrl";
 import { format } from "date-fns";
-import { Building2, Clock, Eye } from "lucide-react";
+import { ArrowUpRight, Building2, Clock } from "lucide-react";
 import Image from "next/image";
 
 interface CourseCardProps {
@@ -28,7 +27,6 @@ export default function CourseCard({
   title,
   description,
   durationMinutes,
-  isActive,
   createdAt,
   thumbnailUrl,
   organization,
@@ -56,11 +54,6 @@ export default function CourseCard({
           />
         )}
 
-        {isActive && (
-          <Badge className="absolute top-3 left-3 bg-[#00A896] text-white">
-            Active
-          </Badge>
-        )}
       </div>
 
       {/* Content */}
@@ -92,9 +85,9 @@ export default function CourseCard({
         <div className="flex flex-col gap-2 mt-0">
           <Link
             href={location}
-            className="w-full h-10 bg-transparent hover:bg-transparent border border-[#00A896] text-[#00A896] flex items-center justify-center text-center"
+            className="w-full h-10 bg-transparent duration-300 border border-dashboard-primary text-dashboard-primary flex items-center justify-center text-center rounded-full font-inter font-medium text-base hover:bg-dashboard-primary hover:text-white"
           >
-            <Eye className="w-4 h-4 mr-1" /> View Details
+             Continue Course <ArrowUpRight className="w-4 h-4 mr-1" />
           </Link>
         </div>
       </div>

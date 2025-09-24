@@ -9,10 +9,10 @@ export interface ICourseEnrollment {
   id: number;
   courseId: number;
   userId: number;
-  enrolledAt: string; // ISO Date string
-  updatedAt: string; // ISO Date string
-  progress: number; // percentage or number
-  status: "ENROLLED" | "IN_PROGRESS" | "COMPLETED"; // extendable union type
+  enrolledAt: string;
+  updatedAt: string;
+  progress: number;
+  status: "ENROLLED" | "IN_PROGRESS" | "COMPLETED"; 
   grade: number | null;
   course: ICourse;
 }
@@ -24,7 +24,10 @@ export default function Page() {
   );
   return (
     <div>
-      <div className="pt-4">
+      <div className="bg-lightBlue border px-3 py-4 rounded-lg">
+          <h3 className="text-black font-inter font-medium ">My Courses </h3>
+      </div>
+      <div className="pt-4 bg-lightBlue mt-5 px-3 py-4 rounded-lg min-h-screen">
         {isLoading ? (
           <div className="grid grid-cols-3 gap-6">
             {Array.from({ length: 10 }, (_, index) => (

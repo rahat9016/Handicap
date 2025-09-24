@@ -7,12 +7,13 @@ import { ICourseContent } from "../types/traning";
 export default function CoursePreview({
   courses,
   setSelectedVideo,
-  selectedVideo
+  selectedCourseItem
 }: {
-  selectedVideo: ICourseContent | null;
+  selectedCourseItem: ICourseContent | null;
   courses: ICourseContent[];
   setSelectedVideo: Dispatch<SetStateAction<ICourseContent | null>>;
 }) {
+  console.log(courses)
   
   return (
     <div>
@@ -33,7 +34,7 @@ export default function CoursePreview({
         <Paragraph>No course content available.</Paragraph>
       ) : (
         courses.map((course, idx) => {
-          const isActive = selectedVideo?.id === course.id;
+          const isActive = selectedCourseItem?.id === course.id;
           return (
           <div
             key={idx}
@@ -42,9 +43,9 @@ export default function CoursePreview({
           >
             <Title className={`text-black group-hover:text-white font-medium text-sm lg:text-sm leading-none flex items-center gap-1 ${isActive ? "text-white " : ""}`}>
               {isActive && <Play size={14} className="text-green-400 animate-pulse" />}
-              {course.content?.title || selectedVideo?.quiz?.title}
+              {course.content?.title || selectedCourseItem?.quiz?.title}
             </Title>
-            {selectedVideo?.content?.contentType === "VIDEO" && <Paragraph className={`text-black group-hover:text-white lg:text-xs ${isActive ? "text-white" : ""}`}>
+            {selectedCourseItem?.content?.contentType === "VIDEO" && <Paragraph className={`text-black group-hover:text-white lg:text-xs ${isActive ? "text-white" : ""}`}>
               Video •  N/A
             </Paragraph>}
           </div>

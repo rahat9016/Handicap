@@ -1,11 +1,11 @@
 "use client";
 import SectionTopTitle from "@/components/share/SectionTopTitle";
-import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { MoveRight } from "lucide-react";
 import Image from "next/image";
 import QuickAccessCard from "./QuickAccessCard";
 import { useState } from "react";
+import Link from "next/link";
 
 export default function QuickAccess() {
   const resources = {
@@ -151,12 +151,12 @@ export default function QuickAccess() {
               </div>
             </Tabs>
             <div className="flex justify-end mt-6  view-all-button" tabIndex={0}>
-              <Button
+              <Link href={'/resources'}
                 className="text-primary bg-transparent hover:bg-transparent hover:underline"
                 tabIndex={0}
               >
                 View All Resources <MoveRight />
-              </Button>
+              </Link>
             </div>
           </div>
         </div>

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import Pagination from "@/components/share/Pagination";
 import { Input } from "@/components/ui/input";

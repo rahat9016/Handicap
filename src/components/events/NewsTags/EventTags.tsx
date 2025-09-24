@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
 import DeleteDialog from "@/components/common/DeleteDialog";

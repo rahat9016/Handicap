@@ -1,13 +1,13 @@
+
 import ToastProvider from "@/components/share/Toast/ToastProvider";
+import { routing } from "@/i18n/routing";
 import QueryProvider from "@/lib/react-query/QueryProvider";
 import StoreProvider from "@/lib/redux/provider/StoreProvider";
 import type { Metadata } from "next";
-import "./globals.css";
-
-import { routing } from "@/i18n/routing";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { Inter } from "next/font/google";
 import { notFound } from "next/navigation";
+import "./globals.css";
 import { UserFetcher } from "./UserFetcher";
 
 const inter = Inter({

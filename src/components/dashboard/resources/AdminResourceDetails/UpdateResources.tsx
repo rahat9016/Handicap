@@ -45,7 +45,7 @@ export default function UpdateResources({
   const { data: languages } = useGet<ILanguage[]>("/languages", [
     "resource-languages",
   ]);
-  
+  console.log(initialValues)
   const {
     mutateAsync: patchAsync,
     error: patchError,
@@ -59,7 +59,9 @@ export default function UpdateResources({
     defaultValues: {
       organizationId: organizationId || "",
       title: "",
+      titleBn: "",
       description: "",
+      descriptionBn: "",
       isPrivate: false,
       languageId: "",
       categoryId: "",
@@ -71,8 +73,10 @@ export default function UpdateResources({
   useEffect(() => {
     if (initialValues) {
       methods.reset({
-        title: initialValues.title,
+        title: initialValues.title?? "",
+        titleBn: initialValues.titleBn ?? "",
         description: initialValues.description,
+        descriptionBn: initialValues.descriptionBn,
         isPrivate: initialValues.isPrivate,
         languageId: String(initialValues.languageId),
         categoryId: String(initialValues.categoryId),
@@ -87,7 +91,9 @@ export default function UpdateResources({
     if (!isOpen) {
       methods.reset({
         title: "",
+        titleBn: "",
         description: "",
+        descriptionBn: "",
         isPrivate: false,
         languageId: "",
         categoryId: "",
@@ -106,7 +112,9 @@ export default function UpdateResources({
     const formData = new FormData();
 
     formData.append("title", data.title);
+    if (data.titleBn) formData.append("titleBn", data.titleBn); 
     if (data.description) formData.append("description", data.description);
+    if (data.descriptionBn) formData.append("descriptionBn", data.descriptionBn);
     formData.append("languageId", data.languageId);
     formData.append("categoryId", data.categoryId);
     formData.append("organizationId", organizationId);
@@ -154,7 +162,41 @@ export default function UpdateResources({
         <FormProvider {...methods}>
           <form onSubmit={methods.handleSubmit(onSubmit)} className="w-full">
             <div className="flex flex-col gap-6 mt-8">
-              <div className="grid grid-cols-1 gap-3 lg:gap-5">
+              <div className="grid grid-cols-2 gap-3 lg:gap-5">
+                <div>
+                  <InputLabel label="Title" required />
+                  <ControlledInputField
+                    name="title"
+                    placeholder="Please enter your title"
+                    className="bg-white"
+                  />
+                </div>
+                <div>
+                  <InputLabel label="Title (Bangla)" />
+                  <ControlledInputField
+                    name="titleBn"
+                    placeholder="শিরোনাম লিখুন"
+                    className="bg-white"
+                  />
+                </div>
+                <div>
+                  <InputLabel label="Description" />
+                  <ControlledTextareaField
+                    name="description"
+                    placeholder="Enter your description"
+                    className="bg-white"
+                  />
+                </div>
+                <div>
+                  <InputLabel label="Description (Bangla)" />
+                  <ControlledTextareaField
+                    name="descriptionBn"
+                    placeholder="বিবরণ লিখুন"
+                    className="bg-white"
+                  />
+                </div>
+              </div>
+              {/* <div className="grid grid-cols-1 gap-3 lg:gap-5">
                 <div>
                   <InputLabel label="Title" required />
                   <ControlledInputField
@@ -171,7 +213,7 @@ export default function UpdateResources({
                     className="bg-white"
                   />
                 </div>
-              </div>
+              </div> */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 lg:gap-5">
                 <div>
                   <InputLabel label="Category" required />

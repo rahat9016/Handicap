@@ -1,7 +1,9 @@
 export interface IResourceUpdate {
   id: number | undefined;
   title: string | undefined;
+  titleBn: string | undefined;
   description: string | undefined;
+  descriptionBn: string | undefined;
   organization: number | undefined;
   isPrivate: boolean | undefined;
   languageId: number | undefined;

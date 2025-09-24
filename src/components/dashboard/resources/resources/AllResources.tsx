@@ -36,7 +36,7 @@ export default function AllResources() {
 
   const shouldFetch = selectedId !== undefined || organizationId !== undefined;
 
-  const { data, isLoading } = useGet(
+  const { data, isLoading } = useGet<IResource[]>(
     endpoint,
     [
       "resources",
@@ -62,9 +62,7 @@ export default function AllResources() {
   };
   
   useEffect(() => {
-    if (data) {
-      setTotalItems(data.meta?.totalItems || 0);
-    }
+    if (data) setTotalItems(data.meta?.totalItems || 0);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 

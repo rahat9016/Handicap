@@ -57,7 +57,8 @@ export default function HomeHeroSection() {
               </p>
             )}
 
-            <Button
+            <div className="flex items-center gap-2">
+              <Button
               onClick={() => router.push("/resources")}
               className="px-4 py-3 h-[46px] bg-[#2A53CD] hover:bg-[#0490EF] text-white border text-sm cursor-pointer font-inter font-medium"
             >
@@ -69,6 +70,7 @@ export default function HomeHeroSection() {
             >
               Start Training
             </Button>
+            </div>
           </div>
           <div>
             <Image

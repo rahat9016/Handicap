@@ -17,9 +17,10 @@ const FILE_SIZE = 50 * 1024 * 1024;
 
 export const resourcesSchema = Yup.object().shape({
   title: Yup.string()
-    .required("Organizer name is required")
-    .min(1, "Organizer name is required"),
-
+    .required("Resources is required")
+    .min(1, "Resources name is required"),
+  titleBn: Yup.string().nullable(),
+  descriptionBn: Yup.string().nullable(),
   description: Yup.string()
     .max(500, "Description must be at most 500 characters")
     .optional(),

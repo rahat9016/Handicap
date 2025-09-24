@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { useGet } from "@/hooks/useGet";
 import { useRouter } from "@/i18n/navigation";
 import { ArrowLeft, Pencil } from "lucide-react";
+import { useLocale } from "next-intl";
 import { useParams } from "next/navigation";
 import { useState } from "react";
 import { IResource } from "../types/types";
@@ -12,6 +13,7 @@ import UpdateResourceFiles from "./UpdateResourceFiles";
 import UpdateResources from "./UpdateResources";
 
 export default function AdminResourceDetails() {
+  const local = useLocale() as "en" | "bn";
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [resource, setResource] = useState<IResourceUpdate | undefined>(
     undefined
@@ -28,8 +30,10 @@ export default function AdminResourceDetails() {
   const handleEdit = () => {
     const editData = {
       id: resourceData?.id,
-      title: resourceData?.title,
-      description: resourceData?.description,
+      title: resourceData?.title.en,
+      titleBn: resourceData?.title.bn ?? "",
+      description: resourceData?.description.en,
+      descriptionBn: resourceData?.description.bn ?? "",
       organization: resourceData?.organization?.id,
       isPrivate: resourceData?.isPrivate,
       languageId: resourceData?.language?.id,
@@ -61,8 +65,11 @@ export default function AdminResourceDetails() {
             <Pencil /> Edit
           </Button>
           <ResourceHeaderDetails
-            title={resourceData?.title}
-            description={resourceData?.description}
+            title={resourceData?.title?.[local] ?? resourceData?.title?.en}
+            description={
+              resourceData?.description?.[local] ??
+              resourceData?.description?.en
+            }
             uploader={resourceData?.uploader}
             createdAt={resourceData?.createdAt}
             updatedAt={resourceData?.updatedAt}

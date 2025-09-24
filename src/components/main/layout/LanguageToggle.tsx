@@ -21,6 +21,7 @@ export function LanguageToggle() {
       { locale: nextLocale as Locale }
     );
   }
+  
   return (
      <ToggleGroup
       type="single"

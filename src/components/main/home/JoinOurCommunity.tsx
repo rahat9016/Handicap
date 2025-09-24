@@ -17,7 +17,7 @@ export default function JoinOurCommunity() {
             <div className="flex items-center gap-3">
                 <Input placeholder="Enter your email address to join with our community" className="border border-[#7297FF] h-[46px] focus:border-[#7297FF] placeholder:text-[#B7B7B7] bg-white"/>
                 <div>
-                    <Button className="bg-[#2A53CD] text-white h-[46px] flex items-center font-inter text-sm font-medium px-6">Sent now</Button>
+                    <Button className="bg-[#2A53CD] text-white h-[46px] flex items-center font-inter text-sm font-medium px-6">Join now</Button>
                 </div>
             </div>
             <p className="text-white text-sm font-inter font-normal mt-3">By entering your mail, you are agreeing to our privacy policy</p>

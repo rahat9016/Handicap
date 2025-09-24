@@ -4,6 +4,7 @@ import { useGet } from "@/hooks/useGet";
 import { useRouter } from "@/i18n/navigation";
 import { IPageSection } from "@/types";
 import { MoveRight } from "lucide-react";
+import { useLocale } from "next-intl";
 import Image from "next/image";
 import shape_1 from "../../../../public/images/common/shape_1.png";
 import bg from "../../../../public/images/home/bg.png";
@@ -11,6 +12,7 @@ import WelcomeSkeleton from "./Skeleton/WelcomeSkeleton copy";
 
 export default function WelcomeDisability() {
   const router = useRouter()
+  const local = useLocale()  as "en" | "bn";
   const { data, isLoading } = useGet<IPageSection>(
     "/page-sections/query/first?page=HOME&sectionType=IMAGE_GALLERY",
     [""]
@@ -48,10 +50,10 @@ export default function WelcomeDisability() {
               className="text-2xl lg:text-4xl text-primary font-inter font-semibold mt-2 lg:mt-4"
               tabIndex={0}
             >
-              {data?.data?.title}
+              {data?.data?.title?.[local] ?? data?.data?.title?.en}
             </h1>
             <div tabIndex={0}>
-              <p className="text-sm font-inter text-[#353535] font-normal mt-3 lg:mt-5 leading-[28px]" dangerouslySetInnerHTML={{ __html: data?.data?.content || "" }}></p>
+              <p className="text-sm font-inter text-[#353535] font-normal mt-3 lg:mt-5 leading-[28px]" dangerouslySetInnerHTML={{ __html: data?.data?.content?.[local] ?? data?.data?.content?.en ?? "", }}></p>
             </div>
             <Button onClick={() => router.push("/about")} className="bg-transparent hover:bg-transparent text-pureBlack hover:text-[#01014E] shadow-none text-base font-inter font-semibold">
               See more <MoveRight />

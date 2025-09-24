@@ -34,9 +34,9 @@ export default function Header() {
               </div>
               <div className="flex space-x-4 items-center">
                 <LanguageToggle />
-                <Link href="#">{t("accessibility")}</Link>
-                <Link href="#">{t("eventCalendar")}</Link>
-                <Link href="#">{t("privacyPolicy")}</Link>
+                <Link href="/accessibility">{t("accessibility")}</Link>
+                <Link href="/event-calendar">{t("eventCalendar")}</Link>
+                <Link href="/privacy">{t("privacyPolicy")}</Link>
                 {email ? (
                   <ProfileDropdown />
                 ) : (

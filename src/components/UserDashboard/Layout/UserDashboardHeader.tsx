@@ -16,10 +16,10 @@ export default function UserDashboardHeader() {
     >
          <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-foreground">
+            <h1 className="text-lg lg:text-3xl font-bold text-foreground leading-none">
               Welcome back, {firstName}!
             </h1>
-            <p className="text-muted-foreground mt-1">
+            <p className="text-sm lg:text-base text-muted-foreground mt-1">
               Continue your learning journey
             </p>
           </div>
@@ -41,10 +41,10 @@ export default function UserDashboardHeader() {
               <AvatarImage src="https://github.com/shadcn.png" />
             </Avatar>
             <div>
-              <h2 className="text-dashboard-primary font-semibold font-inter text-base">
+              <h2 className="text-dashboard-primary font-semibold font-inter text-base leading-none">
                 Hello, {firstName}
               </h2>
-              <p className="text-[#8C8C8C] text-sm font-inter font-normal">
+              <p className="text-[#8C8C8C] text-xs lg:text-sm font-inter font-normal">
                 {roleName}
               </p>
             </div>

@@ -13,13 +13,14 @@ import {
 } from "@/components/ui/dialog";
 import { usePatch } from "@/hooks/usePatch";
 import { usePost } from "@/hooks/usePost";
+import { IPageSection } from "@/types";
 import { yupResolver } from "@hookform/resolvers/yup";
 import dynamic from "next/dynamic";
 import { useEffect } from "react";
 import { FieldError, FormProvider, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { PageSectionForm, pageSectionSchema } from "./schema";
-import { IPageSection } from "./types";
+
 const EditorWrapper = dynamic(
   () => import("@/components/share/EditorWrapper"),
   { ssr: false }
@@ -106,6 +107,15 @@ export default function CreateSectionModal({
         ...initialValues,
         images: initialValues?.imageUrls,
         isActive: Boolean(initialValues?.isActive),
+        title: initialValues?.title?.en,
+        titleBn: initialValues?.title?.bn,
+        content: initialValues?.content?.en,
+        contentBn: initialValues?.content.bn ?? "",
+        subtitle: initialValues?.subtitle?.en,
+        subtitleBn: initialValues?.subtitle?.bn ?? "",
+        buttonLabel: initialValues.buttonLabel.en ?? "",
+        buttonLabelBn: initialValues.buttonLabel.bn ?? "",
+        buttonUrl: initialValues?.buttonUrl,
       });
     }
   }, [initialValues, methods]);
@@ -119,9 +129,13 @@ export default function CreateSectionModal({
 
     // Optional fields
     if (data.title) formData.append("title", data.title);
+    if (data.titleBn) formData.append("titleBn", data.titleBn);
     if (data.subtitle) formData.append("subtitle", data.subtitle);
+    if (data.subtitleBn) formData.append("subtitleBn", data.subtitleBn);
     if (data.content) formData.append("content", data.content);
+    if (data.contentBn) formData.append("contentBn", data.contentBn);
     if (data.buttonLabel) formData.append("buttonLabel", data.buttonLabel);
+    if (data.buttonLabelBn) formData.append("buttonLabelBn", data.buttonLabelBn);
     if (data.buttonUrl) formData.append("buttonUrl", data.buttonUrl);
 
     // Handle image
@@ -216,34 +230,65 @@ export default function CreateSectionModal({
 
               {/* Content Fields */}
               <div>
-                <InputLabel label="Title" />
+                <InputLabel label="Title (English)" />
                 <ControlledInputField
                   name="title"
-                  placeholder="Main heading for the section"
+                  placeholder="Main heading for the section (EN)"
                 />
               </div>
 
               <div>
-                <InputLabel label="Subtitle" />
+                <InputLabel label="Title (Bangla)" />
+                <ControlledInputField
+                  name="titleBn"
+                  placeholder="Main heading for the section (BN)"
+                />
+              </div>
+
+              <div>
+                <InputLabel label="Subtitle (English)" />
                 <ControlledInputField
                   name="subtitle"
-                  placeholder="Secondary heading for the section"
+                  placeholder="Secondary heading for the section (EN)"
+                />
+              </div>
+
+              <div>
+                <InputLabel label="Subtitle (Bangla)" />
+                <ControlledInputField
+                  name="subtitleBn"
+                  placeholder="Secondary heading for the section (BN)"
                 />
               </div>
               <div className="col-span-2">
-                <InputLabel label="Content" />
+                <InputLabel label="Content (English)" />
                 <EditorWrapper
                   value={methods.watch("content") || ""}
                   onChange={(value) => methods.setValue("content", value)}
                 />
               </div>
 
+              <div className="col-span-2">
+                <InputLabel label="Content (Bangla)" />
+                <EditorWrapper
+                  value={methods.watch("contentBn") || ""}
+                  onChange={(value) => methods.setValue("contentBn", value)}
+                />
+              </div>
+
               {/* Action Fields */}
               <div>
-                <InputLabel label="Button Label" />
+                <InputLabel label="Button Label (English)" />
                 <ControlledInputField
                   name="buttonLabel"
-                  placeholder="Text for call-to-action button"
+                  placeholder="Text for call-to-action button (EN)"
+                />
+              </div>
+              <div>
+                <InputLabel label="Button Label (Bangla)" />
+                <ControlledInputField
+                  name="buttonLabelBn"
+                  placeholder="Text for call-to-action button (BN)"
                 />
               </div>
               <div>

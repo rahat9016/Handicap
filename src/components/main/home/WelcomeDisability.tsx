@@ -53,7 +53,31 @@ export default function WelcomeDisability() {
               {data?.data?.title?.[local] ?? data?.data?.title?.en}
             </h1>
             <div tabIndex={0}>
-              <p className="text-sm font-inter text-[#353535] font-normal mt-3 lg:mt-5 leading-[28px]" dangerouslySetInnerHTML={{ __html: data?.data?.content?.[local] ?? data?.data?.content?.en ?? "", }}></p>
+             
+              {local === "en" ? (
+              <p
+                className="text-sm font-inter text-[#353535] font-normal mt-3 lg:mt-5 leading-[28px]"
+                tabIndex={0}
+                dangerouslySetInnerHTML={{
+                  __html:
+                    data?.data?.content?.[local] ??
+                    data?.data?.content?.en ??
+                    "",
+                }}
+              />
+            ) : (
+              <p
+                className="text-sm font-inter text-[#353535] font-normal mt-3 lg:mt-5 leading-[28px]"
+                tabIndex={0}
+              >
+                {(
+                  data?.data?.content?.[local] ??
+                  data?.data?.content?.en ??
+                  ""
+                ).replace(/<[^>]*>/g, "")}
+              </p>
+            )}
+
             </div>
             <Button onClick={() => router.push("/about")} className="bg-transparent hover:bg-transparent text-pureBlack hover:text-[#01014E] shadow-none text-base font-inter font-semibold">
               See more <MoveRight />

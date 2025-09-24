@@ -1,5 +1,6 @@
 import { IResource } from "@/components/dashboard/resources/types/types";
 import { useAppSelector } from "@/lib/redux/hooks";
+import { useLocale } from "next-intl";
 import ResourceCard from "./ResourceCard";
 
 export default function ResourceLibrary({
@@ -9,6 +10,7 @@ export default function ResourceLibrary({
   resources: IResource[];
   refetch: () => void;
 }) {
+  const local = useLocale() as "en" | "bn";
   const {
     userInformation: { id },
   } = useAppSelector((state) => state.auth);
@@ -27,8 +29,8 @@ export default function ResourceLibrary({
               <ResourceCard
                 id={resource.id}
                 key={index}
-                title={resource.title}
-                description={resource.description}
+                title={resource?.title?.[local] ?? resource?.title?.en}
+                description={resource?.description?.[local] ?? resource?.description?.en}
                 imageUrl={resource.filePath}
                 date={resource.createdAt}
                 size={resource.fileSize}

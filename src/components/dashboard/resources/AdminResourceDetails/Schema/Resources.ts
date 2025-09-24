@@ -19,7 +19,8 @@ export const resourcesInformationUpdateSchema = Yup.object().shape({
   title: Yup.string()
     .required("Organizer name is required")
     .min(1, "Organizer name is required"),
-
+  titleBn: Yup.string().nullable(),
+  descriptionBn: Yup.string().nullable(),
   description: Yup.string()
     .max(500, "Description must be at most 500 characters")
     .optional(),

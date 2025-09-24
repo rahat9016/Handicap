@@ -12,11 +12,23 @@ export default function UserDashboardSidebar() {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
-  const { userInformation:{firstName} } = useAppSelector(state => state.auth)
+  const {
+    userInformation: { firstName },
+  } = useAppSelector((state) => state.auth);
   const menuItems = [
-    { id: "dashboard", label: "Dashboard", icon: Home, href: "/user-dashboard" },
+    {
+      id: "dashboard",
+      label: "Dashboard",
+      icon: Home,
+      href: "/user-dashboard",
+    },
     // { id: "profile", label: "Profile", icon: User, href: "/user-dashboard/profile-management" },
-    { id: "courses", label: "My Courses", icon: BookOpen, href: "/user-dashboard/my-courses" },
+    {
+      id: "courses",
+      label: "My Courses",
+      icon: BookOpen,
+      href: "/user-dashboard/my-courses",
+    },
     // { id: "quizzes", label: "Quizzes", icon: FileText, href: "/dashboard/quizzes" }
   ];
 
@@ -27,17 +39,27 @@ export default function UserDashboardSidebar() {
           isCollapsed ? "w-[74px]" : "w-64"
         } flex flex-col`}
       >
-        {/* Header */}
-        <div className="p-4 border-b border-sidebar-border">
-          <div className="flex items-center justify-between">
+        <div className={`${isCollapsed ? "p-4":"p-1.5"} border-b border-sidebar-border relative`}>
+          <div>
             {!isCollapsed && (
-              <h2 className="text-lg font-semibold text-sidebar-foreground">
-                Dashboard
-              </h2>
+              <div
+                onClick={() => router.push("/")}
+                className="cursor-pointer"
+              >
+                <div className="text-center">
+                  <h2 className="font-inter text-lg text-[#0077CC] font-bold leading-none">
+                    Disability Inclusion
+                    <br /> Resource Hub
+                  </h2>
+                  <p className="font-inter font-medium text-sm text-[#666666]">
+                    Bangladesh
+                  </p>
+                </div>
+              </div>
             )}
             <Button
               onClick={() => setIsCollapsed(!isCollapsed)}
-              className="bg-dashboard-primary hover:bg-dashboard-primary/90"
+              className={`bg-dashboard-primary hover:bg-dashboard-primary/90 absolute -top-3 ${isCollapsed ? "right-3":"right-0"}`}
             >
               {isCollapsed ? (
                 <Menu className="h-4 w-4" />
@@ -47,9 +69,7 @@ export default function UserDashboardSidebar() {
             </Button>
           </div>
         </div>
-
-        {/* User Profile Section */}
-        <div className="p-4 border-b border-sidebar-border">
+        <div className="px-4 pb-1 border-b border-sidebar-border">
           <div className="flex items-center gap-3">
             <Avatar className="h-10 w-10">
               <AvatarImage src="/diverse-student-profiles.png" />
@@ -75,7 +95,7 @@ export default function UserDashboardSidebar() {
           <ul className="space-y-2">
             {menuItems.map((item) => {
               const Icon = item.icon;
-              const pathWithoutLocale =  pathname.replace(/^\/(en|bn)/, "");
+              const pathWithoutLocale = pathname.replace(/^\/(en|bn)/, "");
               const isActive = pathWithoutLocale === item.href;
 
               return (
@@ -89,7 +109,9 @@ export default function UserDashboardSidebar() {
                     onClick={() => router.push(item.href)}
                   >
                     <Icon className="h-4 w-4 flex-shrink-0" />
-                    {!isCollapsed && <span className="truncate">{item.label}</span>}
+                    {!isCollapsed && (
+                      <span className="truncate">{item.label}</span>
+                    )}
                   </Button>
                 </li>
               );

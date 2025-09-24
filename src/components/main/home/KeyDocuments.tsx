@@ -1,6 +1,6 @@
 import SectionTopTitle from "@/components/share/SectionTopTitle";
+import { Link } from "@/i18n/navigation";
 import Image from "next/image";
-import Link from "next/link";
 
 const resources = [
   {
@@ -97,7 +97,7 @@ export default function KeyDocuments() {
                     {res.description}
                   </p>
                   <Link
-                    href={"#"}
+                    href={"/key-documents"}
                     className="text-[#353535] block group-hover:text-[#B7B7B7] text-sm font-medium underline mt-6"
                   >
                     View Document

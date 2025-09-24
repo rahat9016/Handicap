@@ -2,12 +2,14 @@
 import SectionTopTitle from "@/components/share/SectionTopTitle";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useRouter } from "@/i18n/navigation";
 import { MoveRight } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 import QuickAccessCard from "./QuickAccessCard";
 
 export default function QuickAccess() {
+  const router = useRouter()
   const resources = {
     featured1: [
       {
@@ -152,6 +154,7 @@ export default function QuickAccess() {
             </Tabs>
             <div className="flex justify-end mt-6  view-all-button" tabIndex={0}>
               <Button
+              onClick={() => router.push("/resources")}
                 className="text-primary bg-transparent hover:bg-transparent hover:underline"
                 tabIndex={0}
               >

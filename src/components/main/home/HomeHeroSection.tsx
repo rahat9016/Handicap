@@ -3,10 +3,12 @@ import { Button } from "@/components/ui/button";
 import { useGet } from "@/hooks/useGet";
 import { useRouter } from "@/i18n/navigation";
 import { IPageSection } from "@/types";
+import { useLocale } from "next-intl";
 import Image from "next/image";
 import HeroSkeleton from "./Skeleton/HeroSkeleton";
 
 export default function HomeHeroSection() {
+  const local = useLocale() as "en" | "bn";
   const router = useRouter();
   const { data, isLoading } = useGet<IPageSection>(
     "/page-sections/query/first?page=HOME&sectionType=HERO",
@@ -29,12 +31,15 @@ export default function HomeHeroSection() {
               className="text-5xl md:text-5xl font-bold leading-tight font-inter text-primary mb-6"
               tabIndex={0}
             >
-              {data?.data?.title}
+              {data?.data?.title?.[local] ?? data?.data?.title?.en}
             </h1>
             <p
               className="text-lg font-inter font-normal text-[#666666]"
               tabIndex={0}
-              dangerouslySetInnerHTML={{ __html: data?.data?.content || "" }}
+              dangerouslySetInnerHTML={{
+                __html:
+                  data?.data?.content?.[local] ?? data?.data?.content?.en ?? "",
+              }}
             ></p>
             <Button
               onClick={() => router.push("/resources")}

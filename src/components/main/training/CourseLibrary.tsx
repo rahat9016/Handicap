@@ -1,10 +1,11 @@
 import CourseCard from "./CourseCard";
 import { ICourse } from "./types/traning";
 
-export default function CourseLibrary({ courses }: { courses: ICourse[], }) {
-  //   const {
-  //     userInformation: { id },
-  //   } = useAppSelector((state) => state.auth);
+export default function CourseLibrary({
+   courses
+}: {
+  courses: ICourse[]
+}) {
 
   return (
     <div>
@@ -18,7 +19,7 @@ export default function CourseLibrary({ courses }: { courses: ICourse[], }) {
           </p>
         </div>
       ) : (
-        <div className="grid grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {courses
             ?.filter(
               (

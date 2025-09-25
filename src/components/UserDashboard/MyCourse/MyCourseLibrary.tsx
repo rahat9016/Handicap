@@ -1,5 +1,5 @@
 import { ICourseEnrollment } from "@/app/[locale]/user-dashboard/my-courses/page";
-import CourseCard from "@/components/main/training/CourseCard";
+import MyCourseCard from "./trainingCourse/MyCourseCard";
 
 export default function MyCourseLibrary({
   courses,
@@ -18,7 +18,7 @@ export default function MyCourseLibrary({
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
           {courses?.map((course, index) => {
             return (
-              <CourseCard
+              <MyCourseCard
                 key={index}
                 {...course?.course}
                 organization={course.course.organization!}

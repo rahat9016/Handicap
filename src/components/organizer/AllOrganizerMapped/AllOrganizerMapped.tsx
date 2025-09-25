@@ -27,6 +27,7 @@ export default function AllOrganizerMapped() {
     setTotalItems,
     setItemsPerPage,
   } = usePagination();
+
   const { search, handleSearchChange, debouncedSearch } =
     useSearchDebounce(300);
   const { data, isLoading } = useGet(

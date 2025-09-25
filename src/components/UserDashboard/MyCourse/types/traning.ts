@@ -111,18 +111,32 @@ export interface ICourseContent {
   id: number;
   type: "CONTENT" | "QUIZ";
   order: number;
+  isAccessible: boolean;
   courseId: number;
   contentId: number | null;
   quizId: number | null;
   createdAt: string;
   updatedAt: string;
-
+  isCompleted: boolean
+  isLocked: boolean
   // nested
   content: IVideoContent | null;
   quiz: IQuiz | null;
 }
 
+export interface ICourseProgress {
+  id: number;
+  status: "STARTED" | "COMPLETED" | "NOT_STARTED";
+  percentComplete: number;
+  lastAccessed: string; 
+  startedAt: string;  
+  completedAt: string | null;
+}
+export interface ICourseEnrollmentResponse  {
+  items: ICourseContent[];
+  courseProgress: ICourseProgress;
 
+}
 
 // ====================== QUIZ =======================
 export interface IQuiz {

@@ -74,7 +74,7 @@ export default function FindResources() {
                     >
                       <div className="flex items-center justify-between">
                         <span className="text-gray-900 font-medium group-hover:text-blue-700 transition-colors text-base">
-                          {resource.title}
+                          {resource.title.en}
                         </span>
                         <svg
                           className="w-4 h-4 text-gray-400 group-hover:text-blue-500 transform group-hover:translate-x-1 transition-all"
@@ -92,7 +92,7 @@ export default function FindResources() {
                       </div>
                       {resource.description && (
                         <p className="text-sm text-gray-600 mt-1 line-clamp-1">
-                          {resource.description}
+                          {resource.description.en}
                         </p>
                       )}
                     </li>

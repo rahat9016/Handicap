@@ -1,7 +1,9 @@
+import { ILangType } from "@/types";
+
 export interface IResourceUpdate {
   id: number | undefined;
-  title: string | undefined;
-  description: string | undefined;
+  title: ILangType | undefined;
+  description: ILangType | undefined;
   organization: number | undefined;
   isPrivate: boolean | undefined;
   languageId: number | undefined;

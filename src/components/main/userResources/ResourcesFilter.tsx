@@ -16,12 +16,13 @@ import { useSearchDebounce } from "@/hooks/useSearchDebounce";
 import { useAppSelector } from "@/lib/redux/hooks";
 import { buildQueryParams } from "@/utils/buildQueryParams";
 import { Search } from "lucide-react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import ResourceCardSkeleton from "./ResourceCardSkeleton";
 import ResourceLibrary from "./ResourceLibrary";
 import ResourcesSorting from "./ResourcesSorting";
+import { Button } from "@/components/ui/button";
 
-export default function ResourcesFilter() {
+const ResourcesFilter = () => {
   const { search, handleSearchChange, debouncedSearch } =
     useSearchDebounce(300);
   const {
@@ -35,6 +36,8 @@ export default function ResourcesFilter() {
   const { resourceTypes, languages, sortBy, keywords } = useAppSelector(
     (state) => state.filter
   );
+
+  const [isFiltersOpen, setIsFiltersOpen] = useState(false);
 
   const filters = {
     sort: sortBy,
@@ -56,6 +59,7 @@ export default function ResourcesFilter() {
     `/resources?${queryString}`,
     ["resources", queryString]
   );
+
   useEffect(() => {
     if (data) {
       setTotalItems(data.meta?.totalItems || 0);
@@ -64,26 +68,49 @@ export default function ResourcesFilter() {
   }, [data]);
 
   const totalPages = Math.ceil(totalItems / itemsPerPage);
+
   return (
     <div>
-      <div className="container py-10 lg:py-20 ">
+      <div className="container px-4 sm:px-6 lg:px-8 py-8 lg:py-16 xl:py-20">
         <SectionTopTitle
           title="Resource Library"
           desc="Access our comprehensive collection of disability inclusion resources, including guidelines, training materials, research reports, and tools."
         />
-        <div className="flex items-start gap-20 mt-14">
-          <div className="w-[300px] sticky top-40 self-start overflow-y-auto custom-scrollbar h-[75vh] bg-white border p-4 rounded-md">
+        
+        {/* Mobile Filter Toggle */}
+        <div className="lg:hidden flex justify-between items-center mb-6 mt-8">
+          <Button
+            onClick={() => setIsFiltersOpen(!isFiltersOpen)}
+            className="bg-[#2A53CD] hover:bg-[#0490EF] text-white"
+            variant="default"
+          >
+            {isFiltersOpen ? "Hide Filters" : "Show Filters"}
+          </Button>
+        </div>
+
+        <div className="flex flex-col lg:flex-row items-start gap-6 lg:gap-10 xl:gap-20 mt-8 lg:mt-14">
+          {/* Filters Sidebar */}
+          <div className={`
+            w-full lg:w-80 xl:w-[300px] 
+            ${isFiltersOpen ? 'block' : 'hidden lg:block'}
+            lg:sticky lg:top-32 self-start overflow-y-auto custom-scrollbar 
+            max-h-[80vh] lg:max-h-[75vh] bg-white border p-4 rounded-md
+            z-10 lg:z-auto
+          `}>
             <ResourcesSorting />
           </div>
-          <div className="w-10/12 ml-auto">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <span className="text-sm">Rows per page:</span>
+
+          {/* Main Content */}
+          <div className="w-full lg:w-[calc(100%-320px)] xl:w-10/12 lg:ml-auto">
+            {/* Controls Bar */}
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
+              <div className="flex items-center gap-2 order-2 sm:order-1">
+                <span className="text-sm whitespace-nowrap">Rows per page:</span>
                 <Select
                   value={itemsPerPage === -1 ? "all" : itemsPerPage.toString()}
                   onValueChange={(value) => setItemsPerPage?.(value)}
                 >
-                  <SelectTrigger className="w-[80px]">
+                  <SelectTrigger className="w-[80px] sm:w-[100px]">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -96,20 +123,25 @@ export default function ResourcesFilter() {
                   </SelectContent>
                 </Select>
               </div>
-              <div className="ml-auto flex items-center mb-4 w-[300px] border px-2 rounded-md">
-                <Search />
-                <Input
-                  placeholder="Search here..."
-                  value={search}
-                  onChange={handleSearchChange}
-                  className="border-none shadow-none"
-                />
+              
+              <div className="w-full sm:w-auto order-1 sm:order-2">
+                <div className="relative w-full sm:w-64 lg:w-80">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                  <Input
+                    placeholder="Search here..."
+                    value={search}
+                    onChange={handleSearchChange}
+                    className="border pl-10 pr-4 py-2 w-full"
+                  />
+                </div>
               </div>
             </div>
+
+            {/* Results */}
             <div className="border-t pt-4">
               {isLoading ? (
-                <div className="grid grid-cols-3 gap-6">
-                  {Array.from({ length: 10 }, (_, index) => (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+                  {Array.from({ length: 6 }, (_, index) => (
                     <ResourceCardSkeleton key={index} />
                   ))}
                 </div>
@@ -119,14 +151,16 @@ export default function ResourcesFilter() {
                     resources={(data?.data as IResource[]) || []}
                     refetch={refetch}
                   />
-                  <Pagination
-                    currentPage={currentPage}
-                    totalPages={totalPages}
-                    onPageChange={setCurrentPage}
-                    itemsPerPage={itemsPerPage}
-                    totalItems={totalItems}
-                    setItemsPerPage={setItemsPerPage}
-                  />
+                  {totalPages > 1 && (
+                    <Pagination
+                      currentPage={currentPage}
+                      totalPages={totalPages}
+                      onPageChange={setCurrentPage}
+                      itemsPerPage={itemsPerPage}
+                      totalItems={totalItems}
+                      setItemsPerPage={setItemsPerPage}
+                    />
+                  )}
                 </div>
               )}
             </div>
@@ -135,4 +169,6 @@ export default function ResourcesFilter() {
       </div>
     </div>
   );
-}
+};
+
+export default ResourcesFilter;

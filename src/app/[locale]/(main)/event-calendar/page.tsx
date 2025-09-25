@@ -1,9 +1,6 @@
-import ComingSoon from '@/components/common/ComingSoon/ComingSoon'
+
+import EventCalendar from "@/components/main/events/EventCalendar";
 
 export default function page() {
-  return (
-    <div>
-        <ComingSoon/>
-    </div>
-  )
+  return <EventCalendar />;
 }

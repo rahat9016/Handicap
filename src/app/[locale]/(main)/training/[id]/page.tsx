@@ -3,7 +3,7 @@ import TrainingCourse from "@/components/main/training/trainingCourse/TrainingCo
 export default function page() {
   return (
     <div>
-        <TrainingCourse />
+      <TrainingCourse />
     </div>
-  )
+  );
 }

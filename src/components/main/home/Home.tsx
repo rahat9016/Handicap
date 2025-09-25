@@ -9,19 +9,21 @@ import ThankyouSection from "./ThankyouSection";
 import TrainingModule from "./TrainingModule";
 import WelcomeDisability from "./WelcomeDisability";
 
-export default function Home() {
+const Home = () => {
   return (
-    <div>
-        <HomeHeroSection/>
-        <WelcomeDisability />
-        <PlatformStatistics />
-        <FindResources/>
-        <QuickAccess />
-        <TrainingModule />
-        <KeyDocuments />
-        <JoinOurCommunity />
-        <ThankyouSection />
-        <OurHonorableFounders/>
+    <div className=" pt-36 lg:pt-6">
+      <HomeHeroSection />
+      <WelcomeDisability />
+      <PlatformStatistics />
+      <FindResources />
+      <QuickAccess />
+      <TrainingModule />
+      <KeyDocuments />
+      <JoinOurCommunity />
+      <ThankyouSection />
+      <OurHonorableFounders />
     </div>
   );
-}
+};
+
+export default Home;

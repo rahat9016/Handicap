@@ -65,6 +65,13 @@ export interface ICategory {
   updatedAt: string; // ISO Date string
 }
 
+export interface ITag {
+  id: number;
+  name: string;
+  isActive: boolean;
+  createdAt: string; // ISO Date string
+}
+
 export interface IVideoContent {
   id: number;
   title: string;

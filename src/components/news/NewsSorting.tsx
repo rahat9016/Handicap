@@ -21,16 +21,10 @@ import { Trash } from "lucide-react";
 import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { ICategory } from "../UserDashboard/MyCourse/types/traning";
-import NewsCategories from "./NewsCategories/NewsCategories";
 
 const sortOptions = [
   { label: "Most View", value: "viewCount:desc" },
   { label: "Oldest First", value: "createdAt:desc" },
-];
-const levelOptions = [
-  { label: "Local", value: "LOCAL" },
-  { label: "National", value: "NATIONAL" },
-  { label: "International", value: "INTERNATIONAL" },
 ];
 
 const organizationOptions = [

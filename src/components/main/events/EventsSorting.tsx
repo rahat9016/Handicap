@@ -1,4 +1,3 @@
-import { IOrganization } from "@/components/organizer/types";
 import ControlledCheckboxField from "@/components/share/ControlledCheckboxField";
 import {
   Accordion,
@@ -22,15 +21,15 @@ import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { ICategory, ITag } from "../training/types/traning";
 
-const sortOptions = [
-  { label: "Most View", value: "viewCount:desc" },
-  { label: "Oldest First", value: "createdAt:desc" },
-];
-const tags = [
-  { label: "Beginner", value: "BEGINNER" },
-  { label: "Intermediate", value: "INTERMEDIATE" },
-  { label: "Advanced", value: "ADVANCED" },
-];
+// const sortOptions = [
+//   { label: "Most View", value: "viewCount:desc" },
+//   { label: "Oldest First", value: "createdAt:desc" },
+// ];
+// const tags = [
+//   { label: "Beginner", value: "BEGINNER" },
+//   { label: "Intermediate", value: "INTERMEDIATE" },
+//   { label: "Advanced", value: "ADVANCED" },
+// ];
 
 const EventsSorting = () => {
   const dispatch = useAppDispatch();

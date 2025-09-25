@@ -20,7 +20,6 @@ import ResourceCardSkeleton from "../userResources/ResourceCardSkeleton";
 import { ICourse } from "../training/types/traning";
 import CourseLibrary from "../training/CourseLibrary";
 import EventsSorting from "./EventsSorting";
-import EventCalendar from "./EventCalendar";
 
 const Events = () => {
   const { search, handleSearchChange, debouncedSearch } =
@@ -53,10 +52,10 @@ const Events = () => {
   });
 
   // API call
-  const { data, isLoading } = useGet<ICourse[]>(`/events?${queryString}`, [
-    "events",
-    queryString,
-  ]);
+  const { data, isLoading } = useGet<ICourse[]>(
+    `/events?${queryString}`,
+    ["events", queryString]
+  );
   useEffect(() => {
     if (data) setTotalItems(data.meta?.totalItems || 0);
   }, [data]);
@@ -65,7 +64,64 @@ const Events = () => {
   return (
     <div className="bg-[#f3f3f3]">
       <div className="container py-10 lg:py-20 lg:pb-40">
-        <EventCalendar />
+        <div className="flex items-start gap-20">
+          <div className="w-[300px] sticky top-40 self-start overflow-y-auto custom-scrollbar h-[75vh] bg-white border p-4 rounded-md">
+            <EventsSorting />
+          </div>
+          <div className="w-10/12 ml-auto">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <span className="text-sm">Rows per page:</span>
+                <Select
+                  value={itemsPerPage === -1 ? "all" : itemsPerPage.toString()}
+                  onValueChange={(value) => setItemsPerPage?.(value)}
+                >
+                  <SelectTrigger className="w-[80px] bg-white">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All</SelectItem>
+                    {[10, 20, 30, 40, 50].map((size) => (
+                      <SelectItem key={size} value={size.toString()}>
+                        {size}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="ml-auto flex items-center mb-4 w-[300px] border px-2 rounded-md bg-white">
+                <Search />
+                <Input
+                  placeholder="Search here..."
+                  value={search}
+                  onChange={handleSearchChange}
+                  className="border-none shadow-none"
+                />
+              </div>
+            </div>
+            <div className="border-t pt-4">
+              {isLoading ? (
+                <div className="grid grid-cols-3 gap-6">
+                  {Array.from({ length: 10 }, (_, index) => (
+                    <ResourceCardSkeleton key={index} />
+                  ))}
+                </div>
+              ) : (
+                <div>
+                  <CourseLibrary courses={(data?.data as ICourse[]) || []} />
+                  <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={setCurrentPage}
+                    itemsPerPage={itemsPerPage}
+                    totalItems={totalItems}
+                    setItemsPerPage={setItemsPerPage}
+                  />
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

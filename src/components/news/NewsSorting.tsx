@@ -21,25 +21,33 @@ import { Trash } from "lucide-react";
 import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { ICategory } from "../UserDashboard/MyCourse/types/traning";
+import NewsCategories from "./NewsCategories/NewsCategories";
 
 const sortOptions = [
   { label: "Most View", value: "viewCount:desc" },
   { label: "Oldest First", value: "createdAt:desc" },
 ];
 const levelOptions = [
-  { label: "Beginner", value: "BEGINNER" },
-  { label: "Intermediate", value: "INTERMEDIATE" },
-  { label: "Advanced", value: "ADVANCED" },
+  { label: "Local", value: "LOCAL" },
+  { label: "National", value: "NATIONAL" },
+  { label: "International", value: "INTERNATIONAL" },
 ];
 
+const organizationOptions = [
+  { label: "Jayjay Din", value: "jayjay-din" },
+  { label: "Daily Amar Desh", value: "daily-amar-desh" },
+  { label: "Bangla Edition", value: "Bangla Edition" },
+];
 const NewsSorting = () => {
   const dispatch = useAppDispatch();
-  const { data: courseCategoryData, isLoading: isResourceLoading } = useGet<
+
+  const { data: newsCategories, isLoading: isNewsCategoriesLoading } = useGet<
     ICategory[]
-  >("/course-category", ["course-category"]);
-  const { data: organizationData, isLoading: isOrganizationLoading } = useGet<
+  >("/news-category", ["news-category"]);
+
+  const { data: newsTags, isLoading: isNewsTagsLoading } = useGet<
     IOrganization[]
-  >("/organizations", ["organizations"]);
+  >("/news-tag", ["news-tag"]);
 
   const methods = useForm({
     defaultValues: {
@@ -60,16 +68,12 @@ const NewsSorting = () => {
     return () => subscription.unsubscribe();
   }, [methods, dispatch]);
 
-  const resourceCategoryOptions = mapToSelectOptions(
-    courseCategoryData?.data,
+  const NewsCategoryOptions = mapToSelectOptions(
+    newsCategories?.data,
     "name",
     "id"
   );
-  const organizationOptions = mapToSelectOptions(
-    organizationData?.data,
-    "name",
-    "id"
-  );
+  const newsTagOptions = mapToSelectOptions(newsTags?.data, "name", "id");
 
   return (
     <div>
@@ -96,27 +100,16 @@ const NewsSorting = () => {
                 Sort by
               </AccordionTrigger>
               <AccordionContent>
-                {isResourceLoading ? (
-                  <div className="space-y-2">
-                    <Skeleton className="h-4 w-52" />
-                    <Skeleton className="h-4 w-52" />
-                    <Skeleton className="h-4 w-52" />
-                  </div>
-                ) : (
-                  <ControlledCheckboxField
-                    name="sortBy"
-                    options={sortOptions}
-                  />
-                )}
+                <ControlledCheckboxField name="sortBy" options={sortOptions} />
               </AccordionContent>
             </AccordionItem>
             {/* ── Level ─────────────────────────────────────── */}
             <AccordionItem value="level" className="border-b-0">
               <AccordionTrigger className="font-bold hover:no-underline text-black text-sm border-b rounded-none mb-3">
-                Levels
+                News Tag
               </AccordionTrigger>
               <AccordionContent>
-                {isResourceLoading ? (
+                {isNewsTagsLoading ? (
                   <div className="space-y-2">
                     <Skeleton className="h-4 w-52" />
                     <Skeleton className="h-4 w-52" />
@@ -125,7 +118,7 @@ const NewsSorting = () => {
                 ) : (
                   <ControlledCheckboxField
                     name="level"
-                    options={levelOptions}
+                    options={newsTagOptions}
                   />
                 )}
               </AccordionContent>
@@ -134,10 +127,10 @@ const NewsSorting = () => {
             {/* ── Resource Type ─────────────────────────────── */}
             <AccordionItem value="courseCategory" className="border-b-0">
               <AccordionTrigger className="font-bold hover:no-underline text-black text-sm border-b rounded-none mb-3">
-                Course Category
+                News Category
               </AccordionTrigger>
               <AccordionContent>
-                {isResourceLoading ? (
+                {isNewsCategoriesLoading ? (
                   <div className="space-y-2">
                     <Skeleton className="h-4 w-52" />
                     <Skeleton className="h-4 w-52" />
@@ -149,7 +142,7 @@ const NewsSorting = () => {
                 ) : (
                   <ControlledCheckboxField
                     name="courseTypes"
-                    options={resourceCategoryOptions}
+                    options={NewsCategoryOptions}
                   />
                 )}
               </AccordionContent>
@@ -157,10 +150,10 @@ const NewsSorting = () => {
             {/* ── Organization ─────────────────────────────── */}
             <AccordionItem value="organization" className="border-b-0">
               <AccordionTrigger className="font-bold hover:no-underline text-black text-sm border-b rounded-none mb-3">
-                Organization
+                News Portals
               </AccordionTrigger>
               <AccordionContent>
-                {isOrganizationLoading ? (
+                {isNewsTagsLoading ? (
                   <div className="space-y-2">
                     <Skeleton className="h-4 w-52" />
                     <Skeleton className="h-4 w-52" />

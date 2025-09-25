@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import Paragraph from "@/components/share/Paragraph";
 import Title from "@/components/share/Title";
 import { useGet } from "@/hooks/useGet";
@@ -8,30 +8,52 @@ import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
+import { usePost } from "@/hooks/usePost";
 import { useRouter } from "@/i18n/navigation";
 import { ChevronLeft } from "lucide-react";
-import { ICourseContent } from "../types/traning";
+import { ICourseContent, ICourseEnrollmentResponse } from "../types/traning";
 import CoursePreview from "./CoursePreview";
 import HlsPlayer from "./HlsPlayer";
 import { Quiz } from "./Quiz";
 import { VideoItemSkeleton } from "./VideoItemSkeleton";
 import YoutubeVideoPlayer from "./YoutubeVideoPlayer";
 
-export default function CourseVideoStep() {
+export default function CourseModules() {
   const { id } = useParams();
-  const router = useRouter()
-  const { data, isLoading } = useGet<ICourseContent[]>(`/course/${id}/items`, [
-    "course",
-  ]);
-  const [selectedCourseItem, setSelectedCourseItem] = useState<ICourseContent | null>(
-    null
+  const router = useRouter();
+  const { data, isLoading } = useGet<ICourseEnrollmentResponse>(
+    `/course-enrollment/${id}/items`,
+    ["course", String(id)]
   );
+  const { mutateAsync } = usePost(
+    ``,
+    () => {
+      console.log("POST success",);
+    },
+    [["course"], ]
+  );
+  const enrollmentCourseData = data?.data;
+  const [selectedCourseItem, setSelectedCourseItem] =
+    useState<ICourseContent | null>(null);
+
+  const handleMarkItemCompleted = async (course: ICourseContent) => {
+    await mutateAsync({
+      endpoint: `/course-enrollment/mark-item-completed/${course.courseId}/${course.id}/`,
+    });
+  };
 
   useEffect(() => {
-    if (data?.data?.length && !selectedCourseItem) {
-      setSelectedCourseItem(data.data[0]);
+    if (
+      enrollmentCourseData &&
+      enrollmentCourseData?.items?.length &&
+      !selectedCourseItem
+    ) {
+      setSelectedCourseItem(enrollmentCourseData.items[0]);
+      if (!enrollmentCourseData.items[0].isLocked)
+        handleMarkItemCompleted(enrollmentCourseData.items[0]);
     }
-  }, [data, selectedCourseItem]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [enrollmentCourseData, selectedCourseItem]);
 
   const videoUrl =
     selectedCourseItem && id && selectedCourseItem.contentId !== null
@@ -47,19 +69,21 @@ export default function CourseVideoStep() {
     <div>
       <div className="container">
         <Button
-        onClick={() => router.push("/user-dashboard/my-courses")}
-        className="bg-dashboard-primary text-white h-10"
-      >
-        <ChevronLeft /> Back
-      </Button>
-        {selectedCourseItem?.content?.title && <div className="w-3/4">
-          <Title className="mb-3">{selectedCourseItem?.content?.title}</Title>
-          <Paragraph className="text-[#8F8F8F] mb-14">
-            {selectedCourseItem?.content?.description}
-          </Paragraph>
-        </div>}
-        <div className="flex items-start gap-4 mb-10 mt-5">
-          <div className="w-3/4 lg:min-h-[500px]">
+          onClick={() => router.push("/user-dashboard/my-courses")}
+          className="bg-dashboard-primary text-white h-10"
+        >
+          <ChevronLeft /> Back
+        </Button>
+        {selectedCourseItem?.content?.title && (
+          <div className="w-full xl:w-3/4  bg-lightBlue border px-3 py-4 rounded-lg mt-4">
+            <Title className="mb-1">{selectedCourseItem?.content?.title}</Title>
+            <Paragraph className="text-[#8F8F8F]">
+              {selectedCourseItem?.content?.description}
+            </Paragraph>
+          </div>
+        )}
+        <div className="flex flex-col xl:flex-row items-start gap-4 mb-10 mt-5">
+          <div className="w-full xl:w-3/4 lg:min-h-[500px]">
             {selectedCourseItem?.type === "QUIZ" && selectedCourseItem?.quiz ? (
               <Quiz quiz={selectedCourseItem.quiz} />
             ) : selectedCourseItem?.content?.contentType === "VIDEO" ? (
@@ -69,8 +93,10 @@ export default function CourseVideoStep() {
                   controls
                   autoPlay
                   width="100%"
-                  height={520}
-                  variants={selectedCourseItem?.content?.contentData?.variants || []}
+                  height={500}
+                  variants={
+                    selectedCourseItem?.content?.contentData?.variants || []
+                  }
                 />
               ) : (
                 <p>Loading video...</p>
@@ -82,7 +108,7 @@ export default function CourseVideoStep() {
             )}
           </div>
 
-          <div className="w-1/4">
+          <div className="w-full xl:w-1/4">
             {isLoading ? (
               <div className="flex flex-col gap-4">
                 {Array.from({ length: 5 }, (_, index) => (
@@ -92,9 +118,10 @@ export default function CourseVideoStep() {
             ) : (
               <div>
                 <CoursePreview
-                  courses={data?.data || []}
+                  courses={enrollmentCourseData?.items || []}
                   setSelectedVideo={setSelectedCourseItem}
                   selectedCourseItem={selectedCourseItem}
+                  handleMarkItemCompleted={handleMarkItemCompleted}
                 />
               </div>
             )}

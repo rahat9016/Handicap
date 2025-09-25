@@ -1,9 +1,9 @@
-import CourseVideoStep from "@/components/UserDashboard/MyCourse/trainingCourse/CourseVideoStep";
+import CourseModules from "@/components/UserDashboard/MyCourse/trainingCourse/CourseModules";
 
 export default function page() {
   return (
     <div>
-        <CourseVideoStep />
+        <CourseModules />
     </div>
   )
 }

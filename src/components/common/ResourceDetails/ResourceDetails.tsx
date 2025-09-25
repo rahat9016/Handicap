@@ -382,8 +382,8 @@ export default function ResourceDetails() {
         <div className="container">
           {/* Resource Header */}
           <ResourceHeaderDetails
-            title={resourceData?.title}
-            description={resourceData?.description}
+            title={resourceData?.title.en}
+            description={resourceData?.description.en}
             uploader={resourceData?.uploader}
             createdAt={resourceData?.createdAt}
             updatedAt={resourceData?.updatedAt}

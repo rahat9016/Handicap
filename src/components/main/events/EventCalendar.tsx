@@ -259,7 +259,7 @@ export default function EventCalendar() {
   };
 
   return (
-    <Card className="max-w-7xl mx-auto p-3 sm:p-6 bg-background">
+    <Card className="my-20 max-w-7xl mx-auto p-3 sm:p-6 bg-background">
       {/* Header */}
       <div className="text-center mb-6 sm:mb-8">
         <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-2">

@@ -164,7 +164,6 @@ export default function EventCalendar() {
   };
 
   const getEventsForDate = (date: number) => {
-    const targetDate = new Date(year, month, date);
     return sampleEvents.filter(
       (event) =>
         event.date.getDate() === date &&
@@ -218,7 +217,7 @@ export default function EventCalendar() {
             {day.toString().padStart(2, "0")}
           </div>
           <div className="space-y-1">
-            {events.map((event, index) => (
+            {events.map((event) => (
               <div
                 key={event.id}
                 onClick={() => handleEventClick(event.id)}

@@ -4,13 +4,7 @@ import { ArrowLeft, Calendar, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Image from "next/image";
-import { sampleEvents } from "@/components/main/events/EventCalendar";
-
-interface EventDetailPageProps {
-  params: {
-    id: string;
-  };
-}
+import { sampleEvents } from "@/components/main/events/EventCalendar"; 
 
 const EventDetails = () => {
   const { locale, id } = useParams();

@@ -16,7 +16,6 @@ import { buildQueryParams } from "@/utils/buildQueryParams";
 import { Search } from "lucide-react";
 import { useEffect } from "react";
 import { ICourse } from "../UserDashboard/MyCourse/types/traning";
-import TrainingSorting from "../main/training/TrainingSorting";
 import NewsSorting from "./NewsSorting";
 import ResourceCardSkeleton from "../main/userResources/ResourceCardSkeleton";
 import CourseLibrary from "../main/training/CourseLibrary";
@@ -57,6 +56,7 @@ const News = () => {
   );
   useEffect(() => {
     if (data) setTotalItems(data.meta?.totalItems || 0);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
   const totalPages = Math.ceil(totalItems / itemsPerPage);

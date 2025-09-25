@@ -8,7 +8,7 @@ import {
   FaTwitter,
 } from "react-icons/fa";
 
-export default function Footer() {
+const Footer = () => {
   const sections = [
     {
       title: "Quick Access",
@@ -21,9 +21,6 @@ export default function Footer() {
       title: "About",
       links: [
         { label: "About", href: "/about" },
-        // { label: "Humanity & Inclusion", href: "/hi" },
-        // { label: "ADTWG", href: "/adtwg" },
-        // { label: "Partners", href: "/partners" },
         { label: "Contact Us", href: "/contact" },
       ],
     },
@@ -32,47 +29,58 @@ export default function Footer() {
       links: [
         { label: "Privacy Policy", href: "/privacy" },
         { label: "Terms of Service", href: "/terms" },
-        // { label: "Cookie Policy", href: "/cookie" },
         { label: "Accessibility Statement", href: "/accessibility" },
-        // { label: "GDPR Compliance", href: "/gdpr" },
       ],
     },
   ];
 
   return (
     <footer
-      className="bg-[#1F2B3A] text-white pt-[51px] bg-contain bg-top bg-no-repeat"
+      className="bg-[#1F2B3A] text-white pt-8 md:pt-[51px] bg-contain bg-top bg-no-repeat"
       style={{ backgroundImage: `url('/images/common/footerBg.png')` }}
     >
-      <div className="container">
-        <div className="flex items-start flex-col lg:flex-row gap-14 lg:gap-28">
-          <div className="w-full lg:w-4/12">
-            <p className="text-sm text-[#B7B7B7] font-inter mb-9" tabIndex={0}>
+      <div className="container px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-col lg:flex-row gap-8 lg:gap-14 xl:gap-28">
+          {/* Company Info Section */}
+          <div className="w-full lg:w-5/12 xl:w-4/12">
+            <p 
+              className="text-sm text-[#B7B7B7] font-inter mb-6 lg:mb-9 leading-relaxed" 
+              tabIndex={0}
+            >
               Working together to build an inclusive, accessible, and empowered future for persons with disabilities...
             </p>
-            <div className="space-y-1 text-sm">
-              <p className="flex items-start gap-3 text-[#B7B7B7]" tabIndex={0} aria-label="Email">
-                <Mail />
-                <Link href="mailto:p.baidya@hi.org" className="mt-1">
+            <div className="space-y-3 text-sm">
+              <div className="flex items-start gap-3 text-[#B7B7B7]" tabIndex={0} aria-label="Email">
+                <Mail className="w-5 h-5 flex-shrink-0 mt-0.5" />
+                <Link href="mailto:p.baidya@hi.org" className="mt-0.5 hover:text-white transition-colors">
                   p.baidya@hi.org
                 </Link>
-              </p>
-              <p className="flex items-start gap-3 text-[#B7B7B7]" tabIndex={0} aria-label="Contact Number">
-                <Phone /> <span tabIndex={0}>+880 1825031014</span>
-              </p>
+              </div>
+              <div className="flex items-start gap-3 text-[#B7B7B7]" tabIndex={0} aria-label="Contact Number">
+                <Phone className="w-5 h-5 flex-shrink-0 mt-0.5" /> 
+                <span className="mt-0.5">+880 1825031014</span>
+              </div>
             </div>
           </div>
 
-          <div className="w-full lg:w-8/12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 lg:gap-10">
+          {/* Links Sections */}
+          <div className="w-full lg:w-7/12 xl:w-8/12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 xl:gap-10">
             {sections.map((section, idx) => (
-              <div key={idx}>
-                <h4 className="font-semibold mb-6" tabIndex={0}>{section.title}</h4>
-                <ul className="space-y-2 text-sm text-white/80">
+              <div key={idx} className="mb-4">
+                <h4 className="font-semibold mb-4 lg:mb-6 text-base" tabIndex={0}>
+                  {section.title}
+                </h4>
+                <ul className="space-y-3 text-sm">
                   {section.links.map((link, i) => (
-                    <li key={i} className="text-[#BABABA] hover:text-white mt-2">
-                      <Link href={link.href}>
-                        {link.label}
-                        <span className="block w-full h-[1px] bg-[#535353] mt-2"></span>
+                    <li key={i}>
+                      <Link 
+                        href={link.href} 
+                        className="text-[#BABABA] hover:text-white transition-colors block group"
+                      >
+                        <span className="block pb-2">
+                          {link.label}
+                        </span>
+                        <span className="block w-0 group-hover:w-full h-[1px] bg-[#535353] transition-all duration-300 mt-1"></span>
                       </Link>
                     </li>
                   ))}
@@ -83,44 +91,70 @@ export default function Footer() {
         </div>
       </div>
 
-      <div className="flex flex-col items-center justify-center gap-4 pt-8">
-        <div className="flex items-center gap-10 lg:gap-20 bg-[#3D465A] border border-[#FFFFFF4D] h-14 px-10 lg:px-20 rounded-full ">
-          <Link href="#" className="hover:text-[#5ABBFD]" aria-label="Facebook Account Link">
+      {/* Social Media Links */}
+      <div className="flex flex-col items-center justify-center gap-4 pt-6 lg:pt-8 mt-6 lg:mt-8">
+        <div className="flex items-center gap-6 sm:gap-10 lg:gap-20 bg-[#3D465A] border border-[#FFFFFF4D] h-12 lg:h-14 px-6 sm:px-10 lg:px-20 rounded-full">
+          <Link 
+            href="#" 
+            className="hover:text-[#5ABBFD] transition-colors duration-200 text-lg"
+            aria-label="Facebook Account Link"
+          >
             <FaFacebookF />
           </Link>
-          <Link href="#" className="hover:text-[#5ABBFD]" aria-label="Twitter Account Link">
+          <Link 
+            href="#" 
+            className="hover:text-[#5ABBFD] transition-colors duration-200 text-lg"
+            aria-label="Twitter Account Link"
+          >
             <FaTwitter />
           </Link>
-          <Link href="#" className="hover:text-[#5ABBFD]" aria-label="Instagram Account Link">
+          <Link 
+            href="#" 
+            className="hover:text-[#5ABBFD] transition-colors duration-200 text-lg"
+            aria-label="Instagram Account Link"
+          >
             <FaInstagram />
           </Link>
-          <Link href="#" className="hover:text-[#5ABBFD]" aria-label="Linkedin Account Link">
+          <Link 
+            href="#" 
+            className="hover:text-[#5ABBFD] transition-colors duration-200 text-lg"
+            aria-label="Linkedin Account Link"
+          >
             <FaLinkedinIn />
           </Link>
         </div>
       </div>
 
-      <div className="flex items-center justify-center w-full py-11 text-xs text-[#B3B3B3]">
-        <div className="flex-grow border-t border-[#B3B3B3]"></div>
-        <span className="px-4 text-center font-inter font-normal text-sm" tabIndex={0}>
+      {/* Copyright Section */}
+      <div className="flex flex-col sm:flex-row items-center justify-center w-full py-6 lg:py-11 gap-4 sm:gap-0 mt-4 lg:mt-6">
+        <div className="flex-grow border-t border-[#B3B3B3] hidden sm:block"></div>
+        <span 
+          className="px-4 text-center font-inter font-normal text-xs sm:text-sm text-[#B3B3B3] whitespace-nowrap" 
+          tabIndex={0}
+        >
           Copyright © 2025 ISCG & HI. All rights reserved.
         </span>
-        <div className="flex-grow border-t border-[#B3B3B3]"></div>
+        <div className="flex-grow border-t border-[#B3B3B3] hidden sm:block"></div>
       </div>
 
-      <div className="container text-xs text-[#B3B3B3] flex justify-end pb-3">
-        <p className="flex items-center gap-3">
-          <span>|</span> Developed by{" "}
+      {/* Developer Credit */}
+      <div className="container px-4 sm:px-6 lg:px-8 text-xs text-[#B3B3B3] flex justify-center sm:justify-end pb-4 lg:pb-3">
+        <div className="flex items-center gap-3 flex-wrap justify-center">
+          <span>|</span>
+          <span>Developed by</span>
           <span className="text-white" tabIndex={0} aria-label="Developed By A T I Limited">
             <Image
               width={67}
               height={24}
               src="/images/common/ATI_Logo.png"
               alt="ATI_Logo"
+              className="h-5 w-auto lg:h-6"
             />
           </span>
-        </p>
+        </div>
       </div>
     </footer>
   );
-}
+};
+
+export default Footer;

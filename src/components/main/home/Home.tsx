@@ -9,7 +9,7 @@ import ThankyouSection from "./ThankyouSection";
 import TrainingModule from "./TrainingModule";
 import WelcomeDisability from "./WelcomeDisability";
 
-export default function Home() {
+const Home = () => {
   return (
     <div className=" pt-36 lg:pt-6">
       <HomeHeroSection />
@@ -24,4 +24,6 @@ export default function Home() {
       <OurHonorableFounders />
     </div>
   );
-}
+};
+
+export default Home;

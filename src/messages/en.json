@@ -12,8 +12,10 @@
   },
   "Nav": {
     "home": "Home",
+    "events": "Events",
     "resources": "Resources",
     "training": "Training",
+    "news": "News",
     "about": "About",
     "contact": "Contact"
   }

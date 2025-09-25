@@ -8,12 +8,12 @@ import UpcomingLiveEvents from "./UpcomingLiveEvents";
 export default function Training() {
   return (
     <div>
-        <HeroSection/>
-        <Courses />
-        <UpcomingLiveEvents />
-        <EssentialFeatures />
-        <EarnRecognizedCertificates />
-        <FrequentlyAskedQuestions />
+      <HeroSection />
+      <Courses />
+      <UpcomingLiveEvents />
+      <EssentialFeatures />
+      <EarnRecognizedCertificates />
+      <FrequentlyAskedQuestions />
     </div>
-  )
+  );
 }

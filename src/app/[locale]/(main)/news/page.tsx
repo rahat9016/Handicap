@@ -1,9 +1,6 @@
-import ComingSoon from '@/components/common/ComingSoon/ComingSoon'
+import ComingSoon from "@/components/common/ComingSoon/ComingSoon";
+import News from "@/components/news/News";
 
 export default function page() {
-  return (
-    <div>
-        <ComingSoon/>
-    </div>
-  )
+  return <News />;
 }

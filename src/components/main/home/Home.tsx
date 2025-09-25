@@ -11,17 +11,17 @@ import WelcomeDisability from "./WelcomeDisability";
 
 export default function Home() {
   return (
-    <div>
-        <HomeHeroSection/>
-        <WelcomeDisability />
-        <PlatformStatistics />
-        <FindResources/>
-        <QuickAccess />
-        <TrainingModule />
-        <KeyDocuments />
-        <JoinOurCommunity />
-        <ThankyouSection />
-        <OurHonorableFounders/>
+    <div className=" pt-36 lg:pt-6">
+      <HomeHeroSection />
+      <WelcomeDisability />
+      <PlatformStatistics />
+      <FindResources />
+      <QuickAccess />
+      <TrainingModule />
+      <KeyDocuments />
+      <JoinOurCommunity />
+      <ThankyouSection />
+      <OurHonorableFounders />
     </div>
   );
 }

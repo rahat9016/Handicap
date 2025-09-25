@@ -115,7 +115,6 @@ const ResourcesSorting = () => {
                   <ControlledCheckboxField
                     name="sortBy"
                     options={sortOptions}
-                    className="space-y-2"
                   />
                 )}
               </AccordionContent>
@@ -137,7 +136,6 @@ const ResourcesSorting = () => {
                   <ControlledCheckboxField
                     name="resourceTypes"
                     options={resourceCategoryOptions}
-                    className="space-y-2"
                   />
                 )}
               </AccordionContent>
@@ -159,7 +157,6 @@ const ResourcesSorting = () => {
                   <ControlledCheckboxField
                     name="languages"
                     options={languagesCategoryOptions}
-                    className="space-y-2"
                   />
                 )}
               </AccordionContent>
@@ -181,7 +178,6 @@ const ResourcesSorting = () => {
                   <ControlledCheckboxField
                     name="keywords"
                     options={keywordOptions}
-                    className="space-y-2"
                   />
                 )}
               </AccordionContent>

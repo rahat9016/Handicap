@@ -23,7 +23,7 @@ export default function ResourceLibrary({
           <p className="text-sm font-inter">Please select right resource type</p>
         </div>
       ) : (
-        <div className="grid grid-cols-3 gap-6">
+        <div className="grid gird-cols-1 md:grid-cols-2 lg:grid-cols-3  gap-6">
           {resources?.map((resource, index) => {
             return (
               <ResourceCard

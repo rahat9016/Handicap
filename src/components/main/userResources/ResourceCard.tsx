@@ -133,6 +133,7 @@
 import Paragraph from "@/components/share/Paragraph";
 import Title from "@/components/share/Title";
 import { Badge } from "@/components/ui/badge";
+import { Card } from "@/components/ui/card";
 import { Link } from "@/i18n/navigation";
 import { formatFileSize } from "@/utils/formatFileSize";
 import { format } from "date-fns";
@@ -368,7 +369,7 @@ export default function ResourceCard({
   };
 
   return (
-    <div className="rounded-lg overflow-hidden border bg-white shadow-sm flex flex-col justify-between p-3">
+    <Card className="rounded-lg overflow-hidden border bg-white shadow-sm flex flex-col justify-between p-3">
       <div className="relative w-full flex items-center justify-center mb-2">
         <div 
           className="w-full max-h-32 overflow-hidden scroll-m-0 flex items-center justify-center bg-gray-50"
@@ -424,6 +425,6 @@ export default function ResourceCard({
           </Link>
         </div>
       </div>
-    </div>
+    </Card>
   );
 }

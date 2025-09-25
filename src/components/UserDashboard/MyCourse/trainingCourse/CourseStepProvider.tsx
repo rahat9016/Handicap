@@ -1,4 +1,4 @@
-import CourseVideoStep from "./CourseVideoStep";
+import CourseVideoStep from "./CourseModules";
 // import PDFViewer from "./PDFViewer";
 
 const CourseStepProvider = ({ activeStep }: { activeStep: number }) => {

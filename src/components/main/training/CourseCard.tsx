@@ -23,17 +23,15 @@ interface CourseCardProps {
 }
 
 export default function CourseCard({
-  id,
   title,
   description,
   durationMinutes,
   createdAt,
   thumbnailUrl,
   organization,
-  location
+  location,
 }: CourseCardProps) {
   const isValid = isValidUrl(thumbnailUrl);
-  console.log(id)
   return (
     <div className="rounded-lg overflow-hidden border bg-white shadow-sm flex flex-col">
       <div className="relative w-full h-44 bg-gray-50 flex items-center justify-center">
@@ -81,13 +79,12 @@ export default function CourseCard({
           </Paragraph>
         </div>
 
-        {/* Actions */}
         <div className="flex flex-col gap-2 mt-0">
           <Link
             href={location}
             className="w-full h-10 bg-transparent duration-300 border border-dashboard-primary text-dashboard-primary flex items-center justify-center text-center rounded-full font-inter font-medium text-base hover:bg-dashboard-primary hover:text-white"
           >
-             Continue Course <ArrowUpRight className="w-4 h-4 mr-1" />
+             View Course <ArrowUpRight className="w-4 h-4 mr-1" />
           </Link>
         </div>
       </div>

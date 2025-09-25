@@ -6,10 +6,7 @@ export default function CourseLibrary({
 }: {
   courses: ICourse[]
 }) {
-//   const {
-//     userInformation: { id },
-//   } = useAppSelector((state) => state.auth);
-  
+
   return (
     <div>
       {courses.length === 0 ? (
@@ -18,7 +15,7 @@ export default function CourseLibrary({
           <p className="text-sm font-inter">Please select right resource type</p>
         </div>
       ) : (
-        <div className="grid grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {courses
             ?.filter((course): course is ICourse & { organization: NonNullable<ICourse["organization"]> } => !!course.organization)
             .map((course, index) => (

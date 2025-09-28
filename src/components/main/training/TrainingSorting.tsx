@@ -24,7 +24,7 @@ import { ICategory } from "./types/traning";
 
 const sortOptions = [
   { label: "Most View", value: "viewCount:desc" },
-  { label: "Oldest First", value: "createdAt:desc" },
+  { label: "Oldest First", value: "createdAt:asc" }, // fixed asc for oldest
 ];
 const levelOptions = [
   { label: "Beginner", value: "BEGINNER" },
@@ -74,53 +74,59 @@ export default function TrainingSorting() {
   return (
     <div>
       <FormProvider {...methods}>
-        <form className="space-y-8 text-sm">
+        <form className="space-y-6 text-sm">
           <Accordion
             type="multiple"
             defaultValue={["sort", "courseCategory", "level", "organization"]}
             className="w-full space-y-0"
           >
-            <Button
-              onClick={(e) => {
-                e.preventDefault();
-                methods.reset();
-              }}
-              className="border text-black hover:text-white flex items-center bg-transparent hover:bg-dashboard-primary ml-auto"
-            >
-              <Trash />
-              Clear
-            </Button>
-            {/* ── Sort By ───────────────────────────────────── */}
-            <AccordionItem value="sort" className="border-b-0">
-              <AccordionTrigger className="font-bold hover:no-underline text-black text-sm border-b rounded-none mb-3">
+            {/* Clear button */}
+            <div className="flex justify-end mb-2">
+              <Button
+                onClick={(e) => {
+                  e.preventDefault();
+                  methods.reset();
+                  dispatch(setSortBy([]));
+                  dispatch(setCourseCategories([]));
+                  dispatch(setLevel([]));
+                  dispatch(setOrganizationIds([]));
+                }}
+                className="border text-black hover:text-white flex items-center gap-2 bg-transparent hover:bg-dashboard-primary"
+              >
+                <Trash className="w-4 h-4" />
+                Clear
+              </Button>
+            </div>
+
+            {/* Sort */}
+            <AccordionItem value="sort">
+              <AccordionTrigger className="font-bold text-black text-sm border-b mb-3">
                 Sort by
               </AccordionTrigger>
               <AccordionContent>
                 {isResourceLoading ? (
                   <div className="space-y-2">
-                    <Skeleton className="h-4 w-52" />
-                    <Skeleton className="h-4 w-52" />
-                    <Skeleton className="h-4 w-52" />
+                    {Array.from({ length: 3 }).map((_, i) => (
+                      <Skeleton key={i} className="h-4 w-52" />
+                    ))}
                   </div>
                 ) : (
-                  <ControlledCheckboxField
-                    name="sortBy"
-                    options={sortOptions}
-                  />
+                  <ControlledCheckboxField name="sortBy" options={sortOptions} />
                 )}
               </AccordionContent>
             </AccordionItem>
-            {/* ── Level ─────────────────────────────────────── */}
-            <AccordionItem value="level" className="border-b-0">
-              <AccordionTrigger className="font-bold hover:no-underline text-black text-sm border-b rounded-none mb-3">
+
+            {/* Levels */}
+            <AccordionItem value="level">
+              <AccordionTrigger className="font-bold text-black text-sm border-b mb-3">
                 Levels
               </AccordionTrigger>
               <AccordionContent>
                 {isResourceLoading ? (
                   <div className="space-y-2">
-                    <Skeleton className="h-4 w-52" />
-                    <Skeleton className="h-4 w-52" />
-                    <Skeleton className="h-4 w-52" />
+                    {Array.from({ length: 3 }).map((_, i) => (
+                      <Skeleton key={i} className="h-4 w-52" />
+                    ))}
                   </div>
                 ) : (
                   <ControlledCheckboxField
@@ -131,20 +137,17 @@ export default function TrainingSorting() {
               </AccordionContent>
             </AccordionItem>
 
-            {/* ── Resource Type ─────────────────────────────── */}
-            <AccordionItem value="courseCategory" className="border-b-0">
-              <AccordionTrigger className="font-bold hover:no-underline text-black text-sm border-b rounded-none mb-3">
+            {/* Course Category */}
+            <AccordionItem value="courseCategory">
+              <AccordionTrigger className="font-bold text-black text-sm border-b mb-3">
                 Course Category
               </AccordionTrigger>
               <AccordionContent>
                 {isResourceLoading ? (
                   <div className="space-y-2">
-                    <Skeleton className="h-4 w-52" />
-                    <Skeleton className="h-4 w-52" />
-                    <Skeleton className="h-4 w-52" />
-                    <Skeleton className="h-4 w-52" />
-                    <Skeleton className="h-4 w-52" />
-                    <Skeleton className="h-4 w-52" />
+                    {Array.from({ length: 6 }).map((_, i) => (
+                      <Skeleton key={i} className="h-4 w-52" />
+                    ))}
                   </div>
                 ) : (
                   <ControlledCheckboxField
@@ -154,20 +157,18 @@ export default function TrainingSorting() {
                 )}
               </AccordionContent>
             </AccordionItem>
-            {/* ── Organization ─────────────────────────────── */}
-            <AccordionItem value="organization" className="border-b-0">
-              <AccordionTrigger className="font-bold hover:no-underline text-black text-sm border-b rounded-none mb-3">
+
+            {/* Organization */}
+            <AccordionItem value="organization">
+              <AccordionTrigger className="font-bold text-black text-sm border-b mb-3">
                 Organization
               </AccordionTrigger>
               <AccordionContent>
                 {isOrganizationLoading ? (
                   <div className="space-y-2">
-                    <Skeleton className="h-4 w-52" />
-                    <Skeleton className="h-4 w-52" />
-                    <Skeleton className="h-4 w-52" />
-                    <Skeleton className="h-4 w-52" />
-                    <Skeleton className="h-4 w-52" />
-                    <Skeleton className="h-4 w-52" />
+                    {Array.from({ length: 6 }).map((_, i) => (
+                      <Skeleton key={i} className="h-4 w-52" />
+                    ))}
                   </div>
                 ) : (
                   <ControlledCheckboxField

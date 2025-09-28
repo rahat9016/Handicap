@@ -1,12 +1,5 @@
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import { Button } from "../ui/button";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../ui/select";
 
 interface IPaginationProps {
   currentPage: number;
@@ -23,7 +16,6 @@ const Pagination = ({
   onPageChange,
   itemsPerPage,
   totalItems,
-  setItemsPerPage,
 }: IPaginationProps) => {
   const pages = [];
 

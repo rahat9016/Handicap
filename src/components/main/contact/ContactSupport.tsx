@@ -72,7 +72,7 @@ const ContactSupport = () => {
                       Office Address
                     </h4>
                     <p className="text-[#353535] text-sm lg:text-base font-inter font-normal w-full lg:w-10/12 xl:w-3/4">
-                      Coordination Hub, Kabita Soroni, Motel Road, Cox's
+                      Coordination Hub, Kabita Soroni, Motel Road, Cox&apos;s
                       Bazar-4700, Bangladesh
                     </p>
                   </div>

@@ -2,7 +2,6 @@
 import { IResource } from "@/components/dashboard/resources/types/types";
 import Pagination from "@/components/share/Pagination";
 import SectionTopTitle from "@/components/share/SectionTopTitle";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
   Select,

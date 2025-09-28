@@ -69,25 +69,6 @@ const Pagination = ({
       </div>
 
       <div className="flex items-center gap-3">
-        <div className="flex items-center gap-2">
-          <span className="text-sm">Rows per page:</span>
-          <Select
-            value={itemsPerPage === -1 ? "all" : itemsPerPage.toString()}
-            onValueChange={(value) => setItemsPerPage?.(value)}
-          >
-            <SelectTrigger className="w-[80px]">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All</SelectItem>
-              {[10, 20, 30, 40, 50].map((size) => (
-                <SelectItem key={size} value={size.toString()}>
-                  {size}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
         <div className="flex items-center space-x-2">
           <Button
             variant="outline"

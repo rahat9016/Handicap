@@ -1,5 +1,6 @@
 "use client";
 import Pagination from "@/components/share/Pagination";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -13,12 +14,13 @@ import { usePagination } from "@/hooks/usePagination";
 import { useSearchDebounce } from "@/hooks/useSearchDebounce";
 import { useAppSelector } from "@/lib/redux/hooks";
 import { buildQueryParams } from "@/utils/buildQueryParams";
-import { Search } from "lucide-react";
-import { useEffect } from "react";
+import { Filter, Search } from "lucide-react";
+import { useEffect, useState } from "react";
 import { ICourse } from "../UserDashboard/MyCourse/types/traning";
 import NewsSorting from "./NewsSorting";
 import ResourceCardSkeleton from "../main/userResources/ResourceCardSkeleton";
 import CourseLibrary from "../main/training/CourseLibrary";
+
 const News = () => {
   const { search, handleSearchChange, debouncedSearch } =
     useSearchDebounce(300);
@@ -33,6 +35,8 @@ const News = () => {
   const { courseCategories, sortBy, level, organizationIds } = useAppSelector(
     (state) => state.filter
   );
+
+  const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
 
   const filters = {
     sort: sortBy,
@@ -54,23 +58,31 @@ const News = () => {
     `/course/published?${queryString}`,
     ["course-published", queryString]
   );
+
   useEffect(() => {
     if (data) setTotalItems(data.meta?.totalItems || 0);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
   const totalPages = Math.ceil(totalItems / itemsPerPage);
+
   return (
     <div className="bg-[#f3f3f3]">
-      <div className="container py-10 lg:py-20 lg:pb-40">
-        <div className="flex items-start gap-20">
-          <div className="w-[300px] sticky top-40 self-start overflow-y-auto custom-scrollbar h-[75vh] bg-white border p-4 rounded-md">
+      <div className="container px-4 sm:px-6 lg:px-8 py-6 lg:py-20 lg:pb-40">
+        <div className="flex flex-col lg:flex-row lg:items-start gap-6 lg:gap-20">
+          {/* Sidebar - Desktop */}
+          <div className="hidden lg:block w-full lg:w-[300px] lg:sticky lg:top-40 lg:self-start overflow-y-auto custom-scrollbar lg:h-[75vh] bg-white border p-4 rounded-md">
             <NewsSorting />
           </div>
-          <div className="w-10/12 ml-auto">
-            <div className="flex items-center justify-between">
+
+          {/* Main Content */}
+          <div className="w-full lg:w-10/12 lg:ml-auto">
+            {/* Top Controls */}
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
+              {/* Rows per page */}
               <div className="flex items-center gap-2">
-                <span className="text-sm">Rows per page:</span>
+                <span className="text-sm whitespace-nowrap">
+                  Rows per page:
+                </span>
                 <Select
                   value={itemsPerPage === -1 ? "all" : itemsPerPage.toString()}
                   onValueChange={(value) => setItemsPerPage?.(value)}
@@ -88,20 +100,71 @@ const News = () => {
                   </SelectContent>
                 </Select>
               </div>
-              <div className="ml-auto flex items-center mb-4 w-[300px] border px-2 rounded-md bg-white">
-                <Search />
+
+              {/* Search Field - Always visible */}
+              <div className="flex items-center w-full sm:w-[300px] border px-2 rounded-md bg-white">
+                <Search className="min-w-[18px]" />
                 <Input
-                  placeholder="Search here..."
+                  placeholder="Search news..."
                   value={search}
                   onChange={handleSearchChange}
                   className="border-none shadow-none"
                 />
               </div>
             </div>
+
+            {/* Mobile Controls */}
+            <div className="lg:hidden flex flex-col gap-4 mb-4">
+              <div className="flex items-center gap-3">
+                {/* Search Field */}
+                <div className="flex-1 flex items-center border px-2 rounded-md bg-white">
+                  <Search className="min-w-[18px]" />
+                  <Input
+                    placeholder="Search news..."
+                    value={search}
+                    onChange={handleSearchChange}
+                    className="border-none shadow-none"
+                  />
+                </div>
+
+                {/* Filter Button */}
+                <div
+                  onClick={() => setIsMobileFilterOpen(true)}
+                  className="bg-[#2A53CD] hover:bg-[#0490EF] text-white p-2 rounded-md shrink-0"
+                >
+                  <Filter className="w-6 h-6" />
+                </div>
+              </div>
+
+              {/* Rows per page */}
+              <div className="flex items-center gap-2">
+                <span className="text-sm whitespace-nowrap">
+                  Rows per page:
+                </span>
+                <Select
+                  value={itemsPerPage === -1 ? "all" : itemsPerPage.toString()}
+                  onValueChange={(value) => setItemsPerPage?.(value)}
+                >
+                  <SelectTrigger className="w-[80px] bg-white">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All</SelectItem>
+                    {[10, 20, 30, 40, 50].map((size) => (
+                      <SelectItem key={size} value={size.toString()}>
+                        {size}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            {/* News List */}
             <div className="border-t pt-4">
               {isLoading ? (
-                <div className="grid grid-cols-3 gap-6">
-                  {Array.from({ length: 10 }, (_, index) => (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {Array.from({ length: 6 }, (_, index) => (
                     <ResourceCardSkeleton key={index} />
                   ))}
                 </div>
@@ -122,6 +185,39 @@ const News = () => {
           </div>
         </div>
       </div>
+
+      {/* Mobile Filter Modal */}
+      {isMobileFilterOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 lg:hidden">
+          <div className="fixed bottom-0 left-0 right-0 bg-white rounded-t-2xl p-4 max-h-[80vh] overflow-y-auto">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-lg font-semibold">Filters</h3>
+              <button
+                onClick={() => setIsMobileFilterOpen(false)}
+                className="text-gray-500 hover:text-gray-700 p-2"
+              >
+                ✕
+              </button>
+            </div>
+            <NewsSorting />
+            <div className="mt-6 flex gap-3">
+              <Button
+                onClick={() => setIsMobileFilterOpen(false)}
+                variant="outline"
+                className="flex-1"
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={() => setIsMobileFilterOpen(false)}
+                className="flex-1 bg-[#2A53CD] hover:bg-[#0490EF] text-white"
+              >
+                Apply Filters
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

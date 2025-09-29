@@ -12,6 +12,7 @@ import {
 } from "@/lib/redux/features/permission/permissionSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
 import {
+  Award,
   BookOpen,
   ChevronLeft,
   ChevronRight,
@@ -42,7 +43,13 @@ export default function UserDashboardSidebar() {
       icon: BookOpen,
       href: "/user-dashboard/my-courses",
     },
-    // { id: "quizzes", label: "Quizzes", icon: FileText, href: "/dashboard/quizzes" }
+    {
+      id: "certifications",
+      label: "Certifications",
+      icon: Award ,
+      href: "/user-dashboard/certifications",
+    },
+
   ];
 
   return (

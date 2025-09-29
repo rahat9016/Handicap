@@ -100,7 +100,10 @@ export default function AllOrganizerMapped() {
       />
       <CreateUpdateOrganizerMappedModal
         isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+        onClose={() => {
+          setIsModalOpen(false);
+          setOrganizationTypes(undefined);
+        }}
         initialValues={organizationTypes}
       />
     </div>

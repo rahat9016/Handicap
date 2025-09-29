@@ -14,7 +14,6 @@ interface QuizResultsProps {
 export function QuizResults({
   totalCorrect,
   totalMissed,
-  totalMarks,
   percentage,
   passed,
 }: QuizResultsProps) {
@@ -46,7 +45,7 @@ export function QuizResults({
             }`}
           >
             {passed ? "✅ PASSED" : "❌ FAILED"}
-            Total marks {totalMarks} 
+            
           </div>
         </div>
 

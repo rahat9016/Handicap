@@ -117,7 +117,10 @@ export default function OrganizationTypeSetup() {
       />
       <CreateUpdateOrganizationTypeSetup
         isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+        onClose={() => {
+          setIsModalOpen(false)
+          setOrganization(null)
+        }}
         initialValues={organization}
       />
     </div>

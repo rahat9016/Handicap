@@ -43,7 +43,7 @@ export function Quiz({ quiz }: QuizProps) {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<AnswerSet>({});
   const [quizResult, setQuizResult] = useState<QuizResult | null>(null);
-  console.log(quizResult)
+  console.log(quizResult);
   const { data } = useGet<IQuiz>(
     `/quizzes/${quiz.id}`,
     ["quizzes", ""],
@@ -105,7 +105,7 @@ export function Quiz({ quiz }: QuizProps) {
       );
       isCorrect = selectedOption?.isCorrect || false;
     }
-    console.log(isCorrect)
+    console.log(isCorrect);
 
     // Move to next question or finish
     if (currentQuestionIndex < questions.length - 1) {
@@ -128,11 +128,10 @@ export function Quiz({ quiz }: QuizProps) {
         responses,
       }).then((response) => {
         toast.success("Quiz submitted successfully!");
-        setQuizResult({...response.data});
+        setQuizResult(response); 
         setQuizState("results");
         console.log("Message sent successfully:", response);
       });
-      
     }
   };
   const currentQuestion = questions?.[currentQuestionIndex];
@@ -174,13 +173,13 @@ export function Quiz({ quiz }: QuizProps) {
 
       {quizState === "results" && quizResult && (
         <QuizResults
-        score={quizResult.score}
-        totalCorrect={quizResult.totalCorrect}
-        totalMissed={quizResult.totalMissed}
-        totalMarks={quizResult.totalMarks}
-        percentage={quizResult.percentage}
-        passed={quizResult.passed}
-      />
+          score={quizResult.score}
+          totalCorrect={quizResult.totalCorrect}
+          totalMissed={quizResult.totalMissed}
+          totalMarks={quizResult.totalMarks}
+          percentage={quizResult.percentage}
+          passed={quizResult.passed}
+        />
       )}
     </div>
   );

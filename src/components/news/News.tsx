@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import Pagination from "@/components/share/Pagination";
 import { Button } from "@/components/ui/button";
@@ -16,10 +17,10 @@ import { useAppSelector } from "@/lib/redux/hooks";
 import { buildQueryParams } from "@/utils/buildQueryParams";
 import { Filter, Search } from "lucide-react";
 import { useEffect, useState } from "react";
+import CourseLibrary from "../main/training/CourseLibrary";
+import ResourceCardSkeleton from "../main/userResources/ResourceCardSkeleton";
 import { ICourse } from "../UserDashboard/MyCourse/types/traning";
 import NewsSorting from "./NewsSorting";
-import ResourceCardSkeleton from "../main/userResources/ResourceCardSkeleton";
-import CourseLibrary from "../main/training/CourseLibrary";
 
 const News = () => {
   const { search, handleSearchChange, debouncedSearch } =

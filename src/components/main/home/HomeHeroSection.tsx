@@ -38,7 +38,7 @@ const HomeHeroSection = () => {
 
             {local === "en" ? (
               <div
-                className="text-sm font-inter text-[#353535] font-normal mt-3 lg:mt-5 leading-[28px]"
+                className="text-sm text-justify font-inter text-[#353535] font-normal mt-3 lg:mt-5 leading-[28px]"
                 tabIndex={0}
                 dangerouslySetInnerHTML={{
                   __html:

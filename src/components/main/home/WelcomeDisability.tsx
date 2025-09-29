@@ -62,7 +62,7 @@ const WelcomeDisability = () => {
             <div tabIndex={0} className="mt-4 lg:mt-6">
               {local === "en" ? (
                 <div
-                  className="text-sm sm:text-base font-inter text-[#353535] font-normal leading-relaxed sm:leading-[28px]"
+                  className="text-sm text-justify sm:text-base font-inter text-[#353535] font-normal leading-relaxed sm:leading-[28px]"
                   tabIndex={0}
                   dangerouslySetInnerHTML={{
                     __html:

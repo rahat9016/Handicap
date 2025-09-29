@@ -68,7 +68,7 @@ const Header = () => {
 
         {/* Main nav */}
         <div className="bg-white shadow-lg">
-          <div className="container flex items-center justify-between py-3 sm:py-4 px-4 sm:px-6 lg:px-8">
+          <div className="container flex items-center justify-between py-3 sm:py-4 px-4 sm:px-6 lg:px-8 h-20 md:h-[108px]">
             {/* Logo */}
             <div className="flex items-center gap-3 sm:gap-5">
               <Link
@@ -146,7 +146,7 @@ const Header = () => {
           >
             <div className="flex flex-col h-full">
               {/* Close button */}
-              <div className="flex justify-end items-center p-4 border-b h-[108px]">
+              <div className="flex justify-end items-center p-4 border-b h-20 md:h-[108px]">
                 <button
                   onClick={() => setMobileOpen(false)}
                   className="p-2 rounded-lg border border-gray-200"

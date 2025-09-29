@@ -15,6 +15,7 @@ const Header = () => {
   } = useAppSelector((state) => state.auth);
 
   const pathname = usePathname();
+
   const t = useTranslations("Header");
   const tNav = useTranslations("Nav");
 
@@ -88,7 +89,14 @@ const Header = () => {
             {/* Desktop nav */}
             <nav className="hidden md:flex font-normal divide-x divide-gray-300 text-sm">
               {navLinks.map(({ label, href }) => {
-                const isActive = pathname === href;
+                const normalizedPath =
+                  pathname.replace(/^\/(en|bn)(?=\/|$)/, "") || "/";
+                let isActive = false;
+                if (href === "/") {
+                  isActive = normalizedPath === "/";
+                } else {
+                  isActive = normalizedPath.startsWith(href);
+                }
                 return (
                   <Link
                     key={label}
@@ -106,8 +114,12 @@ const Header = () => {
                         {tNav(label)}
                       </span>
                       <span
-                        className={`absolute -inset-x-1 -bottom-0.5 h-[3px] bg-red-700 transition-all duration-300 ease-in-out mx-auto
-                        ${isActive ? "w-9/12" : "w-0 group-hover:w-9/12"}`}
+                        className={`absolute -inset-x-1 -bottom-0.5 h-[3px]  transition-all duration-300 ease-in-out mx-auto
+                        ${
+                          isActive
+                            ? "w-9/12 bg-red-700"
+                            : "w-0 group-hover:w-9/12"
+                        }`}
                       />
                     </div>
                   </Link>

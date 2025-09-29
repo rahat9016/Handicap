@@ -20,7 +20,7 @@ import { useEffect, useState } from "react";
 import ResourceCardSkeleton from "./ResourceCardSkeleton";
 import ResourceLibrary from "./ResourceLibrary";
 import ResourcesSorting from "./ResourcesSorting";
-import { Button } from "@/components/ui/button";
+import { LuFilter, LuFilterX } from "react-icons/lu";
 
 const ResourcesFilter = () => {
   const { search, handleSearchChange, debouncedSearch } =
@@ -64,7 +64,7 @@ const ResourcesFilter = () => {
     if (data) {
       setTotalItems(data.meta?.totalItems || 0);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
   const totalPages = Math.ceil(totalItems / itemsPerPage);
@@ -76,36 +76,31 @@ const ResourcesFilter = () => {
           title="Resource Library"
           desc="Access our comprehensive collection of disability inclusion resources, including guidelines, training materials, research reports, and tools."
         />
-        
-        {/* Mobile Filter Toggle */}
-        <div className="lg:hidden flex justify-between items-center mb-6 mt-8">
-          <Button
-            onClick={() => setIsFiltersOpen(!isFiltersOpen)}
-            className="bg-[#2A53CD] hover:bg-[#0490EF] text-white"
-            variant="default"
-          >
-            {isFiltersOpen ? "Hide Filters" : "Show Filters"}
-          </Button>
-        </div>
+
+        {/* Mobile Filter Toggle Button - Outside the main layout */}
 
         <div className="flex flex-col lg:flex-row items-start gap-6 lg:gap-10 xl:gap-20 mt-8 lg:mt-14">
           {/* Filters Sidebar */}
-          <div className={`
+          <div
+            className={`
             w-full lg:w-80 xl:w-[300px] 
-            ${isFiltersOpen ? 'block' : 'hidden lg:block'}
+            ${isFiltersOpen ? "block" : "hidden lg:block"}
             lg:sticky lg:top-32 self-start overflow-y-auto custom-scrollbar 
             max-h-[80vh] lg:max-h-[75vh] bg-white border p-4 rounded-md
-            z-10 lg:z-auto
-          `}>
+            z-10 lg:z-auto shadow-lg lg:shadow-none
+          `}
+          >
             <ResourcesSorting />
           </div>
 
           {/* Main Content */}
           <div className="w-full lg:w-[calc(100%-320px)] xl:w-10/12 lg:ml-auto">
             {/* Controls Bar */}
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
-              <div className="flex items-center gap-2 order-2 sm:order-1">
-                <span className="text-sm whitespace-nowrap">Rows per page:</span>
+            <div className="flex flex-col gap-5 lg:flex-row justify-between">
+              <div className="flex-1 flex items-center gap-2 order-2 sm:order-1">
+                <span className="text-sm whitespace-nowrap">
+                  Rows per page:
+                </span>
                 <Select
                   value={itemsPerPage === -1 ? "all" : itemsPerPage.toString()}
                   onValueChange={(value) => setItemsPerPage?.(value)}
@@ -123,9 +118,8 @@ const ResourcesFilter = () => {
                   </SelectContent>
                 </Select>
               </div>
-              
-              <div className="w-full sm:w-auto order-1 sm:order-2">
-                <div className="relative w-full sm:w-64 lg:w-80">
+              <div className="flex-1 w-full flex items-center gap-3 order-1 sm:order-2">
+                <div className="relative w-full">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
                   <Input
                     placeholder="Search here..."
@@ -134,11 +128,23 @@ const ResourcesFilter = () => {
                     className="border pl-10 pr-4 py-2 w-full"
                   />
                 </div>
+
+                {/* Small Screen Filter Button - Beside Search */}
+                <div
+                  onClick={() => setIsFiltersOpen(!isFiltersOpen)}
+                  className="flex lg:hidden bg-[#2A53CD] hover:bg-[#0490EF] text-white p-2 rounded-md"
+                >
+                  {isFiltersOpen ? (
+                    <LuFilterX size={24} />
+                  ) : (
+                    <LuFilter size={24} />
+                  )}
+                </div>
               </div>
             </div>
 
             {/* Results */}
-            <div className="border-t pt-4">
+            <div className="pt-4">
               {isLoading ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                   {Array.from({ length: 6 }, (_, index) => (
@@ -166,6 +172,14 @@ const ResourcesFilter = () => {
             </div>
           </div>
         </div>
+
+        {/* Mobile Overlay */}
+        {isFiltersOpen && (
+          <div
+            className="lg:hidden fixed inset-0 bg-black bg-opacity-50 z-0"
+            onClick={() => setIsFiltersOpen(false)}
+          />
+        )}
       </div>
     </div>
   );

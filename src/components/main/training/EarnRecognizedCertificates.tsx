@@ -13,7 +13,7 @@ const listEarn = [
   "Step Toward Career Growth in inclusion, development, and rights-based sectors",
 ];
 
-export default function EarnRecognizedCertificates() {
+const EarnRecognizedCertificates = () => {
   return (
     <div className="bg-[#f3f3f3]">
       <div className="container py-10 lg:py-20">
@@ -21,7 +21,7 @@ export default function EarnRecognizedCertificates() {
           title="Earn Recognized Certificates"
           desc="Gain official recognition for your learning and professional development through our certificate programs. Upon completing training courses on disability inclusion, inclusive education, accessible."
         />
-        <div className="grid grid-cols-2 gap-9 mt-14">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-9 mt-14">
           <div>
             <Paragraph>Success</Paragraph>
             <Title>Earn Recognized Certificates</Title>
@@ -39,7 +39,7 @@ export default function EarnRecognizedCertificates() {
                     height={20}
                     src="/images/course/verify.svg"
                     alt={item}
-                  />{" "}
+                  />
                   <Paragraph>{item}</Paragraph>
                 </div>
               ))}
@@ -57,4 +57,6 @@ export default function EarnRecognizedCertificates() {
       </div>
     </div>
   );
-}
+};
+
+export default EarnRecognizedCertificates;

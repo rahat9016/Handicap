@@ -15,13 +15,13 @@ export default function AboutUs() {
             <h3 className="text-primary text-lg font-inter font-medium">
               Our Mission
             </h3>
-            <p className="text-[#7A7A8E] text-sm font-inter font-normal mt-3 ">
+            <p className="text-[#7A7A8E] text-justify text-sm font-inter font-normal mt-3 ">
               A humanitarian and development environment where persons with disabilities are fully included, empowered, and have full access to participation in programs, services, and decision-making processes.
             </p>
             <h3 className="text-primary text-lg font-inter font-medium mt-5 lg:mt-10">
               Our Vision
             </h3>
-            <p className="text-[#7A7A8E] text-sm font-inter font-normal mt-3">
+            <p className="text-[#7A7A8E] text-justify text-sm font-inter font-normal mt-3">
               To provide accessible resources, practical tools, web based training, and guidance on disability inclusion, empowering organizations, communities, individuals, and relevant stakeholders to build capacity, implement inclusive practices, raise awareness, and advocate effectively for the rights of persons with disabilities in humanitarian and development contexts.
             </p>
           </div>

@@ -6,7 +6,7 @@ export default function PlatformStatistics() {
     <div className="container">
       <div className="py-10 lg:py-20">
         <SectionTopTitle title="Platform Statistics" />
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mt-[60px]">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-[60px]">
           {[
             {
               label: "Total Resources",

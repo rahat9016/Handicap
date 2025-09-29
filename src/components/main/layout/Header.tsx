@@ -22,10 +22,10 @@ const Header = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
-    <header className="pb-20 md:pb-32">
+    <header className="pb-20 md:pb-20">
       <div className="fixed w-full top-0 z-50">
         {/* Top accessibility bar */}
-        <div className="w-full pt-2 sm:pt-3 bg-pureBlack">
+        <div className="hidden lg:block w-full pt-2 sm:pt-3 bg-pureBlack">
           <div
             className="container px-4 sm:px-6 lg:px-8"
             aria-label="Nav bar"
@@ -87,7 +87,7 @@ const Header = () => {
             </div>
 
             {/* Desktop nav */}
-            <nav className="hidden md:flex font-normal divide-x divide-gray-300 text-sm">
+            <nav className="hidden lg:flex font-normal divide-x divide-gray-300 text-sm">
               {navLinks.map(({ label, href }) => {
                 const normalizedPath =
                   pathname.replace(/^\/(en|bn)(?=\/|$)/, "") || "/";
@@ -129,7 +129,7 @@ const Header = () => {
 
             {/* Mobile hamburger */}
             <button
-              className="md:hidden p-2 rounded-lg border border-gray-200"
+              className="lg:hidden p-2 rounded-lg border border-gray-200"
               onClick={() => setMobileOpen(!mobileOpen)}
               aria-label="Toggle menu"
               aria-expanded={mobileOpen}
@@ -139,29 +139,116 @@ const Header = () => {
           </div>
 
           {/* Mobile nav dropdown */}
-          {mobileOpen && (
-            <div className="md:hidden bg-white border-t shadow-lg">
-              <nav className="flex flex-col space-y-1 px-4 py-3">
-                {navLinks.map(({ label, href }) => {
-                  const isActive = pathname === href;
-                  return (
+          <div
+            className={`lg:hidden fixed top-0 right-0 h-full w-3/5 max-w-sm bg-white shadow-xl border-l transform transition-transform duration-300 ease-in-out z-50 ${
+              mobileOpen ? "translate-x-0" : "translate-x-full"
+            }`}
+          >
+            <div className="flex flex-col h-full">
+              {/* Close button */}
+              <div className="flex justify-end items-center p-4 border-b h-[108px]">
+                <button
+                  onClick={() => setMobileOpen(false)}
+                  className="p-2 rounded-lg border border-gray-200"
+                  aria-label="Close menu"
+                >
+                  <X size={20} />
+                </button>
+              </div>
+
+              {/* Navigation Links */}
+              <nav className="flex-1 overflow-y-auto">
+                <div className="p-4 border-b">
+                  <h3 className="font-medium text-gray-900 mb-3 text-sm">
+                    Main Navigation
+                  </h3>
+                  <div className="space-y-1">
+                    {navLinks.map(({ label, href }) => {
+                      const isActive = pathname === href;
+                      return (
+                        <Link
+                          key={label}
+                          href={href}
+                          onClick={() => setMobileOpen(false)}
+                          className={`block py-3 px-3 rounded-md text-sm ${
+                            isActive
+                              ? "text-primary font-medium bg-gray-100"
+                              : "text-[#666666] hover:bg-gray-50"
+                          }`}
+                        >
+                          {tNav(label)}
+                        </Link>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Accessibility Links */}
+                <div className="p-4 border-b">
+                  <h3 className="font-medium text-gray-900 mb-3 text-sm">
+                    Accessibility
+                  </h3>
+                  <div className="space-y-1">
                     <Link
-                      key={label}
-                      href={href}
+                      href="/accessibility"
                       onClick={() => setMobileOpen(false)}
-                      className={`py-3 px-3 rounded-md text-sm ${
-                        isActive
-                          ? "text-primary font-medium bg-gray-100"
-                          : "text-[#666666] hover:bg-gray-50"
-                      }`}
+                      className="block py-3 px-3 rounded-md text-sm text-[#666666] hover:bg-gray-50"
                     >
-                      {tNav(label)}
+                      {t("accessibility")}
                     </Link>
-                  );
-                })}
+                    <Link
+                      href="/event-calendar"
+                      onClick={() => setMobileOpen(false)}
+                      className="block py-3 px-3 rounded-md text-sm text-[#666666] hover:bg-gray-50"
+                    >
+                      {t("eventCalendar")}
+                    </Link>
+                    <Link
+                      href="/privacy"
+                      onClick={() => setMobileOpen(false)}
+                      className="block py-3 px-3 rounded-md text-sm text-[#666666] hover:bg-gray-50"
+                    >
+                      {t("privacyPolicy")}
+                    </Link>
+                  </div>
+                  <div className="rounded-full  ml-3 space-y-1 border-2 flex items-center w-28 p-1 pl-2">
+                    <LanguageToggle />
+                  </div>
+                </div>
+
+                {/* User Section */}
+                <div className="p-4">
+                  <div className="space-y-1">
+                    {email ? (
+                      <div className="py-3 px-3">
+                        <ProfileDropdown />
+                      </div>
+                    ) : (
+                      <Link
+                        href="/login"
+                        onClick={() => setMobileOpen(false)}
+                        className="block py-3 px-3 rounded-md text-sm text-[#666666] hover:bg-gray-50 whitespace-nowrap"
+                      >
+                        {t("login")}
+                      </Link>
+                    )}
+                  </div>
+                </div>
               </nav>
             </div>
-          )}
+          </div>
+
+          {/* Overlay */}
+
+          <div
+            className={`lg:hidden ${
+              mobileOpen
+                ? "backdrop-blur-sm bg-black bg-opacity-50"
+                : "pointer-events-none"
+            } fixed inset-0 duration-300  z-40`}
+            onClick={() => setMobileOpen(false)}
+            aria-hidden="true"
+          />
         </div>
       </div>
     </header>

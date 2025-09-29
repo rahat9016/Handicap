@@ -37,7 +37,6 @@ interface QuizFormData {
   selectedOptions: number[];
   singleOption: number;
 }
-
 export function QuizQuestion({
   question,
   questionNumber,
@@ -47,7 +46,7 @@ export function QuizQuestion({
   initialAnswer = [],
   canGoPrevious = false,
 }: QuizQuestionProps) {
-  const { register, handleSubmit, watch, setValue, getValues, reset } =
+  const { handleSubmit, watch, setValue, getValues, reset } =
     useForm<QuizFormData>({
       defaultValues: {
         selectedOptions: [],
@@ -96,11 +95,14 @@ export function QuizQuestion({
   const handleCheckboxChange = (optionId: number, checked: boolean) => {
     const currentSelected = getValues("selectedOptions") || [];
     if (checked) {
-      setValue("selectedOptions", [...currentSelected, optionId]);
+      setValue("selectedOptions", [...currentSelected, optionId], {
+        shouldDirty: true,
+      });
     } else {
       setValue(
         "selectedOptions",
-        currentSelected.filter((id) => id !== optionId)
+        currentSelected.filter((id) => id !== optionId),
+        { shouldDirty: true }
       );
     }
   };
@@ -117,14 +119,14 @@ export function QuizQuestion({
     : singleOption > 0;
 
   return (
-    <div className="min-h-screen font-inter">
-      <div className=" mx-auto space-y-8">
+    <div className="font-inter">
+      <div className="mx-auto space-y-4">
         <div className="glass-strong rounded-2xl p-6">
           <div className="flex justify-between items-center mb-4">
-            <span className="text-lg font-bold text-[#000]">
+            <span className="text-base font-bold text-[#000]">
               Question {questionNumber} of {totalQuestions}
             </span>
-            <span className="text-lg font-bold bg-gradient-to-r from-[#135393] to-[#0d67c2] bg-clip-text text-transparent">
+            <span className="text-base font-bold bg-gradient-to-r from-[#135393] to-[#0d67c2] bg-clip-text text-transparent">
               {Math.round(progress)}% Complete
             </span>
           </div>
@@ -132,9 +134,10 @@ export function QuizQuestion({
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)}>
-          <div className=" bg-[#135393] rounded-3xl p-8 md:p-12">
+          <div className=" bg-[#135393] rounded-3xl p-4 md:p-6">
             <div className="flex items-center gap-3 mb-4">
               <div className="px-3 py-1 rounded-full bg-[#135393] text-[#ffffff] text-sm font-semibold">
+                Question Type:{" "}
                 {question.questionType === "MULTIPLE_CHOICE" &&
                   "Multiple Select"}
                 {question.questionType === "MCQ" && "Single Choice"}
@@ -162,12 +165,12 @@ export function QuizQuestion({
                 </div>
               </div>
             ) : (
-              <h2 className="text-3xl md:text-4xl font-black text-[#ffffff] mb-8 text-balance leading-tight">
+              <h2 className="text-lg md:text-xl font-black text-[#ffffff] mb-8 text-balance leading-tight">
                 {question.questionText}
               </h2>
             )}
 
-            <div className="grid gap-4 mb-8">
+            <div className="grid gap-3 mb-4">
               {question.options
                 .sort((a, b) => a.sequenceNumber - b.sequenceNumber)
                 .map((option) => {
@@ -179,9 +182,9 @@ export function QuizQuestion({
                     <label
                       key={option.id}
                       className={cn(
-                        "group p-6 text-left rounded-2xl border-2 transition-all duration-300 hover:scale-[1.02] hover:shadow-xl cursor-pointer",
+                        "group p-3 text-left rounded-2xl border-2 transition-all duration-300 hover:scale-[1.02] hover:shadow-xl cursor-pointer",
                         isSelected
-                          ? "border-[#1288ff] bg-gradient-to-r from-[#135393] to-[#0d67c2] text-[#ffffff] shadow-2xl scale-[1.02]"
+                          ? "border-[#ffffff] bg-gradient-to-r from-[#135393] to-[#0d67c2] text-[#ffffff] shadow-2xl scale-[1.02]"
                           : "border-[#1288ff] bg-[#ffffff1a] hover:border-[#135393] hover:bg-[#ffffff33]"
                       )}
                     >
@@ -199,35 +202,27 @@ export function QuizQuestion({
                           <input
                             type="radio"
                             value={option.id}
-                            {...register("singleOption", {
-                              required: true,
-                              valueAsNumber: true,
-                            })}
+                            checked={singleOption === option.id}
+                            onChange={() =>
+                              setValue("singleOption", option.id, {
+                                shouldDirty: true,
+                              })
+                            }
                             className="sr-only"
                           />
                         )}
 
                         <div
                           className={cn(
-                            "w-6 h-6 transition-all duration-300 flex items-center justify-center border-2",
+                            "w-4 h-4 transition-all duration-300 flex items-center justify-center border-2",
                             isMultipleChoice ? "rounded-md" : "rounded-full",
                             isSelected
                               ? "border-[#ffffff] bg-[#ffffff]"
                               : "border-[#ffffff66] group-hover:border-[#135393]"
                           )}
                         >
-                          {isSelected && (
-                            <div
-                              className={cn(
-                                "bg-[#135393]",
-                                isMultipleChoice
-                                  ? "w-3 h-3 rounded-sm"
-                                  : "w-3 h-3 rounded-full"
-                              )}
-                            ></div>
-                          )}
                         </div>
-                        <span className="text-lg font-semibold font-mono text-white">
+                        <span className="text-base font-semibold font-inter text-white">
                           {option.optionText}
                         </span>
                       </div>
@@ -243,7 +238,7 @@ export function QuizQuestion({
                   onClick={onPrevious}
                   size="lg"
                   variant="outline"
-                  className="h-16 text-xl font-bold border-[#ffffff33] bg-[#ffffff1a] hover:bg-[#ffffff33] text-[#ffffff] hover:text-[#ffffff] flex-1"
+                  className="h-10 text-base font-medium border-[#ffffff33] bg-[#ffffff1a] hover:bg-[#ffffff33] text-[#ffffff] hover:text-[#ffffff] flex-1"
                 >
                   <ArrowLeft className="w-5 h-5 mr-2" />
                   Previous
@@ -255,7 +250,7 @@ export function QuizQuestion({
                 disabled={!isFormValid}
                 size="lg"
                 className={cn(
-                  "h-16 text-xl font-bold bg-gradient-to-r from-[#135393] to-[#0d67c2] hover:from-[#135393] hover:to-[#0d67c2] disabled:opacity-50 disabled:cursor-not-allowed shadow-2xl hover:shadow-[#0d68c244] transition-all duration-300 hover:scale-[1.02] text-[#ffffff] border border-[#1288ff]",
+                  "h-10 text-base font-medium bg-gradient-to-r from-[#135393] to-[#0d67c2] hover:from-[#135393] hover:to-[#0d67c2] disabled:opacity-50 disabled:cursor-not-allowed shadow-xl hover:shadow-[#0d68c244] transition-all duration-300 hover:scale-[1.02] text-[#ffffff] border border-[#1288ff]",
                   canGoPrevious ? "flex-1" : "w-full"
                 )}
               >

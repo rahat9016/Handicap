@@ -20,6 +20,20 @@ type QuizProps = {
     }[];
   };
 };
+interface QuizResult {
+  id: number;
+  score: number;
+  passed: boolean;
+  totalCorrect: number;
+  totalMissed: number;
+  totalMarks: number;
+  percentage: number;
+  startedAt: string;
+  completedAt: string | null;
+  userId: number;
+  quizId: number;
+}
+
 export type QuizState = "start" | "quiz" | "results";
 interface AnswerSet {
   [questionId: number]: number[];
@@ -28,8 +42,8 @@ export function Quiz({ quiz }: QuizProps) {
   const [quizState, setQuizState] = useState<QuizState>("start");
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<AnswerSet>({});
-  const [score, setScore] = useState(0);
-
+  const [quizResult, setQuizResult] = useState<QuizResult | null>(null);
+  console.log(quizResult)
   const { data } = useGet<IQuiz>(
     `/quizzes/${quiz.id}`,
     ["quizzes", ""],
@@ -52,7 +66,6 @@ export function Quiz({ quiz }: QuizProps) {
     setQuizState("quiz");
     setCurrentQuestionIndex(0);
     setAnswers([]);
-    setScore(0);
   };
 
   const handlePreviousQuestion = () => {
@@ -60,18 +73,17 @@ export function Quiz({ quiz }: QuizProps) {
       setCurrentQuestionIndex((prev) => prev - 1);
     }
   };
-  const handleRestartQuiz = () => {
-    setQuizState("start");
-    setCurrentQuestionIndex(0);
-    setAnswers([]);
-    setScore(0);
-  };
+
   const handleAnswer = (questionId: number, selectedOptions: number[]) => {
     if (!questions) return;
-    setAnswers((prev) => ({
-      ...prev,
+
+    // keep a fresh merged object
+    const newAnswers = {
+      ...answers,
       [questionId]: selectedOptions,
-    }));
+    };
+
+    setAnswers(newAnswers);
 
     // Calculate if answer is correct
     const currentQ = questions.find((q) => q.id === questionId);
@@ -93,44 +105,43 @@ export function Quiz({ quiz }: QuizProps) {
       );
       isCorrect = selectedOption?.isCorrect || false;
     }
-
-    if (isCorrect) {
-      setScore((prev) => prev + 1);
-    }
+    console.log(isCorrect)
 
     // Move to next question or finish
     if (currentQuestionIndex < questions.length - 1) {
       setCurrentQuestionIndex((prev) => prev + 1);
     } else {
+      // build responses from newAnswers instead of stale answers
       const responses: { questionId: number; optionId: number }[] = [];
 
-      Object.entries(answers).forEach(([questionId, optionIds]) => {
-        optionIds.forEach((optionId: string) => {
+      Object.entries(newAnswers).forEach(([qId, optionIds]) => {
+        (optionIds as number[]).forEach((optionId) => {
           responses.push({
-            questionId: Number(questionId),
+            questionId: Number(qId),
             optionId: Number(optionId),
           });
         });
       });
+
       mutateAsync({
         quizId: quiz.id,
-        responses: responses,
+        responses,
       }).then((response) => {
         toast.success("Quiz submitted successfully!");
+        setQuizResult({...response.data});
+        setQuizState("results");
         console.log("Message sent successfully:", response);
-        
       });
-      setQuizState("results");
+      
     }
   };
-
   const currentQuestion = questions?.[currentQuestionIndex];
   const currentAnswer = currentQuestion
     ? answers[currentQuestion.id] || []
     : [];
 
   return (
-    <div className="p-6 border rounded-xl shadow relative overflow-hidden">
+    <div className="p-12 border rounded-xl shadow relative overflow-hidden">
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-[#32598071] to-[#0d68c22a] rounded-full blur-3xl animate-float"></div>
         <div
@@ -161,34 +172,16 @@ export function Quiz({ quiz }: QuizProps) {
         />
       )}
 
-      {quizState === "results" && questions && (
+      {quizState === "results" && quizResult && (
         <QuizResults
-          score={score}
-          totalQuestions={questions.length}
-          passingScore={quizData.passingScore}
-          onRestart={handleRestartQuiz}
-        />
+        score={quizResult.score}
+        totalCorrect={quizResult.totalCorrect}
+        totalMissed={quizResult.totalMissed}
+        totalMarks={quizResult.totalMarks}
+        percentage={quizResult.percentage}
+        passed={quizResult.passed}
+      />
       )}
-      {/* {data?.data?.questions?.map((q) => (
-        <div key={q.id} className="mb-6">
-          <p className="font-medium mb-2">{q.questionText}</p>
-          <div className="flex flex-col gap-2">
-            {q.options.map((opt) => (
-              <label key={opt.id} className="flex items-center gap-2">
-                <input
-                  type="radio"
-                  name={`question-${q.id}`}
-                  checked={answers[q.id] === opt.id}
-                  onChange={() => handleAnswer(q.id, opt.id)}
-                />
-                {opt.optionText}
-              </label>
-            ))}
-          </div>
-        </div>
-      ))}
-
-      <Button onClick={handleSubmit}>Submit Quiz</Button> */}
     </div>
   );
 }

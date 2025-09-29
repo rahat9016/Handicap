@@ -28,9 +28,9 @@ export default function CourseModules() {
   const { mutateAsync } = usePost(
     ``,
     () => {
-      console.log("POST success",);
+      console.log("POST success");
     },
-    [["course"], ]
+    [["course", String(id)]]
   );
   const enrollmentCourseData = data?.data;
   const [selectedCourseItem, setSelectedCourseItem] =
@@ -52,7 +52,7 @@ export default function CourseModules() {
       if (!enrollmentCourseData.items[0].isLocked)
         handleMarkItemCompleted(enrollmentCourseData.items[0]);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [enrollmentCourseData, selectedCourseItem]);
 
   const videoUrl =
@@ -65,6 +65,7 @@ export default function CourseModules() {
     selectedCourseItem?.content?.link
       ? extractYouTubeId(selectedCourseItem.content?.link)
       : null;
+
   return (
     <div>
       <div className="container">

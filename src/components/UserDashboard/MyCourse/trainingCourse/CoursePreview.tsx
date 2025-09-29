@@ -27,7 +27,7 @@ export default function CoursePreview({
   courses,
   setSelectedVideo,
   selectedCourseItem,
-  handleMarkItemCompleted
+  handleMarkItemCompleted,
 }: {
   selectedCourseItem: ICourseContent | null;
   courses: ICourseContent[];
@@ -37,18 +37,19 @@ export default function CoursePreview({
   const handleLessonClick = async (lesson: ICourseContent) => {
     const index = courses.findIndex((i) => i.id === lesson.id);
     const prevItem = index > 0 ? courses[index - 1] : null;
-    if (lesson.isLocked) {
-      if (prevItem && !prevItem.isLocked && prevItem.isCompleted) {
-        await handleMarkItemCompleted(lesson).then(() => {
-          setSelectedVideo(lesson);
-        });
-      } else {
-        toast.error("You must unlock the previous item first.");
-      }
-    } else {
-      setSelectedVideo(lesson);
+
+    if (prevItem && !prevItem.isCompleted) {
+      toast.error("You must complete the previous item first.");
+      return;
     }
+    if (!lesson.isCompleted) {
+      await handleMarkItemCompleted(lesson);
+    }
+
+    // 🎬 Finally, set the video
+    setSelectedVideo(lesson);
   };
+
   return (
     <div>
       <div className="flex w-full bg-black px-4 py-5 rounded-t-xl items-center justify-between">

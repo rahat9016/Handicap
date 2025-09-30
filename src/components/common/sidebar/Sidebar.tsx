@@ -108,7 +108,7 @@ export default function Sidebar({className}:{className?: string}) {
         },
       ],
     },
-    {
+    hasPermission &&{
       label: "Events",
       icon: Folder,
       children: [

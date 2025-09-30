@@ -5,7 +5,7 @@ import { Card } from "@/components/ui/card";
 import { CheckCircle2, FileText, Lock, PlayCircle } from "lucide-react";
 import { Dispatch, SetStateAction } from "react";
 import { toast } from "react-toastify";
-import { ICourseContent } from "../types/traning";
+import { ICourseContent, ICourseProgress } from "../types/traning";
 
 const getLessonIcon = (lesson: ICourseContent) => {
   if (lesson.isCompleted)
@@ -28,11 +28,13 @@ export default function CoursePreview({
   setSelectedVideo,
   selectedCourseItem,
   handleMarkItemCompleted,
+  courseProgress,
 }: {
   selectedCourseItem: ICourseContent | null;
   courses: ICourseContent[];
   setSelectedVideo: Dispatch<SetStateAction<ICourseContent | null>>;
   handleMarkItemCompleted: (course: ICourseContent) => Promise<void>;
+  courseProgress: ICourseProgress | undefined;
 }) {
   const handleLessonClick = async (lesson: ICourseContent) => {
     const index = courses.findIndex((i) => i.id === lesson.id);
@@ -46,7 +48,6 @@ export default function CoursePreview({
       await handleMarkItemCompleted(lesson);
     }
 
-    // 🎬 Finally, set the video
     setSelectedVideo(lesson);
   };
 
@@ -60,12 +61,19 @@ export default function CoursePreview({
           </Paragraph>
         </div>
         <div className="border border-white rounded-full px-3 py-1.5">
-          <Paragraph className="text-white text-xs font-medium">40%</Paragraph>
+          <Paragraph className="text-white text-xs font-medium">
+            {Math.round(courseProgress?.percentComplete ?? 0) }%
+          </Paragraph>
         </div>
       </div>
 
       <Card className="p-3 rounded-t-none">
         <div className="space-y-1">
+          {courses.length === 0 && (
+            <div className="flex items-center justify-center py-28">
+              <p>No video available</p>
+            </div>
+          )}
           {courses?.map((lesson) => (
             <div
               key={lesson.id}
@@ -127,44 +135,6 @@ export default function CoursePreview({
           ))}
         </div>
       </Card>
-      {/* <div className="flex flex-col gap-0.5 mt-2">
-        {courses.length === 0 ? (
-          <Paragraph>No course content available.</Paragraph>
-        ) : (
-          courses.map((course, idx) => {
-            const isActive = selectedCourseItem?.id === course.id;
-            return (
-              <div
-                key={idx}
-                className={`group shadow-sm border flex flex-col px-5 py-3 rounded-lg cursor-pointer hover:bg-[#0F3BB7] ${
-                  isActive ? "bg-[#0F3BB7] " : "bg-slate-50 "
-                }`}
-                onClick={() => setSelectedVideo(course)}
-              >
-                <Title
-                  className={`text-black group-hover:text-white font-medium text-sm lg:text-sm leading-none flex items-center gap-1 ${
-                    isActive ? "text-white " : ""
-                  }`}
-                >
-                  {isActive && (
-                    <Play size={14} className="text-green-400 animate-pulse" />
-                  )}
-                  {course.content?.title || selectedCourseItem?.quiz?.title}
-                </Title>
-                {selectedCourseItem?.content?.contentType === "VIDEO" && (
-                  <Paragraph
-                    className={`text-black group-hover:text-white lg:text-xs ${
-                      isActive ? "text-white" : ""
-                    }`}
-                  >
-                    Video • N/A
-                  </Paragraph>
-                )}
-              </div>
-            );
-          })
-        )}
-      </div> */}
     </div>
   );
 }

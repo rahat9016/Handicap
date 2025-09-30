@@ -27,6 +27,7 @@ module.exports = {
         },
       },
       colors: {
+        gold: "rgb(212 175 55)",
         "primary": "#242D65",
         "primaryLight":"#EAF6FB",
         "secondary": "#F68C25",
@@ -219,6 +220,9 @@ module.exports = {
         'pulse-ring-big': 'pulse-ring-big 2s ease-in-out infinite',
       },
     },
+  },
+  experimental: {
+    optimizeUniversalDefaults: true,
   },
   plugins: [
     function ({ addUtilities }) {

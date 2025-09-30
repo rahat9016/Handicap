@@ -1,6 +1,9 @@
+import Certifications from "@/components/UserDashboard/Certifications/Certifications/Certifications";
 
 export default function page() {
   return (
-    <div>page</div>
+    <div>
+      <Certifications />
+    </div>
   )
 }

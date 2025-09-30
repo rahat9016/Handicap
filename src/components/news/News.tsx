@@ -17,10 +17,10 @@ import { useAppSelector } from "@/lib/redux/hooks";
 import { buildQueryParams } from "@/utils/buildQueryParams";
 import { Filter, Search } from "lucide-react";
 import { useEffect, useState } from "react";
-import CourseLibrary from "../main/training/CourseLibrary";
 import ResourceCardSkeleton from "../main/userResources/ResourceCardSkeleton";
-import { ICourse } from "../UserDashboard/MyCourse/types/traning";
+import NewsLibrary from "./NewsLibrary";
 import NewsSorting from "./NewsSorting";
+import { INews } from "./types/news";
 
 const News = () => {
   const { search, handleSearchChange, debouncedSearch } =
@@ -55,9 +55,9 @@ const News = () => {
   });
 
   // API call
-  const { data, isLoading } = useGet<ICourse[]>(
-    `/course/published?${queryString}`,
-    ["course-published", queryString]
+  const { data, isLoading } = useGet<INews[]>(
+    `/news?${queryString}`,
+    ["news", queryString]
   );
 
   useEffect(() => {
@@ -171,7 +171,7 @@ const News = () => {
                 </div>
               ) : (
                 <div>
-                  <CourseLibrary courses={(data?.data as ICourse[]) || []} />
+                  <NewsLibrary news={(data?.data as INews[]) || []} />
                   <Pagination
                     currentPage={currentPage}
                     totalPages={totalPages}

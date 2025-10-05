@@ -16,10 +16,13 @@ import {
 import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
 import { cn } from "@/lib/utils";
 import {
+  Building2,
+  CalendarDays,
   Folder,
   LayoutDashboard,
   LogOut,
   LucideIcon,
+  Newspaper,
   Settings,
   Shapes,
   ShieldCheck,
@@ -52,7 +55,7 @@ export default function Sidebar({className}:{className?: string}) {
     },
     hasPermission && {
       label: "Organization Manage",
-      icon: Settings,
+      icon: Building2,
       children: [
         {
           label: "Organization mapped",
@@ -95,7 +98,7 @@ export default function Sidebar({className}:{className?: string}) {
     },
     hasPermission && {
       label: "News",
-      icon: Folder,
+      icon: Newspaper,
       children: [
         { label: "News List", href: "/admin/news/news-list" },
         {
@@ -110,8 +113,9 @@ export default function Sidebar({className}:{className?: string}) {
     },
     hasPermission &&{
       label: "Events",
-      icon: Folder,
+      icon: CalendarDays,
       children: [
+        { label: "Event List", href: "/admin/events/events-list" },
         {
           label: "Events Categories",
           href: "/admin/events/events-categories",

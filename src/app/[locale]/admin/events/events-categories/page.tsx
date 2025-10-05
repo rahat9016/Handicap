@@ -1,4 +1,4 @@
-import EventsCategories from "@/components/events/EventsCategories/EventsCategories";
+import EventsCategories from "@/components/dashboard/events/EventsCategories/EventsCategories";
 
 export default function page() {
   return (

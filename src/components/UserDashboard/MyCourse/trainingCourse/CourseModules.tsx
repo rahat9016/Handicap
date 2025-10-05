@@ -72,37 +72,43 @@ export default function CourseModules() {
       <div className="container">
         <div className="flex items-center gap-4">
           <div className="w-full xl:w-3/4  bg-white border px-3 py-4 h-40 rounded-lg">
-          <Button
-            onClick={() => router.push("/user-dashboard/my-courses")}
-            className="bg-dashboard-primary text-white h-10"
-          >
-            <ChevronLeft /> Back
-          </Button>
-          {selectedCourseItem?.content?.title && (
-            <>
-              <Title className="mb-1 mt-2">
-                {selectedCourseItem?.content?.title}
-              </Title>
-              <Paragraph className="text-[#8F8F8F]">
-                {selectedCourseItem?.content?.description}
-              </Paragraph>
-            </>
-          )}
-        </div>
-        <div className="w-full xl:w-1/4">
-
-        {enrollmentCourseData?.courseProgress && (
-          <CourseProgressIndicator
-          className="w-full h-40"
-            progress={enrollmentCourseData?.courseProgress}
-          />
-        )}
-        </div>
+            <Button
+              onClick={() => router.push("/user-dashboard/my-courses")}
+              className="bg-dashboard-primary text-white h-10"
+            >
+              <ChevronLeft /> Back
+            </Button>
+            {selectedCourseItem?.content?.title && (
+              <>
+                <Title className="mb-1 mt-2">
+                  {selectedCourseItem?.content?.title}
+                </Title>
+                <Paragraph className="text-[#8F8F8F]">
+                  {selectedCourseItem?.content?.description}
+                </Paragraph>
+              </>
+            )}
+          </div>
+          <div className="w-full xl:w-1/4">
+            {enrollmentCourseData?.courseProgress && (
+              <CourseProgressIndicator
+                className="w-full h-40"
+                progress={enrollmentCourseData?.courseProgress}
+              />
+            )}
+          </div>
         </div>
         <div className="flex flex-col xl:flex-row items-start gap-4 mb-10 mt-5">
           <div className="w-full xl:w-3/4 lg:min-h-[500px]">
             {selectedCourseItem?.type === "QUIZ" && selectedCourseItem?.quiz ? (
-              <Quiz quiz={selectedCourseItem.quiz} />
+              <Quiz
+                quiz={selectedCourseItem.quiz}
+                onQuizComplete={async () => {
+                  if (!selectedCourseItem.isCompleted) {
+                    await handleMarkItemCompleted(selectedCourseItem);
+                  }
+                }}
+              />
             ) : selectedCourseItem?.content?.contentType === "VIDEO" ? (
               videoUrl ? (
                 <HlsPlayer

@@ -40,7 +40,7 @@ const WelcomeDisability = () => {
               }}
             >
               <Image
-                src={data?.data?.imageUrls[0] || "/placeholder-welcome.jpg"}
+                src={data?.data?.imageUrls?.[0] || "/placeholder-welcome.jpg"}
                 alt="welcome Img"
                 width={590}
                 height={410}

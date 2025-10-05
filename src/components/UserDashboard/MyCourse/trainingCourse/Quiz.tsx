@@ -19,6 +19,7 @@ type QuizProps = {
       options: { id: number; optionText: string; isCorrect: boolean }[];
     }[];
   };
+  onQuizComplete?: () => void
 };
 interface QuizResult {
   id: number;
@@ -38,12 +39,12 @@ export type QuizState = "start" | "quiz" | "results";
 interface AnswerSet {
   [questionId: number]: number[];
 }
-export function Quiz({ quiz }: QuizProps) {
+export function Quiz({ quiz, onQuizComplete }: QuizProps) {
   const [quizState, setQuizState] = useState<QuizState>("start");
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<AnswerSet>({});
   const [quizResult, setQuizResult] = useState<QuizResult | null>(null);
-  console.log(quizResult);
+
   const { data } = useGet<IQuiz>(
     `/quizzes/${quiz.id}`,
     ["quizzes", ""],
@@ -130,7 +131,9 @@ export function Quiz({ quiz }: QuizProps) {
         toast.success("Quiz submitted successfully!");
         setQuizResult(response); 
         setQuizState("results");
-        console.log("Message sent successfully:", response);
+        if (onQuizComplete) {
+          onQuizComplete(); // Mark quiz completed in parent
+        }
       });
     }
   };

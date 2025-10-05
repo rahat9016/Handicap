@@ -1,10 +1,24 @@
 import Paragraph from "@/components/share/Paragraph";
 import Title from "@/components/share/Title";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { CheckCircle2, FileText, Lock, PlayCircle } from "lucide-react";
-import { Dispatch, SetStateAction } from "react";
-import { toast } from "react-toastify";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import {
+  CheckCircle2,
+  FileText,
+  Lock,
+  PlayCircle,
+  ShieldX,
+} from "lucide-react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { ICourseContent, ICourseProgress } from "../types/traning";
 
 const getLessonIcon = (lesson: ICourseContent) => {
@@ -36,15 +50,17 @@ export default function CoursePreview({
   handleMarkItemCompleted: (course: ICourseContent) => Promise<void>;
   courseProgress: ICourseProgress | undefined;
 }) {
+  const [showLockedDialog, setShowLockedDialog] = useState(false);
+
   const handleLessonClick = async (lesson: ICourseContent) => {
     const index = courses.findIndex((i) => i.id === lesson.id);
     const prevItem = index > 0 ? courses[index - 1] : null;
 
     if (prevItem && !prevItem.isCompleted) {
-      toast.error("You must complete the previous item first.");
+      setShowLockedDialog(true);
       return;
     }
-    if (!lesson.isCompleted) {
+    if (!lesson.isCompleted && lesson.type === "CONTENT") {
       await handleMarkItemCompleted(lesson);
     }
 
@@ -62,7 +78,7 @@ export default function CoursePreview({
         </div>
         <div className="border border-white rounded-full px-3 py-1.5">
           <Paragraph className="text-white text-xs font-medium">
-            {Math.round(courseProgress?.percentComplete ?? 0) }%
+            {Math.round(courseProgress?.percentComplete ?? 0)}%
           </Paragraph>
         </div>
       </div>
@@ -135,6 +151,27 @@ export default function CoursePreview({
           ))}
         </div>
       </Card>
+      <Dialog open={showLockedDialog} onOpenChange={setShowLockedDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle className="font-inter">Locked Lesson</DialogTitle>
+            <div className="flex items-center justify-center w-16 h-16 rounded-full bg-red-100 mb-4 my-5 mx-auto ">
+              <ShieldX className="text-red-500 w-10 h-10" />
+            </div>
+            <DialogDescription className="text-center font-inter text-sm">
+              You must complete the previous item before unlocking this lesson.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button
+              onClick={() => setShowLockedDialog(false)}
+              className="bg-dashboard-primary"
+            >
+              Close
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

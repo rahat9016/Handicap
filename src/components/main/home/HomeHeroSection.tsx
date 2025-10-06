@@ -77,16 +77,16 @@ const HomeHeroSection = () => {
           </div>
 
           {/* Image */}
-          <div className="order-1 lg:order-2">
+          {data?.data &&<div className="order-1 lg:order-2">
             <Image
               width={765}
               height={460}
-              src={data?.data?.imageUrls[0] || "/placeholder-hero.jpg"}
+              src={data?.data?.imageUrls?.[0] || "/placeholder-hero.jpg"}
               alt="hero"
               className="w-full h-[300px] sm:h-[350px] md:h-[400px] lg:h-[460px] object-cover rounded-lg"
               priority
             />
-          </div>
+          </div>}
         </div>
       </div>
     </section>

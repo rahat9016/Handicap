@@ -1,4 +1,4 @@
-import EventTags from "@/components/events/NewsTags/EventTags";
+import EventTags from "@/components/dashboard/events/NewsTags/EventTags";
 
 export default function page() {
   return <EventTags />;

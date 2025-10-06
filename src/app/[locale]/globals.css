@@ -42,10 +42,10 @@ html {
     --sidebar-ring: 217.2 91.2% 59.8%;
     --primary: 0 0% 9%;
     --secondary: 0 0% 96.1%;
-    --certificate-gold: oklch(0.8 0.15 85);
-  --certificate-gold-foreground: oklch(0.2 0 0);
-  --certificate-border: oklch(0.9 0.05 85);
-  --certificate-accent: oklch(0.95 0.02 85);
+  --certificate-gold: #f6c445;             /* bright gold */
+  --certificate-gold-foreground: #333333;  /* dark text */
+  --certificate-border: #f0e6d2;           /* light beige */
+  --certificate-accent: #faf6f0;
   }
   .dark {
     --background: 0 0% 3.9%;
@@ -83,10 +83,10 @@ html {
     --primary: 0 0% 98%;
     --secondary: 0 0% 14.9%;
       /* Dark mode certificate tokens */
-  --certificate-gold: oklch(0.7 0.12 85);
-  --certificate-gold-foreground: oklch(0.1 0 0);
-  --certificate-border: oklch(0.3 0.03 85);
-  --certificate-accent: oklch(0.2 0.01 85);
+  --certificate-gold: #d4af37;              /* metallic gold */
+  --certificate-gold-foreground: #1a1a1a;  /* dark text */
+  --certificate-border: #5c4d40;           /* muted border */
+  --certificate-accent: #332b26;    
   }
 }
 

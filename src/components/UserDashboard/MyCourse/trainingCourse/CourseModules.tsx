@@ -13,6 +13,7 @@ import { useRouter } from "@/i18n/navigation";
 import { ChevronLeft } from "lucide-react";
 import { ICourseContent, ICourseEnrollmentResponse } from "../types/traning";
 import CoursePreview from "./CoursePreview";
+import { CourseProgressIndicator } from "./CourseProgressIndicator";
 import HlsPlayer from "./HlsPlayer";
 import { Quiz } from "./Quiz";
 import { VideoItemSkeleton } from "./VideoItemSkeleton";
@@ -69,24 +70,45 @@ export default function CourseModules() {
   return (
     <div>
       <div className="container">
-        <Button
-          onClick={() => router.push("/user-dashboard/my-courses")}
-          className="bg-dashboard-primary text-white h-10"
-        >
-          <ChevronLeft /> Back
-        </Button>
-        {selectedCourseItem?.content?.title && (
-          <div className="w-full xl:w-3/4  bg-lightBlue border px-3 py-4 rounded-lg mt-4">
-            <Title className="mb-1">{selectedCourseItem?.content?.title}</Title>
-            <Paragraph className="text-[#8F8F8F]">
-              {selectedCourseItem?.content?.description}
-            </Paragraph>
+        <div className="flex items-center gap-4">
+          <div className="w-full xl:w-3/4  bg-white border px-3 py-4 h-40 rounded-lg">
+            <Button
+              onClick={() => router.push("/user-dashboard/my-courses")}
+              className="bg-dashboard-primary text-white h-10"
+            >
+              <ChevronLeft /> Back
+            </Button>
+            {selectedCourseItem?.content?.title && (
+              <>
+                <Title className="mb-1 mt-2">
+                  {selectedCourseItem?.content?.title}
+                </Title>
+                <Paragraph className="text-[#8F8F8F]">
+                  {selectedCourseItem?.content?.description}
+                </Paragraph>
+              </>
+            )}
           </div>
-        )}
+          <div className="w-full xl:w-1/4">
+            {enrollmentCourseData?.courseProgress && (
+              <CourseProgressIndicator
+                className="w-full h-40"
+                progress={enrollmentCourseData?.courseProgress}
+              />
+            )}
+          </div>
+        </div>
         <div className="flex flex-col xl:flex-row items-start gap-4 mb-10 mt-5">
           <div className="w-full xl:w-3/4 lg:min-h-[500px]">
             {selectedCourseItem?.type === "QUIZ" && selectedCourseItem?.quiz ? (
-              <Quiz quiz={selectedCourseItem.quiz} />
+              <Quiz
+                quiz={selectedCourseItem.quiz}
+                onQuizComplete={async () => {
+                  if (!selectedCourseItem.isCompleted) {
+                    await handleMarkItemCompleted(selectedCourseItem);
+                  }
+                }}
+              />
             ) : selectedCourseItem?.content?.contentType === "VIDEO" ? (
               videoUrl ? (
                 <HlsPlayer
@@ -105,7 +127,9 @@ export default function CourseModules() {
             ) : youtubeId ? (
               <YoutubeVideoPlayer youtubeId={youtubeId} />
             ) : (
-              <p>No video available</p>
+              <div className="h-h-[50vh] lg:min-h-[70vh] flex items-center justify-center bg-lightBlue rounded-xl border">
+                <p>No video available</p>
+              </div>
             )}
           </div>
 
@@ -123,6 +147,7 @@ export default function CourseModules() {
                   setSelectedVideo={setSelectedCourseItem}
                   selectedCourseItem={selectedCourseItem}
                   handleMarkItemCompleted={handleMarkItemCompleted}
+                  courseProgress={enrollmentCourseData?.courseProgress}
                 />
               </div>
             )}

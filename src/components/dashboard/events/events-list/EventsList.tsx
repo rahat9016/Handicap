@@ -12,8 +12,8 @@ import { IEvent } from "./types";
 
 export default function EventsList() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [section, setSection] = useState<IEvent>();
-  const  { hasPermission } = useAppSelector(state => state.permission)
+  // const [section, setSection] = useState<IEvent>();
+  const { hasPermission } = useAppSelector((state) => state.permission);
   const { search, handleSearchChange, debouncedSearch } =
     useSearchDebounce(300);
   const {
@@ -45,7 +45,8 @@ export default function EventsList() {
   }, [data]);
 
   const handleEdit = (row: IEvent) => {
-    setSection(row);
+    console.log(row);
+    // setSection(row);
     setIsModalOpen(true);
   };
 
@@ -69,7 +70,6 @@ export default function EventsList() {
         );
       },
     },
-    
 
     {
       header: "Action",
@@ -114,7 +114,7 @@ export default function EventsList() {
         isOpen={isModalOpen}
         onClose={() => {
           setIsModalOpen(false);
-          setSection(undefined);
+          // setSection(undefined);
         }}
         // initialValues={section}
       />

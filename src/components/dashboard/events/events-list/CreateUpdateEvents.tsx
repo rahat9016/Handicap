@@ -23,7 +23,6 @@ const EditorWrapper = dynamic(
   { ssr: false }
 );
 
-
 interface CreateUpdateEventModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -89,7 +88,8 @@ export default function CreateEventModal({
     if (data.content) formData.append("content", data.content);
     if (data.contentBn) formData.append("contentBn", data.contentBn);
     if (data.buttonLabel) formData.append("buttonLabel", data.buttonLabel);
-    if (data.buttonLabelBn) formData.append("buttonLabelBn", data.buttonLabelBn);
+    if (data.buttonLabelBn)
+      formData.append("buttonLabelBn", data.buttonLabelBn);
     if (data.buttonUrl) formData.append("buttonUrl", data.buttonUrl);
 
     // Handle image
@@ -148,11 +148,10 @@ export default function CreateEventModal({
               {/* Required Fields */}
               <div>
                 <InputLabel label="Page" required />
-                <ControlledInputField />
+                <ControlledInputField name="title" />
               </div>
               <div>
                 <InputLabel label="Section Type" required />
-                
               </div>
 
               <div>

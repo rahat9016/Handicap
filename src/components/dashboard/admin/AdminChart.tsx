@@ -77,14 +77,16 @@ const trainingData = [
 ];
 const COLORS = ["#135393", "#83B9EF", "#27AE60", "#F2994A"];
 export default function AdminChart() {
-  const router = useRouter()
-  const { adminOrganizationPermission, hasPermission } = useAppSelector(state => state.permission)
+  const router = useRouter();
+  const { adminOrganizationPermission, hasPermission } = useAppSelector(
+    (state) => state.permission
+  );
   const [organization, setOrganization] = useState("all");
   const [timeRange, setTimeRange] = useState("24h");
   return (
     <div>
-      <div className="grid gap-6 grid-cols-1 lg:grid-cols-3">
-        <Card className="lg:col-span-2 py-0 border border-skeleton">
+      <div className="grid gap-6 grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3">
+        <Card className="col-span-3 lg:col-span-2  py-0 border border-skeleton">
           <CardContent className="p-8">
             <div className="flex justify-between items-center">
               <h2 className="font-semibold text-lg text-erieBlack font-inter">
@@ -146,7 +148,7 @@ export default function AdminChart() {
             </div>
           </CardContent>
         </Card>
-        <Card className="py-0 px-0 border border-skeleton">
+        <Card className="col-span-3 lg:col-span-2 xl:col-span-1 py-0 px-0 border border-skeleton">
           <CardContent className="px-0 flex flex-col gap-2">
             <div className="border-b p-8 border-skeleton">
               <h2 className="font-semibold text-lg text-erieBlack font-inter">
@@ -164,40 +166,52 @@ export default function AdminChart() {
                 />{" "}
                 Add New Members
               </Button> */}
-              { hasPermission &&<Button className="group bg-white hover:bg-dashboard-primary flex items-center justify-start gap-2 w-full h-[58px] border border-skeleton hover:text-white text-darkLiver font-inter font-medium text-base">
-                <Image
-                  width={24}
-                  height={24}
-                  src="/images/dashboard/icon02.svg"
-                  alt="Add Organization"
-                  className="group-hover:white-filter"
-                />{" "}
-                Add Organization
-              </Button>}
-              {adminOrganizationPermission &&<Button onClick={() => router.push("/admin/course/course-create")} className="group bg-white hover:bg-dashboard-primary flex items-center justify-start gap-2 w-full h-[58px] border border-skeleton hover:text-white text-darkLiver font-inter font-medium text-base">
-                <Image
-                  width={24}
-                  height={24}
-                  src="/images/dashboard/icon04.svg"
-                  alt="Add New Members"
-                  className="group-hover:white-filter"
-                />{" "}
-                Create Course Module
-              </Button>}
-              {adminOrganizationPermission &&<Button onClick={() => router.push("/admin/resources/resources-list")} className="group bg-white hover:bg-dashboard-primary flex items-center justify-start gap-2 w-full h-[58px] border border-skeleton hover:text-white text-darkLiver font-inter font-medium text-base">
-                <Image
-                  width={24}
-                  height={24}
-                  src="/images/dashboard/icon23.svg"
-                  alt="Add New Members"
-                  className="group-hover:white-filter"
-                />{" "}
-                Upload Resources
-              </Button>}
+              {hasPermission && (
+                <Button className="group bg-white hover:bg-dashboard-primary flex items-center justify-start gap-2 w-full h-[58px] border border-skeleton hover:text-white text-darkLiver font-inter font-medium text-base">
+                  <Image
+                    width={24}
+                    height={24}
+                    src="/images/dashboard/icon02.svg"
+                    alt="Add Organization"
+                    className="group-hover:white-filter"
+                  />{" "}
+                  Add Organization
+                </Button>
+              )}
+              {adminOrganizationPermission && (
+                <Button
+                  onClick={() => router.push("/admin/course/course-create")}
+                  className="group bg-white hover:bg-dashboard-primary flex items-center justify-start gap-2 w-full h-[58px] border border-skeleton hover:text-white text-darkLiver font-inter font-medium text-base"
+                >
+                  <Image
+                    width={24}
+                    height={24}
+                    src="/images/dashboard/icon04.svg"
+                    alt="Add New Members"
+                    className="group-hover:white-filter"
+                  />{" "}
+                  Create Course Module
+                </Button>
+              )}
+              {adminOrganizationPermission && (
+                <Button
+                  onClick={() => router.push("/admin/resources/resources-list")}
+                  className="group bg-white hover:bg-dashboard-primary flex items-center justify-start gap-2 w-full h-[58px] border border-skeleton hover:text-white text-darkLiver font-inter font-medium text-base"
+                >
+                  <Image
+                    width={24}
+                    height={24}
+                    src="/images/dashboard/icon23.svg"
+                    alt="Add New Members"
+                    className="group-hover:white-filter"
+                  />{" "}
+                  Upload Resources
+                </Button>
+              )}
             </div>
           </CardContent>
         </Card>
-        <Card className="py-0 px-0 border border-skeleton">
+        <Card className="col-span-3 lg:col-span-2 xl:col-span-1 py-0 px-0 border border-skeleton">
           <CardContent className="px-0 flex flex-col gap-2">
             <div className="border-b p-8 border-skeleton flex items-center justify-between">
               <h2 className="font-semibold text-lg text-erieBlack font-inter">
@@ -287,7 +301,7 @@ export default function AdminChart() {
             </ul>
           </CardContent>
         </Card>
-        <Card className="py-0 px-0 border border-skeleton">
+        <Card className="col-span-3 lg:col-span-2 xl:col-span-1 py-0 px-0 border border-skeleton">
           <CardContent className="px-0 flex flex-col gap-2">
             <div className="p-8 pb-[28px] flex items-center justify-between">
               <h2 className="font-semibold text-lg text-erieBlack font-inter">
@@ -299,14 +313,17 @@ export default function AdminChart() {
             </div>
             <div className="">
               <div className="text-xs font-inter ">
-                  <div className="flex border-b text-[#8C8C8C] px-6">
-                    <div className="text-left p-2 flex-1">Title</div>
-                    <div className="text-left p-2 w-20 ">Enrolled</div>
-                    <div className="text-left p-2 w-20">Completed</div>
-                  </div>
+                <div className="flex border-b text-[#8C8C8C] px-6">
+                  <div className="text-left p-2 flex-1">Title</div>
+                  <div className="text-left p-2 w-20 ">Enrolled</div>
+                  <div className="text-left p-2 w-20">Completed</div>
+                </div>
                 <div>
                   {trainingData.map((training, index) => (
-                    <div key={index} className="border-b h-[66px] flex items-center px-6">
+                    <div
+                      key={index}
+                      className="border-b h-[66px] flex items-center px-6"
+                    >
                       <div className="p-2 flex items-center gap-2 mt-1 flex-1">
                         <Image
                           width={44}
@@ -316,7 +333,9 @@ export default function AdminChart() {
                           className="w-11 h-11 rounded object-cover"
                         />
                         <div>
-                          <div className="text-xs text-erieBlack font-inter font-medium">{training.title}</div>
+                          <div className="text-xs text-erieBlack font-inter font-medium">
+                            {training.title}
+                          </div>
                           <div className="text-xs text-[#8C8C8C] font-inter font-normal">
                             {training.organizer}
                           </div>
@@ -335,7 +354,7 @@ export default function AdminChart() {
             </div>
           </CardContent>
         </Card>
-        <Card className="py-0 px-0 border border-skeleton">
+        <Card className="col-span-3 lg:col-span-2 xl:col-span-1 py-0 px-0 border border-skeleton">
           <CardContent className="px-0 flex flex-col gap-2">
             <div className="border-b p-8 border-skeleton">
               <h2 className="font-semibold text-lg text-erieBlack font-inter">
@@ -344,7 +363,10 @@ export default function AdminChart() {
             </div>
             <div className="px-8 py-2 border-skeleton">
               <h2 className="font-medium text-base text-darkLiver font-inter flex items-center gap-2">
-                Total Visitor  <span className="text-dashboard-primary font-bold text-2xl">24,985</span>
+                Total Visitor{" "}
+                <span className="text-dashboard-primary font-bold text-2xl">
+                  24,985
+                </span>
               </h2>
             </div>
             <div className="py-4 flex items-center flex-row gap-2 px-[28px]">

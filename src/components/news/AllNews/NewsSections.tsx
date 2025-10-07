@@ -27,23 +27,19 @@ export default function NewsSections() {
     setItemsPerPage,
   } = usePagination();
 
-  const { data, isLoading } = useGet(
-    "/news",
-    ["all-news"],
-    {
-      ...(itemsPerPage !== -1 && {
-        page: currentPage.toString(),
-        limit: itemsPerPage.toString(),
-      }),
-      search: debouncedSearch,
-    }
-  );
+  const { data, isLoading } = useGet("/news", ["all-news"], {
+    ...(itemsPerPage !== -1 && {
+      page: currentPage.toString(),
+      limit: itemsPerPage.toString(),
+    }),
+    search: debouncedSearch,
+  });
 
   useEffect(() => {
     if (data) {
       setTotalItems(data.meta?.totalItems || 0);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
   const handleEdit = (row: INewsSection) => {
@@ -56,7 +52,9 @@ export default function NewsSections() {
       header: "Thumbnail",
       accessorKey: "images",
       cell: (value) => {
-        const images = value as { id: number; newsId: number; imageUrl: string; }[] | undefined;
+        const images = value as
+          | { id: number; newsId: number; imageUrl: string }[]
+          | undefined;
         return (
           <div className="w-14 h-14 p-1 border flex items-center justify-center rounded-md cursor-pointer hover:opacity-80">
             {images && images[0] && (
@@ -138,7 +136,7 @@ export default function NewsSections() {
     },
   ];
   return (
-    <div className="bg-white p-8 min-h-[85vh] border border-skeleton rounded-2xl">
+    <div className="bg-white p-4 lg:p-8 min-h-[85vh] border border-skeleton rounded-2xl">
       <DataTable
         columns={columns}
         data={Array.isArray(data?.data) ? data.data : []}

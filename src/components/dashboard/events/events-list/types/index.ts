@@ -2,6 +2,7 @@ export interface IEvent {
   id: number;
   title: string;
   slug: string;
+
   description: string;
   summary: string;
   featuredImage: string;

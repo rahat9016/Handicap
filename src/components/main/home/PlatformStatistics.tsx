@@ -57,7 +57,7 @@ export default function PlatformStatistics() {
                 desc: "More than 1,200 individuals have completed our training programs, advancing their knowledge",
                 weakThisMonth: `${
                   dashboardStatsData?.trainingCompletion?.thisMonth ?? 0
-                } +23 this month`,
+                } this month`,
               },
             ].map((item, idx) => (
               <div

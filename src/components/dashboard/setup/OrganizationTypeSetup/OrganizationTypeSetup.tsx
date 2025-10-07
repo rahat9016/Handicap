@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 import { IOrganizationType } from "../types/setup";
 import CreateUpdateOrganizationTypeSetup from "./CreateUpdateOrganizationTypeSetup";
 interface IOrganization {
-  actions?: string
+  actions?: string;
   id: number;
   name: string;
   description: string;
@@ -16,7 +16,9 @@ interface IOrganization {
 }
 export default function OrganizationTypeSetup() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [organization, setOrganization] = useState<IOrganizationType | null>(null);
+  const [organization, setOrganization] = useState<IOrganizationType | null>(
+    null
+  );
   const { search, handleSearchChange, debouncedSearch } =
     useSearchDebounce(300);
   const {
@@ -41,7 +43,7 @@ export default function OrganizationTypeSetup() {
 
   const handleEdit = (row: IOrganizationType) => {
     setIsModalOpen(true);
-    setOrganization(row)
+    setOrganization(row);
   };
 
   // const { mutateAsync } = usePatch(
@@ -53,7 +55,7 @@ export default function OrganizationTypeSetup() {
     if (data) {
       setTotalItems(data.meta?.totalItems || 0);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
   const columns: ColumnDef<IOrganization>[] = [
@@ -93,10 +95,9 @@ export default function OrganizationTypeSetup() {
         );
       },
     },
-    
   ];
   return (
-    <div className="bg-white p-8 min-h-[85vh] border border-skeleton rounded-2xl">
+    <div className="bg-white p-4 lg:p-8 min-h-[85vh] border border-skeleton rounded-2xl">
       <DataTable
         columns={columns}
         data={Array.isArray(data?.data) ? data.data : []}
@@ -118,8 +119,8 @@ export default function OrganizationTypeSetup() {
       <CreateUpdateOrganizationTypeSetup
         isOpen={isModalOpen}
         onClose={() => {
-          setIsModalOpen(false)
-          setOrganization(null)
+          setIsModalOpen(false);
+          setOrganization(null);
         }}
         initialValues={organization}
       />

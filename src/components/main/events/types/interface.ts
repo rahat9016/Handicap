@@ -79,7 +79,7 @@ export interface EventCalendarResponse {
   meta: any | null;
 }
 
-interface EventCalendarData {
+export interface EventCalendarData {
   year: number;
   month: number;
   monthName: string;

@@ -5,19 +5,34 @@ import {
   useQueryClient
 } from "@tanstack/react-query";
 import { toast } from "react-toastify";
-
+//  mutationFn: (data: FormData | Record<string, unknown>) =>
+//       postService.request(endpoint, data),
 export const usePost = <T>(
-  endpoint: string,
+  defaultEndpoint?: string,
   onSuccess?: (data: T) => void,
   invalidateQueriesKeys?: Array<string[]>
 ) => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (data: FormData | Record<string, unknown>) =>
-      postService.request(endpoint, data),
+    mutationFn: (
+      arg: FormData | Record<string, unknown> | { endpoint: string; data?: FormData | Record<string, unknown> }
+    ) => {
+      if (typeof arg === "object" && "endpoint" in arg) {
+        return postService.request(
+          arg.endpoint as string,
+          (arg.data ?? {}) as FormData | Record<string, unknown>
+        );
+      }
+
+      if (!defaultEndpoint) {
+        throw new Error("defaultEndpoint is required if endpoint is not provided");
+      }
+
+      return postService.request(defaultEndpoint, arg);
+    },
     onSuccess: (data) => {
-      toast.success(data.message);
+      // toast.success(data.message);
 
       // Automatically refetch matching queries
       if (invalidateQueriesKeys) {

@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { ILangType } from "@/types";
 import { Dispatch, SetStateAction } from "react";
 
 export interface IUserRole { 
@@ -69,8 +70,8 @@ export interface IResource {
   actions?: string;
   isPrivate?: boolean;
 
-  title: string;
-  description: string;
+  title: ILangType;
+  description: ILangType;
   filePath: string;
   fileType: string;
   fileSize: number;

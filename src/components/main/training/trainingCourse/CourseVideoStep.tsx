@@ -38,7 +38,6 @@ export default function CourseVideoStep() {
     selectedVideo?.content?.link
       ? extractYouTubeId(selectedVideo.content?.link)
       : null;
-  console.log(data);
   return (
     <div>
       <div className="container ">
@@ -49,7 +48,7 @@ export default function CourseVideoStep() {
           </Paragraph>
         </div>
         <div className="flex items-start gap-4 mb-10">
-          <div className="w-3/4 lg:h-[500px]">
+          <div className="w-3/4 lg:min-h-[500px]">
             {selectedVideo?.type === "QUIZ" && selectedVideo?.quiz ? (
               <Quiz quiz={selectedVideo.quiz} />
             ) : selectedVideo?.content?.contentType === "VIDEO" ? (

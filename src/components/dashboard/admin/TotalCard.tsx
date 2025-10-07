@@ -1,13 +1,7 @@
 import Image from "next/image";
+import { ITotalCard } from "./types/interface";
 
-interface ITotalCardProps {
-  icon: string;
-  shape: string;
-  title: string;
-  count: number | string;
-}
-
-export default function TotalCard({ icon, shape, title, count }: ITotalCardProps) {
+export default function TotalCard({ icon, shape, title, count }: ITotalCard) {
   return (
     <div className="relative group rounded-lg bg-white shadow-sm p-6 w-full overflow-hidden transition-colors duration-300 hover:bg-[#135393] border border-skeleton">
       <div className="absolute inset-0 flex justify-end items-end transition-all duration-500 pointer-events-none w-full">

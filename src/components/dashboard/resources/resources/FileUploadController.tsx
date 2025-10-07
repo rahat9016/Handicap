@@ -1,31 +1,34 @@
 import { cn } from "@/lib/utils";
 import { FileText, X } from "lucide-react";
 import Image from "next/image";
+import { useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
+import { SUPPORTED_FORMATS } from "./Schema/Resources";
 
-const SUPPORTED_FORMATS = [
-  "image/png",
-  "image/jpeg",
-  "image/jpg",
-  "application/pdf",
-  "application/msword",
-  "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-];
+// const SUPPORTED_FORMATS = [
+//   "image/png",
+//   "image/jpeg",
+//   "image/jpg",
+//   "application/pdf",
+//   "application/msword",
+//   "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+// ];
 
 interface FileUploadControllerProps {
   name: string;
   className?: string;
   initialUrl?: string;
-  label?: string
+  label?: string;
 }
 
 export function FileUploadController({
   name,
   className,
-  label
+  label,
 }: FileUploadControllerProps) {
   const { control, getValues } = useFormContext();
   const initialUrl = getValues(name);
+  const [touched, setTouched] = useState(false);
 
   return (
     <Controller
@@ -35,62 +38,68 @@ export function FileUploadController({
       render={({ field, fieldState }) => {
         const fileValue = field.value || null;
 
-        // check if it's an image
+        // detect image type
         const isImage =
           fileValue instanceof File
             ? fileValue.type.startsWith("image/")
             : typeof fileValue === "string"
             ? /\.(jpg|jpeg|png|gif|webp|svg)$/i.test(fileValue)
-            : initialUrl
+            : !touched && initialUrl
             ? /\.(jpg|jpeg|png|gif|webp|svg)$/i.test(initialUrl)
             : false;
-
-        // get preview URL
+        // detect video type
+        const isVideo =
+          fileValue instanceof File
+            ? fileValue.type.startsWith("video/")
+            : typeof fileValue === "string"
+            ? /\.(mp4|mov|avi|webm|mkv)$/i.test(fileValue)
+            : !touched && initialUrl
+            ? /\.(mp4|mov|avi|webm|mkv)$/i.test(initialUrl)
+            : false;
+        // preview URL
         const preview =
           fileValue instanceof File
-            ? isImage
-              ? URL.createObjectURL(fileValue)
-              : null
+            ? URL.createObjectURL(fileValue)
             : typeof fileValue === "string"
             ? fileValue
-            : initialUrl || null;
+            : !touched
+            ? initialUrl
+            : null;
 
+        // file change handler
         const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
           const file = e.target.files?.[0];
           if (file) {
+            setTouched(true);
             field.onChange(file);
           }
         };
 
+        // delete file
         const handleDelete = () => {
+          setTouched(true);
           field.onChange(null);
         };
 
+        // render icon for non-image files
         const renderFileIcon = () => {
           if (fileValue instanceof File) {
             if (fileValue.type === "application/pdf") {
-              return (
-                <FileText className="w-10 h-10 text-rose-600" />
-              );
+              return <FileText className="w-10 h-10 text-rose-600" />;
             }
             if (
               fileValue.type.includes("word") ||
+              fileValue.name.endsWith(".doc") ||
               fileValue.name.endsWith(".docx")
             ) {
-              return (
-                <FileText className="w-10 h-10 text-blue" />
-              );
+              return <FileText className="w-10 h-10 text-blue-600" />;
             }
-          } else if (typeof fileValue === "string" && !isImage) {
+          } else if (typeof fileValue === "string" && !isImage && !isVideo) {
             if (fileValue.endsWith(".pdf")) {
-              return (
-                <FileText className="w-10 h-10 text-rose-600" />
-              );
+              return <FileText className="w-10 h-10 text-rose-600" />;
             }
             if (fileValue.endsWith(".doc") || fileValue.endsWith(".docx")) {
-              return (
-                <FileText className="w-10 h-10 text-blue-600" />
-              );
+              return <FileText className="w-10 h-10 text-blue-600" />;
             }
           }
           return (
@@ -106,38 +115,127 @@ export function FileUploadController({
                 className
               )}
             >
-              {preview && isImage ? (
-                <div className="w-full h-full relative group">
-                  <button
-                    onClick={handleDelete}
-                    className="absolute w-6 h-6 flex items-center justify-center bg-dashboard-primary hover:bg-dashboard-primary rounded-full p-1 -right-2 -top-2"
-                    aria-label="Delete image"
-                    type="button"
-                  >
-                    <X className="w-4 h-4 text-white" />
-                  </button>
-                  <Image
-                    width={244}
-                    height={132}
-                    src={preview}
-                    alt="File Preview"
-                    className="w-full h-full object-contain rounded-lg"
-                  />
-                </div>
-              ) : fileValue ? (
-                <div className="w-full h-full flex flex-col items-center justify-center text-gray-600 relative">
-                  <button
-                    onClick={handleDelete}
-                    className="absolute w-6 h-6 flex items-center justify-center bg-dashboard-primary hover:bg-dashboard-primary rounded-full p-1 -right-2 -top-2"
-                    aria-label="Delete file"
-                    type="button"
-                  >
-                    <X className="w-4 h-4 text-white" />
-                  </button>
-                  {renderFileIcon()}
-                  <p className="text-sm font-normal font-inter mt-2">File selected</p>
-                </div>
+              {fileValue ? (
+                isImage && preview ? (
+                  // Image preview
+                  <div className="w-full h-full relative group">
+                    <button
+                      onClick={handleDelete}
+                      className="absolute w-6 h-6 flex items-center justify-center bg-dashboard-primary hover:bg-dashboard-primary rounded-full p-1 -right-2 -top-2"
+                      aria-label="Delete file"
+                      type="button"
+                    >
+                      <X className="w-4 h-4 text-white" />
+                    </button>
+                    <Image
+                      width={244}
+                      height={132}
+                      src={preview}
+                      alt="Preview"
+                      className="w-full h-full object-contain rounded-lg"
+                    />
+                  </div>
+                ) : isVideo && preview ? (
+                  // Video preview
+                  <div className="w-full h-full relative group">
+                    <button
+                      onClick={handleDelete}
+                      className="absolute w-6 h-6 flex items-center justify-center bg-dashboard-primary hover:bg-dashboard-primary rounded-full p-1 -right-2 -top-2 z-50"
+                      aria-label="Delete video"
+                      type="button"
+                    >
+                      <X className="w-4 h-4 text-white" />
+                    </button>
+                    <video
+                      src={preview}
+                      controls
+                      className="w-full h-full object-cover rounded-lg"
+                    />
+                  </div>
+                ) : (
+                  // Document preview
+                  <div className="w-full h-full flex flex-col items-center justify-center text-gray-600 relative">
+                    <button
+                      onClick={handleDelete}
+                      className="absolute w-6 h-6 flex items-center justify-center bg-dashboard-primary hover:bg-dashboard-primary rounded-full p-1 -right-2 -top-2"
+                      aria-label="Delete file"
+                      type="button"
+                    >
+                      <X className="w-4 h-4 text-white" />
+                    </button>
+                    {renderFileIcon()}
+                    <p className="text-sm font-normal font-inter mt-2 text-center px-2 truncate max-w-[200px]">
+                      {fileValue instanceof File
+                        ? fileValue.name
+                        : "File selected"}
+                    </p>
+                  </div>
+                )
               ) : (
+                // Upload placeholder
+                <label
+                  htmlFor={`${name}-file`}
+                  className="flex flex-col items-center justify-center h-full lg:gap-2 cursor-pointer select-none"
+                >
+                  <Image
+                    width={36}
+                    height={36}
+                    src="/images/dashboard/gallery-add.svg"
+                    alt="gallery"
+                  />
+                  <span className="text-grayDark lg:text-[#A6A6A6] text-xs font-poppins font-normal text-center px-2">
+                    {label || "Upload file (image, pdf, doc, video)"}
+                  </span>
+                  <input
+                    id={`${name}-file`}
+                    type="file"
+                    accept={SUPPORTED_FORMATS.join(",")}
+                    className="hidden"
+                    onChange={handleFileChange}
+                  />
+                </label>
+              )}
+              {/* {fileValue ? (
+                isImage && preview ? (
+                  // Image preview
+                  <div className="w-full h-full relative group">
+                    <button
+                      onClick={handleDelete}
+                      className="absolute w-6 h-6 flex items-center justify-center bg-dashboard-primary hover:bg-dashboard-primary rounded-full p-1 -right-2 -top-2"
+                      aria-label="Delete image"
+                      type="button"
+                    >
+                      <X className="w-4 h-4 text-white" />
+                    </button>
+                    <Image
+                      width={244}
+                      height={132}
+                      src={preview}
+                      alt="File Preview"
+                      className="w-full h-full object-contain rounded-lg"
+                    />
+                  </div>
+                ) : (
+                  // PDF/DOC preview (icon + filename)
+                  <div className="w-full h-full flex flex-col items-center justify-center text-gray-600 relative">
+                    <button
+                      onClick={handleDelete}
+                      className="absolute w-6 h-6 flex items-center justify-center bg-dashboard-primary hover:bg-dashboard-primary rounded-full p-1 -right-2 -top-2"
+                      aria-label="Delete file"
+                      type="button"
+                    >
+                      <X className="w-4 h-4 text-white" />
+                    </button>
+                    {renderFileIcon()}
+                    <p className="text-sm font-normal font-inter mt-2 text-center px-2 truncate max-w-[200px]">
+                      {fileValue instanceof File
+                        ? fileValue.name
+                        : "File selected"}
+                    </p>
+                  </div>
+                )
+              ) : (
+                // Upload placeholder
                 <label
                   htmlFor={`${name}-file`}
                   className="flex flex-col items-center justify-center h-full lg:gap-2 cursor-pointer select-none"
@@ -159,7 +257,7 @@ export function FileUploadController({
                     onChange={handleFileChange}
                   />
                 </label>
-              )}
+              )} */}
             </div>
             {fieldState.error && (
               <p className="text-rose-500 text-xs mt-1 pl-2">

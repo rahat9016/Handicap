@@ -72,8 +72,8 @@ export default function UpdateResources({
   useEffect(() => {
     if (initialValues) {
       methods.reset({
-        title: initialValues.title,
-        description: initialValues.description,
+        title: initialValues.title?.en,
+        description: initialValues.description?.en,
         isPrivate: initialValues.isPrivate,
         languageId: String(initialValues.languageId),
         categoryId: String(initialValues.categoryId),

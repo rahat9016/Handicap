@@ -13,6 +13,7 @@ interface ControlledInputFieldProps {
 const ControlledCheckboxField: React.FC<ControlledInputFieldProps> = ({
   name,
   options,
+  
 }) => {
   const { control } = useFormContext();
 

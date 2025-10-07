@@ -14,7 +14,7 @@ export default function TableView({
   onSearchChange,
   currentPage,
   setCurrentPage,
-//   totalPages,
+  //   totalPages,
   totalItems,
   itemsPerPage,
   setItemsPerPage,
@@ -22,15 +22,48 @@ export default function TableView({
   const { adminOrganizationPermission } = useAppSelector(
     (state) => state.permission
   );
-  
+
   const columns: ColumnDef<IResource>[] = [
-    { header: "Resource Title", accessorKey: "title" },
-    { header: "Description", accessorKey: "description" }, 
-{
+    {
+      header: "Title EN",
+      accessorKey: "title",
+      cell: (
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        _value: any,
+        row: IResource
+      ) => {
+        return <div>{row?.title?.en && <span>{row.title.en}</span>}</div>;
+      },
+    },
+    {
+      header: "Title BN",
+      accessorKey: "title",
+      cell: (
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        _value: any,
+        row: IResource
+      ) => {
+        return <div>{row?.title?.en && <span>{row.title.bn}</span>}</div>;
+      },
+    },
+    {
+      header: "Description",
+      accessorKey: "description",
+      cell: (
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        _value: any,
+        row: IResource
+      ) => {
+        return (
+          <div>{row?.description?.en && <span>{row.description.en}</span>}</div>
+        );
+      },
+    },
+    {
       header: "organization",
       accessorKey: "organization",
       cell: (_value, row) => {
-        return <span>{row?.organization?.name}</span>; 
+        return <span>{row?.organization?.name}</span>;
       },
     },
     { header: "Download Count", accessorKey: "totalDownloadCount" },

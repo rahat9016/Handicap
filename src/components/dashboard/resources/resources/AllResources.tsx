@@ -11,12 +11,12 @@ import ResourceTabs from "./ResourceTabs";
 import ViewResourceDetails from "./ViewDetails";
 
 export default function AllResources() {
+  const navigate = useRouter();
+  const [isView, setIsView] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [selectedId, setSelectedId] = useState<string | undefined>(undefined);
   const [resource, setResource] = useState<IResource | undefined>(undefined);
-  const [isView, setIsView] = useState<boolean>(false);
   const { organizationId } = useAppSelector((state) => state.organizer);
-  const navigate = useRouter();
   const {
     setCurrentPage,
     itemsPerPage,
@@ -25,20 +25,24 @@ export default function AllResources() {
     setItemsPerPage,
     setTotalItems,
   } = usePagination();
-  
+
   const { search, handleSearchChange, debouncedSearch } =
     useSearchDebounce(300);
   const endpoint = selectedId
-  ? `/resources/organization/${selectedId}`
-  : organizationId
+    ? `/resources/organization/${selectedId}`
+    : organizationId
     ? `/resources/organization/${organizationId}`
     : "/resources";
 
   const shouldFetch = selectedId !== undefined || organizationId !== undefined;
 
-  const { data, isLoading } = useGet(
+  const { data, isLoading } = useGet<IResource[]>(
     endpoint,
-    ["resources",currentPage.toString(), selectedId ?? organizationId ?? "all"],
+    [
+      "resources",
+      currentPage.toString(),
+      selectedId ?? organizationId ?? "all",
+    ],
     {
       ...(itemsPerPage !== -1 && {
         page: currentPage.toString(),
@@ -56,15 +60,14 @@ export default function AllResources() {
     setResource(row);
     setIsView(true);
   };
-  // // Update total items whenever data changes
+  
   useEffect(() => {
-    if (data) {
-      setTotalItems(data.meta?.totalItems || 0);
-    }
+    if (data) setTotalItems(data.meta?.totalItems || 0);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
   const totalPages = Math.ceil(totalItems / itemsPerPage);
-  console.log(resource)
+
   return (
     <div className="bg-white p-8 min-h-[85vh] border border-skeleton rounded-2xl">
       <ResourceTabs

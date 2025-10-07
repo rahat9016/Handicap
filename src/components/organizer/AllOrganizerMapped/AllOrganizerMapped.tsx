@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import { ColumnDef, DataTable } from "@/components/ui/data-table";
 import { useGet } from "@/hooks/useGet";
@@ -28,6 +27,7 @@ export default function AllOrganizerMapped() {
     setTotalItems,
     setItemsPerPage,
   } = usePagination();
+
   const { search, handleSearchChange, debouncedSearch } =
     useSearchDebounce(300);
   const { data, isLoading } = useGet(
@@ -52,6 +52,7 @@ export default function AllOrganizerMapped() {
     if (data) {
       setTotalItems(data.meta?.totalItems || 0);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
   
   const columns: ColumnDef<IOrganization>[] = [
@@ -99,7 +100,10 @@ export default function AllOrganizerMapped() {
       />
       <CreateUpdateOrganizerMappedModal
         isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+        onClose={() => {
+          setIsModalOpen(false);
+          setOrganizationTypes(undefined);
+        }}
         initialValues={organizationTypes}
       />
     </div>

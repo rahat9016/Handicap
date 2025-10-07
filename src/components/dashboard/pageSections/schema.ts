@@ -39,9 +39,13 @@ export const pageSectionSchema = Yup.object().shape({
     .positive("Order must be positive")
     .integer("Order must be an integer"),
   title: Yup.string().optional(),
+  titleBn: Yup.string().nullable(),
   subtitle: Yup.string().optional(),
+  subtitleBn: Yup.string().nullable(),
   content: Yup.string().optional(),
+  contentBn: Yup.string().nullable(),
   buttonLabel: Yup.string().notRequired().nullable(),
+  buttonLabelBn: Yup.string().nullable(),
   buttonUrl: Yup.string().notRequired().nullable(),
   isActive: Yup.boolean().default(true),
   images: Yup.array().nullable().of(imageSchema),

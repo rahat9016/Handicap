@@ -2,20 +2,25 @@ import { IVideoContent } from "@/components/main/training/types/traning";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 
-import { MessageCircleQuestionMark } from "lucide-react";
+import { Eye, MessageCircleQuestionMark } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 import CreateUpdateCourseQuiz from "../Quiz/CreateUpdateCourseQuiz";
 import EditVideoModal from "./EditVideoModal";
 import VideoModal from "./VideoModal";
+import ViewQuizModal from "./ViewQuizModal";
 
 export default function CourseVideoList({
   courseContentList,
   className,
+  courseId,
 }: {
   courseContentList: IVideoContent[] | never[];
   className?: string;
+  courseId: string;
 }) {
+  const [contentId, setContentId] = useState<number | null | undefined>(null);
+  const [isQuizModalOpen, setIsQuizModalOpen] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [selectedVideo, setSelectedVideo] = useState<IVideoContent | null>(
     null
@@ -26,7 +31,7 @@ export default function CourseVideoList({
   //   setSelectedVideo(video);
   //   setModalType(type);
   // };
-
+  console.log(contentId, isQuizModalOpen);
   const handleClose = () => {
     setSelectedVideo(null);
     setModalType(null);
@@ -39,56 +44,85 @@ export default function CourseVideoList({
         className
       )}
     >
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {courseContentList?.map((item) => (
-          <Card
-            key={item.id}
-            className="relative cursor-pointer hover:shadow-lg transition border rounded-xl"
-          >
-            <CardContent className="flex items-center gap-4 p-4">
-              <div className="flex-shrink-0">
-                {item.contentType === "VIDEO" ? (
-                  <div className="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center">
-                    <Image
-                      className="w-10 h-10"
-                      src="/video.png"
-                      alt="video"
-                      width={100}
-                      height={100}
-                    />
+      {courseContentList.length === 0 ? (
+        <Card className="border rounded-xl">
+          <CardContent className="flex items-center justify-center gap-4 p-4">
+            <p className="text-sm text-black font-inter text-center">
+              No course video content available
+            </p>
+          </CardContent>
+        </Card>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
+          {courseContentList?.map((item) => {
+            console.log(item.quiz?.id);
+            return (
+              <Card
+                key={item.id}
+                className="relative cursor-pointer hover:shadow-lg transition border rounded-xl"
+              >
+                <CardContent className="flex items-center gap-4 p-4">
+                  <div className="flex-shrink-0">
+                    {item.contentType === "VIDEO" ? (
+                      <div className="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center">
+                        <Image
+                          className="w-10 h-10"
+                          src="/video.png"
+                          alt="video"
+                          width={100}
+                          height={100}
+                        />
+                      </div>
+                    ) : (
+                      <div className="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center">
+                        <Image
+                          className="w-10 h-10"
+                          src="/youtube_play.png"
+                          alt="youtube"
+                          width={100}
+                          height={100}
+                        />
+                      </div>
+                    )}
                   </div>
-                ) : (
-                  <div className="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center">
-                    <Image
-                      className="w-10 h-10"
-                      src="/youtube_play.png"
-                      alt="youtube"
-                      width={100}
-                      height={100}
-                    />
+                  <div>
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-base font-semibold line-clamp-1">
+                        {item.title}
+                      </h3>
+                      {!item.quiz?.id && (
+                        <button
+                          onClick={() => {
+                            setIsModalOpen(true);
+                            setContentId(item?.id);
+                          }}
+                          className="absolute top-4 right-4 flex items-center text-white bg-dashboard-primary p-1 rounded-md text-sm"
+                        >
+                          <MessageCircleQuestionMark size={16} /> Add Quiz
+                        </button>
+                      )}
+                      {item.quiz?.id && (
+                        <button
+                          onClick={() => {
+                            setIsQuizModalOpen(true);
+                            setContentId(item?.quiz?.id);
+                          }}
+                          className="absolute top-4 right-4 flex items-center text-white bg-dashboard-primary p-1 rounded-md text-sm"
+                        >
+                          <Eye size={16} /> View Quiz
+                        </button>
+                      )}
+                    </div>
+                    <p className="text-sm text-gray-500 line-clamp-2">
+                      {item.description}
+                    </p>
                   </div>
-                )}
-              </div>
-              <div>
-                <div className="flex items-center justify-between">
-                  <h3 className="text-base font-semibold line-clamp-1">
-                    {item.title}
-                  </h3>
-                  <button
-                    onClick={() => setIsModalOpen(true)}
-                    className="absolute top-4 right-4 flex items-center text-white bg-dashboard-primary p-1 rounded-md text-sm"
-                  >
-                    <MessageCircleQuestionMark size={16} /> Add Quiz
-                  </button>
-                </div>
-                <p className="text-sm text-gray-500 line-clamp-2">
-                  {item.description}
-                </p>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+                </CardContent>
+              </Card>
+            );
+          })}
+        </div>
+      )}
       {modalType === "view" && selectedVideo && (
         <VideoModal video={selectedVideo} onClose={handleClose} />
       )}
@@ -99,11 +133,24 @@ export default function CourseVideoList({
           onClose={handleClose}
         />
       )}
+      {isQuizModalOpen && (
+        <ViewQuizModal
+          quizId={contentId as number}
+          isOpen={isQuizModalOpen}
+          onClose={() => {
+            setIsQuizModalOpen(false);
+            setContentId(null);
+          }}
+        />
+      )}
       <CreateUpdateCourseQuiz
         isOpen={isModalOpen}
         onClose={() => {
           setIsModalOpen(false);
+          setContentId(null);
         }}
+        id={courseId}
+        contentId={contentId}
       />
     </div>
   );

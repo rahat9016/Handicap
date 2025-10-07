@@ -1,15 +1,14 @@
-"use client"
-import { useEffect, useState } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
+/* eslint-disable react-hooks/exhaustive-deps */
+"use client";
 import { INewsSection } from "@/components/news/AllNews/types";
+import { Button } from "@/components/ui/button";
 import { Link } from "@/i18n/navigation";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useEffect, useState } from "react";
 interface NewsSliderProps {
   slides: INewsSection[];
 }
 const NewsSlider = ({ slides }: NewsSliderProps) => {
-    console.log(slides);
-    
   const [currentSlide, setCurrentSlide] = useState(0);
   const [prevSlide, setPrevSlide] = useState(0);
   const [direction, setDirection] = useState<"left" | "right">("right");
@@ -66,10 +65,10 @@ const NewsSlider = ({ slides }: NewsSliderProps) => {
             <p className="text-sm lg:text-lg mb-6 font-inter">
               {slide.summary}
             </p>
-            <Link href={`/news/${slide?.id}`}>  
-            <Button className="bg-transparent hover:bg-[#2A53CD] text-white font-medium py-2 h-12 rounded transition shadow-none text-base border px-10 font-inter">
-              Read More
-            </Button>
+            <Link href={`/news/${slide?.id}`}>
+              <Button className="bg-transparent hover:bg-[#2A53CD] text-white font-medium py-2 h-12 rounded transition shadow-none text-base border px-10 font-inter">
+                Read More
+              </Button>
             </Link>
           </div>
         ))}
@@ -90,4 +89,4 @@ const NewsSlider = ({ slides }: NewsSliderProps) => {
   );
 };
 
-export default NewsSlider
+export default NewsSlider;

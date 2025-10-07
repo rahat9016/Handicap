@@ -113,7 +113,7 @@ export default function FileView({
                   height={160}
                   className="mx-auto"
                 />
-                <p className="truncate text-sm px-4">{resource.title}</p>
+                <p className="truncate text-sm px-4">{resource.title.en}</p>
               </div>
             ))}
       </div>

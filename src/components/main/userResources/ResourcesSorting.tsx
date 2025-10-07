@@ -30,7 +30,7 @@ const sortOptions = [
   { label: "Oldest First", value: "createdAt:desc" },
 ];
 
-export default function ResourcesSorting() {
+const ResourcesSorting = () => {
   const dispatch = useAppDispatch();
 
   const { data: resourceData, isLoading: isResourceLoading } = useGet<
@@ -76,35 +76,40 @@ export default function ResourcesSorting() {
   const keywordOptions = mapToSelectOptions(keywordsData?.data, "name", "id");
 
   return (
-    <div>
+    <div className="w-full">
       <FormProvider {...methods}>
-        <form className="space-y-8 text-sm">
-          <Accordion
-            type="multiple"
-            defaultValue={["sort", "resourceType", "language", "keyword"]}
-            className="w-full space-y-0"
-          >
+        <form className="space-y-6 lg:space-y-8 text-sm">
+          {/* Clear Button */}
+          <div className="flex justify-end">
             <Button
               onClick={(e) => {
                 e.preventDefault();
                 methods.reset();
               }}
-              className="border text-black hover:text-white flex items-center bg-transparent hover:bg-dashboard-primary ml-auto"
+              className="border text-black hover:text-white flex items-center gap-2 bg-transparent hover:bg-dashboard-primary text-xs lg:text-sm"
+              size="sm"
             >
-              <Trash />
-              Clear
+              <Trash className="w-3 h-3 lg:w-4 lg:h-4" />
+              Clear Filters
             </Button>
-            {/* ── Sort By ───────────────────────────────────── */}
+          </div>
+
+          <Accordion
+            type="multiple"
+            defaultValue={["sort", "resourceType", "language", "keyword"]}
+            className="w-full space-y-0"
+          >
+            {/* Sort By Section */}
             <AccordionItem value="sort" className="border-b-0">
-              <AccordionTrigger className="font-bold hover:no-underline text-black text-sm border-b rounded-none mb-3">
+              <AccordionTrigger className="font-bold hover:no-underline text-black text-sm lg:text-base border-b rounded-none mb-3 px-0">
                 Sort by
               </AccordionTrigger>
-              <AccordionContent>
+              <AccordionContent className="px-0">
                 {isResourceLoading ? (
                   <div className="space-y-2">
-                    <Skeleton className="h-4 w-52" />
-                    <Skeleton className="h-4 w-52" />
-                    <Skeleton className="h-4 w-52" />
+                    {Array.from({ length: 3 }, (_, i) => (
+                      <Skeleton key={i} className="h-4 w-full max-w-52" />
+                    ))}
                   </div>
                 ) : (
                   <ControlledCheckboxField
@@ -115,20 +120,17 @@ export default function ResourcesSorting() {
               </AccordionContent>
             </AccordionItem>
 
-            {/* ── Resource Type ─────────────────────────────── */}
+            {/* Resource Type Section */}
             <AccordionItem value="resourceType" className="border-b-0">
-              <AccordionTrigger className="font-bold hover:no-underline text-black text-sm border-b rounded-none mb-3">
-                Resource Type
+              <AccordionTrigger className="font-bold hover:no-underline text-black text-sm lg:text-base border-b rounded-none mb-3 px-0">
+                Resource Sector
               </AccordionTrigger>
-              <AccordionContent>
+              <AccordionContent className="px-0 max-h-40 lg:max-h-60 overflow-y-auto">
                 {isResourceLoading ? (
                   <div className="space-y-2">
-                    <Skeleton className="h-4 w-52" />
-                    <Skeleton className="h-4 w-52" />
-                    <Skeleton className="h-4 w-52" />
-                    <Skeleton className="h-4 w-52" />
-                    <Skeleton className="h-4 w-52" />
-                    <Skeleton className="h-4 w-52" />
+                    {Array.from({ length: 6 }, (_, i) => (
+                      <Skeleton key={i} className="h-4 w-full max-w-52" />
+                    ))}
                   </div>
                 ) : (
                   <ControlledCheckboxField
@@ -139,17 +141,17 @@ export default function ResourcesSorting() {
               </AccordionContent>
             </AccordionItem>
 
-            {/* ── Language ─────────────────────────────────── */}
+            {/* Language Section */}
             <AccordionItem value="language" className="border-b-0">
-              <AccordionTrigger className="font-bold hover:no-underline text-black text-sm border-b rounded-none mb-3">
+              <AccordionTrigger className="font-bold hover:no-underline text-black text-sm lg:text-base border-b rounded-none mb-3 px-0">
                 Language
               </AccordionTrigger>
-              <AccordionContent>
+              <AccordionContent className="px-0 max-h-32 lg:max-h-40 overflow-y-auto">
                 {isLanguagesLoading ? (
                   <div className="space-y-2">
-                    <Skeleton className="h-4 w-28" />
-                    <Skeleton className="h-4 w-24" />
-                    <Skeleton className="h-4 w-20" />
+                    {Array.from({ length: 3 }, (_, i) => (
+                      <Skeleton key={i} className="h-4 w-full max-w-52" />
+                    ))}
                   </div>
                 ) : (
                   <ControlledCheckboxField
@@ -159,16 +161,18 @@ export default function ResourcesSorting() {
                 )}
               </AccordionContent>
             </AccordionItem>
+
+            {/* Keywords Section */}
             <AccordionItem value="keyword" className="border-b-0">
-              <AccordionTrigger className="font-bold hover:no-underline text-black text-sm border-b rounded-none mb-3">
+              <AccordionTrigger className="font-bold hover:no-underline text-black text-sm lg:text-base border-b rounded-none mb-3 px-0">
                 Keywords
               </AccordionTrigger>
-              <AccordionContent>
+              <AccordionContent className="px-0 max-h-32 lg:max-h-40 overflow-y-auto">
                 {isResourceKeywords ? (
                   <div className="space-y-2">
-                    <Skeleton className="h-4 w-28" />
-                    <Skeleton className="h-4 w-24" />
-                    <Skeleton className="h-4 w-20" />
+                    {Array.from({ length: 3 }, (_, i) => (
+                      <Skeleton key={i} className="h-4 w-full max-w-52" />
+                    ))}
                   </div>
                 ) : (
                   <ControlledCheckboxField
@@ -183,4 +187,6 @@ export default function ResourcesSorting() {
       </FormProvider>
     </div>
   );
-}
+};
+
+export default ResourcesSorting;

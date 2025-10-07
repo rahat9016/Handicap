@@ -19,15 +19,43 @@ export interface ICourse {
   objectives: string;
   durationMinutes: number;
   isActive: boolean;
+  courseType: string;
   isPublished: boolean;
+  level: string; // e.g., BEGINNER, INTERMEDIATE, ADVANCED
+  isQuizExist: boolean;
+  linkUrl: string | null;
   createdAt: string;
   updatedAt: string;
-  creator: ICreator;
-  organization: IOrganization;
+  creatorId: number;
+  organizationId: number;
+  courseCategoryId: number;
+  creator?: ICreator;
+  organization?: IOrganization;
+  CourseCategory?: ICategory;
+  CourseEnrollment: ICourseEnrollment[];
   thumbnailUrl: string;
-  CourseCategory: ICategory;
+  intro?: ICourseIntro | null;
 }
-
+export interface ICourseEnrollment {
+  id: number;
+  userId: number;
+  courseId: number;
+  enrolledAt: string;
+  progress?: number;
+  completed?: boolean;
+}
+export interface ICourseIntro {
+  id: number;
+  type: string; // e.g., CONTENT, QUIZ
+  order: number;
+  courseId: number;
+  contentId: number | null;
+  quizId: number | null;
+  createdAt: string;
+  updatedAt: string;
+  content?: ICourseContent | null;
+  quiz?: IQuiz | null;
+}
 export interface ICategory {
   id: number;
   name: string;
@@ -35,6 +63,13 @@ export interface ICategory {
   isActive: boolean;
   createdAt: string; // ISO Date string
   updatedAt: string; // ISO Date string
+}
+
+export interface ITag {
+  id: number;
+  name: string;
+  isActive: boolean;
+  createdAt: string; // ISO Date string
 }
 
 export interface IVideoContent {
@@ -54,6 +89,7 @@ export interface IVideoContent {
   courseId: number;
   createdAt: string;
   updatedAt: string;
+  quiz?:  IQuiz | null;
 }
 
 export interface IVariant {
@@ -91,4 +127,40 @@ export interface ICourseContent {
   // nested
   content: IVideoContent | null;
   quiz: IQuiz | null;
+}
+
+
+
+// ====================== QUIZ =======================
+export interface IQuiz {
+  id: number;
+  title: string;
+  description: string;
+  passingScore: number;
+  timeLimitMinutes: number;
+  isActive: boolean;
+  createdAt: string;
+  courseId: number;
+  contentId: number | null;
+  questions: IQuestion[];
+}
+
+interface IQuestion {
+  id: number;
+  questionText: string;
+  questionType: "MCQ" | "TRUE_FALSE" | "FILL_IN_BLANK" | string;
+  points: number;
+  sequenceNumber: number;
+  createdAt: string;
+  quizId: number;
+  options: IOption[];
+}
+
+interface IOption {
+  id: number;
+  optionText: string;
+  isCorrect: boolean;
+  sequenceNumber: number;
+  createdAt: string;
+  questionId: number;
 }

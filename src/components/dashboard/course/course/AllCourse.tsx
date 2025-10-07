@@ -78,6 +78,7 @@ export default function AllCourse() {
     if (data) {
       setTotalItems(data.meta?.totalItems || 0);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
   const columns: ColumnDef<ICourse>[] = useMemo(() => {
@@ -110,6 +111,10 @@ export default function AllCourse() {
       header: "Organization",
       accessorKey: "organization",
       cell: (_value: string | number | undefined, row: ICourse) => <span>{row?.organization?.name}</span>,
+    },
+    {
+      header: "Course Type",
+      accessorKey: "courseType",
     },
     { header: "Duration ", accessorKey: "durationMinutes" },
     { header: "Objectives", accessorKey: "objectives" },

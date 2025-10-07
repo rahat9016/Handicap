@@ -76,7 +76,6 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(redirectUrl);
   }
 
-
   // 🚫 Block users from /organization-list if roleId !== 2
   if (isOrgListRoute && roleId !== 2) {
     const redirectUrl = new URL(`/${locale}`, request.url);

@@ -13,7 +13,7 @@ export default function CoursePreview({
   courses: ICourseContent[];
   setSelectedVideo: Dispatch<SetStateAction<ICourseContent | null>>;
 }) {
-
+  
   return (
     <div>
       <div className="flex w-full bg-black px-4 py-5 rounded-t-xl items-center justify-between">
@@ -33,7 +33,6 @@ export default function CoursePreview({
         <Paragraph>No course content available.</Paragraph>
       ) : (
         courses.map((course, idx) => {
-          console.log(course)
           const isActive = selectedVideo?.id === course.id;
           return (
           <div
@@ -43,11 +42,11 @@ export default function CoursePreview({
           >
             <Title className={`text-black group-hover:text-white font-medium text-sm lg:text-sm leading-none flex items-center gap-1 ${isActive ? "text-white " : ""}`}>
               {isActive && <Play size={14} className="text-green-400 animate-pulse" />}
-              {course.content?.title}
+              {course.content?.title || selectedVideo?.quiz?.title}
             </Title>
-            <Paragraph className={`text-black group-hover:text-white lg:text-xs ${isActive ? "text-white" : ""}`}>
+            {selectedVideo?.content?.contentType === "VIDEO" && <Paragraph className={`text-black group-hover:text-white lg:text-xs ${isActive ? "text-white" : ""}`}>
               Video •  N/A
-            </Paragraph>
+            </Paragraph>}
           </div>
         )
         })

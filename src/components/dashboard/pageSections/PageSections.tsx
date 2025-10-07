@@ -4,16 +4,13 @@ import { useGet } from "@/hooks/useGet";
 import { usePagination } from "@/hooks/usePagination";
 
 import { useSearchDebounce } from "@/hooks/useSearchDebounce";
-import { useAppSelector } from "@/lib/redux/hooks";
-import { format } from "date-fns";
+import { ILangType, IPageSection } from "@/types";
 import { NotebookText, SquarePen } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import CreateUpdatePageSectionModal from "./CreateUpdatePageSection";
-import { IPageSection } from "./types";
 
 export default function PageSections() {
-  const { hasPermission } = useAppSelector((state) => state.permission);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [section, setSection] = useState<IPageSection>();
   const { search, handleSearchChange, debouncedSearch } =
@@ -43,6 +40,7 @@ export default function PageSections() {
     if (data) {
       setTotalItems(data.meta?.totalItems || 0);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
   const handleEdit = (row: IPageSection) => {
@@ -54,7 +52,10 @@ export default function PageSections() {
     {
       header: "Thumbnail",
       accessorKey: "imageUrls",
-      cell: (_value: string | number | boolean | string[], row: IPageSection) => {
+      cell: (
+        _value: string | number | boolean | string[] | ILangType,
+        row: IPageSection
+      ) => {
         return (
           <div className="w-14 h-14 p-1 border flex items-center justify-center rounded-md cursor-pointer hover:opacity-80">
             {row?.imageUrls[0] && (
@@ -70,9 +71,37 @@ export default function PageSections() {
         );
       },
     },
+    { header: "Page Name", accessorKey: "pageId" },
     { header: "Section Type", accessorKey: "sectionType" },
     { header: "Order", accessorKey: "order" },
-    { header: "Title", accessorKey: "title" },
+    {
+      header: "Title EN",
+      accessorKey: "title",
+      cell: (
+        _value: string | number | boolean | string[] | ILangType,
+        row: IPageSection
+      ) => {
+        return (
+          <div>
+            {row?.title?.en && <span>{row.title.en}</span>}
+          </div>
+        );
+      },
+    },
+    {
+      header: "Title BN",
+      accessorKey: "title",
+      cell: (
+        _value: string | number | boolean | string[] | ILangType,
+        row: IPageSection
+      ) => {
+        return (
+          <div >
+            {row?.title?.bn && <span>{row.title.bn}</span>}
+          </div>
+        );
+      },
+    },
     {
       header: "Is Active",
       accessorKey: "isActive",
@@ -90,14 +119,7 @@ export default function PageSections() {
         );
       },
     },
-    {
-      header: "Created date",
-      accessorKey: "createdAt",
-      cell: (value) => {
-        const date = new Date(value as string);
-        return <span>{format(date, "dd MMM yyyy")}</span>;
-      },
-    },
+    
 
     {
       header: "Action",
@@ -134,8 +156,8 @@ export default function PageSections() {
         showSearch
         searchValue={search}
         onSearchChange={handleSearchChange}
-        IsCreate={hasPermission} // [If you need a create button, just pass true as a props]
-        setIsModalOpen={setIsModalOpen} // [create modal open state]
+        // IsCreate={hasPermission} // [If you need a create button, just pass true as a props]
+        // setIsModalOpen={setIsModalOpen} // [create modal open state]
       />
 
       <CreateUpdatePageSectionModal

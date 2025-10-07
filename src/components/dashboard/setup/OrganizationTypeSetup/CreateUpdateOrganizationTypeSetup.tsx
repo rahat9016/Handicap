@@ -29,7 +29,11 @@ export default function CreateUpdateOrganizationTypeSetup({
   onClose: () => void;
   initialValues?: IOrganizationType | null;
 }) {
-  const { mutateAsync, error } = usePost<IUser[]>(
+  const {
+    mutateAsync,
+    error,
+    reset: postReset,
+  } = usePost<IUser[]>(
     "/organization-types",
     (data) => {
       console.log("POST success", data);
@@ -55,11 +59,31 @@ export default function CreateUpdateOrganizationTypeSetup({
     }
   }, [initialValues, methods]);
 
+  useEffect(() => {
+    if (!isOpen) {
+      methods.reset({
+        name: "",
+        description: "",
+        isActive: false,
+      });
+      postReset();
+    }
+  }, [isOpen, methods, postReset]);
+  
   const onSubmit = (data: OrganizerTypeSetupForm) => {
+    const organizedData: {
+      name: string;
+      description?: string;
+      isActive?: boolean;
+    } = {
+      name: data.name,
+      description: data.description,
+    };
+    if (initialValues) organizedData.isActive = data.isActive;
     if (initialValues) {
       mutateAsyncPatch({
         url: `/organization-types/${initialValues.id}`,
-        data,
+        data: organizedData,
       }).then(() => {
         toast.success("Organizer type updated successfully");
         onClose();
@@ -68,7 +92,7 @@ export default function CreateUpdateOrganizationTypeSetup({
         console.log("Organizer type updated successfully");
       });
     } else {
-      mutateAsync(data).then(() => {
+      mutateAsync(organizedData).then(() => {
         console.log("Organizer type created successfully");
         toast.success("Organizer type created successfully");
         onClose();
@@ -82,7 +106,9 @@ export default function CreateUpdateOrganizationTypeSetup({
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="bg-white min-h-[20vh] w-[80vw] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>{initialValues ? "Edit Type Setup" : "Create Type Setup"}</DialogTitle>
+          <DialogTitle>
+            {initialValues ? "Edit Type Setup" : "Create Type Setup"}
+          </DialogTitle>
         </DialogHeader>
         <FormProvider {...methods}>
           <form onSubmit={methods.handleSubmit(onSubmit)} className="w-full">
@@ -97,13 +123,15 @@ export default function CreateUpdateOrganizationTypeSetup({
                 placeholder="Enter description"
               />
             </div>
-            <div className="mb-4">
-              <InputLabel label="Is Active" />
-              <ControlledCheckField
-                name="isActive"
-                label="Active (Visible on website)"
-              />
-            </div>
+            {initialValues && (
+              <div className="mb-4">
+                <InputLabel label="Is Active" />
+                <ControlledCheckField
+                  name="isActive"
+                  label="Active (Visible on website)"
+                />
+              </div>
+            )}
             {error?.errors && <ErrorMessage error={error.errors[0]} />}
             <div className="flex justify-end gap-3 mt-6">
               <Button

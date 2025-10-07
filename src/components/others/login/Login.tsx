@@ -72,13 +72,14 @@ export default function Login() {
         }
         let destination = callbackUrl;
 
-        if (res?.parentRoleId === 2) {
+        if (res?.role === "USER") {
+          // ✅ Send USER to user dashboard
+          destination = "/user-dashboard";
+        } else if (res?.parentRoleId === 2) {
           destination = "/organization-list";
         } else if (res?.parentRoleId === null) {
-          // 🚫 no permission → send back to callback (not /admin!)
           destination = callbackUrl;
         } else if (!rawCallback) {
-          // If no callback was passed, allow only permitted users to land in /admin
           destination = "/admin";
         }
 
@@ -143,6 +144,7 @@ export default function Login() {
                 )}
                 <div>
                   <Button
+                  disabled={isPending}
                     type="submit"
                     className="w-full rounded-[--radius] bg-dashboard-primary text-white hover:bg-dashboard-primary hover:text-white mt-3"
                   >

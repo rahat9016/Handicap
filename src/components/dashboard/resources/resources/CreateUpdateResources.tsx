@@ -69,6 +69,8 @@ export default function CreateUpdateResources({
       isPrivate: false,
       languageId: "",
       categoryId: "",
+      titleBn: "",
+      descriptionBn: "",
       keywordIds: [],
       files: [{ title: "", description: "", languageId: "", file: undefined }],
     },
@@ -85,13 +87,17 @@ export default function CreateUpdateResources({
     if (!isOpen) {
       methods.reset({
         title: "",
+        titleBn: "",
         description: "",
+        descriptionBn: "",
         isPrivate: false,
         languageId: "",
         categoryId: "",
         organizationId: "",
         keywordIds: [],
-        files: [{ title: "", description: "", languageId: "", file: undefined }],
+        files: [
+          { title: "", description: "", languageId: "", file: undefined },
+        ],
       });
       postReset();
     }
@@ -118,13 +124,13 @@ export default function CreateUpdateResources({
     }
   };
 
-   
   const onSubmit = (data: any) => {
-    console.log({ data });
     const formData = new FormData();
 
     formData.append("title", data.title);
+    if (data.titleBn) formData.append("titleBn", data.titleBn); 
     if (data.description) formData.append("description", data.description);
+    if (data.descriptionBn) formData.append("descriptionBn", data.descriptionBn);
     formData.append("languageId", data.languageId);
     formData.append("categoryId", data.categoryId);
     formData.append("organizationId", organizationId);
@@ -145,7 +151,7 @@ export default function CreateUpdateResources({
     }
 
     // ✅ handle files with metadata
-    data.files.forEach((f:any , idx:number) => {
+    data.files.forEach((f: any, idx: number) => {
       if (f.file) {
         formData.append(`files[${idx}][file]`, f.file);
       }
@@ -189,12 +195,20 @@ export default function CreateUpdateResources({
         <FormProvider {...methods}>
           <form onSubmit={methods.handleSubmit(onSubmit)} className="w-full">
             <div className="flex flex-col gap-6 mt-8">
-              <div className="grid grid-cols-1 gap-3 lg:gap-5">
+              <div className="grid grid-cols-2  gap-3 lg:gap-5">
                 <div>
                   <InputLabel label="Title" required />
                   <ControlledInputField
                     name="title"
                     placeholder="Please enter your title"
+                    className="bg-white"
+                  />
+                </div>
+                <div>
+                  <InputLabel label="Title (Bangla)" />
+                  <ControlledInputField
+                    name="titleBn"
+                    placeholder="শিরোনাম লিখুন"
                     className="bg-white"
                   />
                 </div>
@@ -206,7 +220,17 @@ export default function CreateUpdateResources({
                     className="bg-white"
                   />
                 </div>
+                <div>
+                  <InputLabel label="Description (Bangla)" />
+                  <ControlledTextareaField
+                    name="descriptionBn"
+                    placeholder="বিবরণ লিখুন"
+                    className="bg-white"
+                  />
+                </div>
               </div>
+
+              {/* Category + Language */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 lg:gap-5">
                 <div>
                   <InputLabel label="Category" required />
@@ -225,6 +249,8 @@ export default function CreateUpdateResources({
                   />
                 </div>
               </div>
+
+              {/* Keywords */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 lg:gap-5">
                 <div>
                   <InputLabel label="Keywords" required />
@@ -235,6 +261,8 @@ export default function CreateUpdateResources({
                   />
                 </div>
               </div>
+
+              {/* Toggle */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 lg:gap-5">
                 <div>
                   <ControlledToggleField
@@ -243,89 +271,94 @@ export default function CreateUpdateResources({
                   />
                 </div>
               </div>
+
+              {/* Files Section */}
               <div>
-                {
-                  <div className="flex flex-col gap-3">
-                    {fields.map((resources, index) => {
-                      return (
-                        <div
-                          id={`files-${resources.id}`}
-                          key={resources.id}
-                          className="bg-slate-50 p-4 border rounded-lg flex flex-row gap-4"
-                        >
-                          <div>
-                            <div className="flex items-center justify-between">
-                              <InputLabel
-                                label="File"
-                                required
-                                className="text-black lg:mt-2"
-                              />
-                            </div>
-                             <FileUploadController name={`files.${index}.file`} className="h-[224px]" />
+                <div className="flex flex-col gap-3">
+                  {fields.map((resources, index) => {
+                    return (
+                      <div
+                        id={`files-${resources.id}`}
+                        key={resources.id}
+                        className="bg-slate-50 p-4 border rounded-lg flex flex-row gap-4"
+                      >
+                        <div>
+                          <div className="flex items-center justify-between">
+                            <InputLabel
+                              label="File"
+                              required
+                              className="text-black lg:mt-2"
+                            />
                           </div>
-                          <div className="w-8/12 relative">
-                            <Button
-                              type="button"
-                              onClick={() => remove(index)}
-                              className="text-red-500 w-7 h-7 flex items-center justify-center rounded-sm ml-auto absolute right-0 bg-rose-100 hover:bg-rose-200"
-                            >
-                              <Trash />
-                            </Button>
-                            <div className="mt-4 lg:mt-3 pb-4 lg:pb-0 border-b lg:border-none border-[#E4E4E4]">
-                              <InputLabel
-                                className="lg:text-smokyBlack lg:mb-1 lg:mt-2"
-                                label="Title"
-                                required
-                              />
-                              <ControlledInputField
-                                name={`files.${index}.title`}
-                                placeholder="Enter book title"
-                                className="rounded-md lg:border-gray"
-                              />
-                            </div>
-                            <div className="mt-4 lg:mt-3 pb-4 border-b lg:border-none border-[#E4E4E4]">
-                              <InputLabel
-                                label="Language"
-                                required
-                                className="lg:text-smokyBlack lg:mb-1"
-                              />
-                              <ControlledSelectField
-                                name={`files.${index}.languageId`}
-                                placeholder="Select language"
-                                options={languageOptions}
-                              />
-                            </div>
-                            <div className="mt-4 lg:mt-3 pb-4 lg:pb-0 border-b lg:border-none border-[#E4E4E4]">
-                              <InputLabel
-                                className="lg:text-smokyBlack lg:mb-2 lg:mt-2"
-                                label="Description"
-                                required
-                              />
-                              <ControlledInputField
-                                name={`files.${index}.description`}
-                                placeholder="Enter description name"
-                                className="rounded-md lg:border-gray"
-                              />
-                            </div>
+                          <FileUploadController
+                            name={`files.${index}.file`}
+                            className="h-[224px]"
+                          />
+                        </div>
+                        <div className="w-8/12 relative">
+                          <Button
+                            type="button"
+                            onClick={() => remove(index)}
+                            className="text-red-500 w-7 h-7 flex items-center justify-center rounded-sm ml-auto absolute right-0 bg-rose-100 hover:bg-rose-200"
+                          >
+                            <Trash />
+                          </Button>
+                          <div className="mt-4 lg:mt-3 pb-4 lg:pb-0 border-b lg:border-none border-[#E4E4E4]">
+                            <InputLabel
+                              className="lg:text-smokyBlack lg:mb-1 lg:mt-2"
+                              label="Title"
+                              required
+                            />
+                            <ControlledInputField
+                              name={`files.${index}.title`}
+                              placeholder="Enter book title"
+                              className="rounded-md lg:border-gray"
+                            />
+                          </div>
+                          <div className="mt-4 lg:mt-3 pb-4 border-b lg:border-none border-[#E4E4E4]">
+                            <InputLabel
+                              label="Language"
+                              required
+                              className="lg:text-smokyBlack lg:mb-1"
+                            />
+                            <ControlledSelectField
+                              name={`files.${index}.languageId`}
+                              placeholder="Select language"
+                              options={languageOptions}
+                            />
+                          </div>
+                          <div className="mt-4 lg:mt-3 pb-4 lg:pb-0 border-b lg:border-none border-[#E4E4E4]">
+                            <InputLabel
+                              className="lg:text-smokyBlack lg:mb-2 lg:mt-2"
+                              label="Description"
+                              required
+                            />
+                            <ControlledInputField
+                              name={`files.${index}.description`}
+                              placeholder="Enter description name"
+                              className="rounded-md lg:border-gray"
+                            />
                           </div>
                         </div>
-                      );
-                    })}
-                    <div className="mt-4">
-                      <Button
-                        type="button"
-                        onClick={addAnotherFile}
-                        className="bg-dashboard-primary text-white"
-                      >
-                        + Add Another File
-                      </Button>
-                    </div>
+                      </div>
+                    );
+                  })}
+                  <div className="mt-4">
+                    <Button
+                      type="button"
+                      onClick={addAnotherFile}
+                      className="bg-dashboard-primary text-white"
+                    >
+                      + Add Another File
+                    </Button>
                   </div>
-                }
+                </div>
               </div>
 
               <ErrorMessage error={error} />
             </div>
+
+            {/* Submit */}
             <div className="flex justify-end gap-3 mt-4">
               <Button
                 type="submit"

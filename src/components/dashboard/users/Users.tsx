@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import { IUser } from "@/components/organizer/types";
 import { StatusToggle } from "@/components/share/StatusToggle";
@@ -49,6 +48,7 @@ export default function Users() {
     if (data) {
       setTotalItems(data.meta?.totalItems || 0);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
   const handleEdit = (row: IUser) => {

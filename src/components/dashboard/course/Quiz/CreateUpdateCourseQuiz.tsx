@@ -10,9 +10,11 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { usePost } from "@/hooks/usePost";
-import { useParams } from "next/navigation";
+import { yupResolver } from "@hookform/resolvers/yup";
 import { FormProvider, useFieldArray, useForm } from "react-hook-form";
+import { IQuiz } from "../types/types";
 import QuestionField from "./QuestionField";
+import { quizFormSchema } from "./Schema/Quiz";
 
 export type Option = {
   optionText: string;
@@ -22,9 +24,10 @@ export type Option = {
 
 export type Question = {
   questionText: string;
-  questionType: "MULTIPLE_CHOICE" | "TRUE_FALSE" | "SHORT_ANSWER" | "ESSAY";
+  questionType: "MULTIPLE_CHOICE" | "TRUE_FALSE" | "MCQ";
   points: number;
   sequenceNumber: number;
+  correctAnswer?: string;
   options: Option[];
 };
 
@@ -34,22 +37,37 @@ export type QuizForm = {
 export default function CreateUpdateCourseQuiz({
   isOpen,
   onClose,
+  id,
+  contentId,
+  quizId,
 }: {
   isOpen: boolean;
   onClose: () => void;
+  id: string;
+  contentId?: number | null;
+  quizId?: number;
 }) {
-  const { id } = useParams();
+  // const { data: quizData } = useGet<IQuiz>(
+  //   `/quizzes/${quizId}`,
+  //   ["", String(quizId)],
+  //   {},
+  //   { enabled: quizId !== undefined }
+  // );
   const { mutateAsync } = usePost(
     "/quizzes",
     (data) => {
       console.log("POST success", data);
     },
-    [["quizzes"]]
+    [["courseDetails"]]
   );
   const methods = useForm({
     mode: "onChange",
-    // resolver: yupResolver(quizFormSchema),
+    resolver: yupResolver(quizFormSchema),
     defaultValues: {
+      title: "",
+      description: "",
+      passingScore: 1,
+      timeLimitMinutes: 15,
       questions: [
         {
           questionText: "",
@@ -57,43 +75,116 @@ export default function CreateUpdateCourseQuiz({
           points: 1,
           sequenceNumber: 1,
           options: [{ optionText: "", isCorrect: false, sequenceNumber: 1 }],
+          correctAnswer: "true",
         },
       ],
     },
   });
+console.log(quizId)
+  // useEffect(() => {
+  //   if (quizData) {
+  //     methods.reset({
+  //       title: quizData.title,
+  //       description: quizData.description,
+  //       passingScore: quizData.passingScore,
+  //       timeLimitMinutes: quizData.timeLimitMinutes,
+  //       questions: quizData.questions.map((q, idx) => ({
+  //         questionText: q.questionText,
+  //         questionType: q.questionType,
+  //         points: q.points,
+  //         sequenceNumber: q.sequenceNumber ?? idx + 1,
+  //         options: q.options.map((opt, optIdx) => ({
+  //           optionText: opt.optionText,
+  //           isCorrect: opt.isCorrect,
+  //           sequenceNumber: opt.sequenceNumber ?? optIdx + 1,
+  //         })),
+  //         correctAnswer: q.options.find((o) => o.isCorrect)?.optionText ?? "",
+  //       })),
+  //     });
+  //   }
+  // }, [quizData, methods.reset, methods]);
 
   const { fields, append, remove } = useFieldArray({
     control: methods.control,
     name: "questions",
   });
-  console.log(methods.formState.errors);
+  const questions = methods.watch("questions");
+  const passingScore = methods.watch("passingScore");
+
+  const totalPoints =
+    questions?.reduce((sum, question) => {
+      return sum + (Number(question.points) || 0);
+    }, 0) || 0;
+  const isPassingScoreValid = Number(passingScore) <= Number(totalPoints);
 
   const onSubmit = (data: any) => {
-    console.log(data);
+    console.log(data)
     try {
-      // Transform frontend form data into API format
-      const payload = {
-        title: data.name,
+      const payload: IQuiz = {
+        title: data.title,
         description: data.description,
-        passingScore: 50,
-        timeLimitMinutes: 15,
+        passingScore: data.passingScore,
+        timeLimitMinutes: data.timeLimitMinutes,
         courseId: id,
-        // contentId: data.contentId,
-        questions: data.questions.map((q: any, index: number) => ({
-          questionText: q.questionText,
-          questionType:
-            q.questionType === "MULTIPLE_CHOICE" ? "MCQ" : q.questionType,
-          points: q.points,
-          sequenceNumber: index + 1,
-          options: q.options.map((o: any, oIndex: number) => ({
-            optionText: o.optionText,
-            isCorrect: o.isCorrect,
-            sequenceNumber: oIndex + 1,
-          })),
-        })),
+        questions: data?.questions.map((q: any, index: number) => {
+          if (q.questionType === "MULTIPLE_CHOICE") {
+            return {
+              questionText: q.questionText,
+              questionType: q.questionType,
+              points: q.points,
+              sequenceNumber: index + 1,
+              options: q.options.map((o: any, oIndex: number) => ({
+                optionText: o.optionText,
+                isCorrect: o.isCorrect,
+                sequenceNumber: oIndex + 1,
+              })),
+            };
+          }
+          if (q.questionType === "MCQ") {
+            return {
+              questionText: q.questionText,
+              questionType: q.questionType,
+              points: q.points,
+              sequenceNumber: index + 1,
+              options: q.options.map((o: any, oIndex: number) => ({
+                optionText: o.optionText,
+                isCorrect: o.isCorrect,
+                sequenceNumber: oIndex + 1,
+              })),
+            };
+          }
+          if (q.questionType === "TRUE_FALSE") {
+            return {
+              questionText: q.questionText,
+              questionType: "TRUE_FALSE",
+              points: q.points,
+              sequenceNumber: index + 1,
+              options: [
+                {
+                  optionText: "True",
+                  isCorrect: q.correctAnswer === "true",
+                  sequenceNumber: 1,
+                },
+                {
+                  optionText: "False",
+                  isCorrect: q.correctAnswer === "false",
+                  sequenceNumber: 2,
+                },
+              ],
+            };
+          }
+          return q;
+        }),
       };
-      mutateAsync(payload);
-      // onClose();
+
+      if (contentId) {
+        payload.contentId = contentId;
+      }
+
+      mutateAsync(payload).then(() => {
+        methods.reset();
+        onClose();
+      });
     } catch (error) {
       console.error("❌ Error creating quiz:", error);
     }
@@ -108,6 +199,7 @@ export default function CreateUpdateCourseQuiz({
       options: [{ optionText: "", isCorrect: false, sequenceNumber: 1 }],
     });
   };
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent
@@ -125,7 +217,7 @@ export default function CreateUpdateCourseQuiz({
             <div className="mb-4">
               <InputLabel label="Name" required />
               <ControlledInputField
-                name="name"
+                name="title"
                 placeholder="Enter the quiz name..."
               />
             </div>
@@ -136,6 +228,36 @@ export default function CreateUpdateCourseQuiz({
                 name="description"
                 placeholder="Write down here the description..."
               />
+            </div>
+            <div className="mb-4">
+              <InputLabel label="Time Limit (Minutes)" />
+              <ControlledInputField
+                name={`timeLimitMinutes`}
+                type="number"
+                placeholder="Enter the time limit in minutes"
+              />
+            </div>
+            <div className="mb-4">
+              <InputLabel label="Passing Score" required />
+              <ControlledInputField
+                name="passingScore"
+                type="number"
+                placeholder="Enter passing score..."
+              />
+              <div className="mt-2 text-sm text-gray-600">
+                Total Points: {totalPoints} / Passing Score: {passingScore}
+                {!isPassingScoreValid && (
+                  <span className="text-red-500 ml-2">
+                    ⚠️ Passing score cannot exceed total points!
+                  </span>
+                )}
+                {isPassingScoreValid && totalPoints > 0 && (
+                  <span className="text-green-500 ml-2">
+                    ✓ Valid ({((passingScore / totalPoints) * 100).toFixed(0)}%
+                    to pass)
+                  </span>
+                )}
+              </div>
             </div>
             {fields.map((field, questionIndex) => (
               <QuestionField

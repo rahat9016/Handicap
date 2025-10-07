@@ -22,6 +22,9 @@ export const courseInformationSchema = Yup.object().shape({
   categoryId: Yup.string()
     .required("Category is required")
     .min(1, "Category is required"),
+  courseType: Yup.string()
+    .required("Course type is required")
+    .min(1, "Course type is required"),
 
   organizationId: Yup.string(),
   thumbNail: Yup.mixed<File | string>()

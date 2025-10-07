@@ -10,8 +10,8 @@ import { NotebookText, SquarePen } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
-import { INewsSection } from "./types";
 import CreateUpdateNewsSectionModal from "./CreateUpdateNewsSection";
+import { INewsSection } from "./types";
 export default function NewsSections() {
   const { hasPermission } = useAppSelector((state) => state.permission);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -43,6 +43,7 @@ export default function NewsSections() {
     if (data) {
       setTotalItems(data.meta?.totalItems || 0);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
   const handleEdit = (row: INewsSection) => {

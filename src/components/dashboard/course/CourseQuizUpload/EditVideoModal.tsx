@@ -42,7 +42,7 @@ export default function EditVideoModal({
   const [replaceMode, setReplaceMode] = useState(false);
 
   const { control, watch, setValue, handleSubmit } = methods;
-  console.log(video);
+
   useEffect(() => {
     if (video) {
       methods.reset({
@@ -52,7 +52,7 @@ export default function EditVideoModal({
         link: "",
         uploadType: video.contentType === "VIDEO" ? "file" : "link",
       });
-      console.log(video.link);
+      
       if (video.contentType === "VIDEO") {
         methods.setValue("file", video.filePath ?? null);
       } else if (video.contentType === "LINK") {

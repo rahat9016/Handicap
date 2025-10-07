@@ -27,6 +27,7 @@ module.exports = {
         },
       },
       colors: {
+        gold: "rgb(212 175 55)",
         "primary": "#242D65",
         "primaryLight":"#EAF6FB",
         "secondary": "#F68C25",
@@ -220,11 +221,25 @@ module.exports = {
       },
     },
   },
+  experimental: {
+    optimizeUniversalDefaults: true,
+  },
   plugins: [
     function ({ addUtilities }) {
       addUtilities({
         '.white-filter': {
           filter: 'brightness(0) saturate(100%) invert(100%)',
+        },
+      });
+    },
+    function ({ addUtilities }) {
+      addUtilities({
+        ".hide-scrollbar": {
+          "::-webkit-scrollbar": {
+            display: "none",
+          },
+          "scrollbar-width": "none",
+          "-ms-overflow-style": "none",
         },
       });
     },

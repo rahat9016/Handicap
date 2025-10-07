@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-    title: "Handicap International | admin",
+    title: "Disability Inclusion Resource Hub | admin",
 };
 
 export default function Page() {

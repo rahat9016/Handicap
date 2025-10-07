@@ -294,7 +294,7 @@ export function DataTable<T>({
           <DropdownMenuContent align="end" className="w-40 flex flex-col gap-1">
             <Button
               size="sm"
-              className="w-full h-10 bg-slate-100 hover:bg-slate-200"
+              className="w-full h-10 text-black bg-slate-100 hover:bg-slate-200"
               onClick={exportToCSV}
             >
               <Sheet />
@@ -302,7 +302,7 @@ export function DataTable<T>({
             </Button>
             <Button
               size="sm"
-              className="w-full h-10 bg-slate-100 hover:bg-slate-200"
+              className="w-full h-10 text-black bg-slate-100 hover:bg-slate-200"
               onClick={exportToPDF}
             >
               <FileText />

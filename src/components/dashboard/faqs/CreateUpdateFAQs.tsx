@@ -27,8 +27,6 @@ const CreateUpdateFAQs = ({
   onClose,
   initialValues,
 }: CreateUpdateFAQsProps) => {
-
-
   const {
     mutateAsync,
     error,
@@ -38,17 +36,14 @@ const CreateUpdateFAQs = ({
     (data) => {
       console.log("POST success", data);
     },
-    [["page-sections"]]
+    [["faqs"]]
   );
 
   const {
     mutateAsync: patchAsync,
     error: patchError,
     reset: patchReset,
-  } = usePatch(
-    (data) => console.log("Success", data),
-    [["faqs"]]
-  );
+  } = usePatch((data) => console.log("Success", data), [["faqs"]]);
 
   const isEditMode = !!initialValues;
   const methods = useForm<FAQsSchema>({
@@ -84,6 +79,12 @@ const CreateUpdateFAQs = ({
   }, [isOpen, methods, patchReset, postReset]);
 
   const onSubmit = (data: FAQsSchema) => {
+    data = {
+      question: data.question,
+      questionBn: data.questionBn,
+      answer: data.answer,
+      answerBn: data.answerBn,
+    };
     if (isEditMode) {
       patchAsync({
         url: `/faqs/${initialValues?.id}`,

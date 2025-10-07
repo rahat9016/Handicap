@@ -1,4 +1,3 @@
-
 import ToastProvider from "@/components/share/Toast/ToastProvider";
 import { routing } from "@/i18n/routing";
 import QueryProvider from "@/lib/react-query/QueryProvider";
@@ -9,6 +8,7 @@ import { Inter } from "next/font/google";
 import { notFound } from "next/navigation";
 import "./globals.css";
 import { UserFetcher } from "./UserFetcher";
+// import { useAnalytics } from "@/hooks/useAnalytics";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -18,7 +18,8 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: "Disability Inclusion Resource Hub",
-  description: "The major Rohingya influx into Cox’s Bazar, Bangladesh began in August 2017, after which the humanitarian community in Cox’s Bazar has continued its efforts to strengthen disability-inclusive practices across the response. Over the years, various organizations have developed valuable tools, resources, and training materials to promote inclusion; however, these resources were often scattered and difficult to access. The Disability Inclusion Resource Hub has been created to bring all these materials together in one accessible platform, making it easier for humanitarian stakeholders to find, use, and learn from the collective knowledge of the response.",
+  description:
+    "The major Rohingya influx into Cox’s Bazar, Bangladesh began in August 2017, after which the humanitarian community in Cox’s Bazar has continued its efforts to strengthen disability-inclusive practices across the response. Over the years, various organizations have developed valuable tools, resources, and training materials to promote inclusion; however, these resources were often scattered and difficult to access. The Disability Inclusion Resource Hub has been created to bring all these materials together in one accessible platform, making it easier for humanitarian stakeholders to find, use, and learn from the collective knowledge of the response.",
 };
 
 export default async function RootLayout({
@@ -32,6 +33,7 @@ export default async function RootLayout({
   if (!hasLocale(routing.locales, locale)) {
     notFound();
   }
+  // useAnalytics();
 
   return (
     <html lang={locale} className={inter.variable}>
@@ -41,9 +43,7 @@ export default async function RootLayout({
             <QueryProvider>
               <ToastProvider>
                 <UserFetcher />
-                <main id="main-content">
-                  {children}
-                </main>
+                <main id="main-content">{children}</main>
               </ToastProvider>
             </QueryProvider>
           </StoreProvider>

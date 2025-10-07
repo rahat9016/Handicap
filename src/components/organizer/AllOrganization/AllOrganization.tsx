@@ -12,7 +12,7 @@ import CreateUpdateOrganization from "./CreateUpdateOrganization";
 import ViewOrganizationDetails from "./ViewDetails";
 
 export default function AllOrganization() {
-  const { hasPermission } = useAppSelector(state => state.permission)
+  const { hasPermission } = useAppSelector((state) => state.permission);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isViewModalOpen, setIsViewModalOpen] = useState<boolean>(false);
   const [organization, setOrganization] = useState<
@@ -54,8 +54,8 @@ export default function AllOrganization() {
     if (data) {
       setTotalItems(data.meta?.totalItems || 0);
     }
-   
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
   const columns: ColumnDef<IOrganizationResponse>[] = [
@@ -95,34 +95,36 @@ export default function AllOrganization() {
         );
       },
     },
-    hasPermission ?{
-      header: "Action",
-      accessorKey: "id",
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      cell: (_value: any, row: IOrganizationResponse) => {
-        return (
-          <div className="flex items-center gap-5">
-            <button
-              onClick={() => handleEdit(row)}
-              className="text-darkLiver hover:underline text-sm flex items-center gap-1"
-            >
-              <SquarePen size={16} />
-              Edit
-            </button>
-            <button
-              onClick={() => handleView(row)}
-              className="text-darkLiver hover:underline text-sm flex items-center gap-1"
-            >
-              <Eye size={16} />
-              View
-            </button>
-          </div>
-        );
-      },
-    }: undefined,
+    hasPermission
+      ? {
+          header: "Action",
+          accessorKey: "id",
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          cell: (_value: any, row: IOrganizationResponse) => {
+            return (
+              <div className="flex items-center gap-5">
+                <button
+                  onClick={() => handleEdit(row)}
+                  className="text-darkLiver hover:underline text-sm flex items-center gap-1"
+                >
+                  <SquarePen size={16} />
+                  Edit
+                </button>
+                <button
+                  onClick={() => handleView(row)}
+                  className="text-darkLiver hover:underline text-sm flex items-center gap-1"
+                >
+                  <Eye size={16} />
+                  View
+                </button>
+              </div>
+            );
+          },
+        }
+      : undefined,
   ].filter(Boolean) as ColumnDef<IOrganizationResponse>[];
   return (
-    <div className="bg-white p-8 min-h-[85vh] border border-skeleton rounded-2xl">
+    <div className="bg-white p-4 lg:p-8 min-h-[85vh] border border-skeleton rounded-2xl">
       <DataTable
         columns={columns}
         data={Array.isArray(data?.data) ? data.data : []}

@@ -32,22 +32,26 @@ import {
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 
-export default function Sidebar({ className }: { className?: string }) {
+interface SidebarProps {
+  className?: string;
+  isOpen: boolean;
+  setIsOpen: (value: boolean) => void;
+}
+
+export default function Sidebar({
+  className,
+  isOpen,
+  setIsOpen,
+}: SidebarProps) {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const { hasPermission } = useAppSelector((state) => state.permission);
-  console.log(hasPermission);
+
+  const pathname = usePathname();
+
   const menuItems = [
-    {
-      label: "Overview",
-      icon: LayoutDashboard,
-      href: "/admin",
-    },
-    hasPermission && {
-      label: "Users",
-      icon: User2,
-      href: "/admin/users",
-    },
+    { label: "Overview", icon: LayoutDashboard, href: "/admin" },
+    hasPermission && { label: "Users", icon: User2, href: "/admin/users" },
     hasPermission && {
       label: "Content",
       icon: Upload,
@@ -75,10 +79,7 @@ export default function Sidebar({ className }: { className?: string }) {
           label: "Organization Type Setup",
           href: "/admin/setup/organization-type-setup",
         },
-        {
-          label: "Language Setup",
-          href: "/admin/setup/language-setup",
-        },
+        { label: "Language Setup", href: "/admin/setup/language-setup" },
       ],
     },
     {
@@ -101,14 +102,8 @@ export default function Sidebar({ className }: { className?: string }) {
       icon: Newspaper,
       children: [
         { label: "News List", href: "/admin/news/news-list" },
-        {
-          label: "News Categories",
-          href: "/admin/news/news-categories",
-        },
-        {
-          label: "News Tags",
-          href: "/admin/news/news-tags",
-        },
+        { label: "News Categories", href: "/admin/news/news-categories" },
+        { label: "News Tags", href: "/admin/news/news-tags" },
       ],
     },
     hasPermission && {
@@ -116,14 +111,8 @@ export default function Sidebar({ className }: { className?: string }) {
       icon: CalendarDays,
       children: [
         { label: "Event List", href: "/admin/events/events-list" },
-        {
-          label: "Events Categories",
-          href: "/admin/events/events-categories",
-        },
-        {
-          label: "Events Tags",
-          href: "/admin/events/events-tags",
-        },
+        { label: "Events Categories", href: "/admin/events/events-categories" },
+        { label: "Events Tags", href: "/admin/events/events-tags" },
       ],
     },
     {
@@ -134,31 +123,11 @@ export default function Sidebar({ className }: { className?: string }) {
         { label: "Course Categories", href: "/admin/course/course-categories" },
       ],
     },
-    // {
-    //   label: "Analytics",
-    //   icon: BarChart3,
-    //   href: "/admin/analytics",
-    // },
     hasPermission && {
       label: "Role Management",
       icon: ShieldCheck,
-      children: [
-        // { label: "Add Role", href: "/admin/roles/create-roles" },
-        { label: "All Roles", href: "/admin/roles/all-roles" },
-      ],
+      children: [{ label: "All Roles", href: "/admin/roles/all-roles" }],
     },
-    // {
-    //   label: "System Settings",
-    //   icon: Settings,
-    //   href: "/settings",
-    // },
-    // {
-    //   label: "Modules Management",
-    //   icon: ShieldCheck,
-    //   children: [
-    //     { label: "Add Module", href: "/admin/modules/create-modules" },
-    //   ],
-    // },
   ].filter(Boolean) as Array<{
     label: string;
     icon: LucideIcon;
@@ -166,44 +135,45 @@ export default function Sidebar({ className }: { className?: string }) {
     children?: { label: string; href: string }[];
   }>;
 
-  const pathname = usePathname();
   return (
     <aside
       className={cn(
-        "w-[300px] bg-white h-screen border-r border-skeleton flex flex-col px-[22px] fixed top-0 overflow-y-auto py-6",
+        "fixed top-0 left-0 min-h-screen w-[320px] xl:w-[350px] bg-white border-r border-skeleton flex flex-col px-[20px] py-6 transition-transform duration-300 ease-in-out z-50",
+        {
+          "-translate-x-full": !isOpen,
+          "translate-x-0": isOpen,
+          "lg:translate-x-0 lg:static": true,
+        },
         className
       )}
     >
-      <nav className="flex flex-col h-full">
-        <div
-          onClick={() => router.push("/")}
-          className="flex flex-col items-center  gap-3 mb-8 cursor-pointer"
-        >
-          <Image width={109} height={48} src="/logo.png" alt="logo" />
-          <div className="text-center">
-            <h3 className="font-inter text-lg font-bold mb-1 text-erieBlack">
-              Handicap International{" "}
-            </h3>
-            <p className="font-inter text-sm font-normal text-[#4D4D4D]">
-              Disability Inclusion Resource Hub
-            </p>
-          </div>
+      <div
+        onClick={() => router.push("/")}
+        className="flex flex-col items-center gap-3 mb-4 cursor-pointer mt-20 xl:mt-0"
+      >
+        <Image width={109} height={48} src="/logo.png" alt="logo" />
+        <div className="text-center">
+          <h3 className="font-inter text-lg font-bold mb-1 text-erieBlack">
+            Handicap International
+          </h3>
+          <p className="font-inter text-sm font-normal text-[#4D4D4D]">
+            Disability Inclusion Resource Hub
+          </p>
         </div>
+      </div>
+      <nav className="flex-1 overflow-y-auto mt-3  custom-scrollbar">
+        {/* Menu */}
         <Accordion
           type="multiple"
-          className="w-full h-full flex  flex-col gap-1"
+          className="flex flex-col h-full gap-1 w-full"
         >
           {menuItems.map((item) => {
             const pathnameWithoutLocale = pathname.replace(/^\/(en|bn)/, "");
-
-            // ✅ active logic
             const isActiveParent =
               item.href && pathnameWithoutLocale === item.href;
-
             const isActiveChild = item.children?.some(
               (child) => pathnameWithoutLocale === child.href
             );
-
             const isActive = isActiveParent || isActiveChild;
 
             return (
@@ -215,9 +185,9 @@ export default function Sidebar({ className }: { className?: string }) {
                 {item.children ? (
                   <>
                     <AccordionTrigger
-                      className={`px-4 h-[46px] hover:no-underline leading-none flex items-left font-inter  ${
+                      className={`px-4 h-[46px] flex items-left font-inter leading-none hover:no-underline ${
                         isActive
-                          ? "bg-dashboard-primary text-white "
+                          ? "bg-dashboard-primary text-white"
                           : "text-[#8C8C8C] hover:bg-[#EAF6FB] hover:text-dashboard-primary"
                       }`}
                     >
@@ -239,11 +209,11 @@ export default function Sidebar({ className }: { className?: string }) {
                       {item.children.map((child) => {
                         const isChildActive =
                           pathnameWithoutLocale === child.href;
-
                         return (
                           <Link
                             key={child.label}
                             href={child.href}
+                            onClick={() => setIsOpen(false)} // close on mobile
                             className={`w-full h-[46px] flex items-center gap-2 px-4 text-sm rounded-md font-inter pl-6 ${
                               isChildActive
                                 ? "bg-dashboard-primary text-white"
@@ -259,6 +229,7 @@ export default function Sidebar({ className }: { className?: string }) {
                 ) : (
                   <Link
                     href={item.href ?? "#"}
+                    onClick={() => setIsOpen(false)}
                     className={`w-full h-[46px] flex items-center gap-2 px-4 text-sm rounded-md font-inter ${
                       isActive
                         ? "bg-dashboard-primary text-white"
@@ -272,18 +243,21 @@ export default function Sidebar({ className }: { className?: string }) {
             );
           })}
         </Accordion>
+      </nav>
+      <div className="px-6 pb-6">
         <Button
           onClick={() => {
             dispatch(logoutUser());
             dispatch(clearOrganization());
             dispatch(setPermission(false));
             dispatch(setAdminOrganizationPermission(false));
+            setIsOpen(false);
           }}
-          className="w-full bg-[#F0F0F0] hover:bg-[#FDECEC] text-[#A8A8A8] hover:text-[#EB5757]  flex items-center justify-start gap-2 h-12 !px-4"
+          className="w-full bg-[#F0F0F0] hover:bg-[#FDECEC] text-[#A8A8A8] hover:text-[#EB5757] flex items-center justify-start gap-2 h-12 !px-4"
         >
           <LogOut className="h-6 w-6" size={24} /> Logout
         </Button>
-      </nav>
+      </div>
     </aside>
   );
 }

@@ -6,7 +6,7 @@ import { ITotalCard } from "./types/interface";
 
 export default function AdminTotalCardSection() {
   const { data: dashboardData } = useGet("/dashboard", ["dashboard"]);
-  const { hasPermission } = useAppSelector(state => state.permission)
+  const { hasPermission } = useAppSelector((state) => state.permission);
   const lastData = (dashboardData?.data ?? {
     totalCourse: 0,
     totalOrganization: 0,
@@ -48,7 +48,13 @@ export default function AdminTotalCardSection() {
 
   return (
     <div>
-      <div className={`grid ${data.length === 2 ? "grid-cols-2" : "grid-cols-4"} gap-6`}>
+      <div
+        className={`grid ${
+          data.length === 2
+            ? "grid-cols-1 lg:grid-cols-2"
+            : "grid-cols-1 md:grid-cols-2 lg:grid-cols-4"
+        } gap-6`}
+      >
         {data.map((item, index) => (
           <TotalCard key={index} {...item} />
         ))}

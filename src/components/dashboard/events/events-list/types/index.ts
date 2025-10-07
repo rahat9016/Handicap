@@ -8,7 +8,7 @@ export interface IEvent {
   location: string;
   address: string;
   startDate: string;
-  endDate: string; 
+  endDate: string;
   isOnline: boolean;
   registrationUrl: string;
   isPublished: boolean;
@@ -21,30 +21,33 @@ export interface IEvent {
   images: IEventImage[];
 }
 
+export interface ICategory {
+  id: number;
+  name: string;
+  description: string;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface IEventCategory {
   eventId: number;
   categoryId: number;
   createdAt: string;
-  category: {
-    id: number;
-    name: string;
-    description: string;
-    isActive: boolean;
-    createdAt: string;
-    updatedAt: string;
-  };
+  category: ICategory;
 }
 
+export interface ITag {
+  id: number;
+  name: string;
+  createdAt: string;
+  isActive: boolean;
+}
 export interface IEventTag {
   eventId: number;
   tagId: number;
   createdAt: string;
-  tag: {
-    id: number;
-    name: string;
-    createdAt: string;
-    isActive: boolean;
-  };
+  tag: ITag;
 }
 
 export interface IEventImage {

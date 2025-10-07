@@ -27,16 +27,16 @@ import {
   Shapes,
   ShieldCheck,
   Upload,
-  User2
+  User2,
 } from "lucide-react";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 
-export default function Sidebar({className}:{className?: string}) {
+export default function Sidebar({ className }: { className?: string }) {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const { hasPermission } = useAppSelector((state) => state.permission);
-
+  console.log(hasPermission);
   const menuItems = [
     {
       label: "Overview",
@@ -111,7 +111,7 @@ export default function Sidebar({className}:{className?: string}) {
         },
       ],
     },
-    hasPermission &&{
+    hasPermission && {
       label: "Events",
       icon: CalendarDays,
       children: [
@@ -139,7 +139,7 @@ export default function Sidebar({className}:{className?: string}) {
     //   icon: BarChart3,
     //   href: "/admin/analytics",
     // },
-    hasPermission &&{
+    hasPermission && {
       label: "Role Management",
       icon: ShieldCheck,
       children: [
@@ -168,7 +168,12 @@ export default function Sidebar({className}:{className?: string}) {
 
   const pathname = usePathname();
   return (
-    <aside className={cn("w-[300px] bg-white h-screen border-r border-skeleton flex flex-col px-[22px] fixed top-0 overflow-y-auto py-6", className)}>
+    <aside
+      className={cn(
+        "w-[300px] bg-white h-screen border-r border-skeleton flex flex-col px-[22px] fixed top-0 overflow-y-auto py-6",
+        className
+      )}
+    >
       <nav className="flex flex-col h-full">
         <div
           onClick={() => router.push("/")}

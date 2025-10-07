@@ -18,11 +18,13 @@ import { buildQueryParams } from "@/utils/buildQueryParams";
 import { Filter, Search } from "lucide-react";
 import { useEffect, useState } from "react";
 import ResourceCardSkeleton from "../userResources/ResourceCardSkeleton";
+import { CourseDevelopmentModal } from "./CourseDevelopmentModal";
 import CourseLibrary from "./CourseLibrary";
 import TrainingSorting from "./TrainingSorting";
 import { ICourse } from "./types/traning";
 
 const Courses = () => {
+  const [isModalOpen, setIsModalOpen] = useState(true);
   const { search, handleSearchChange, debouncedSearch } =
     useSearchDebounce(300);
   const {
@@ -182,6 +184,10 @@ const Courses = () => {
           </div>
         </div>
       )}
+      <CourseDevelopmentModal
+        open={isModalOpen}
+        onOpenChange={setIsModalOpen}
+      />
     </div>
   );
 };

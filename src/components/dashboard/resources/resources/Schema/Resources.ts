@@ -1,6 +1,7 @@
 import * as Yup from "yup";
 
 export const SUPPORTED_FORMATS = [
+  // Images
   "image/jpg",
   "image/webp",
   "image/svg+xml",
@@ -8,9 +9,19 @@ export const SUPPORTED_FORMATS = [
   "image/png",
   "image/heic",
   "image/heif",
+
+  // Documents
   "application/pdf",
   "application/msword",
   "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+
+  // Videos
+  "video/mp4",
+  "video/mpeg",
+  "video/ogg",
+  "video/webm",
+  "video/quicktime",
+  "video/x-msvideo",
 ];
 
 const FILE_SIZE = 50 * 1024 * 1024;
@@ -51,7 +62,7 @@ export const resourcesSchema = Yup.object().shape({
           .required("File is required")
           .test(
             "fileType",
-            "Unsupported file format. Only JPG, PNG, PDF, DOC, DOCX allowed.",
+            "Unsupported file format. Allowed: JPG, PNG, PDF, DOC, DOCX, MP4, MOV, AVI, WEBM.",
             (value) => {
               if (typeof value === "string") return true; // allow URL
               if (value instanceof File) {

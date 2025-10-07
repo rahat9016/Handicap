@@ -19,7 +19,7 @@ export default function ResourceKeywords() {
   const [keywords, setKeywords] = useState<IKeywords | undefined>();
   const [deleteKeywords, setDeleteKeywords] = useState<IKeywords | undefined>();
   const { search, handleSearchChange, debouncedSearch } =
-      useSearchDebounce(300);
+    useSearchDebounce(300);
   const {
     setCurrentPage,
     itemsPerPage,
@@ -32,12 +32,12 @@ export default function ResourceKeywords() {
     "/resource-keywords",
     ["resource-keywords", currentPage.toString()],
     {
-    ...(itemsPerPage !== -1 && {
-      page: currentPage.toString(),
-      limit: itemsPerPage.toString(),
-    }),
-    search: debouncedSearch,
-  }
+      ...(itemsPerPage !== -1 && {
+        page: currentPage.toString(),
+        limit: itemsPerPage.toString(),
+      }),
+      search: debouncedSearch,
+    }
   );
   const { mutateAsync: deleteAsync, isPending: isDeleting } = useDelete(
     (data) => {
@@ -45,9 +45,7 @@ export default function ResourceKeywords() {
     },
     [["resource-keywords"]]
   );
-  const { hasPermission } = useAppSelector(
-    (state) => state.permission
-  );
+  const { hasPermission } = useAppSelector((state) => state.permission);
 
   const handleEdit = (row: IKeywords) => {
     setKeywords(row);
@@ -62,12 +60,12 @@ export default function ResourceKeywords() {
     if (data) {
       setTotalItems(data.meta?.totalItems || 0);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
   const columns: ColumnDef<IKeywords>[] = [
-     { header: "ID", accessorKey: "id" },
-  { header: "Name", accessorKey: "name" },
+    { header: "ID", accessorKey: "id" },
+    { header: "Name", accessorKey: "name" },
     {
       header: "Created date",
       accessorKey: "createdAt",

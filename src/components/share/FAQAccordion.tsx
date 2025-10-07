@@ -12,7 +12,7 @@ import { IFaq, IFaqItem } from "../dashboard/faqs/types";
 export default function FAQAccordion() {
   const { data } = useGet<IFaq[]>("/faqs", ["faqs"]);
   const FAQData = data?.data || [];
-  console.log(FAQData);
+
   return (
     <Accordion type="single" collapsible className="w-full">
       {FAQData.map(

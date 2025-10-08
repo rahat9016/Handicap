@@ -1,4 +1,4 @@
-export interface EventCategory {
+export interface IEventCategory {
   eventId: number;
   categoryId: number;
   createdAt: string;
@@ -12,7 +12,7 @@ export interface EventCategory {
   };
 }
 
-export interface EventTag {
+export interface IEventTag {
   eventId: number;
   tagId: number;
   createdAt: string;
@@ -24,7 +24,7 @@ export interface EventTag {
   };
 }
 
-export interface EventImage {
+export interface IEventImage {
   id: number;
   imageUrl: string;
   altText: string;
@@ -34,13 +34,13 @@ export interface EventImage {
   eventId: number;
 }
 
-export interface Organization {
+export interface IOrganization {
   id: number;
   name: string;
   logoUrl: string | null;
 }
 
-export interface EventItem {
+export interface IEventItem {
   id: number;
   title: string;
   description: string;
@@ -56,27 +56,18 @@ export interface EventItem {
   updatedAt: string;
   createdById: number;
   organizationId: number;
-  categories: EventCategory[];
-  tags: EventTag[];
-  images: EventImage[];
-  organization: Organization;
+  categories: IEventCategory[];
+  tags: IEventTag[];
+  images: IEventImage[];
+  organization: IOrganization;
 }
 
-export interface CalendarDay {
-  date: string; // e.g. "2025-10-01"
+export interface ICalendarDay {
+  date: string;
   day: number;
   dayOfWeek: string;
-  events: EventItem[];
+  events: IEventItem[];
   eventCount: number;
-}
-
-export interface EventCalendarResponse {
-  statusCode: number;
-  success: boolean;
-  message: string;
-  data: EventCalendarData;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  meta: any | null;
 }
 
 export interface EventCalendarData {
@@ -84,5 +75,5 @@ export interface EventCalendarData {
   month: number;
   monthName: string;
   totalEvents: number;
-  calendar: CalendarDay[];
+  calendar: ICalendarDay[];
 }

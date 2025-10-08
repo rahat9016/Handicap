@@ -32,9 +32,9 @@ export default function SignUp() {
     mutateAsync: verifyOTP,
     isPending: otpIsPending,
     error: otpError,
-  } = usePost("/auth/verify-otp");
+  } = usePost("/auth/verify-user");
 
-  const { mutate: resendOTP } = usePost("/auth/resend-otp");
+  const { mutate: resendOTP } = usePost("/auth/resend-otp-verify-user");
   const onSubmit: SubmitHandler<CombinedForm> = (data: CombinedForm) => {
     console.log(data);
     if (step === 0) {
@@ -78,7 +78,7 @@ export default function SignUp() {
       case 1:
         return <OtpVerifyForm resendOTPHandler={resendOTPHandler} />;
       default:
-        return null;
+        return <SignUpForm />;
     }
   };
 

@@ -30,7 +30,7 @@ const WelcomeDisability = () => {
       className="py-8 sm:py-12 lg:py-16 xl:py-20 bg-cover bg-center"
     >
       <div className="container px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col items-center lg:flex-row gap-8 lg:gap-10 xl:gap-12 mt-5 lg:mt-10 xl:mt-14">
+        <div className="flex flex-col items-center lg:flex-row gap-8 lg:gap-10 xl:gap-12">
           {/* Image Section */}
           <div className="w-full lg:w-1/2 order-2 lg:order-1">
             <div
@@ -51,18 +51,18 @@ const WelcomeDisability = () => {
           </div>
 
           {/* Content Section */}
-          <div className="w-full lg:w-1/2 order-1 lg:order-2">
+          <div className="@container w-full flex flex-col lg:w-1/2 order-1 lg:order-2">
             <h1
               className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl text-primary font-inter font-semibold mt-2 lg:mt-4 leading-tight"
               tabIndex={0}
             >
               {data?.data?.title?.[local] ?? data?.data?.title?.en}
             </h1>
-            
+
             <div tabIndex={0} className="mt-4 lg:mt-6">
               {local === "en" ? (
                 <div
-                  className="text-sm sm:text-base font-inter text-[#353535] font-normal leading-relaxed sm:leading-[28px]"
+                  className="text-sm text-justify  sm:text-base font-inter text-[#353535] font-normal leading-relaxed sm:leading-[28px]"
                   tabIndex={0}
                   dangerouslySetInnerHTML={{
                     __html:
@@ -85,13 +85,13 @@ const WelcomeDisability = () => {
               )}
             </div>
 
-            <Button 
-              onClick={() => router.push("/about")} 
-              className="bg-transparent hover:bg-transparent text-pureBlack hover:text-[#01014E] shadow-none text-base font-inter font-semibold mt-6 lg:mt-8 px-0 hover:translate-x-2 transition-transform duration-300"
+            <div
+              onClick={() => router.push("/about")}
+              className="group flex items-center justify-center rounded-lg mt-10  w-full lg:w-[20%] border text-pureBlack hover:text-[#01014E] hover:shadow-lg text-base font-inter font-semibold px-4 py-2 cursor-pointer transition-all duration-300"
             >
-              See more 
-              <MoveRight className="ml-2 w-4 h-4 sm:w-5 sm:h-5" />
-            </Button>
+              See more
+              <MoveRight className="ml-2 w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 duration-300" />
+            </div>
           </div>
         </div>
       </div>

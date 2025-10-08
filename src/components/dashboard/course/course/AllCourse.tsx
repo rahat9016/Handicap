@@ -78,130 +78,145 @@ export default function AllCourse() {
     if (data) {
       setTotalItems(data.meta?.totalItems || 0);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
   const columns: ColumnDef<ICourse>[] = useMemo(() => {
-  return [
-    {
-      header: "Thumbnail",
-      accessorKey: "thumbnailUrl",
-      cell: (_value: string | number | undefined, row: ICourse) => (
-        <div className="w-14 h-14 p-1 border flex items-center justify-center rounded-md cursor-pointer hover:opacity-80">
-          {row?.thumbnailUrl && (
-            <Image
-              src={row.thumbnailUrl}
-              width={44}
-              height={44}
-              alt="thumbnail"
-              className="rounded"
-            />
-          )}
-        </div>
-      ),
-    },
-    { header: "Resource Title", accessorKey: "title" },
-    { header: "Description", accessorKey: "description" },
-    {
-      header: "Category",
-      accessorKey: "CourseCategory",
-      cell: (_value: string | number | undefined, row: ICourse) => <span>{row?.CourseCategory?.name}</span>,
-    },
-    {
-      header: "Organization",
-      accessorKey: "organization",
-      cell: (_value: string | number | undefined, row: ICourse) => <span>{row?.organization?.name}</span>,
-    },
-    {
-      header: "Course Type",
-      accessorKey: "courseType",
-    },
-    { header: "Duration ", accessorKey: "durationMinutes" },
-    { header: "Objectives", accessorKey: "objectives" },
-    {
-      header: "Is Active",
-      accessorKey: "isActive",
-      cell: (value: boolean | undefined) => {
-        return (
-          <span
-            className={`px-2 py-1 rounded-full text-xs font-medium ${
-              value ? "bg-[#bfffda] text-green" : "bg-rose-200 text-rose-700"
-            }`}
-          >
-            {value ? "Active" : "Inactive"}
-          </span>
-        );
+    return [
+      {
+        header: "Thumbnail",
+        accessorKey: "thumbnailUrl",
+        cell: (_value: string | number | undefined, row: ICourse) => (
+          <div className="w-14 h-14 p-1 border flex items-center justify-center rounded-md cursor-pointer hover:opacity-80">
+            {row?.thumbnailUrl && (
+              <Image
+                src={row.thumbnailUrl}
+                width={44}
+                height={44}
+                alt="thumbnail"
+                className="rounded"
+              />
+            )}
+          </div>
+        ),
       },
-    },
-    {
-      header: "Is Publish",
-      accessorKey: "isPublished",
-      cell: (value: boolean | undefined) => {
-        return (
-          <span
-            className={`px-2 py-1 rounded-full text-xs font-medium ${
-              value ? "bg-[#bfffda] text-green" : "bg-rose-200 text-rose-700"
-            }`}
-          >
-            {value ? "Published" : "Unpublished"}
-          </span>
-        );
+      { header: "Resource Title", accessorKey: "title" },
+      { header: "Description", accessorKey: "description" },
+      {
+        header: "Category",
+        accessorKey: "CourseCategory",
+        cell: (_value: string | number | undefined, row: ICourse) => (
+          <span>{row?.CourseCategory?.name}</span>
+        ),
       },
-    },
-    adminOrganizationPermission
-      ? {
-          header: "Action",
-          accessorKey: "id",
-          cell: (value: string | number | undefined) => {
-            return (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <button className="p-1 border border-skeleton rounded bg-[#F5F5F5] cursor-pointer">
-                    <EllipsisVertical className="text-lg text-darkLiver" />
-                  </button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-40">
-                  <DropdownMenuItem
-                    onClick={() => router.push(`/admin/course/course-view-details/${value}`)}
-                    className="flex items-center gap-1 text-darkLiver font-inter font-normal text-sm"
-                  >
-                    <Eye /> View Course
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    onClick={() => router.push(`/admin/course/course-video-upload/${value}`)}
-                    className="flex items-center gap-1 text-darkLiver font-inter font-normal text-sm"
-                  >
-                    <Video />
-                    Add Video
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    onClick={() => router.push(`/admin/course/course-quiz-upload/${value}`)}
-                    className="flex items-center gap-1 text-darkLiver font-inter font-normal text-sm"
-                  >
-                    <MessageCircleQuestionMark />
-                    Add Quiz
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    onClick={() => router.push(`/admin/course/course-update/${value}`)}
-                    className="flex items-center gap-1 text-darkLiver font-inter font-normal text-sm"
-                  >
-                    <SquarePen />
-                    Edit Course
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            );
-          },
-        }
-      : undefined,
-  ].filter(Boolean) as ColumnDef<ICourse>[];
-}, [adminOrganizationPermission, router]);
-
+      {
+        header: "Organization",
+        accessorKey: "organization",
+        cell: (_value: string | number | undefined, row: ICourse) => (
+          <span>{row?.organization?.name}</span>
+        ),
+      },
+      {
+        header: "Course Type",
+        accessorKey: "courseType",
+      },
+      { header: "Duration ", accessorKey: "durationMinutes" },
+      { header: "Objectives", accessorKey: "objectives" },
+      {
+        header: "Is Active",
+        accessorKey: "isActive",
+        cell: (value: boolean | undefined) => {
+          return (
+            <span
+              className={`px-2 py-1 rounded-full text-xs font-medium ${
+                value ? "bg-[#bfffda] text-green" : "bg-rose-200 text-rose-700"
+              }`}
+            >
+              {value ? "Active" : "Inactive"}
+            </span>
+          );
+        },
+      },
+      {
+        header: "Is Publish",
+        accessorKey: "isPublished",
+        cell: (value: boolean | undefined) => {
+          return (
+            <span
+              className={`px-2 py-1 rounded-full text-xs font-medium ${
+                value ? "bg-[#bfffda] text-green" : "bg-rose-200 text-rose-700"
+              }`}
+            >
+              {value ? "Published" : "Unpublished"}
+            </span>
+          );
+        },
+      },
+      adminOrganizationPermission
+        ? {
+            header: "Action",
+            accessorKey: "id",
+            cell: (value: string | number | undefined) => {
+              return (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <button className="p-1 border border-skeleton rounded bg-[#F5F5F5] cursor-pointer">
+                      <EllipsisVertical className="text-lg text-darkLiver" />
+                    </button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-40">
+                    <DropdownMenuItem
+                      onClick={() =>
+                        router.push(
+                          `/admin/course/course-view-details/${value}`
+                        )
+                      }
+                      className="flex items-center gap-1 text-darkLiver font-inter font-normal text-sm"
+                    >
+                      <Eye /> View Course
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      onClick={() =>
+                        router.push(
+                          `/admin/course/course-video-upload/${value}`
+                        )
+                      }
+                      className="flex items-center gap-1 text-darkLiver font-inter font-normal text-sm"
+                    >
+                      <Video />
+                      Add Video
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      onClick={() =>
+                        router.push(`/admin/course/course-quiz-upload/${value}`)
+                      }
+                      className="flex items-center gap-1 text-darkLiver font-inter font-normal text-sm"
+                    >
+                      <MessageCircleQuestionMark />
+                      Add Quiz
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      onClick={() =>
+                        router.push(`/admin/course/course-update/${value}`)
+                      }
+                      className="flex items-center gap-1 text-darkLiver font-inter font-normal text-sm"
+                    >
+                      <SquarePen />
+                      Edit Course
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              );
+            },
+          }
+        : undefined,
+    ].filter(Boolean) as ColumnDef<ICourse>[];
+  }, [adminOrganizationPermission, router]);
 
   const options = mapToSelectOptions(organizationsData?.data, "name", "id");
 
   return (
-    <div className="bg-white p-8 min-h-[85vh] border border-skeleton rounded-2xl">
+    <div className="bg-white p-4 lg:p-8 min-h-[85vh] border border-skeleton rounded-2xl">
       <DataTable
         columns={columns}
         data={Array.isArray(data?.data) ? data.data : []}

@@ -131,7 +131,7 @@ export default function Login() {
                     />
                   </div>
                   <Link
-                    href="#"
+                    href="/forgot-password"
                     className="font-medium text-primary mt-3 block text-right"
                   >
                     Forgot password?
@@ -144,7 +144,7 @@ export default function Login() {
                 )}
                 <div>
                   <Button
-                  disabled={isPending}
+                    disabled={isPending}
                     type="submit"
                     className="w-full rounded-[--radius] bg-dashboard-primary text-white hover:bg-dashboard-primary hover:text-white mt-3"
                   >

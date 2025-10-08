@@ -36,10 +36,18 @@ export function ProfileDropdown() {
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuLabel>My Account</DropdownMenuLabel>
-        {roleName === "ADMIN" && (
+        {roleName === "SUPER_ADMIN" && (
           <DropdownMenuLabel
             className="cursor-pointer"
             onClick={() => router.push("/admin")}
+          >
+            Admin
+          </DropdownMenuLabel>
+        )}
+        {roleName === "ADMIN" && (
+          <DropdownMenuLabel
+            className="cursor-pointer"
+            onClick={() => router.push("/organization-list")}
           >
             Admin
           </DropdownMenuLabel>

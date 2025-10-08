@@ -1,26 +1,28 @@
 "use client";
-import { notFound, useParams } from "next/navigation";
-import { ArrowLeft, Calendar, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useGet } from "@/hooks/useGet";
+import { ArrowLeft, Calendar, MapPin } from "lucide-react";
 import Link from "next/link";
-import Image from "next/image";
-import { sampleEvents } from "@/components/main/events/EventCalendar"; 
+import { useParams } from "next/navigation";
+// import { sampleEvents } from "@/components/main/events/EventCalendar";
 
 const EventDetails = () => {
   const { locale, id } = useParams();
-  const event = sampleEvents.find((e) => e.id === id);
-  if (!event) {
-    notFound();
-  }
+  const { data } = useGet(`/events/${id}`, ["events", String(id)]);
+  console.log(data?.data);
+  // const event = sampleEvents.find((e) => e.id === id);
+  // if (!data?.data) {
+  //   notFound();
+  // }
 
-  const formatDate = (date: Date) => {
-    return date.toLocaleDateString("en-US", {
-      weekday: "long",
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
-  };
+  // const formatDate = (date: Date) => {
+  //   return date.toLocaleDateString("en-US", {
+  //     weekday: "long",
+  //     year: "numeric",
+  //     month: "long",
+  //     day: "numeric",
+  //   });
+  // };
 
   return (
     <div className="my-20 w-full min-h-screen bg-background">
@@ -40,22 +42,22 @@ const EventDetails = () => {
             <div className="flex items-center gap-2">
               <Calendar className="h-5 w-5 text-muted-foreground" />
               <span className="text-sm text-muted-foreground">
-                {formatDate(event.date)}
+                {/* {formatDate(data.date)} */}
               </span>
             </div>
           </div>
           <h1 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">
-            {event.title}
+            {/* {event.title} */}
           </h1>
-          {event.description && (
+          {/* {event.description && (
             <p className="text-lg text-muted-foreground leading-relaxed">
               {event.description}
             </p>
-          )}
+          )} */}
         </div>
 
         {/* Event Image */}
-        {event.image && (
+        {/* {event.image && (
           <div className="mb-8">
             <div className="relative aspect-video rounded-lg overflow-hidden bg-muted">
               <Image
@@ -67,7 +69,7 @@ const EventDetails = () => {
               />
             </div>
           </div>
-        )}
+        )} */}
 
         {/* Event Details */}
         <div className="bg-card rounded-lg border border-border p-6 mb-8">
@@ -78,7 +80,7 @@ const EventDetails = () => {
               <div>
                 <div className="font-medium">Date & Time</div>
                 <div className="text-muted-foreground">
-                  {formatDate(event.date)}
+                  {/* {formatDate(event.date)} */}
                 </div>
               </div>
             </div>
@@ -95,7 +97,7 @@ const EventDetails = () => {
         </div>
 
         {/* Full Description */}
-        {event.fullDescription && (
+        {/* {event.fullDescription && (
           <div className="bg-card rounded-lg border border-border p-6">
             <h2 className="text-2xl font-semibold mb-4">About This Event</h2>
             <div className="prose prose-neutral dark:prose-invert max-w-none">
@@ -104,7 +106,7 @@ const EventDetails = () => {
               </p>
             </div>
           </div>
-        )}
+        )} */}
       </div>
     </div>
   );

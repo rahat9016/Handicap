@@ -17,9 +17,10 @@ import OtpVerifyForm from "./OtpVerifyForm";
 import { OTPForm, SignupForm, signupValidationSchemas } from "./Schema/Signup";
 import SignUpForm from "./SignUpForm";
 type CombinedForm = SignupForm & Partial<OTPForm>;
+
 export default function SignUp() {
   const [step, setStep] = useState(0);
-  const router = useRouter()
+  const router = useRouter();
   const methods = useForm<SignupForm>({
     resolver: yupResolver(
       signupValidationSchemas[step] as yup.ObjectSchema<any>
@@ -27,11 +28,13 @@ export default function SignUp() {
     mode: "onChange",
   });
   const { mutateAsync: signup, isPending, error } = usePost("/auth/register");
-  const { mutateAsync: verifyOTP, isPending: otpIsPending, error: otpError } =
-    usePost("/auth/verify-otp");
+  const {
+    mutateAsync: verifyOTP,
+    isPending: otpIsPending,
+    error: otpError,
+  } = usePost("/auth/verify-otp");
 
-  const { mutate: resendOTP } =
-    usePost("/auth/resend-otp");
+  const { mutate: resendOTP } = usePost("/auth/resend-otp");
   const onSubmit: SubmitHandler<CombinedForm> = (data: CombinedForm) => {
     console.log(data);
     if (step === 0) {
@@ -41,7 +44,7 @@ export default function SignUp() {
     } else {
       // Handle OTP submission logic here
       const otpData: OTPForm = {
-        email: data.email,  // Ensure email is included in OTP data
+        email: data.email, // Ensure email is included in OTP data
         otp: data?.otp as string,
       };
       verifyOTP(otpData).then(() => {
@@ -56,11 +59,10 @@ export default function SignUp() {
     }
   };
 
-
   const resendOTPHandler = () => {
-    console.log('Resending OTP...');
+    console.log("Resending OTP...");
     const email = methods.getValues("email");
-    if(!email) {
+    if (!email) {
       toast.error("Email is required to resend OTP");
       return;
     }
@@ -79,7 +81,7 @@ export default function SignUp() {
         return null;
     }
   };
-  console.log(error?.errors);
+
   return (
     <div>
       <HeroSection />
@@ -121,7 +123,13 @@ export default function SignUp() {
                     type="submit"
                     className="w-full bg-dashboard-primary hover:bg-dashboard-primary text-white mt-6"
                   >
-                    {isPending ? "Loading..." : otpIsPending ?  "Loading..." : step === 0 ? "Register" : "Verified OTP"}
+                    {isPending
+                      ? "Loading..."
+                      : otpIsPending
+                      ? "Loading..."
+                      : step === 0
+                      ? "Register"
+                      : "Verified OTP"}
                   </Button>
                 </div>
               </form>

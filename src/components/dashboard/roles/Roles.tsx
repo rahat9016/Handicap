@@ -11,25 +11,25 @@ import { IRole } from "./types/Role";
 export default function Roles() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const { search, handleSearchChange, debouncedSearch } =
-      useSearchDebounce(300);
+    useSearchDebounce(300);
   const {
     setCurrentPage,
     itemsPerPage,
     currentPage,
     totalItems,
     setTotalItems,
-    setItemsPerPage
+    setItemsPerPage,
   } = usePagination();
   const { data, isLoading } = useGet<IRole[]>(
     "/roles",
     ["roles", currentPage.toString()],
     {
-    ...(itemsPerPage !== -1 && {
-      page: currentPage.toString(),
-      limit: itemsPerPage.toString(),
-    }),
-    search: debouncedSearch,
-  }
+      ...(itemsPerPage !== -1 && {
+        page: currentPage.toString(),
+        limit: itemsPerPage.toString(),
+      }),
+      search: debouncedSearch,
+    }
   );
 
   // Update total items whenever data changes
@@ -37,7 +37,7 @@ export default function Roles() {
     if (data) {
       setTotalItems(data.meta?.totalItems || 0);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
   // const handleEdit = (row: IRole) => {
@@ -54,13 +54,13 @@ export default function Roles() {
     { header: "Description", accessorKey: "description" },
     { header: "Parent Role ID", accessorKey: "parentRoleId" },
     {
-          header: "Created date",
-          accessorKey: "createdAt",
-          cell: (value) => {
-            const date = new Date(value as string);
-            return <span>{format(date, "dd MMM yyyy")}</span>;
-          },
-        },
+      header: "Created date",
+      accessorKey: "createdAt",
+      cell: (value) => {
+        const date = new Date(value as string);
+        return <span>{format(date, "dd MMM yyyy")}</span>;
+      },
+    },
     {
       header: "Is Active",
       accessorKey: "isSystemRole",
@@ -70,9 +70,7 @@ export default function Roles() {
         return (
           <span
             className={`px-2 py-1 rounded-full text-xs font-medium ${
-              isActive
-                ? "bg-[#bfffda] text-green"
-                : "bg-rose-200 text-rose-700"
+              isActive ? "bg-[#bfffda] text-green" : "bg-rose-200 text-rose-700"
             }`}
           >
             {isActive ? "Active" : "Inactive  "}
@@ -80,10 +78,9 @@ export default function Roles() {
         );
       },
     },
-    
   ];
   return (
-    <div className="bg-white p-8 min-h-[85vh] border border-skeleton rounded-2xl">
+    <div className="bg-white p-4 lg:p-8 min-h-[85vh] border border-skeleton rounded-2xl">
       <DataTable
         columns={columns}
         data={Array.isArray(data?.data) ? data.data : []}
@@ -106,11 +103,9 @@ export default function Roles() {
         isOpen={isModalOpen}
         onClose={() => {
           setIsModalOpen(false);
-          
         }}
         // initialValues={role}
       />
-      
     </div>
   );
 }

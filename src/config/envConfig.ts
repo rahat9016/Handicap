@@ -7,5 +7,5 @@ export const getBaseUrl = (): string => {
     process.env.NEXT_PUBLIC_API_BASE_URL ||
     "http://192.168.100.240:4047/handicap/api/v1"
   ); //
-  return process.env.NEXT_PUBLIC_API_BASE_URL || "http://192.168.0.3:4047/handicap/api/v1"; // uat server API
+  // return process.env.NEXT_PUBLIC_API_BASE_URL || "http://192.168.0.3:4047/handicap/api/v1"; // uat server API
 };

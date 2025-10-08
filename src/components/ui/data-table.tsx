@@ -224,7 +224,7 @@ export function DataTable<T>({
 
   return (
     <>
-      <div className="flex items-center gap-3 mb-6">
+      <div className="flex flex-col lg:flex-row lg:items-center gap-3 lg:mb-6">
         <TableTopBarHeader
           icon={icon}
           title={title}
@@ -312,7 +312,7 @@ export function DataTable<T>({
         </DropdownMenu>
         {IsCreate && (
           <Button
-            className="text-white font-inter text-sm font-medium bg-rose-600 hover:bg-rose-700 h-11 gap-1 !px-6"
+            className="text-white font-inter text-sm font-medium bg-rose-600 hover:bg-rose-700 h-11 gap-1 !px-6 mb-3 lg:mb-0"
             onClick={() => {
               if (routeURL) {
                 router.push(routeURL);

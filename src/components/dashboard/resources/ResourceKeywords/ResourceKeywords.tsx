@@ -104,7 +104,7 @@ export default function ResourceKeywords() {
   ].filter(Boolean) as ColumnDef<IKeywords>[];
 
   return (
-    <div className="bg-white p-8 min-h-[85vh] border border-skeleton rounded-2xl">
+    <div className="bg-white p-4 lg:p-8 min-h-[85vh] border border-skeleton rounded-2xl">
       <DataTable
         columns={columns}
         data={Array.isArray(data?.data) ? data.data : []}

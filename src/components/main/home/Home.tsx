@@ -1,7 +1,6 @@
 import FindResources from "./FindResources";
 import HomeHeroSection from "./HomeHeroSection";
 import JoinOurCommunity from "./JoinOurCommunity";
-import KeyDocuments from "./KeyDocuments";
 import OurHonorableFounders from "./OurHonorableFounders";
 import PlatformStatistics from "./PlatformStatistics";
 import QuickAccess from "./QuickAccess";
@@ -18,7 +17,7 @@ const Home = () => {
       <FindResources />
       <QuickAccess />
       <TrainingModule />
-      <KeyDocuments />
+      {/* <KeyDocuments /> */}
       <JoinOurCommunity />
       <ThankyouSection />
       <OurHonorableFounders />

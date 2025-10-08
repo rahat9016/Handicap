@@ -8,8 +8,8 @@ import { useAppSelector } from "@/lib/redux/hooks";
 import { format } from "date-fns";
 import { FileCog, SquarePen } from "lucide-react";
 import { useEffect, useState } from "react";
-import { ICategory } from "./types/Categories";
 import CreateUpdateCategories from "./CreateUpdateCategories";
+import { ICategory } from "./types/Categories";
 
 export default function EventsCategories() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -48,7 +48,7 @@ export default function EventsCategories() {
     if (data) {
       setTotalItems(data.meta?.totalItems || 0);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
   const handleEdit = (row: ICategory) => {
@@ -107,7 +107,7 @@ export default function EventsCategories() {
   ].filter(Boolean) as ColumnDef<ICategory>[];
 
   return (
-    <div className="bg-white p-8 min-h-[85vh] border border-skeleton rounded-2xl">
+    <div className="bg-white p-4 lg:p-8 min-h-[85vh] border border-skeleton rounded-2xl">
       <DataTable
         columns={columns}
         data={Array.isArray(data?.data) ? data.data : []}

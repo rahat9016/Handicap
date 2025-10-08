@@ -1,5 +1,9 @@
+import { IOrganization } from "@/components/organizer/types";
 import { ControlledCheckField } from "@/components/share/ControlledCheckField";
+import ControlledDatePicker from "@/components/share/ControlledDatePicker";
 import ControlledInputField from "@/components/share/ControlledInputField";
+import ControlledMultiSelectField from "@/components/share/ControlledMultiSelectField";
+import ControlledSelectField from "@/components/share/ControlledSelectField";
 import InputLabel from "@/components/share/InputLabel";
 import MultipleImageFileInput from "@/components/share/MultipleImageFileInput";
 import { Button } from "@/components/ui/button";
@@ -9,14 +13,17 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { useGet } from "@/hooks/useGet";
 import { usePatch } from "@/hooks/usePatch";
 import { usePost } from "@/hooks/usePost";
+import { mapToSelectOptions } from "@/utils/mapToSelectOptions";
 import { yupResolver } from "@hookform/resolvers/yup";
 import dynamic from "next/dynamic";
+import { useEffect } from "react";
 import { FieldError, FormProvider, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import { PageSectionForm, pageSectionSchema } from "./schema";
-import { IEvent } from "./types";
+import { EventForm, eventSchema } from "./schema";
+import { ICategory, IEvent, ITag } from "./types";
 
 const EditorWrapper = dynamic(
   () => import("@/components/share/EditorWrapper"),
@@ -34,77 +41,128 @@ export default function CreateEventModal({
   onClose,
   initialValues,
 }: CreateUpdateEventModalProps) {
-  const { mutateAsync, error } = usePost(
+  const { data } = useGet<ICategory[]>("/event-categories", [
+    "event-categories",
+  ]);
+  const { data: tagData } = useGet<ITag[]>("/event-tags", ["event-tags"]);
+  const { data: organizationData } = useGet<IOrganization[]>(`/organizations`, [
+    "organizations",
+  ]);
+  const {
+    mutateAsync,
+    error,
+    reset: eventReset,
+  } = usePost(
     "/events",
     (data) => {
       console.log("POST success", data);
     },
     [["events"]]
   );
-  const { mutateAsync: patchAsync, error: patchError } = usePatch<FormData>(
-    (data) => console.log("Success", data),
-    [["events"]]
-  );
+  const {
+    mutateAsync: patchAsync,
+    error: patchError,
+    reset: patchReset,
+  } = usePatch<FormData>((data) => console.log("Success", data), [["events"]]);
   const isEditMode = !!initialValues;
-  const methods = useForm<PageSectionForm>({
-    resolver: yupResolver(pageSectionSchema),
+  const methods = useForm<EventForm>({
+    resolver: yupResolver(eventSchema),
     defaultValues: {
-      isActive: true,
+      isPublished: false,
+      isOnline: false,
     },
     mode: "onChange",
   });
+  const {
+    formState: { errors },
+  } = methods;
 
-  // useEffect(() => {
-  //   if (initialValues) {
-  //     methods.reset({
-  //       ...initialValues,
-  //       images: initialValues?.imageUrls,
-  //       isActive: Boolean(initialValues?.isActive),
-  //       title: initialValues?.title?.en,
-  //       titleBn: initialValues?.title?.bn,
-  //       content: initialValues?.content?.en,
-  //       contentBn: initialValues?.content.bn ?? "",
-  //       subtitle: initialValues?.subtitle?.en,
-  //       subtitleBn: initialValues?.subtitle?.bn ?? "",
-  //       buttonLabel: initialValues.buttonLabel.en ?? "",
-  //       buttonLabelBn: initialValues.buttonLabel.bn ?? "",
-  //       buttonUrl: initialValues?.buttonUrl,
-  //     });
-  //   }
-  // }, [initialValues, methods]);
+  useEffect(() => {
+    if (initialValues) {
+      methods.reset({
+        // Simple fields
+        title: initialValues.title || "",
+        description: initialValues.description || "",
+        summary: initialValues.summary || "",
+        featuredImage: initialValues.featuredImage || "",
+        location: initialValues.location || "",
+        address: initialValues.address || "",
+        startDate: initialValues.startDate
+          ? new Date(initialValues.startDate)
+          : undefined,
+        endDate: initialValues.endDate
+          ? new Date(initialValues.endDate)
+          : undefined,
+        isOnline: Boolean(initialValues.isOnline),
+        isPublished: Boolean(initialValues.isPublished),
+        organizationId: initialValues.organizationId || 0,
 
-  const onSubmit = (data: PageSectionForm) => {
+        categoryIds: initialValues.categories[0]?.categoryId,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        tagIds: initialValues.tags?.map((t: any) => t.tagId) || [],
+        images:
+          initialValues.images?.map(
+            (img: { imageUrl: string }) => img.imageUrl
+          ) || [],
+      });
+    }
+  }, [initialValues, methods]);
+  useEffect(() => {
+    if (!isOpen) {
+      methods.reset({
+        title: "",
+        description: "",
+        summary: "",
+        featuredImage: "",
+        location: "",
+        address: "",
+        startDate: undefined,
+        endDate: undefined,
+        isOnline: false,
+        isPublished: false,
+        organizationId: 0,
+        categoryIds: undefined,
+        tagIds: [],
+        images: [],
+      });
+
+      eventReset?.();
+      patchReset?.();
+    }
+  }, [isOpen, methods, eventReset, patchReset]);
+
+  const onSubmit = (data: EventForm) => {
     const formData = new FormData();
-    formData.append("pageId", data.pageId);
-    formData.append("sectionType", data.sectionType);
-    formData.append("order", data.order.toString());
-    formData.append("isActive", String(data.isActive));
 
-    // Optional fields
-    if (data.title) formData.append("title", data.title);
-    if (data.titleBn) formData.append("titleBn", data.titleBn);
-    if (data.subtitle) formData.append("subtitle", data.subtitle);
-    if (data.subtitleBn) formData.append("subtitleBn", data.subtitleBn);
-    if (data.content) formData.append("content", data.content);
-    if (data.contentBn) formData.append("contentBn", data.contentBn);
-    if (data.buttonLabel) formData.append("buttonLabel", data.buttonLabel);
-    if (data.buttonLabelBn)
-      formData.append("buttonLabelBn", data.buttonLabelBn);
-    if (data.buttonUrl) formData.append("buttonUrl", data.buttonUrl);
-
-    // Handle image
-    const currentImages = data.images || [];
-    const newFiles = currentImages.filter((img) => img instanceof File);
-    // const existingUrls = currentImages.filter(
-    //   (img) => typeof img === "string"
-    // ) as string[];
-
-    // Append new files
-    newFiles.forEach((file) => formData.append("images", file));
+    formData.append("title", data.title);
+    formData.append("description", data.description);
+    formData.append("summary", data.summary);
+    formData.append("featuredImage", data.featuredImage || "");
+    formData.append("location", data.location || "");
+    formData.append("address", data.address || "");
+    const startDateIso =
+      data.startDate instanceof Date
+        ? data.startDate.toISOString()
+        : data.startDate;
+    const endDateIso =
+      data.endDate instanceof Date ? data.endDate.toISOString() : data.endDate;
+    formData.append("startDate", String(startDateIso));
+    formData.append("endDate", String(endDateIso));
+    formData.append("isOnline", String(data.isOnline));
+    formData.append("isPublished", String(data.isPublished));
+    formData.append("organizationId", String(data.organizationId));
+    formData.append("categoryIds", String(data.categoryIds));
+    (data.tagIds || []).forEach((id) => {
+      if (id) formData.append("tagIds", String(id));
+    });
+    (data.images || []).forEach((img: File | string) => {
+      if (typeof img === "string") formData.append("images", img);
+      else formData.append("images", img);
+    });
 
     if (isEditMode) {
       patchAsync({
-        url: `/page-sections/${initialValues?.id}`,
+        url: `/events/${initialValues?.id}`,
         data: formData,
       }).then(() => {
         console.log("Page section updated successfully");
@@ -126,7 +184,13 @@ export default function CreateEventModal({
         console.error(error);
       });
   };
-
+  const categoryOptions = mapToSelectOptions(data?.data, "name", "id");
+  const tagOptions = mapToSelectOptions(tagData?.data, "name", "id");
+  const organizationOptions = mapToSelectOptions(
+    organizationData?.data,
+    "name",
+    "id"
+  );
   return (
     <Dialog
       open={isOpen}
@@ -137,7 +201,9 @@ export default function CreateEventModal({
     >
       <DialogContent className="bg-white !max-w-[60vw] w-[60vw] max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Create Page Section</DialogTitle>
+          <DialogTitle>
+            {isEditMode ? "Update Event" : "Create Event"}
+          </DialogTitle>
         </DialogHeader>
         <FormProvider {...methods}>
           <form
@@ -145,96 +211,96 @@ export default function CreateEventModal({
             className="w-full space-y-6"
           >
             <div className="grid grid-cols-2 gap-4">
-              {/* Required Fields */}
               <div>
-                <InputLabel label="Page" required />
-                <ControlledInputField name="title" />
-              </div>
-              <div>
-                <InputLabel label="Section Type" required />
-              </div>
-
-              <div>
-                <InputLabel label="Order" required />
-                <ControlledInputField
-                  name="order"
-                  type="number"
-                  placeholder="Enter display order (e.g., 1, 2, 3...)"
-                />
-              </div>
-
-              {/* Content Fields */}
-              <div>
-                <InputLabel label="Title (English)" />
+                <InputLabel label="Title" required />
                 <ControlledInputField
                   name="title"
-                  placeholder="Main heading for the section (EN)"
+                  placeholder="Write here your event name..."
+                />
+              </div>
+              <div>
+                <InputLabel label="Event Location" />
+                <ControlledInputField
+                  name="location"
+                  placeholder="Write here your event location..."
                 />
               </div>
 
               <div>
-                <InputLabel label="Title (Bangla)" />
+                <InputLabel label="Address" />
                 <ControlledInputField
-                  name="titleBn"
-                  placeholder="Main heading for the section (BN)"
+                  name="address"
+                  placeholder="Write here your event address"
+                />
+              </div>
+              <div>
+                <InputLabel label="Featured image URL" />
+                <ControlledInputField
+                  name="featuredImage"
+                  placeholder="Write here your featured image URL..."
                 />
               </div>
 
               <div>
-                <InputLabel label="Subtitle (English)" />
-                <ControlledInputField
-                  name="subtitle"
-                  placeholder="Secondary heading for the section (EN)"
-                />
+                <InputLabel label="Start Date" />
+                <ControlledDatePicker name="startDate" />
+              </div>
+              <div>
+                <InputLabel label="End Date" />
+                <ControlledDatePicker name="endDate" />
               </div>
 
-              <div>
-                <InputLabel label="Subtitle (Bangla)" />
-                <ControlledInputField
-                  name="subtitleBn"
-                  placeholder="Secondary heading for the section (BN)"
-                />
-              </div>
-              <div className="col-span-2">
-                <InputLabel label="Content (English)" />
+              <div className="col-span-1">
+                <InputLabel label="Description" required />
                 <EditorWrapper
-                  value={methods.watch("content") || ""}
-                  onChange={(value) => methods.setValue("content", value)}
+                  value={methods.watch("description") || ""}
+                  onChange={(value) => methods.setValue("description", value)}
                 />
+                {errors?.description?.message && (
+                  <div className="text-rose-500 text-xs mt-1 pl-2">
+                    {errors.description.message}
+                  </div>
+                )}
               </div>
 
-              <div className="col-span-2">
-                <InputLabel label="Content (Bangla)" />
+              <div className="col-span-1">
+                <InputLabel label="Summary" required />
                 <EditorWrapper
-                  value={methods.watch("contentBn") || ""}
-                  onChange={(value) => methods.setValue("contentBn", value)}
+                  value={methods.watch("summary") || ""}
+                  onChange={(value) => methods.setValue("summary", value)}
                 />
-              </div>
-
-              {/* Action Fields */}
-              <div>
-                <InputLabel label="Button Label (English)" />
-                <ControlledInputField
-                  name="buttonLabel"
-                  placeholder="Text for call-to-action button (EN)"
-                />
+                {errors?.summary?.message && (
+                  <div className="text-rose-500 text-xs mt-1 pl-2">
+                    {errors.summary.message}
+                  </div>
+                )}
               </div>
               <div>
-                <InputLabel label="Button Label (Bangla)" />
-                <ControlledInputField
-                  name="buttonLabelBn"
-                  placeholder="Text for call-to-action button (BN)"
+                <InputLabel label="Category" required />
+                <ControlledSelectField
+                  name="categoryIds"
+                  placeholder="Please enter your category"
+                  options={categoryOptions}
                 />
               </div>
               <div>
-                <InputLabel label="Button URL" />
-                <ControlledInputField
-                  name="buttonUrl"
-                  placeholder="URL for the button (e.g., '/about')"
+                <InputLabel label="Tag" required />
+                <ControlledMultiSelectField
+                  name="tagIds"
+                  placeholder="Please enter your tag"
+                  options={tagOptions}
+                />
+              </div>
+              <div>
+                <InputLabel label="Organization" required />
+                <ControlledSelectField
+                  name="organizationId"
+                  placeholder="Please enter your tag"
+                  options={organizationOptions}
                 />
               </div>
               <div className="col-span-2">
-                <InputLabel label="Section Image" />
+                <InputLabel label="Event Images" />
                 <MultipleImageFileInput
                   name="images"
                   errors={{
@@ -244,10 +310,16 @@ export default function CreateEventModal({
               </div>
 
               {/* Status Field */}
-              <div className="col-span-2 flex items-center gap-2">
+              <div className="col-span-1 flex items-center gap-2">
                 <ControlledCheckField
                   name="isPublished"
-                  label="Published Section (Visible on website)"
+                  label="Is published events (Visible on website)"
+                />
+              </div>
+              <div className="col-span-1 flex items-center gap-2">
+                <ControlledCheckField
+                  name="isOnline"
+                  label="Is online events (Visible on website)"
                 />
               </div>
             </div>
@@ -271,7 +343,7 @@ export default function CreateEventModal({
                 type="submit"
                 className="min-w-[100px] bg-dashboard-primary hover:bg-dashboard-primary  text-white hover:text-white"
               >
-                {isEditMode ? "Update Section" : "Create Section"}
+                {isEditMode ? "Update Event" : "Create Event"}
               </Button>
             </div>
           </form>

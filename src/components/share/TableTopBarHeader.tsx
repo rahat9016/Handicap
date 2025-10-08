@@ -35,7 +35,7 @@ export default function TableTopBarHeader({
 }: TableHeaderProps) {
   const { hasPermission } = useAppSelector((state) => state.permission);
   return (
-    <div className="flex w-full items-center justify-between">
+    <div className="flex flex-col lg:flex-row w-full lg:items-center justify-between gap-4">
       <div className="flex items-center gap-3">
         <div className="flex items-center gap-2">
           {icon && (
@@ -66,7 +66,7 @@ export default function TableTopBarHeader({
         )}
       </div>
       {showSearch && (
-        <div className="ml-auto flex items-center w-[300px] border px-2 rounded-md">
+        <div className="ml-auto flex items-center w-full lg:w-[300px] border px-2 rounded-md">
           <Search />
           <Input
             placeholder={searchPlaceholder}

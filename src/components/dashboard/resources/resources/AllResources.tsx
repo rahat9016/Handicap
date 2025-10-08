@@ -60,7 +60,7 @@ export default function AllResources() {
     setResource(row);
     setIsView(true);
   };
-  
+
   useEffect(() => {
     if (data) setTotalItems(data.meta?.totalItems || 0);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -69,7 +69,7 @@ export default function AllResources() {
   const totalPages = Math.ceil(totalItems / itemsPerPage);
 
   return (
-    <div className="bg-white p-8 min-h-[85vh] border border-skeleton rounded-2xl">
+    <div className="bg-white p-4 lg:p-8 min-h-[85vh] border border-skeleton rounded-2xl">
       <ResourceTabs
         data={Array.isArray(data?.data) ? data.data : []}
         isLoading={isLoading}

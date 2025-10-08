@@ -13,19 +13,15 @@ const Header = () => {
   const {
     userInformation: { email },
   } = useAppSelector((state) => state.auth);
-
   const pathname = usePathname();
-
+  const [mobileOpen, setMobileOpen] = useState(false);
   const t = useTranslations("Header");
   const tNav = useTranslations("Nav");
-
-  const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
     <header className="pb-20 md:pb-20">
       <div className="fixed w-full top-0 z-50">
-        {/* Top accessibility bar */}
-        <div className="hidden lg:block w-full pt-2 sm:pt-3 bg-pureBlack">
+        <div className="w-full pt-2 sm:pt-3 bg-pureBlack">
           <div
             className="container px-4 sm:px-6 lg:px-8"
             aria-label="Nav bar"

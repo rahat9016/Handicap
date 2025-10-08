@@ -81,11 +81,7 @@ export default function PageSections() {
         _value: string | number | boolean | string[] | ILangType,
         row: IPageSection
       ) => {
-        return (
-          <div>
-            {row?.title?.en && <span>{row.title.en}</span>}
-          </div>
-        );
+        return <div>{row?.title?.en && <span>{row.title.en}</span>}</div>;
       },
     },
     {
@@ -95,11 +91,7 @@ export default function PageSections() {
         _value: string | number | boolean | string[] | ILangType,
         row: IPageSection
       ) => {
-        return (
-          <div >
-            {row?.title?.bn && <span>{row.title.bn}</span>}
-          </div>
-        );
+        return <div>{row?.title?.bn && <span>{row.title.bn}</span>}</div>;
       },
     },
     {
@@ -119,7 +111,6 @@ export default function PageSections() {
         );
       },
     },
-    
 
     {
       header: "Action",
@@ -140,7 +131,7 @@ export default function PageSections() {
     },
   ];
   return (
-    <div className="bg-white p-8 min-h-[85vh] border border-skeleton rounded-2xl">
+    <div className="bg-white p-4 lg:p-8 min-h-[85vh] border border-skeleton rounded-2xl">
       <DataTable
         columns={columns}
         data={Array.isArray(data?.data) ? data.data : []}

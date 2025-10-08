@@ -15,7 +15,7 @@ interface IOrganization {
   userName: string;
 }
 export default function AllOrganizerMapped() {
-  const { hasPermission } =useAppSelector(state => state.permission)
+  const { hasPermission } = useAppSelector((state) => state.permission);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [organizationTypes, setOrganizationTypes] =
     useState<UserOrganizationAssignment>();
@@ -52,34 +52,36 @@ export default function AllOrganizerMapped() {
     if (data) {
       setTotalItems(data.meta?.totalItems || 0);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
-  
+
   const columns: ColumnDef<IOrganization>[] = [
     { header: "User Name", accessorKey: "userName" },
     { header: "Organization Name", accessorKey: "organizationName" },
     { header: "Role", accessorKey: "role" },
 
-    hasPermission ? {
-      header: "Action",
-      accessorKey: "action",
-      cell: (_value: unknown, row: UserOrganizationAssignment) => {
-        return (
-          <div className="flex items-center gap-5">
-            <button
-              onClick={() => handleEdit(row as UserOrganizationAssignment)}
-              className="text-darkLiver hover:underline text-sm flex items-center gap-1"
-            >
-              <SquarePen size={16} />
-              Edit
-            </button>
-          </div>
-        );
-      },
-    }: undefined,
+    hasPermission
+      ? {
+          header: "Action",
+          accessorKey: "action",
+          cell: (_value: unknown, row: UserOrganizationAssignment) => {
+            return (
+              <div className="flex items-center gap-5">
+                <button
+                  onClick={() => handleEdit(row as UserOrganizationAssignment)}
+                  className="text-darkLiver hover:underline text-sm flex items-center gap-1"
+                >
+                  <SquarePen size={16} />
+                  Edit
+                </button>
+              </div>
+            );
+          },
+        }
+      : undefined,
   ].filter(Boolean) as ColumnDef<IOrganization>[];
   return (
-    <div className="bg-white p-8 min-h-[85vh] border border-skeleton rounded-2xl">
+    <div className="bg-white p-4 lg:p-8 min-h-[85vh] border border-skeleton rounded-2xl">
       <DataTable
         columns={columns}
         data={Array.isArray(data?.data) ? data.data : []}

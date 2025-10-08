@@ -28,16 +28,21 @@ export default function ResourceCategories() {
     useSearchDebounce(300);
 
   const { data, isLoading } = useGet<IResource[]>(
-  "/resource-categories",
-  ["resource-categories", currentPage.toString(), itemsPerPage.toString(), debouncedSearch],
-  {
-    ...(itemsPerPage !== -1 && {
-      page: currentPage.toString(),
-      limit: itemsPerPage.toString(),
-    }),
-    search: debouncedSearch,
-  }
-);
+    "/resource-categories",
+    [
+      "resource-categories",
+      currentPage.toString(),
+      itemsPerPage.toString(),
+      debouncedSearch,
+    ],
+    {
+      ...(itemsPerPage !== -1 && {
+        page: currentPage.toString(),
+        limit: itemsPerPage.toString(),
+      }),
+      search: debouncedSearch,
+    }
+  );
   const { hasPermission } = useAppSelector((state) => state.permission);
 
   // Update total items whenever data changes
@@ -45,7 +50,7 @@ export default function ResourceCategories() {
     if (data) {
       setTotalItems(data.meta?.totalItems || 0);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
   const handleEdit = (row: IResource) => {
@@ -104,7 +109,7 @@ export default function ResourceCategories() {
   ].filter(Boolean) as ColumnDef<IResource>[];
 
   return (
-    <div className="bg-white p-8 min-h-[85vh] border border-skeleton rounded-2xl">
+    <div className="bg-white p-4 lg:p-8 min-h-[85vh] border border-skeleton rounded-2xl">
       <DataTable
         columns={columns}
         data={Array.isArray(data?.data) ? data.data : []}

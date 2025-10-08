@@ -23,11 +23,7 @@ const ControlledInputField: React.FC<ControlledInputFieldProps> = ({
 
   return (
     <div className="relative">
-      {icon && (
-        <span>
-          {icon}
-        </span>
-      )}
+      {icon && <span>{icon}</span>}
       <Controller
         name={name}
         control={control}

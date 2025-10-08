@@ -14,7 +14,7 @@ import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { FAQsSchema, pageSectionSchema } from "./schema";
-import { IFaq, IFaqItem } from "./types";
+import { IFaqItem } from "./types";
 
 interface CreateUpdateFAQsProps {
   isOpen: boolean;

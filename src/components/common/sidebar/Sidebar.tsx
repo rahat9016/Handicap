@@ -15,7 +15,6 @@ import {
 } from "@/lib/redux/features/permission/permissionSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
 import { cn } from "@/lib/utils";
-import { FaQuestion } from "react-icons/fa6";
 import {
   Building2,
   CalendarDays,
@@ -32,6 +31,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
+import { FaQuestion } from "react-icons/fa6";
 
 interface SidebarProps {
   className?: string;
@@ -146,7 +146,6 @@ export default function Sidebar({
       icon: FaQuestion,
       href: "/admin/faqs",
     },
-    
   ].filter(Boolean) as Array<{
     label: string;
     icon: LucideIcon;

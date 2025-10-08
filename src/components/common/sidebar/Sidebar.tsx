@@ -15,6 +15,7 @@ import {
 } from "@/lib/redux/features/permission/permissionSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
 import { cn } from "@/lib/utils";
+import { FaQuestion } from "react-icons/fa6";
 import {
   Building2,
   CalendarDays,
@@ -128,6 +129,24 @@ export default function Sidebar({
       icon: ShieldCheck,
       children: [{ label: "All Roles", href: "/admin/roles/all-roles" }],
     },
+    // {
+    //   label: "System Settings",
+    //   icon: Settings,
+    //   href: "/settings",
+    // },
+    // {
+    //   label: "Modules Management",
+    //   icon: ShieldCheck,
+    //   children: [
+    //     { label: "Add Module", href: "/admin/modules/create-modules" },
+    //   ],
+    // },
+    {
+      label: "FAQs",
+      icon: FaQuestion,
+      href: "/admin/faqs",
+    },
+    
   ].filter(Boolean) as Array<{
     label: string;
     icon: LucideIcon;
@@ -193,7 +212,7 @@ export default function Sidebar({
                     >
                       <div className="flex items-center">
                         <item.icon
-                          className={`mr-2 h-4 w-4 ${
+                          className={`flex mr-2 h-4 w-4 ${
                             isActive ? "text-white" : ""
                           }`}
                         />
@@ -229,8 +248,7 @@ export default function Sidebar({
                 ) : (
                   <Link
                     href={item.href ?? "#"}
-                    onClick={() => setIsOpen(false)}
-                    className={`w-full h-[46px] flex items-center gap-2 px-4 text-sm rounded-md font-inter ${
+                    className={`w-full font-medium h-[46px] flex items-center gap-2 px-4 text-sm rounded-md font-inter ${
                       isActive
                         ? "bg-dashboard-primary text-white"
                         : "text-[#8C8C8C] hover:bg-[#EAF6FB] hover:text-dashboard-primary"

@@ -7,7 +7,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { useGet } from "@/hooks/useGet";
-import { IFaq, IFaqItem } from "../dashboard/faqs/types";
+import { IFaq } from "../dashboard/faqs/types";
 
 export default function FAQAccordion() {
   const { data } = useGet<IFaq[]>("/faqs", ["faqs"]);

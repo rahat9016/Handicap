@@ -16,6 +16,7 @@ import {
 import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
 import { cn } from "@/lib/utils";
 import { FaQuestion } from "react-icons/fa6";
+import { PiChats } from "react-icons/pi";
 import {
   Building2,
   CalendarDays,
@@ -142,11 +143,15 @@ export default function Sidebar({
     //   ],
     // },
     {
+      label: "Contacts",
+      icon: PiChats,
+      href: "/admin/contacts",
+    },
+    {
       label: "FAQs",
       icon: FaQuestion,
       href: "/admin/faqs",
     },
-    
   ].filter(Boolean) as Array<{
     label: string;
     icon: LucideIcon;

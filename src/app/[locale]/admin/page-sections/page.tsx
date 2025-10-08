@@ -1,4 +1,4 @@
-import PageSections from '@/components/dashboard/pageSections/PageSections'
+import PageSections from '@/components/dashboard/contacts/Contacts'
 import React from 'react'
 
 export default function page() {

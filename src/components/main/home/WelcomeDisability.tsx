@@ -87,7 +87,7 @@ const WelcomeDisability = () => {
 
             <div
               onClick={() => router.push("/about")}
-              className="group flex items-center justify-center rounded-lg mt-10  w-full lg:w-[20%] border text-pureBlack hover:text-[#01014E] hover:shadow-lg text-base font-inter font-semibold px-4 py-2 cursor-pointer transition-all duration-300"
+              className="whitespace-nowrap group flex items-center justify-center rounded-lg mt-10  w-full lg:w-[25%] border text-pureBlack hover:text-[#01014E] hover:shadow-lg text-base font-inter font-semibold px-4 py-2 cursor-pointer transition-all duration-300"
             >
               See more
               <MoveRight className="ml-2 w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 duration-300" />

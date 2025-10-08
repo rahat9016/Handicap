@@ -10,7 +10,7 @@ import WelcomeDisability from "./WelcomeDisability";
 
 const Home = () => {
   return (
-    <div className=" pt-36 lg:pt-6">
+    <div className="pt-6">
       <HomeHeroSection />
       <WelcomeDisability />
       <PlatformStatistics />

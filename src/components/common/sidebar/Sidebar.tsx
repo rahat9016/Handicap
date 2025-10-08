@@ -32,6 +32,7 @@ import {
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { FaQuestion } from "react-icons/fa6";
+import { PiChats } from "react-icons/pi";
 
 interface SidebarProps {
   className?: string;
@@ -133,6 +134,11 @@ export default function Sidebar({
       label: "Role Management",
       icon: ShieldCheck,
       children: [{ label: "All Roles", href: "/admin/roles/all-roles" }],
+    },
+    {
+      label: "Contacts",
+      icon: PiChats,
+      href: "/admin/contacts",
     },
     {
       label: "FAQs",

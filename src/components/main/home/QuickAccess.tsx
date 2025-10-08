@@ -134,7 +134,7 @@ const QuickAccess = () => {
               </div>
 
               {/* ----- Tab Contents ----- */}
-              <div className="mt-20 lg:mt-10">
+              <div className="mt-10">
                 {/* Featured 1 */}
                 <TabsContent value="featured1">
                   {isLoading ? (

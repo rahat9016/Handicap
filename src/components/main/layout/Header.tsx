@@ -71,7 +71,7 @@ const Header = () => {
 
         {/* 🔹 Main White Navbar */}
         <div className="bg-white shadow-lg h-20 lg:h-28 flex items-center relative">
-          <div className="container z-[60] flex items-center justify-between py-3 sm:py-4 px-4 sm:px-6 lg:px-8 bg-white">
+          <div className="container z-[60] mt-4 lg:mt-0 flex items-center justify-between py-3 sm:py-4 px-4 sm:px-6 lg:px-8 bg-white">
             {/* Logo */}
             <div className="flex items-center gap-3 sm:gap-5">
               <Link
@@ -90,7 +90,7 @@ const Header = () => {
             </div>
 
             {/* Desktop Nav */}
-            <nav className="hidden md:flex font-normal divide-x divide-gray-300 text-sm">
+            <nav className="hidden lg:flex font-normal divide-x divide-gray-300 text-sm">
               {navLinks.map(({ label, href }) => {
                 const isActive =
                   href === "/"
@@ -124,7 +124,7 @@ const Header = () => {
                 );
               })}
             </nav>
-            <div className="flex gap-1 md:hidden ">
+            <div className="flex gap-1 lg:hidden ">
               <div className="cursor-pointer flex border rounded-lg items-center justify-center h-10 w-10">
                 <LanguageToggle />
               </div>
@@ -144,7 +144,7 @@ const Header = () => {
 
       {/* 🔹 Mobile Drawer (slides under navbar) */}
       <div
-        className={`fixed z-40 top-0 right-0 h-full w-4/5 max-w-sm bg-white shadow-2xl transform transition-transform duration-300 ease-in-out ${
+        className={`fixed z-40 right-0 h-full w-4/5 max-w-sm bg-white shadow-2xl transform transition-transform duration-300 ease-in-out ${
           mobileOpen ? "translate-x-0" : "translate-x-full"
         }`}
         style={{ marginTop: "80px", height: "calc(100vh - 80px)" }} // Added height calculation

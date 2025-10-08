@@ -2,17 +2,15 @@
 import { ColumnDef, DataTable } from "@/components/ui/data-table";
 import { useGet } from "@/hooks/useGet";
 import { usePagination } from "@/hooks/usePagination";
-
 import { useSearchDebounce } from "@/hooks/useSearchDebounce";
-import { ILangType, IPageSection } from "@/types";
-import { NotebookText, SquarePen } from "lucide-react";
-import Image from "next/image";
+import { Eye, NotebookText } from "lucide-react";
 import { useEffect, useState } from "react";
 import CreateUpdatePageSectionModal from "./CreateUpdatePageSection";
+import { IContactMessage } from "./types";
 
-export default function PageSections() {
+const Contacts = () => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [section, setSection] = useState<IPageSection>();
+  const [section, setSection] = useState<IContactMessage>();
   const { search, handleSearchChange, debouncedSearch } =
     useSearchDebounce(300);
   const {
@@ -25,8 +23,8 @@ export default function PageSections() {
   } = usePagination();
 
   const { data, isLoading } = useGet(
-    "/page-sections",
-    ["page-sections", currentPage.toString()],
+    "/contact-us",
+    ["contact-us", currentPage.toString()],
     {
       ...(itemsPerPage !== -1 && {
         page: currentPage.toString(),
@@ -43,60 +41,21 @@ export default function PageSections() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
-  const handleEdit = (row: IPageSection) => {
+  const handleMessageView = (row: IContactMessage) => {
     setSection(row);
     setIsModalOpen(true);
   };
 
-  const columns: ColumnDef<IPageSection>[] = [
+  const columns: ColumnDef<IContactMessage>[] = [
+    { header: "First Name", accessorKey: "firstName" },
+    { header: "Last Name", accessorKey: "lastName" },
+    { header: "Organization", accessorKey: "organization" },
+    { header: "Email", accessorKey: "email" },
+    { header: "Subject", accessorKey: "subject" },
+    { header: "Message", accessorKey: "message" },
     {
-      header: "Thumbnail",
-      accessorKey: "imageUrls",
-      cell: (
-        _value: string | number | boolean | string[] | ILangType,
-        row: IPageSection
-      ) => {
-        return (
-          <div className="w-14 h-14 p-1 border flex items-center justify-center rounded-md cursor-pointer hover:opacity-80">
-            {row?.imageUrls[0] && (
-              <Image
-                src={row.imageUrls[0]}
-                width={44}
-                height={44}
-                alt="thumbnail"
-                className="rounded"
-              />
-            )}
-          </div>
-        );
-      },
-    },
-    { header: "Page Name", accessorKey: "pageId" },
-    { header: "Section Type", accessorKey: "sectionType" },
-    { header: "Order", accessorKey: "order" },
-    {
-      header: "Title EN",
-      accessorKey: "title",
-      cell: (
-        _value: string | number | boolean | string[] | ILangType,
-        row: IPageSection
-      ) => {
-        return <div>{row?.title?.en && <span>{row.title.en}</span>}</div>;
-      },
-    },
-    {
-      header: "Title BN",
-      accessorKey: "title",
-      cell: (
-        _value: string | number | boolean | string[] | ILangType,
-        row: IPageSection
-      ) => {
-        return <div>{row?.title?.bn && <span>{row.title.bn}</span>}</div>;
-      },
-    },
-    {
-      header: "Is Active",
-      accessorKey: "isActive",
+      header: "Seen",
+      accessorKey: "isRead",
       cell: (value) => {
         const isActive = value;
 
@@ -106,7 +65,7 @@ export default function PageSections() {
               isActive ? "bg-[#bfffda] text-green" : "bg-rose-200 text-rose-700"
             }`}
           >
-            {isActive ? "Active" : "Inactive"}
+            {isActive ? "Seen" : "Not seen"}
           </span>
         );
       },
@@ -119,11 +78,11 @@ export default function PageSections() {
         return (
           <div className="flex items-center gap-5">
             <button
-              onClick={() => handleEdit(row)}
+              onClick={() => handleMessageView(row)}
               className="text-darkLiver hover:underline text-sm flex items-center gap-1"
             >
-              <SquarePen size={16} />
-              Edit
+              <Eye size={16} />
+              View
             </button>
           </div>
         );
@@ -142,8 +101,8 @@ export default function PageSections() {
         onPageChange={setCurrentPage}
         setItemsPerPage={setItemsPerPage}
         icon={<NotebookText />}
-        title="Page Sections"
-        subtitle="Manage page sections"
+        title="Contact Messages"
+        subtitle="Messages from contact"
         showSearch
         searchValue={search}
         onSearchChange={handleSearchChange}
@@ -161,4 +120,6 @@ export default function PageSections() {
       />
     </div>
   );
-}
+};
+
+export default Contacts;

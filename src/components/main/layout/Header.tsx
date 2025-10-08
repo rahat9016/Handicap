@@ -4,7 +4,7 @@ import { useAppSelector } from "@/lib/redux/hooks";
 import { Menu, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { usePathname } from "next/navigation";
-import { useState, useEffect } from "react"; // Added useEffect
+import { useState, useEffect } from "react";
 import { LanguageToggle } from "./LanguageToggle";
 import { navLinks } from "./navLinks";
 import { ProfileDropdown } from "./ProfileDropdown";
@@ -124,16 +124,20 @@ const Header = () => {
                 );
               })}
             </nav>
-
-            {/* Mobile Hamburger */}
-            <button
-              className="md:hidden p-2 rounded-lg border border-gray-200"
-              onClick={() => setMobileOpen(!mobileOpen)}
-              aria-label="Toggle menu"
-              aria-expanded={mobileOpen}
-            >
-              {mobileOpen ? <X size={20} /> : <Menu size={20} />}
-            </button>
+            <div className="flex gap-1 md:hidden ">
+              <div className="cursor-pointer flex border rounded-lg items-center justify-center h-10 w-10">
+                <LanguageToggle />
+              </div>
+              {/* Mobile Hamburger */}
+              <button
+                className="p-2 rounded-lg border border-gray-200"
+                onClick={() => setMobileOpen(!mobileOpen)}
+                aria-label="Toggle menu"
+                aria-expanded={mobileOpen}
+              >
+                {mobileOpen ? <X size={20} /> : <Menu size={20} />}
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -199,7 +203,6 @@ const Header = () => {
               Profile & Settings
             </h4>
             <div className="flex flex-col gap-3 text-sm">
-              <LanguageToggle />
               {email ? (
                 <ProfileDropdown />
               ) : (

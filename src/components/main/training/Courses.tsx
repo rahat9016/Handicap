@@ -19,7 +19,7 @@ import { Filter, Search } from "lucide-react";
 import { useEffect, useState } from "react";
 import ResourceCardSkeleton from "../userResources/ResourceCardSkeleton";
 import { CourseDevelopmentModal } from "./CourseDevelopmentModal";
-import CourseLibrary from "./CourseLibrary";
+import EventsLibrary from "./CourseLibrary";
 import TrainingSorting from "./TrainingSorting";
 import { ICourse } from "./types/traning";
 
@@ -136,7 +136,7 @@ const Courses = () => {
                 </div>
               ) : (
                 <div>
-                  <CourseLibrary courses={(data?.data as ICourse[]) || []} />
+                  <EventsLibrary courses={(data?.data as ICourse[]) || []} />
                   <Pagination
                     currentPage={currentPage}
                     totalPages={totalPages}

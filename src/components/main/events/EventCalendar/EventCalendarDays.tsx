@@ -1,7 +1,7 @@
 import { Skeleton } from "@/components/ui/skeleton";
 import { useRouter } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
-import { ICalendarDay } from "./types/interface";
+import { ICalendarDay } from "../types/interface";
 
 const eventColors = [
   { bg: "#FECACA", text: "#991B1B" },
@@ -33,7 +33,7 @@ export default function EventCalendarDays({
   };
 
   return (
-    <>
+    <div className="grid grid-cols-7 gap-1 sm:gap-2 p-1 sm:p-2">
       {calendarDays.map((dayObj) => {
         const isToday = new Date().toISOString().slice(0, 10) === dayObj.date;
         const events = dayObj.events || [];
@@ -81,6 +81,6 @@ export default function EventCalendarDays({
           </div>
         );
       })}
-    </>
+    </div>
   );
 }

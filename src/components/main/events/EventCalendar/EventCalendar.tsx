@@ -3,12 +3,12 @@
 import SectionTopTitle from "@/components/share/SectionTopTitle";
 import { useGet } from "@/hooks/useGet";
 import { useMemo, useState } from "react";
+import { EventCalendarData } from "../types/interface";
 import { months } from "./constant";
 import EventCalendarDays from "./EventCalendarDays";
 import CalendarDaysHeader from "./EventCalendarDaysHeader";
 import EventCalendarDaysSkeleton from "./EventCalendarDaysSkeleton";
 import CalendarHeader from "./EventCalendarHeader";
-import { EventCalendarData } from "./types/interface";
 
 export default function EventCalendar() {
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -55,7 +55,7 @@ export default function EventCalendar() {
 
         <div className="bg-card rounded-lg border border-border overflow-hidden">
           <CalendarDaysHeader />
-          <div className="grid grid-cols-7 gap-1 sm:gap-2 p-1 sm:p-2">
+          <div>
             {isLoading ? (
               <EventCalendarDaysSkeleton />
             ) : (

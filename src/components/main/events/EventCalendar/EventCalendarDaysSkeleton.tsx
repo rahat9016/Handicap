@@ -2,7 +2,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 export default function EventCalendarDaysSkeleton() {
   return (
-    <div>
+    <div className="grid grid-cols-7 gap-1 sm:gap-2 p-1 sm:p-2">
       {Array.from({ length: 42 }).map((_, idx) => (
         <div
           key={idx}

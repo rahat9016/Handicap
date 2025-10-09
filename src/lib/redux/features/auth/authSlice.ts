@@ -1,4 +1,5 @@
 import { logout } from "@/services/auth.service";
+import { UserRole } from "@/utils/UserRoleEnum";
 import { createSlice } from "@reduxjs/toolkit";
 import { IInitialState } from "./authTypes";
 
@@ -14,7 +15,7 @@ const initialState: IInitialState = {
     isVerified: false,
     accountStatus: "",
     roleId: "",
-    roleName: "",
+    roleName: UserRole.USER,
   },
   data: [],
 };

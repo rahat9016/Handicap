@@ -1,15 +1,21 @@
-import UserDashboardHeader from "@/components/UserDashboard/Layout/UserDashboardHeader";
-import UserDashboardSidebar from "@/components/UserDashboard/UserDashboard/UserDashboardSidebar";
-import { ReactNode } from "react";
+"use client";
+import Sidebar from "@/components/common/sidebar/Sidebar";
+import DashboardHeader from "@/components/main/layout/dashboardLayout/DashboardHeader";
+import { ReactNode, useState } from "react";
 
 export default function UserLayout({ children }: { children: ReactNode }) {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   return (
-    <div className="flex h-screen bg-background">
-      <UserDashboardSidebar />
-      <main className="flex-1 overflow-auto">
-        <UserDashboardHeader />
-        <div className="p-6">{children}</div>
-      </main>
+    <div className="flex w-full min-h-screen bg-culturedLight">
+      <Sidebar isOpen={sidebarOpen} setIsOpen={setSidebarOpen} />
+      <div className="flex-1 lg:ml-0 min-w-0 w-full">
+        <div className="w-full sticky top-0 z-30 bg-white">
+          <DashboardHeader toggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
+        </div>
+        <div className="p-3 sm:p-4 lg:p-6 w-full overflow-hidden">
+          <div className="w-full max-w-full overflow-hidden">{children}</div>
+        </div>
+      </div>
     </div>
   );
 }

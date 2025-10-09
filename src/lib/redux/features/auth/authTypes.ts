@@ -1,3 +1,5 @@
+import { UserRole } from "@/utils/UserRoleEnum";
+
 export interface IUserInformation {
   id: string;
   email: string;
@@ -8,7 +10,7 @@ export interface IUserInformation {
   isVerified: boolean;
   accountStatus: string;
   roleId: string;
-  roleName: string
+  roleName: UserRole;
 }
 
 export interface IDataItem {

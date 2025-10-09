@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button";
 import { useRouter } from "@/i18n/navigation";
 import { useAppSelector } from "@/lib/redux/hooks";
 import { Bell, Building2, ChevronLeft, Menu } from "lucide-react";
+import Link from "next/link";
+import { BiArrowBack } from "react-icons/bi";
 import UserSkeleton from "./Skeleton/UserSkeleton";
 
 export default function DashboardHeader({
@@ -27,7 +29,14 @@ export default function DashboardHeader({
         organizationName ? "justify-between" : "justify-end"
       }`}
     >
-      <div className="flex items-center gap-2 md:gap-4">
+      <Link
+        href="/"
+        className="flex font-medium items-center gap-2 border px-4 py-2 hover:bg-muted rounded-lg text-sm "
+      >
+        <BiArrowBack size={20} />
+        Back to Home
+      </Link>
+      <div className="flex items-center gap-4">
         {toggleSidebar && (
           <button
             className="lg:hidden p-1 md:p-2 rounded-md hover:bg-gray-100"

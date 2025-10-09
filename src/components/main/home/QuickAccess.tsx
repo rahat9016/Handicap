@@ -11,7 +11,7 @@ import { ICourse } from "../training/types/traning";
 import QuickAccessCard from "./QuickAccessCard";
 import QuickAccessSkeleton from "./QuickAccessSkeleton";
 
-export default function QuickAccess() {
+const QuickAccess = () => {
   const local = useLocale() as "en" | "bn";
   const { data, isLoading } = useGet<IResource[]>("/resources", ["resources"], {
     page: String(1),
@@ -80,17 +80,14 @@ export default function QuickAccess() {
       <div className="container">
         <div className="py-10 lg:py-20">
           <SectionTopTitle title="Quick Access" />
-          <div
-            className="w-full lg:w-9/12 mx-auto"
-            tabIndex={0}
-            onFocus={() => setActive(true)}
-          >
+
+          <div className="w-full" tabIndex={0} onFocus={() => setActive(true)}>
             <Tabs value={activeTab} onValueChange={setActiveTab}>
               {/* ----- Tab Buttons ----- */}
-              <div className="w-6/12 mx-auto">
-                <TabsList className="mx-auto flex-col lg:flex-row w-fit bg-transparent rounded-lg mb-6 gap-5">
+              <div className="w-6/12 mx-auto mt-14">
+                <TabsList className="w-full gap-2 lg:gap-5 flex flex-col lg:flex-row">
                   <TabsTrigger
-                    className="group bg-[#DBE4FF] px-8 py-3 text-[#0D0D0D] data-[state=active]:bg-black data-[state=active]:text-white flex items-center gap-3"
+                    className=" w-[220px] group bg-[#DBE4FF] py-2 text-[#0D0D0D] data-[state=active]:bg-black data-[state=active]:text-white flex gap-3"
                     value="featured1"
                     tabIndex={active ? 1 : 0}
                   >
@@ -105,7 +102,7 @@ export default function QuickAccess() {
                   </TabsTrigger>
 
                   <TabsTrigger
-                    className="group bg-[#DBE4FF] px-8 py-3 text-[#0D0D0D] data-[state=active]:bg-black data-[state=active]:text-white flex items-center gap-3"
+                    className=" w-[220px] group bg-[#DBE4FF] py-2 text-[#0D0D0D] data-[state=active]:bg-black data-[state=active]:text-white flex gap-3"
                     value="featured2"
                     tabIndex={active ? 3 : 0}
                   >
@@ -120,7 +117,7 @@ export default function QuickAccess() {
                   </TabsTrigger>
 
                   <TabsTrigger
-                    className="group bg-[#DBE4FF] px-8 py-3 text-[#0D0D0D] data-[state=active]:bg-black data-[state=active]:text-white flex items-center gap-3"
+                    className=" w-[220px] group bg-[#DBE4FF] py-2 text-[#0D0D0D] data-[state=active]:bg-black data-[state=active]:text-white flex gap-3"
                     value="announcements"
                     tabIndex={active ? 5 : 0}
                   >
@@ -131,19 +128,19 @@ export default function QuickAccess() {
                       src={"/images/home/icon__3.svg"}
                       alt="icon_3.svg"
                     />
-                    Announcements
+                    News
                   </TabsTrigger>
                 </TabsList>
               </div>
 
               {/* ----- Tab Contents ----- */}
-              <div className="mt-20 lg:mt-10">
+              <div className="mt-10">
                 {/* Featured 1 */}
                 <TabsContent value="featured1">
                   {isLoading ? (
                     <QuickAccessSkeleton />
                   ) : (
-                    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 justify-center">
+                    <div className="md:grid gap-6 md:grid-cols-2 lg:grid-cols-3 justify-center w-full">
                       {data?.data?.map((item) => (
                         <QuickAccessCard
                           key={item.id}
@@ -199,4 +196,6 @@ export default function QuickAccess() {
       </div>
     </div>
   );
-}
+};
+
+export default QuickAccess;

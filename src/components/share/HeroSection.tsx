@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { useGet } from "@/hooks/useGet";
 import Image from "next/image";
 import HeroSkeleton from "../main/home/Skeleton/HeroSkeleton";
@@ -6,13 +6,13 @@ import HeroSkeleton from "../main/home/Skeleton/HeroSkeleton";
 export default function HeroSection() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data, isLoading } = useGet<any>(
-      "/page-sections?pageIds=RESOURCES&sectionTypes=HERO",
-      ["user"]
-    );
-  
-   if (isLoading) {
-       return <HeroSkeleton />;
-     } 
+    "/page-sections?pageIds=RESOURCES&sectionTypes=HERO",
+    ["user"]
+  );
+
+  if (isLoading) {
+    return <HeroSkeleton />;
+  }
   return (
     <div>
       <Image

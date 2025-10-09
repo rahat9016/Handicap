@@ -24,15 +24,17 @@ export default function SectionTopTitle({
       >
         {title}
       </h1>
-      {desc && <p
-        className={cn(
-          "text-sm font-inter text-[#666666] font-medium mt-3 lg:mt-6 leading-[28px] mx-auto w-full lg:w-6/12",
-          classDesc
-        )}
-        tabIndex={0}
-      >
-        {desc}
-      </p>}
+      {desc && (
+        <p
+          className={cn(
+            "text-sm font-inter text-[#666666] font-medium mt-3 lg:mt-6 leading-[28px] mx-auto w-full lg:w-6/12",
+            classDesc
+          )}
+          tabIndex={0}
+        >
+          {desc}
+        </p>
+      )}
     </div>
   );
 }

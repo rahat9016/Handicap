@@ -2,11 +2,8 @@
 import { ColumnDef, DataTable } from "@/components/ui/data-table";
 import { useGet } from "@/hooks/useGet";
 import { usePagination } from "@/hooks/usePagination";
-import { FaQuestion } from "react-icons/fa6";
 import { useSearchDebounce } from "@/hooks/useSearchDebounce";
-import { ILangType, IPageSection } from "@/types";
 import { NotebookText, SquarePen } from "lucide-react";
-import Image from "next/image";
 import { useEffect, useState } from "react";
 import CreateUpdateFAQs from "./CreateUpdateFAQs";
 import { useAppSelector } from "@/lib/redux/hooks";

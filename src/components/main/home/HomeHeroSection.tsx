@@ -23,7 +23,7 @@ const HomeHeroSection = () => {
     <section
       tabIndex={0}
       aria-label="Hero Section"
-      className="pb-16 md:pt-10 md:pb-20 bg-white"
+      className="pb-16 md:pb-20 bg-white"
     >
       <div className="container px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 items-center gap-8 lg:gap-10">
@@ -38,7 +38,7 @@ const HomeHeroSection = () => {
 
             {local === "en" ? (
               <div
-                className="text-sm font-inter text-[#353535] font-normal mt-3 lg:mt-5 leading-[28px]"
+                className="text-sm text-justify font-inter text-[#353535] font-normal mt-3 lg:mt-5 leading-[28px]"
                 tabIndex={0}
                 dangerouslySetInnerHTML={{
                   __html:

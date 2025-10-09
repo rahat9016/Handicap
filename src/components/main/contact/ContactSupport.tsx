@@ -6,6 +6,7 @@ import { Clock4, Mail, MapPin, Phone, User } from "lucide-react";
 import ContactForm from "./ContactForm";
 import { useGet } from "@/hooks/useGet";
 import { IContactInfo } from "@/types/types";
+import { CapFirst } from "@/utils/CapFirst";
 
 const ContactSupport = () => {
   const { data } = useGet<IContactInfo>("/contact-information", [
@@ -39,16 +40,18 @@ const ContactSupport = () => {
                     <h4 className="leading-none text-blue font-semibold font-inter text-base lg:text-lg mb-1 lg:mb-[6px]">
                       Name
                     </h4>
-                    {ContactData?.contacts.map((contact, index) => (
-                      <div key={index}>
-                        <p className="text-[#353535] text-sm lg:text-base font-inter font-normal">
-                          {contact.name}
-                        </p>
-                        <p className="text-[#353535] text-xs lg:text-sm font-inter font-normal mt-1">
-                          <b>Designation:</b> {contact.designation}
-                        </p>
-                      </div>
-                    ))}
+                    <div className="space-y-4">
+                      {ContactData?.contacts.map((contact, index) => (
+                        <div key={index}>
+                          <p className="text-[#353535] text-sm lg:text-base font-inter font-normal">
+                            {contact.name}
+                          </p>
+                          <p className="text-[#353535] text-xs lg:text-sm font-inter font-normal mt-1">
+                            <b>Designation:</b> {contact.designation}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </li>
 
@@ -63,6 +66,9 @@ const ContactSupport = () => {
                         key={index}
                         className="text-[#353535] text-sm lg:text-base font-inter font-normal"
                       >
+                        <span className="font-semibold text-sm">
+                          {CapFirst(email.type)}:{" "}
+                        </span>
                         {email.email}
                       </p>
                     ))}
@@ -80,6 +86,9 @@ const ContactSupport = () => {
                         key={index}
                         className="text-[#353535] text-sm lg:text-base font-inter font-normal"
                       >
+                        <span className="font-semibold text-sm">
+                          {CapFirst(item.type)}:{" "}
+                        </span>
                         {item.phone}
                       </p>
                     ))}
@@ -97,6 +106,9 @@ const ContactSupport = () => {
                         key={index}
                         className="text-[#353535] text-sm lg:text-base font-inter font-normal w-full lg:w-10/12 xl:w-3/4"
                       >
+                        <span className="font-semibold text-sm">
+                          {CapFirst(item.type)}:{" "}
+                        </span>
                         {item.address}
                       </p>
                     ))}
@@ -110,8 +122,7 @@ const ContactSupport = () => {
                       Office Time
                     </h4>
                     <p className="text-[#353535] text-sm lg:text-base font-inter font-normal">
-                      Sunday – Thursday: 8:30 AM – 5:00 PM <br />
-                      Friday – Saturday: Closed
+                      {ContactData?.officeHours}
                     </p>
                   </div>
                 </li>

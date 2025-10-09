@@ -28,6 +28,7 @@ export default function SectionTopTitle({
         <p
           className={cn(
             "text-xs lg:text-sm font-inter text-[#666666] font-medium mt-3 lg:mt-6 leading-[28px] mx-auto w-full lg:w-6/12",
+
             classDesc
           )}
           tabIndex={0}

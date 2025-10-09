@@ -4,10 +4,10 @@ import SectionTopTitle from "@/components/share/SectionTopTitle";
 import Title from "@/components/share/Title";
 import { useGet } from "@/hooks/useGet";
 import { Building2, Eye } from "lucide-react";
-import { IFeaturedResource } from "./types/interface";
 import { useLocale } from "next-intl";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { IFeaturedResource } from "./types/interface";
 
 const FeaturedResources = () => {
   const local = useLocale() as "en" | "bn";

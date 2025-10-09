@@ -1,12 +1,7 @@
 import CourseCard from "./CourseCard";
 import { ICourse } from "./types/traning";
 
-export default function CourseLibrary({
-   courses
-}: {
-  courses: ICourse[]
-}) {
-
+export default function CourseLibrary({ courses }: { courses: ICourse[] }) {
   return (
     <div>
       {courses.length === 0 ? (

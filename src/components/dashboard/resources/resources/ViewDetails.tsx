@@ -14,14 +14,19 @@ import {
   Globe,
   Hash,
   Tag,
-  User
+  User,
 } from "lucide-react";
 import Image from "next/image";
 import { IResource } from "../types/types";
 
 function getFileTypeIcon(fileType: string) {
-  if (fileType.includes("pdf")) return <FileText className="w-10 h-10 text-red-500" />;
-  if (fileType.includes("png") || fileType.includes("jpg") || fileType.includes("jpeg")) {
+  if (fileType.includes("pdf"))
+    return <FileText className="w-10 h-10 text-red-500" />;
+  if (
+    fileType.includes("png") ||
+    fileType.includes("jpg") ||
+    fileType.includes("jpeg")
+  ) {
     return null;
   }
   return <FileText className="w-10 h-10 text-gray-500" />;
@@ -52,8 +57,6 @@ export default function ViewResourceDetails({
             Resource Details
           </DialogTitle>
         </DialogHeader>
-
-        {/* Resource main info */}
         <div className="flex items-start space-x-4 pb-4 border-b font-inter">
           <div className="w-16 h-16 rounded-lg bg-gradient-to-br from-blue to-purple-100 flex items-center justify-center overflow-hidden">
             {resource?.fileType === "application/pdf" ? (
@@ -70,7 +73,9 @@ export default function ViewResourceDetails({
           </div>
           <div className="flex-1">
             <h2 className="text-xl font-semibold mb-1">{resource?.title.en}</h2>
-            <p className="text-sm text-gray-600 mb-2">{resource?.description.en}</p>
+            <p className="text-sm text-gray-600 mb-2">
+              {resource?.description.en}
+            </p>
             <div className="flex items-center gap-4 text-xs text-gray-500">
               <span className="flex items-center gap-1">
                 <Download className="w-3 h-3 text-green" />

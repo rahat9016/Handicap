@@ -17,10 +17,10 @@ import { useAppSelector } from "@/lib/redux/hooks";
 import { buildQueryParams } from "@/utils/buildQueryParams";
 import { Filter, Search } from "lucide-react";
 import { useEffect, useState } from "react";
-import ResourceCardSkeleton from "../userResources/ResourceCardSkeleton";
-import { ICourse } from "../training/types/traning";
-import CourseLibrary from "../training/CourseLibrary";
+import EventCardSkeleton from "./EventCardSkeleton";
+import EventLibrary from "./EventLibrary";
 import EventsSorting from "./EventsSorting";
+import { IEventItem } from "./types/interface";
 
 const Events = () => {
   const { search, handleSearchChange, debouncedSearch } =
@@ -55,7 +55,7 @@ const Events = () => {
   });
 
   // API call
-  const { data, isLoading } = useGet<ICourse[]>(`/events?${queryString}`, [
+  const { data, isLoading } = useGet<IEventItem[]>(`/events?${queryString}`, [
     "events",
     queryString,
   ]);
@@ -69,16 +69,11 @@ const Events = () => {
     <div className="bg-[#f3f3f3]">
       <div className="container px-4 sm:px-6 lg:px-8 py-6 lg:py-20 lg:pb-40">
         <div className="flex flex-col lg:flex-row lg:items-start gap-6 lg:gap-20">
-          {/* Sidebar - Desktop */}
           <div className="hidden lg:block w-full lg:w-[300px] lg:sticky lg:top-40 lg:self-start overflow-y-auto custom-scrollbar lg:h-[75vh] bg-white border p-4 rounded-md">
             <EventsSorting />
           </div>
-
-          {/* Main Content */}
           <div className="w-full lg:w-10/12 lg:ml-auto">
-            {/* Top Controls */}
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
-              {/* Rows per page */}
               <div className="flex items-center gap-2">
                 <span className="text-sm whitespace-nowrap">
                   Rows per page:
@@ -101,7 +96,6 @@ const Events = () => {
                 </Select>
               </div>
 
-              {/* Search Field - Always visible */}
               <div className="flex items-center w-full sm:w-[300px] border px-2 rounded-md bg-white">
                 <Search className="min-w-[18px]" />
                 <Input
@@ -113,7 +107,6 @@ const Events = () => {
               </div>
             </div>
 
-            {/* Mobile Controls - Search and Filter together */}
             <div className="lg:hidden flex flex-col gap-4 mb-4">
               <div className="flex items-center gap-3">
                 {/* Search Field - Full width on mobile */}
@@ -159,18 +152,16 @@ const Events = () => {
                 </Select>
               </div>
             </div>
-
-            {/* Events list */}
             <div className="border-t pt-4">
               {isLoading ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                   {Array.from({ length: 6 }, (_, index) => (
-                    <ResourceCardSkeleton key={index} />
+                    <EventCardSkeleton key={index} />
                   ))}
                 </div>
               ) : (
                 <div>
-                  <CourseLibrary courses={(data?.data as ICourse[]) || []} />
+                  <EventLibrary events={(data?.data as IEventItem[]) || []} />
                   <Pagination
                     currentPage={currentPage}
                     totalPages={totalPages}
@@ -185,8 +176,6 @@ const Events = () => {
           </div>
         </div>
       </div>
-
-      {/* Mobile Filter Modal */}
       {isMobileFilterOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-50 lg:hidden">
           <div className="fixed bottom-0 left-0 right-0 bg-white rounded-t-2xl p-4 max-h-[80vh] overflow-y-auto">

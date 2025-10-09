@@ -5,15 +5,18 @@ import { usePagination } from "@/hooks/usePagination";
 
 import { useSearchDebounce } from "@/hooks/useSearchDebounce";
 import { useAppSelector } from "@/lib/redux/hooks";
+import { format } from "date-fns";
 import { CalendarDays, SquarePen } from "lucide-react";
 import { useEffect, useState } from "react";
 import CreateEventModal from "./CreateUpdateEvents";
 import { IEvent } from "./types";
 
 export default function EventsList() {
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [events, setEvents] = useState<IEvent>();
+  // const [selectedId, setSelectedId] = useState<string | undefined>(undefined);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const { hasPermission } = useAppSelector((state) => state.permission);
+  // const { organizationId } = useAppSelector((state) => state.organizer);
   const { search, handleSearchChange, debouncedSearch } =
     useSearchDebounce(300);
   const {
@@ -24,6 +27,12 @@ export default function EventsList() {
     setTotalItems,
     setItemsPerPage,
   } = usePagination();
+
+  // const endpoint = selectedId
+  //   ? `/resources/organization/${selectedId}`
+  //   : organizationId
+  //   ? `/resources/organization/${organizationId}`
+  //   : "/resources";
 
   const { data, isLoading } = useGet<IEvent[]>(
     "/events",
@@ -52,7 +61,44 @@ export default function EventsList() {
 
   const columns: ColumnDef<IEvent>[] = [
     { header: "Title", accessorKey: "title" },
-    { header: "Description", accessorKey: "description" },
+    {
+      header: "Start Date",
+      accessorKey: "startDate",
+      cell: (value) => {
+        const dateValue = typeof value === "string" ? value : "";
+        return (
+          <span>
+            {dateValue ? format(new Date(dateValue), "MMM dd, yyyy") : "—"}
+          </span>
+        );
+      },
+    },
+    {
+      header: "End Date",
+      accessorKey: "endDate",
+      cell: (value) => {
+        const dateValue = typeof value === "string" ? value : "";
+        return (
+          <span>
+            {dateValue ? format(new Date(dateValue), "MMM dd, yyyy") : "—"}
+          </span>
+        );
+      },
+    },
+    {
+      header: "Description",
+      accessorKey: "description",
+      cell: (value) => {
+        const htmlContent = typeof value === "string" ? value : "";
+        return (
+          <div
+            className="text-sm text-gray-700 line-clamp-2"
+            dangerouslySetInnerHTML={{ __html: htmlContent }}
+          />
+        );
+      },
+    },
+
     {
       header: "Is Published",
       accessorKey: "isPublished",
@@ -66,6 +112,23 @@ export default function EventsList() {
             }`}
           >
             {isActive ? "Published" : "Unpublished"}
+          </span>
+        );
+      },
+    },
+    {
+      header: "Is Online",
+      accessorKey: "isOnline",
+      cell: (value) => {
+        const isActive = value;
+
+        return (
+          <span
+            className={`px-2 py-1 rounded-full text-xs font-medium ${
+              isActive ? "bg-[#bfffda] text-green" : "bg-rose-200 text-rose-700"
+            }`}
+          >
+            {isActive ? "Online" : "Offline"}
           </span>
         );
       },

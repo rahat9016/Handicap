@@ -32,9 +32,9 @@ export default function SignUp() {
     mutateAsync: verifyOTP,
     isPending: otpIsPending,
     error: otpError,
-  } = usePost("/auth/verify-otp");
+  } = usePost("/auth/verify-user");
 
-  const { mutate: resendOTP } = usePost("/auth/resend-otp");
+  const { mutate: resendOTP } = usePost("/auth/resend-otp-verify-user");
   const onSubmit: SubmitHandler<CombinedForm> = (data: CombinedForm) => {
     console.log(data);
     if (step === 0) {
@@ -42,14 +42,11 @@ export default function SignUp() {
         setStep(1);
       });
     } else {
-      // Handle OTP submission logic here
       const otpData: OTPForm = {
-        email: data.email, // Ensure email is included in OTP data
+        email: data.email,
         otp: data?.otp as string,
       };
       verifyOTP(otpData).then(() => {
-        // Handle successful OTP verification, e.g., redirect to login or home page
-        console.log("OTP verified successfully");
         toast.success("OTP verified successfully");
         router.push("/login");
         setStep(0);
@@ -78,7 +75,7 @@ export default function SignUp() {
       case 1:
         return <OtpVerifyForm resendOTPHandler={resendOTPHandler} />;
       default:
-        return null;
+        return <SignUpForm />;
     }
   };
 

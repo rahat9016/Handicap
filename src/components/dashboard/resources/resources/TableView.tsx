@@ -14,7 +14,6 @@ export default function TableView({
   onSearchChange,
   currentPage,
   setCurrentPage,
-  //   totalPages,
   totalItems,
   itemsPerPage,
   setItemsPerPage,

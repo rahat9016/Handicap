@@ -12,9 +12,11 @@ import CreateEventModal from "./CreateUpdateEvents";
 import { IEvent } from "./types";
 
 export default function EventsList() {
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [events, setEvents] = useState<IEvent>();
+  // const [selectedId, setSelectedId] = useState<string | undefined>(undefined);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const { hasPermission } = useAppSelector((state) => state.permission);
+  // const { organizationId } = useAppSelector((state) => state.organizer);
   const { search, handleSearchChange, debouncedSearch } =
     useSearchDebounce(300);
   const {
@@ -25,6 +27,12 @@ export default function EventsList() {
     setTotalItems,
     setItemsPerPage,
   } = usePagination();
+
+  // const endpoint = selectedId
+  //   ? `/resources/organization/${selectedId}`
+  //   : organizationId
+  //   ? `/resources/organization/${organizationId}`
+  //   : "/resources";
 
   const { data, isLoading } = useGet<IEvent[]>(
     "/events",

@@ -42,14 +42,11 @@ export default function SignUp() {
         setStep(1);
       });
     } else {
-      // Handle OTP submission logic here
       const otpData: OTPForm = {
-        email: data.email, // Ensure email is included in OTP data
+        email: data.email,
         otp: data?.otp as string,
       };
       verifyOTP(otpData).then(() => {
-        // Handle successful OTP verification, e.g., redirect to login or home page
-        console.log("OTP verified successfully");
         toast.success("OTP verified successfully");
         router.push("/login");
         setStep(0);

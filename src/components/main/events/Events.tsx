@@ -176,8 +176,6 @@ const Events = () => {
           </div>
         </div>
       </div>
-
-      {/* Mobile Filter Modal */}
       {isMobileFilterOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-50 lg:hidden">
           <div className="fixed bottom-0 left-0 right-0 bg-white rounded-t-2xl p-4 max-h-[80vh] overflow-y-auto">

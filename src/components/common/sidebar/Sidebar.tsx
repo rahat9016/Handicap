@@ -107,14 +107,19 @@ export default function Sidebar({
         { label: "News Tags", href: "/admin/news/news-tags" },
       ],
     },
-    hasPermission && {
+    {
       label: "Events",
       icon: CalendarDays,
-      children: [
-        { label: "Event List", href: "/admin/events/events-list" },
-        { label: "Events Categories", href: "/admin/events/events-categories" },
-        { label: "Events Tags", href: "/admin/events/events-tags" },
-      ],
+      children: hasPermission
+        ? [
+            { label: "Event List", href: "/admin/events/events-list" },
+            {
+              label: "Events Categories",
+              href: "/admin/events/events-categories",
+            },
+            { label: "Events Tags", href: "/admin/events/events-tags" },
+          ]
+        : [{ label: "Event List", href: "/admin/events/events-list" }],
     },
     {
       label: "Course's",

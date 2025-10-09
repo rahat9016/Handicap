@@ -35,9 +35,8 @@ const Header = () => {
   const normalizedPath = pathname.replace(/^\/(en|bn)(?=\/|$)/, "") || "/";
 
   return (
-    <header className="pb-20 md:pb-32">
-      {/* Sticky header wrapper */}
-      <div className="fixed w-full top-0 z-[60]">
+    <header>
+      <div className="fixed w-full h-20 md:h-24 lg:h-28 bg-white shadow-lg z-50">
         {/* 🔹 Top Black Accessibility Bar (Desktop only) */}
         <div className="hidden lg:flex items-center w-full h-12 bg-pureBlack">
           <div
@@ -70,8 +69,8 @@ const Header = () => {
         </div>
 
         {/* 🔹 Main White Navbar */}
-        <div className="bg-white shadow-lg h-20 lg:h-28 flex items-center relative">
-          <div className="container z-[60] mt-4 lg:mt-0 flex items-center justify-between py-3 sm:py-4 px-4 sm:px-6 lg:px-8 bg-white">
+        <div className="h-full shadow-lg flex items-center relative">
+          <div className="container flex items-center justify-between">
             {/* Logo */}
             <div className="flex items-center gap-3 sm:gap-5">
               <Link
@@ -144,15 +143,11 @@ const Header = () => {
 
       {/* 🔹 Mobile Drawer (slides under navbar) */}
       <div
-        className={`fixed z-40 right-0 h-full w-4/5 max-w-sm bg-white shadow-2xl transform transition-transform duration-300 ease-in-out ${
+        className={`lg:hidden fixed z-40 right-0 top-20 md:top-24 h-full w-4/5 max-w-sm bg-white shadow-2xl transform transition-transform duration-300 ease-in-out ${
           mobileOpen ? "translate-x-0" : "translate-x-full"
         }`}
-        style={{ marginTop: "80px", height: "calc(100vh - 80px)" }} // Added height calculation
       >
         <div className="p-5 space-y-8 h-full overflow-y-auto">
-          {" "}
-          {/* Added overflow-y-auto */}
-          {/* 1️⃣ Main Menu */}
           <div>
             <h4 className="text-xs font-semibold uppercase text-gray-500 mb-3 tracking-wide">
               Main Menu
@@ -220,13 +215,12 @@ const Header = () => {
       </div>
 
       <div
-        className={`fixed duration-300 z-30 inset-0 ${
+        className={`fixed duration-300 top-20 md:top-24 z-30 inset-0 ${
           mobileOpen
             ? "backdrop-blur-sm bg-black/40"
             : "bg-transparent pointer-events-none"
         }`}
         onClick={() => setMobileOpen(false)}
-        style={{ marginTop: "80px" }}
       />
     </header>
   );

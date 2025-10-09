@@ -35,8 +35,8 @@ const Header = () => {
   const normalizedPath = pathname.replace(/^\/(en|bn)(?=\/|$)/, "") || "/";
 
   return (
-    <header>
-      <div className="fixed w-full h-20 md:h-24 lg:h-28 bg-white shadow-lg z-50">
+    <header className="relative">
+      <div className="fixed w-full h-20 md:h-24 lg:h-40 bg-white z-50">
         {/* 🔹 Top Black Accessibility Bar (Desktop only) */}
         <div className="hidden lg:flex items-center w-full h-12 bg-pureBlack">
           <div
@@ -69,7 +69,7 @@ const Header = () => {
         </div>
 
         {/* 🔹 Main White Navbar */}
-        <div className="h-full shadow-lg flex items-center relative">
+        <div className="h-20 md:h-24 lg:h-28 shadow-lg flex items-center relative">
           <div className="container flex items-center justify-between">
             {/* Logo */}
             <div className="flex items-center gap-3 sm:gap-5">

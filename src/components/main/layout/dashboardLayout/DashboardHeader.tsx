@@ -7,10 +7,6 @@ import { Bell, Building2, ChevronLeft, Menu } from "lucide-react";
 import Link from "next/link";
 import { BiArrowBack } from "react-icons/bi";
 import UserSkeleton from "./Skeleton/UserSkeleton";
-import { BiArrowBack } from "react-icons/bi";
-import Link from "next/link";
-
-
 
 export default function DashboardHeader({
   toggleSidebar,
@@ -33,8 +29,10 @@ export default function DashboardHeader({
         organizationName ? "justify-between" : "justify-end"
       }`}
     >
-
-      <Link href="/" className="flex font-medium items-center gap-2 border px-4 py-2 hover:bg-muted rounded-lg text-sm ">
+      <Link
+        href="/"
+        className="flex font-medium items-center gap-2 border px-4 py-2 hover:bg-muted rounded-lg text-sm "
+      >
         <BiArrowBack size={20} />
         Back to Home
       </Link>

@@ -49,7 +49,7 @@ export default function ForgotPassword() {
     error: confirmError,
   } = usePost("/auth/reset-password");
 
-  const { mutate: resendOTP } = usePost("/auth/resend-otp");
+  const { mutate: resendOTP } = usePost("/auth/resend-otp-reset-password");
   console.log(methods.getValues());
   const onSubmit: SubmitHandler<CombinedForm> = (data: CombinedForm) => {
     console.log(data);

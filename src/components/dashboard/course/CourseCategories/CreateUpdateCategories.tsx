@@ -1,4 +1,5 @@
 import ErrorMessage from "@/components/common/Errors/ErrorMessage";
+import { ControlledCheckField } from "@/components/share/ControlledCheckField";
 import ControlledInputField from "@/components/share/ControlledInputField";
 import ControlledTextareaField from "@/components/share/ControlledTextareaField";
 import InputLabel from "@/components/share/InputLabel";
@@ -24,7 +25,7 @@ export default function CreateUpdateCategories({
   initialValues,
 }: {
   isOpen: boolean;
-onClose: () => void;
+  onClose: () => void;
   initialValues?: ICategory | undefined;
 }) {
   const {
@@ -42,7 +43,10 @@ onClose: () => void;
     mutateAsync: patchAsync,
     error: patchError,
     reset: patchReset,
-  } = usePatch((data) => console.log("Success", data), [["resource-categories"]]);
+  } = usePatch(
+    (data) => console.log("Success", data),
+    [["resource-categories"]]
+  );
 
   const methods = useForm<CategoryForm>({
     resolver: yupResolver(categorySchema),
@@ -53,6 +57,7 @@ onClose: () => void;
       methods.reset({
         name: initialValues.name,
         description: initialValues.description,
+        isActive: Boolean(initialValues?.isActive),
       });
     }
   }, [initialValues, methods]);
@@ -62,6 +67,7 @@ onClose: () => void;
       methods.reset({
         name: "",
         description: "",
+        isActive: false,
       });
       postReset();
       patchReset();
@@ -69,10 +75,9 @@ onClose: () => void;
   }, [isOpen, methods, patchReset, postReset]);
 
   const onSubmit = (data: CategoryForm) => {
-    const organizedData: { name: string; description?: string | undefined; } = {
+    const organizedData: { name: string; description?: string | undefined } = {
       name: data.name,
-      
-    }
+    };
     if (data.description) {
       organizedData.description = data.description;
     }
@@ -103,7 +108,9 @@ onClose: () => void;
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="bg-white min-h-[20vh] w-[80vw] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>{initialValues ? "Edit Category" : "Create Category"}</DialogTitle>
+          <DialogTitle>
+            {initialValues ? "Edit Category" : "Create Category"}
+          </DialogTitle>
         </DialogHeader>
         <FormProvider {...methods}>
           <form onSubmit={methods.handleSubmit(onSubmit)} className="w-full">
@@ -121,6 +128,15 @@ onClose: () => void;
                 placeholder="Write down here the description..."
               />
             </div>
+            {!!initialValues && (
+              <div className="mb-4">
+                <InputLabel label="Active/Deactivate" />
+                <ControlledCheckField
+                  name="isActive"
+                  label="Active Section (Visible on website)"
+                />
+              </div>
+            )}
             <ErrorMessage error={error} />
             <ErrorMessage error={patchError} />
             <div className="flex justify-end gap-3 mt-6">

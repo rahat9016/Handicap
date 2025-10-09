@@ -17,7 +17,6 @@ const Home = () => {
       <FindResources />
       <QuickAccess />
       <TrainingModule />
-      {/* <KeyDocuments /> */}
       <JoinOurCommunity />
       <ThankyouSection />
       <OurHonorableFounders />

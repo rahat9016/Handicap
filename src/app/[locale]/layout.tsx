@@ -33,7 +33,6 @@ export default async function RootLayout({
   if (!hasLocale(routing.locales, locale)) {
     notFound();
   }
-  // useAnalytics();
 
   return (
     <html lang={locale} className={inter.variable}>

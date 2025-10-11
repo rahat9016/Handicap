@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/dialog";
 import { usePatch } from "@/hooks/usePatch";
 import { usePost } from "@/hooks/usePost";
+import { getChangedFields } from "@/utils/getChangedFields";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
@@ -86,9 +87,10 @@ const CreateUpdateFAQs = ({
       answerBn: data.answerBn,
     };
     if (isEditMode) {
+      const changedData = getChangedFields<FAQsSchema>(data, initialValues);
       patchAsync({
         url: `/faqs/${initialValues?.id}`,
-        data: data,
+        data: changedData,
       }).then(() => {
         console.log("Page section updated successfully");
         toast.success("Page section updated successfully");

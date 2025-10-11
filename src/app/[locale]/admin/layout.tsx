@@ -13,8 +13,8 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
         <div className="w-full sticky top-0 z-30 bg-white">
           <DashboardHeader toggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
         </div>
-        <div className="p-3 sm:p-4 lg:p-6 w-full overflow-hidden">
-          <div className="w-full max-w-full overflow-hidden">{children}</div>
+        <div className="p-3 sm:p-4 lg:p-6 w-full overflow-y-auto h-screen scrollbar-hide">
+          <div className="w-full max-w-full">{children}</div>
         </div>
       </div>
     </div>

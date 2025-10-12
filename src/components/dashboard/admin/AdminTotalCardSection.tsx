@@ -1,28 +1,16 @@
 "use client";
-import { useGet } from "@/hooks/useGet";
 import { useAppSelector } from "@/lib/redux/hooks";
 import TotalCard from "./TotalCard";
-import { ITotalCard } from "./types/interface";
+import { IDashboardData, ITotalCard } from "./types/interface";
 
-export default function AdminTotalCardSection() {
-  // const { data: dashboardData } = useGet("/dashboard", ["dashboard"]);
+export default function AdminTotalCardSection({
+  dashboardData,
+}: {
+  dashboardData: IDashboardData | undefined;
+}) {
   const { hasPermission } = useAppSelector((state) => state.permission);
-  const { organizationId } = useAppSelector((state) => state.organizer);
-  const isReady = useAppSelector((state) => state.organizer !== undefined);
- console.log(isReady)
-  const endpoint = organizationId
-    ? `/dashboard/organization/${organizationId}`
-    : "/dashboard";
-  const shouldFetch =
-  organizationId !== undefined || organizationId === null;
-  const { data: dashboardData } = useGet(
-    endpoint,
-    ["dashboard", organizationId ?? "all"],
-    {},
-    { enabled: organizationId !== undefined }
-  );
 
-  const lastData = (dashboardData?.data ?? {
+  const lastData = (dashboardData ?? {
     totalCourse: 0,
     totalOrganization: 0,
     totalUsers: 0,

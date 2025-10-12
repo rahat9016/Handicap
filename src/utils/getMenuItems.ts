@@ -26,7 +26,7 @@ export interface MenuItem {
 
 export function getMenuItems(
   hasPermission: boolean,
-  role: UserRole
+  role: UserRole | null
 ): MenuItem[] {
   if (role === UserRole.USER) {
     return [

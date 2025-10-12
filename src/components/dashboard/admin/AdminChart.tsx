@@ -288,7 +288,7 @@ export default function AdminChart({
             </div>
           </CardContent>
         </Card>
-        <Card className="col-span-3 lg:col-span-2 xl:col-span-1 py-0 px-0 border border-skeleton">
+        <Card className="hidden col-span-3 lg:col-span-2 xl:col-span-1 py-0 px-0 border border-skeleton">
           <CardContent className="px-0 flex flex-col gap-2">
             <div className="border-b p-8 border-skeleton">
               <h2 className="font-semibold text-lg text-erieBlack font-inter">

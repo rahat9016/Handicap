@@ -36,7 +36,6 @@ export default function ContactInformation() {
       </div>
 
       <div className="grid md:grid-cols-2 gap-6">
-        {/* Contacts */}
         <div>
           <h3 className="font-semibold text-gray-700 mb-2">Contacts</h3>
           <ul className="space-y-1">

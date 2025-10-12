@@ -1,4 +1,4 @@
-import PageSections from "@/components/dashboard/contacts/Contacts";
+import PageSections from "@/components/dashboard/pageSections/PageSections";
 
 export default function page() {
   return (

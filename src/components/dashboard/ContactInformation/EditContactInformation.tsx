@@ -10,8 +10,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { usePatch } from "@/hooks/usePatch";
-import { getChangedFields } from "@/utils/getChangedFields";
+import { usePost } from "@/hooks/usePost";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { X } from "lucide-react";
 import { useEffect } from "react";
@@ -27,12 +26,11 @@ interface Props {
 }
 
 const EditContactInformation = ({ isOpen, onClose, initialValues }: Props) => {
-  const {
-    mutateAsync: patchAsync,
-    error: patchError,
-    // reset: patchReset,
-  } = usePatch(
-    (data) => console.log("Success", data),
+  const { mutateAsync, error: postError } = usePost(
+    "/contact-information/upsert",
+    (data) => {
+      console.log("POST success", data);
+    },
     [["contact-information"]]
   );
   const methods = useForm<ContactInformationSchema>({
@@ -84,15 +82,8 @@ const EditContactInformation = ({ isOpen, onClose, initialValues }: Props) => {
   const addressesArray = useFieldArray({ control, name: "addresses" });
 
   const onSubmit = async (data: ContactInformationSchema) => {
-    const changedData = getChangedFields<ContactInformationSchema>(
-      data,
-      initialValues
-    );
-    console.log(changedData);
-    await patchAsync({
-      url: `/contact-information`,
-      data: changedData,
-    });
+    console.log(data);
+    await mutateAsync(data);
 
     toast.success("Contact information updated successfully");
     onClose();
@@ -100,9 +91,11 @@ const EditContactInformation = ({ isOpen, onClose, initialValues }: Props) => {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-[80vw] max-h-[90vh] overflow-y-auto">
+      <DialogContent className="!max-w-[60vw] w-[60vw] max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Update Contact Information</DialogTitle>
+          <DialogTitle>
+            {!!initialValues ? "Create" : "Update"} Contact Information
+          </DialogTitle>
         </DialogHeader>
 
         <FormProvider {...methods}>
@@ -112,7 +105,7 @@ const EditContactInformation = ({ isOpen, onClose, initialValues }: Props) => {
               {contactsArray.fields.map((field, idx) => (
                 <div
                   key={field.id}
-                  className="grid grid-cols-2 gap-3 mb-2 border p-3 rounded-lg relative"
+                  className="grid grid-cols-1  lg:grid-cols-2 gap-3 mb-2 border p-3 rounded-lg relative"
                 >
                   <button
                     type="button"
@@ -138,6 +131,7 @@ const EditContactInformation = ({ isOpen, onClose, initialValues }: Props) => {
                 </div>
               ))}
               <Button
+                className="w-full"
                 type="button"
                 variant="outline"
                 onClick={() =>
@@ -147,14 +141,12 @@ const EditContactInformation = ({ isOpen, onClose, initialValues }: Props) => {
                 + Add Another Contact
               </Button>
             </div>
-
-            {/* 🧩 Emails */}
             <div>
-              <h3 className="font-semibold mb-2">Emails</h3>
+              <h3 className="font-semibold mb-2">E-mails</h3>
               {emailsArray.fields.map((field, idx) => (
                 <div
                   key={field.id}
-                  className="grid grid-cols-2 gap-3 mb-2 border p-3 rounded-lg relative"
+                  className="grid grid-cols-1  lg:grid-cols-2 gap-3 mb-2 border p-3 rounded-lg relative"
                 >
                   <button
                     type="button"
@@ -163,17 +155,25 @@ const EditContactInformation = ({ isOpen, onClose, initialValues }: Props) => {
                   >
                     <X className="w-4 h-4" />
                   </button>
-                  <ControlledInputField
-                    name={`emails.${idx}.type`}
-                    placeholder="Type (e.g., support)"
-                  />
-                  <ControlledInputField
-                    name={`emails.${idx}.email`}
-                    placeholder="Email"
-                  />
+                  <div>
+                    <InputLabel label="Emails Type (e.g., support)" required />
+                    <ControlledInputField
+                      name={`emails.${idx}.type`}
+                      placeholder="Type (e.g., support)"
+                    />
+                  </div>
+                  <div>
+                    <InputLabel label="Contact email" required />
+
+                    <ControlledInputField
+                      name={`emails.${idx}.email`}
+                      placeholder="Email"
+                    />
+                  </div>
                 </div>
               ))}
               <Button
+                className="w-full"
                 type="button"
                 variant="outline"
                 onClick={() => emailsArray.append({ type: "", email: "" })}
@@ -182,13 +182,12 @@ const EditContactInformation = ({ isOpen, onClose, initialValues }: Props) => {
               </Button>
             </div>
 
-            {/* 🧩 Phones */}
             <div>
               <h3 className="font-semibold mb-2">Phones</h3>
               {phonesArray.fields.map((field, idx) => (
                 <div
                   key={field.id}
-                  className="grid grid-cols-2 gap-3 mb-2 border p-3 rounded-lg relative"
+                  className="grid grid-cols-1  lg:grid-cols-2 gap-3 mb-2 border p-3 rounded-lg relative"
                 >
                   <button
                     type="button"
@@ -197,17 +196,24 @@ const EditContactInformation = ({ isOpen, onClose, initialValues }: Props) => {
                   >
                     <X className="w-4 h-4" />
                   </button>
-                  <ControlledInputField
-                    name={`phones.${idx}.type`}
-                    placeholder="Type (e.g., main)"
-                  />
-                  <ControlledInputField
-                    name={`phones.${idx}.phone`}
-                    placeholder="Phone Number"
-                  />
+                  <div>
+                    <InputLabel label="Phone type (e.g., main)" required />
+                    <ControlledInputField
+                      name={`phones.${idx}.type`}
+                      placeholder="Type (e.g., main)"
+                    />
+                  </div>
+                  <div>
+                    <InputLabel label="Contact phone " required />
+                    <ControlledInputField
+                      name={`phones.${idx}.phone`}
+                      placeholder="Phone Number"
+                    />
+                  </div>
                 </div>
               ))}
               <Button
+                className="w-full"
                 type="button"
                 variant="outline"
                 onClick={() => phonesArray.append({ type: "", phone: "" })}
@@ -216,13 +222,12 @@ const EditContactInformation = ({ isOpen, onClose, initialValues }: Props) => {
               </Button>
             </div>
 
-            {/* 🧩 Addresses */}
             <div>
               <h3 className="font-semibold mb-2">Addresses</h3>
               {addressesArray.fields.map((field, idx) => (
                 <div
                   key={field.id}
-                  className="grid grid-cols-2 gap-3 mb-2 border p-3 rounded-lg relative"
+                  className="grid grid-cols-1  lg:grid-cols-2 gap-3 mb-2 border p-3 rounded-lg relative"
                 >
                   <button
                     type="button"
@@ -231,17 +236,27 @@ const EditContactInformation = ({ isOpen, onClose, initialValues }: Props) => {
                   >
                     <X className="w-4 h-4" />
                   </button>
-                  <ControlledInputField
-                    name={`addresses.${idx}.type`}
-                    placeholder="Type (e.g., head office)"
-                  />
-                  <ControlledTextareaField
-                    name={`addresses.${idx}.address`}
-                    placeholder="Address"
-                  />
+                  <div>
+                    <InputLabel
+                      label="Addresses type (e.g., head office)"
+                      required
+                    />
+                    <ControlledInputField
+                      name={`addresses.${idx}.type`}
+                      placeholder="Type (e.g., head office)"
+                    />
+                  </div>
+                  <div>
+                    <InputLabel label="Addresses" required />
+                    <ControlledTextareaField
+                      name={`addresses.${idx}.address`}
+                      placeholder="Address"
+                    />
+                  </div>
                 </div>
               ))}
               <Button
+                className="w-full"
                 type="button"
                 variant="outline"
                 onClick={() => addressesArray.append({ type: "", address: "" })}
@@ -249,37 +264,52 @@ const EditContactInformation = ({ isOpen, onClose, initialValues }: Props) => {
                 + Add Another Address
               </Button>
             </div>
-
-            {/* 🕒 Office Hours */}
-            <ControlledInputField
-              name="officeHours"
-              placeholder="Office Hours"
-            />
-
-            {/* 🌐 Social Links */}
-            <div className="grid grid-cols-2 gap-4">
+            <div>
+              <InputLabel label="Office Hours" required />
               <ControlledInputField
-                name="facebookUrl"
-                placeholder="Facebook URL"
-              />
-              <ControlledInputField
-                name="twitterUrl"
-                placeholder="Twitter URL"
-              />
-              <ControlledInputField
-                name="linkedinUrl"
-                placeholder="LinkedIn URL"
-              />
-              <ControlledInputField
-                name="websiteUrl"
-                placeholder="Website URL"
-              />
-              <ControlledTextareaField
-                name="mapEmbedUrl"
-                placeholder="Map Embed URL"
+                name="officeHours"
+                placeholder="Office Hours"
               />
             </div>
-            <ErrorMessage error={patchError} />
+
+            <div className="grid grid-cols-1  lg:grid-cols-2 gap-4">
+              <div>
+                <InputLabel label="Facebook URL" />
+                <ControlledInputField
+                  name="facebookUrl"
+                  placeholder="Facebook URL"
+                />
+              </div>
+              <div>
+                <InputLabel label="Twitter URL" />
+                <ControlledInputField
+                  name="twitterUrl"
+                  placeholder="Twitter URL"
+                />
+              </div>
+              <div>
+                <InputLabel label="LinkedIn URL" />
+                <ControlledInputField
+                  name="linkedinUrl"
+                  placeholder="LinkedIn URL"
+                />
+              </div>
+              <div>
+                <InputLabel label="Website URL" />
+                <ControlledInputField
+                  name="websiteUrl"
+                  placeholder="Website URL"
+                />
+              </div>
+              <div>
+                <InputLabel label="Map Embed URL" />
+                <ControlledTextareaField
+                  name="mapEmbedUrl"
+                  placeholder="Map Embed URL"
+                />
+              </div>
+            </div>
+            <ErrorMessage error={postError} />
             <div className="flex justify-end gap-3 pt-4">
               <Button type="button" variant="outline" onClick={onClose}>
                 Cancel

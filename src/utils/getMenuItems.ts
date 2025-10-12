@@ -1,5 +1,6 @@
 import {
   Activity,
+  BadgeInfo,
   Building2,
   CalendarDays,
   Folder,
@@ -25,7 +26,7 @@ export interface MenuItem {
 
 export function getMenuItems(
   hasPermission: boolean,
-  role: UserRole
+  role: UserRole | null
 ): MenuItem[] {
   if (role === UserRole.USER) {
     return [
@@ -122,7 +123,16 @@ export function getMenuItems(
       icon: ShieldCheck,
       children: [{ label: "All Roles", href: "/admin/roles/all-roles" }],
     },
-    hasPermission &&  { label: "Contacts", icon: PiChats, href: "/admin/contacts" },
+    hasPermission && {
+      label: "Contacts",
+      icon: PiChats,
+      href: "/admin/contacts",
+    },
+    hasPermission && {
+      label: "Contact Information",
+      icon: BadgeInfo,
+      href: "/admin/contact-information",
+    },
     hasPermission && { label: "FAQs", icon: FaQuestion, href: "/admin/faqs" },
     hasPermission && {
       label: "Activity",

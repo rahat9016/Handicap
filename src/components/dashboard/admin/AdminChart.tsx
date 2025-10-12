@@ -24,6 +24,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import { IDashboardData } from "./types/interface";
 const chartData = [
   { month: "Jan", visitors: 3920 },
   { month: "Feb", visitors: 100000 },
@@ -76,12 +77,16 @@ const trainingData = [
   },
 ];
 const COLORS = ["#135393", "#83B9EF", "#27AE60", "#F2994A"];
-export default function AdminChart() {
+export default function AdminChart({
+  dashboardData,
+}: {
+  dashboardData: IDashboardData | undefined;
+}) {
   const router = useRouter();
   const { adminOrganizationPermission, hasPermission } = useAppSelector(
     (state) => state.permission
   );
-  const [organization, setOrganization] = useState("all");
+  console.log(dashboardData?.topCourses);
   const [timeRange, setTimeRange] = useState("24h");
   return (
     <div>
@@ -93,16 +98,6 @@ export default function AdminChart() {
                 Total Visitor
               </h2>
               <div className="flex gap-2">
-                <Select value={organization} onValueChange={setOrganization}>
-                  <SelectTrigger className="w-40 text-darkLiver font-inter text-sm border border-skeleton">
-                    <SelectValue placeholder="All Organization" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Organization</SelectItem>
-                    <SelectItem value="org01">Organization 01</SelectItem>
-                    <SelectItem value="org02">Organization 02</SelectItem>
-                  </SelectContent>
-                </Select>
                 <Select value={timeRange} onValueChange={setTimeRange}>
                   <SelectTrigger className="w-40 text-darkLiver font-inter text-sm border border-skeleton">
                     <SelectValue placeholder="Last 24 Hours" />
@@ -156,16 +151,6 @@ export default function AdminChart() {
               </h2>
             </div>
             <div className="py-4 flex flex-col gap-2 px-[28px]">
-              {/* <Button className="group bg-white hover:bg-dashboard-primary flex items-center justify-start gap-2 w-full h-[58px] border border-skeleton hover:text-white text-darkLiver font-inter font-medium text-base">
-                <Image
-                  width={24}
-                  height={24}
-                  src="/images/dashboard/icon01.svg"
-                  alt="Add New Members"
-                  className="group-hover:white-filter"
-                />{" "}
-                Add New Members
-              </Button> */}
               {hasPermission && (
                 <Button className="group bg-white hover:bg-dashboard-primary flex items-center justify-start gap-2 w-full h-[58px] border border-skeleton hover:text-white text-darkLiver font-inter font-medium text-base">
                   <Image
@@ -222,82 +207,61 @@ export default function AdminChart() {
               </Button>
             </div>
             <ul className="py-4 flex flex-col gap-2 px-[28px]">
-              {[
-                {
-                  title: "Resource 1",
-                  description: "Description for resource 1",
-                  downloads: 120,
-                  views: 500,
-                },
-                {
-                  title: "Resource 2",
-                  description: "Description for resource 2",
-                  downloads: 90,
-                  views: 400,
-                },
-                {
-                  title: "Resource 3",
-                  description: "Description for resource 3",
-                  downloads: 70,
-                  views: 300,
-                },
-                {
-                  title: "Resource 4",
-                  description: "Description for resource 4",
-                  downloads: 50,
-                  views: 200,
-                },
-              ].map((resource, index) => (
-                <li
-                  key={index}
-                  className={`${
-                    index % 2 === 0 ? "bg-[#EDF5FD]" : ""
-                  } px-4 h-[72px] rounded flex gap-2 items-center `}
-                >
-                  <div
-                    className={`flex-shrink-0 w-10 h-10  rounded-full flex items-center justify-center ${
-                      index % 2 !== 0 ? "bg-[#EAF6FB]" : "bg-white"
-                    }`}
+              {dashboardData?.topResources?.map((resource, index) => {
+                return (
+                  <li
+                    key={index}
+                    className={`${
+                      index % 2 === 0 ? "bg-[#EDF5FD]" : ""
+                    } px-4 h-[72px] rounded flex gap-2 items-center `}
                   >
-                    <Image
-                      width={24}
-                      height={24}
-                      src={
-                        index % 2 !== 0
-                          ? "/images/dashboard/icon11.svg"
-                          : "/images/dashboard/icon12.svg"
-                      }
-                      alt="icon"
-                    />
-                  </div>
-                  <div className="flex-1">
-                    <div className="font-semibold">{resource.title}</div>
-                    <div className="text-sm text-muted-foreground">
-                      {resource.description}
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-5">
-                    <div className="text-xs text-erieBlack font-medium font-inter flex flex-row items-center gap-1">
+                    <div
+                      className={`flex-shrink-0 w-10 h-10  rounded-full flex items-center justify-center ${
+                        index % 2 !== 0 ? "bg-[#EAF6FB]" : "bg-white"
+                      }`}
+                    >
                       <Image
                         width={24}
                         height={24}
-                        src="/images/dashboard/icon05.svg"
-                        alt="icon05"
+                        src={
+                          index % 2 !== 0
+                            ? "/images/dashboard/icon11.svg"
+                            : "/images/dashboard/icon12.svg"
+                        }
+                        alt="icon"
                       />
-                      <span>{resource.downloads}</span>
                     </div>
-                    <div className="text-xs text-erieBlack font-medium  font-inter flex flex-row items-center gap-1">
-                      <Image
-                        width={24}
-                        height={24}
-                        src="/images/dashboard/icon06.svg"
-                        alt="icon06"
-                      />
-                      <span>{resource.views}</span>
+                    <div className="flex-1">
+                      <div className="font-semibold line-clamp-1">
+                        {resource.title}
+                      </div>
+                      <div className="text-sm text-muted-foreground line-clamp-1">
+                        {resource.description}
+                      </div>
                     </div>
-                  </div>
-                </li>
-              ))}
+                    <div className="flex items-center gap-5">
+                      <div className="text-xs text-erieBlack font-medium font-inter flex flex-row items-center gap-1">
+                        <Image
+                          width={24}
+                          height={24}
+                          src="/images/dashboard/icon05.svg"
+                          alt="icon05"
+                        />
+                        <span>{resource.totalDownloadCount}</span>
+                      </div>
+                      <div className="text-xs text-erieBlack font-medium  font-inter flex flex-row items-center gap-1">
+                        <Image
+                          width={24}
+                          height={24}
+                          src="/images/dashboard/icon06.svg"
+                          alt="icon06"
+                        />
+                        <span>{resource.totalViewCount}</span>
+                      </div>
+                    </div>
+                  </li>
+                );
+              })}
             </ul>
           </CardContent>
         </Card>

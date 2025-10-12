@@ -5,12 +5,12 @@ import { usePagination } from "@/hooks/usePagination";
 import { useSearchDebounce } from "@/hooks/useSearchDebounce";
 import { Eye, NotebookText } from "lucide-react";
 import { useEffect, useState } from "react";
-import CreateUpdatePageSectionModal from "./CreateUpdatePageSection";
 import { IContactMessage } from "./types";
+import ViewDetails from "./ViewContactDetails";
 
 const Contacts = () => {
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [section, setSection] = useState<IContactMessage>();
+  const [isView, setIsView] = useState<boolean>(false);
+  const [contact, setContact] = useState<IContactMessage>();
   const { search, handleSearchChange, debouncedSearch } =
     useSearchDebounce(300);
   const {
@@ -42,8 +42,8 @@ const Contacts = () => {
   }, [data]);
 
   const handleMessageView = (row: IContactMessage) => {
-    setSection(row);
-    setIsModalOpen(true);
+    setContact(row);
+    setIsView(true);
   };
 
   const columns: ColumnDef<IContactMessage>[] = [
@@ -109,15 +109,16 @@ const Contacts = () => {
         // IsCreate={hasPermission} // [If you need a create button, just pass true as a props]
         // setIsModalOpen={setIsModalOpen} // [create modal open state]
       />
-
-      <CreateUpdatePageSectionModal
-        isOpen={isModalOpen}
-        onClose={() => {
-          setIsModalOpen(false);
-          setSection(undefined);
-        }}
-        initialValues={section}
-      />
+      {contact && (
+        <ViewDetails
+          isOpen={isView}
+          onClose={() => {
+            setIsView(false);
+            setContact(undefined);
+          }}
+          contact={contact}
+        />
+      )}
     </div>
   );
 };

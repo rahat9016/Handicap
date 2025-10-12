@@ -235,6 +235,7 @@ export default function ResourceCard({
 
     if (fileTypeInfo?.previewable && fileTypeInfo.icon === Image) {
       return (
+        // eslint-disable-next-line @next/next/no-img-element
         <img
           src={filePath}
           alt={title}

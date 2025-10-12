@@ -10,7 +10,7 @@ export interface IUserInformation {
   isVerified: boolean;
   accountStatus: string;
   roleId: string;
-  roleName: UserRole;
+  roleName: UserRole | null;
 }
 
 export interface IDataItem {

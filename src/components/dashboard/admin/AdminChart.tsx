@@ -46,36 +46,6 @@ const countryData = [
   { name: "China", value: 15 },
 ];
 
-const trainingData = [
-  {
-    img: "/images/dashboard/img.png",
-    title: "Digital Literacy for Beginners",
-    organizer: "Organization Name 01",
-    enrolled: 10423,
-    completed: 1823,
-  },
-  {
-    img: "/images/dashboard/img.png",
-    title: "Digital Literacy for Beginners",
-    organizer: "Organization Name 01",
-    enrolled: 10423,
-    completed: 1823,
-  },
-  {
-    img: "/images/dashboard/img.png",
-    title: "Digital Literacy for Beginners",
-    organizer: "Organization Name 01",
-    enrolled: 10423,
-    completed: 1823,
-  },
-  {
-    img: "/images/dashboard/img.png",
-    title: "Digital Literacy for Beginners",
-    organizer: "Organization Name 01",
-    enrolled: 10423,
-    completed: 1823,
-  },
-];
 const COLORS = ["#135393", "#83B9EF", "#27AE60", "#F2994A"];
 export default function AdminChart({
   dashboardData,
@@ -283,7 +253,7 @@ export default function AdminChart({
                   <div className="text-left p-2 w-20">Completed</div>
                 </div>
                 <div>
-                  {trainingData.map((training, index) => (
+                  {dashboardData?.topCourses.map((training, index) => (
                     <div
                       key={index}
                       className="border-b h-[66px] flex items-center px-6"
@@ -292,7 +262,7 @@ export default function AdminChart({
                         <Image
                           width={44}
                           height={44}
-                          src={training.img}
+                          src={training?.thumbnailUrl}
                           alt="trannig"
                           className="w-11 h-11 rounded object-cover"
                         />
@@ -301,15 +271,15 @@ export default function AdminChart({
                             {training.title}
                           </div>
                           <div className="text-xs text-[#8C8C8C] font-inter font-normal">
-                            {training.organizer}
+                            {training.organization.name}
                           </div>
                         </div>
                       </div>
                       <div className="p-2 w-20 text-erieBlack font-inter text-xs font-medium">
-                        {training.enrolled.toLocaleString()}
+                        {/* {.toLocaleString()} */}0
                       </div>
                       <div className="p-2 w-20 text-erieBlack font-inter text-xs font-medium">
-                        {training.completed.toLocaleString()}
+                        {/* {training.completed.toLocaleString()} */}0
                       </div>
                     </div>
                   ))}

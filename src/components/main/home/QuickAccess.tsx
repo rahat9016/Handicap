@@ -33,45 +33,6 @@ const QuickAccess = () => {
       limit: String(3),
     }
   );
-  // const resources = {
-  //   featured1: [
-  //     {
-  //       date: "Apr 2023",
-  //       title: "Disability Inclusion in WASH",
-  //       desc: "Guidelines for inclusive WASH facilities in humanitarian settings",
-  //       downloads: 78,
-  //     },
-  //     {
-  //       date: "Jun 2023",
-  //       title: "Inclusive Education in Emergencies",
-  //       desc: "Best practices for ensuring education access for children with disabilities",
-  //       downloads: 64,
-  //     },
-  //     {
-  //       date: "Feb 2024",
-  //       title: "Accessible Shelter Guidelines",
-  //       desc: "Technical specifications for accessible shelter design",
-  //       downloads: 52,
-  //     },
-  //   ],
-  //   featured2: [
-  //     {
-  //       date: "Jan 2024",
-  //       title: "Assistive Tech Tools",
-  //       desc: "Tools and software for accessibility improvements",
-  //       downloads: 35,
-  //     },
-  //   ],
-  //   announcements: [
-  //     {
-  //       date: "Mar 2024",
-  //       title: "New Training Program Launched",
-  //       desc: "Vocational training for persons with disabilities now open",
-  //       downloads: 0,
-  //     },
-  //   ],
-  // };
-
   const [active, setActive] = useState(false);
   const [activeTab, setActiveTab] = useState("featured1");
 
@@ -149,6 +110,7 @@ const QuickAccess = () => {
                           desc={
                             item?.description?.[local] ?? item?.description?.en
                           }
+                          pathname={`/resources/${item.id}`}
                         />
                       ))}
                     </div>
@@ -166,6 +128,7 @@ const QuickAccess = () => {
                           date={item.createdAt}
                           title={item?.title}
                           desc={item?.description}
+                          pathname={`/training/${item.id}`}
                         />
                       ))}
                     </div>
@@ -184,6 +147,7 @@ const QuickAccess = () => {
                           date={item.createdAt}
                           title={item?.title}
                           desc={item?.summary}
+                          pathname={`/news/${item.id}`}
                         />
                       ))}
                     </div>

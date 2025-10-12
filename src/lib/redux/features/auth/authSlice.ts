@@ -15,7 +15,7 @@ const initialState: IInitialState = {
     isVerified: false,
     accountStatus: "",
     roleId: "",
-    roleName: UserRole.USER,
+    roleName: null,
   },
   data: [],
 };

@@ -7,6 +7,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useGet } from "@/hooks/useGet";
 import { useRouter } from "@/i18n/navigation";
 import { useAppSelector } from "@/lib/redux/hooks";
 import { ChevronRight } from "lucide-react";
@@ -25,20 +26,12 @@ import {
   YAxis,
 } from "recharts";
 import { IDashboardData } from "./types/interface";
-const chartData = [
-  { month: "Jan", visitors: 3920 },
-  { month: "Feb", visitors: 100000 },
-  { month: "Mar", visitors: 60000 },
-  { month: "Apr", visitors: 20000 },
-  { month: "May", visitors: 30000 },
-  { month: "Jun", visitors: 50000 },
-  { month: "Jul", visitors: 150000 },
-  { month: "Aug", visitors: 180000 },
-  { month: "Sep", visitors: 60000 },
-  { month: "Oct", visitors: 80000 },
-  { month: "Nov", visitors: 130000 },
-  { month: "Dec", visitors: 180000 },
-];
+type VisitorsResponse = {
+  data?: {
+    data?: Array<{ month: string; visitors: number }>;
+  };
+};
+
 const countryData = [
   { name: "Bangladesh", value: 40 },
   { name: "Malaysia", value: 25 },
@@ -56,63 +49,88 @@ export default function AdminChart({
   const { adminOrganizationPermission, hasPermission } = useAppSelector(
     (state) => state.permission
   );
-  console.log(dashboardData?.topCourses);
-  const [timeRange, setTimeRange] = useState("24h");
+  const currentYear = new Date().getFullYear();
+  const [selectedYear, setSelectedYear] = useState(String(currentYear));
+
+  const { data, isLoading } = useGet<VisitorsResponse>(
+    `/analytics/visitors/yearly?year=${selectedYear}`,
+    ["dashboard", selectedYear],
+    {}
+  );
+  const chartData = Array.isArray(data?.data?.data) ? data.data.data : [];
+  console.log(chartData);
   return (
     <div>
       <div className="grid gap-6 grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3">
-        <Card className="col-span-3 lg:col-span-2  py-0 border border-skeleton">
-          <CardContent className="p-8">
-            <div className="flex justify-between items-center">
-              <h2 className="font-semibold text-lg text-erieBlack font-inter">
-                Total Visitor
-              </h2>
-              <div className="flex gap-2">
-                <Select value={timeRange} onValueChange={setTimeRange}>
-                  <SelectTrigger className="w-40 text-darkLiver font-inter text-sm border border-skeleton">
-                    <SelectValue placeholder="Last 24 Hours" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="24h">Last 24 Hours</SelectItem>
-                    <SelectItem value="12h">Last 12 Hours</SelectItem>
-                  </SelectContent>
-                </Select>
+        {hasPermission && (
+          <Card className="col-span-3 lg:col-span-2  py-0 border border-skeleton">
+            <CardContent className="p-8">
+              <div className="flex justify-between items-center">
+                <h2 className="font-semibold text-lg text-erieBlack font-inter">
+                  Total Visitor
+                </h2>
+                <div className="flex gap-2">
+                  <Select
+                    value={selectedYear}
+                    onValueChange={(value) => setSelectedYear(value)}
+                  >
+                    <SelectTrigger className="w-32 text-darkLiver font-inter text-sm border border-skeleton">
+                      <SelectValue placeholder="Select Year" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {[2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030].map(
+                        (year) => (
+                          <SelectItem key={year} value={String(year)}>
+                            {year}
+                          </SelectItem>
+                        )
+                      )}
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
-            </div>
-            <div className="mt-4 h-80">
-              <ResponsiveContainer width="100%" height="100%">
-                <AreaChart
-                  data={chartData}
-                  margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
-                >
-                  <defs>
-                    <linearGradient
-                      id="colorVisitors"
-                      x1="0"
-                      y1="0"
-                      x2="0"
-                      y2="1"
+              <div className="mt-4 h-80">
+                {isLoading ? (
+                  <div className="flex justify-center items-center h-full text-gray-500">
+                    Loading...
+                  </div>
+                ) : (
+                  <ResponsiveContainer width="100%" height="100%">
+                    <AreaChart
+                      data={chartData ?? []}
+                      margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
                     >
-                      <stop offset="0%" stopColor="#3A6FF833" />
-                      <stop offset="100%" stopColor="#3A6FF800" />
-                    </linearGradient>
-                  </defs>
-                  <XAxis dataKey="month" stroke="#8C8C8C" />
-                  <YAxis stroke="#8C8C8C" />
-                  <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                  <Tooltip />
-                  <Area
-                    type="monotone"
-                    dataKey="visitors"
-                    stroke="#3F93E6"
-                    fillOpacity={1}
-                    fill="url(#colorVisitors)"
-                  />
-                </AreaChart>
-              </ResponsiveContainer>
-            </div>
-          </CardContent>
-        </Card>
+                      <defs>
+                        <linearGradient
+                          id="colorVisitors"
+                          x1="0"
+                          y1="0"
+                          x2="0"
+                          y2="1"
+                        >
+                          <stop offset="0%" stopColor="#3A6FF833" />
+                          <stop offset="100%" stopColor="#3A6FF800" />
+                        </linearGradient>
+                      </defs>
+                      <XAxis dataKey="month" stroke="#8C8C8C" />
+                      <YAxis stroke="#8C8C8C" />
+                      <CartesianGrid strokeDasharray="3 3" vertical={false} />
+                      <Tooltip />
+                      <Area
+                        type="monotone"
+                        dataKey="visitors"
+                        stroke="#3F93E6"
+                        fillOpacity={1}
+                        fill="url(#colorVisitors)"
+                      />
+                    </AreaChart>
+                  </ResponsiveContainer>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
         <Card className="col-span-3 lg:col-span-2 xl:col-span-1 py-0 px-0 border border-skeleton">
           <CardContent className="px-0 flex flex-col gap-2">
             <div className="border-b p-8 border-skeleton">
@@ -166,6 +184,7 @@ export default function AdminChart({
             </div>
           </CardContent>
         </Card>
+
         <Card className="col-span-3 lg:col-span-2 xl:col-span-1 py-0 px-0 border border-skeleton">
           <CardContent className="px-0 flex flex-col gap-2">
             <div className="border-b p-8 border-skeleton flex items-center justify-between">

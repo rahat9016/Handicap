@@ -10,15 +10,13 @@ import { Eye, SquarePen, UsersIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import CreateUpdateUser from "./CreateUpdateUsers";
 import ViewDetails from "./ViewDetails";
+
 export default function Users() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isView, setIsView] = useState<boolean>(false);
   const [user, setUser] = useState<IUser>();
   const { search, handleSearchChange, debouncedSearch } =
     useSearchDebounce(300);
-
-  // const [selectedUser, setSelectedUser] = useState<any>(null); // row currently selected
-  // const [isDialogOpen, setIsDialogOpen] = useState(false);
   const {
     setCurrentPage,
     itemsPerPage,
@@ -27,7 +25,8 @@ export default function Users() {
     setTotalItems,
     setItemsPerPage,
   } = usePagination();
-  const { data, isLoading } = useGet<IUser>(
+
+  const { data, isLoading } = useGet<IUser[]>(
     "/user",
     ["user", currentPage.toString()],
     {

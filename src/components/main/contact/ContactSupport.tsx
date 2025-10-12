@@ -2,11 +2,11 @@
 import Paragraph from "@/components/share/Paragraph";
 import SectionTopTitle from "@/components/share/SectionTopTitle";
 import Title from "@/components/share/Title";
-import { Clock4, Mail, MapPin, Phone, User } from "lucide-react";
-import ContactForm from "./ContactForm";
 import { useGet } from "@/hooks/useGet";
 import { IContactInfo } from "@/types/types";
 import { CapFirst } from "@/utils/CapFirst";
+import { Clock4, Mail, MapPin, Phone, User } from "lucide-react";
+import ContactForm from "./ContactForm";
 
 const ContactSupport = () => {
   const { data } = useGet<IContactInfo>("/contact-information", [
@@ -25,7 +25,6 @@ const ContactSupport = () => {
           />
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 xl:gap-16 mt-6 lg:mt-10 xl:mt-14">
-            {/* Contact Information Section */}
             <div className="order-2 lg:order-1">
               <div className="mb-6 lg:mb-8 xl:mb-10">
                 <Title className="mb-2 lg:mb-[6px] text-xl lg:text-2xl">
@@ -41,13 +40,13 @@ const ContactSupport = () => {
                       Name
                     </h4>
                     <div className="space-y-4">
-                      {ContactData?.contacts.map((contact, index) => (
+                      {ContactData?.contacts?.map((contact, index) => (
                         <div key={index}>
                           <p className="text-[#353535] text-sm lg:text-base font-inter font-normal">
-                            {contact.name}
+                            {contact?.name}
                           </p>
                           <p className="text-[#353535] text-xs lg:text-sm font-inter font-normal mt-1">
-                            <b>Designation:</b> {contact.designation}
+                            <b>Designation:</b> {contact?.designation}
                           </p>
                         </div>
                       ))}
@@ -61,7 +60,7 @@ const ContactSupport = () => {
                     <h4 className="leading-none text-blue font-semibold font-inter text-base lg:text-lg mb-1 lg:mb-[6px]">
                       Email address
                     </h4>
-                    {ContactData?.emails.map((email, index) => (
+                    {ContactData?.emails?.map((email, index) => (
                       <p
                         key={index}
                         className="text-[#353535] text-sm lg:text-base font-inter font-normal"
@@ -69,7 +68,7 @@ const ContactSupport = () => {
                         <span className="font-semibold text-sm">
                           {CapFirst(email.type)}:{" "}
                         </span>
-                        {email.email}
+                        {email?.email}
                       </p>
                     ))}
                   </div>
@@ -81,15 +80,15 @@ const ContactSupport = () => {
                     <h4 className="leading-none text-blue font-semibold font-inter text-base lg:text-lg mb-1 lg:mb-[6px]">
                       Phone
                     </h4>
-                    {ContactData?.phones.map((item, index) => (
+                    {ContactData?.phones?.map((item, index) => (
                       <p
                         key={index}
                         className="text-[#353535] text-sm lg:text-base font-inter font-normal"
                       >
                         <span className="font-semibold text-sm">
-                          {CapFirst(item.type)}:{" "}
+                          {CapFirst(item?.type)}:{" "}
                         </span>
-                        {item.phone}
+                        {item?.phone}
                       </p>
                     ))}
                   </div>
@@ -101,7 +100,7 @@ const ContactSupport = () => {
                     <h4 className="leading-none text-blue font-semibold font-inter text-base lg:text-lg mb-1 lg:mb-[6px]">
                       Office Address
                     </h4>
-                    {ContactData?.addresses.map((item, index) => (
+                    {ContactData?.addresses?.map((item, index) => (
                       <p
                         key={index}
                         className="text-[#353535] text-sm lg:text-base font-inter font-normal w-full lg:w-10/12 xl:w-3/4"
@@ -109,7 +108,7 @@ const ContactSupport = () => {
                         <span className="font-semibold text-sm">
                           {CapFirst(item.type)}:{" "}
                         </span>
-                        {item.address}
+                        {item?.address}
                       </p>
                     ))}
                   </div>

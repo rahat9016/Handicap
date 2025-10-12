@@ -1,3 +1,4 @@
+import ErrorMessage from "@/components/common/Errors/ErrorMessage";
 import ControlledInputField from "@/components/share/ControlledInputField";
 import InputLabel from "@/components/share/InputLabel";
 import { Button } from "@/components/ui/button";
@@ -159,13 +160,9 @@ const CreateUpdateFAQs = ({
                 />
               </div>
             </div>
-            {error?.errors?.length ||
-              (patchError?.errors?.length && (
-                <div className="text-rose-600 bg-rose-200 text-center py-2 rounded-sm font-inter text-sm">
-                  {error?.errors && error?.errors[0]}
-                  {patchError?.errors && patchError?.errors[0]}
-                </div>
-              ))}
+            <ErrorMessage error={error} />
+            <ErrorMessage error={patchError} />
+
             <div className="flex justify-end gap-3 pt-4">
               <Button
                 type="button"

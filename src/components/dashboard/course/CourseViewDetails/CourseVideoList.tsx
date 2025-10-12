@@ -1,6 +1,5 @@
 import { IVideoContent } from "@/components/main/training/types/traning";
 import Paragraph from "@/components/share/Paragraph";
-import { StatusToggle } from "@/components/share/StatusToggle";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 
@@ -27,14 +26,14 @@ export default function CourseVideoList({
             className="relative cursor-pointer hover:shadow-lg transition border rounded-xl"
           >
             <div className="flex justify-end px-2 absolute right-0 top-3 gap-3">
-              <Paragraph>Ordering: {i+1}</Paragraph>
-              <StatusToggle
+              <Paragraph>Ordering: {i + 1}</Paragraph>
+              {/* <StatusToggle
                 id={10}
                 status={false}
                 onConfirm={async () => {
                   console.log("clicked");
                 }}
-              />
+              /> */}
             </div>
             <CardContent className="flex items-center gap-4 mt-2 ">
               <div className="flex-shrink-0">

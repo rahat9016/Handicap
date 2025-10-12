@@ -1,10 +1,9 @@
-import PageSections from '@/components/dashboard/contacts/Contacts'
-import React from 'react'
+import PageSections from "@/components/dashboard/contacts/Contacts";
 
 export default function page() {
   return (
     <div>
-      <PageSections/>
+      <PageSections />
     </div>
-  )
+  );
 }

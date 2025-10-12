@@ -2,15 +2,13 @@
 import { ILangType } from "@/types";
 import { Dispatch, SetStateAction } from "react";
 
-export interface IUserRole { 
+export interface IUserRole {
   id: number;
   organizationId: number;
   organizationName: string;
   roleId: number;
   roleName: string;
 }
-
-
 
 interface Language {
   id: number;
@@ -69,7 +67,7 @@ export interface IResource {
   name?: string;
   actions?: string;
   isPrivate?: boolean;
-
+  isApproved: boolean;
   title: ILangType;
   description: ILangType;
   filePath: string;
@@ -80,8 +78,8 @@ export interface IResource {
   totalDownloadCount: number;
   totalViewCount: number;
   filesCount: number;
-  createdAt: string; 
-  updatedAt: string; 
+  createdAt: string;
+  updatedAt: string;
   language: Language;
   category: Category;
   uploader: Uploader;
@@ -104,5 +102,5 @@ export interface IResourceProps {
   totalItems: number;
   itemsPerPage: number;
   setItemsPerPage: any;
-  setSelectedId: Dispatch<SetStateAction<string | undefined>>
+  setSelectedId: Dispatch<SetStateAction<string | undefined>>;
 }

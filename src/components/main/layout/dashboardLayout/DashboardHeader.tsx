@@ -1,7 +1,7 @@
 "use client";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { useRouter } from "@/i18n/navigation";
+import { usePathname, useRouter } from "@/i18n/navigation";
 import { useAppSelector } from "@/lib/redux/hooks";
 import { Bell, Building2, ChevronLeft, Menu } from "lucide-react";
 import Link from "next/link";
@@ -22,7 +22,9 @@ export default function DashboardHeader({
   );
 
   const router = useRouter();
-
+  const pathname = usePathname();
+  const isUser = pathname.startsWith("/user-dashboard");
+  console.log(pathname.startsWith("/user-dashboard"));
   return (
     <div
       className={`h-[70px] md:h-[90px] bg-white shadow-sm flex items-center px-3 md:px-6 border-b border-skeleton gap-3 md:gap-5 ${
@@ -46,7 +48,7 @@ export default function DashboardHeader({
           </button>
         )}
 
-        {organizationName && (
+        {!isUser && organizationName && (
           <div className="flex items-center gap-2 md:gap-4">
             <Button
               onClick={() => router.push("/organization-list")}

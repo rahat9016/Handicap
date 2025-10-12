@@ -238,12 +238,6 @@ export default function AllCourse() {
         options={options}
         setSelectedId={setSelectedId}
       />
-      {/* <CreateUpdateCourseQuiz
-        isOpen={isModalOpen}
-        onClose={() => {
-          setIsModalOpen(false);
-        }}
-      /> */}
     </div>
   );
 }

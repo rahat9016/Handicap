@@ -45,10 +45,10 @@ export function getMenuItems(
             label: "My Profile",
             href: "/user-dashboard/user-profile",
           },
-          {
-            label: "Change Password",
-            href: "/user-dashboard/change-password",
-          },
+          // {
+          //   label: "Change Password",
+          //   href: "/user-dashboard/change-password",
+          // },
         ],
       },
     ];
@@ -130,6 +130,20 @@ export function getMenuItems(
       children: [
         { label: "Course List", href: "/admin/course/course-list" },
         { label: "Course Categories", href: "/admin/course/course-categories" },
+      ],
+    },
+    {
+      label: "Settings",
+      icon: Settings,
+      children: [
+        {
+          label: "My Profile",
+          href: "/admin/user-profile",
+        },
+        // {
+        //   label: "Change Password",
+        //   href: "/admin/change-password",
+        // },
       ],
     },
     hasPermission && {

@@ -9,6 +9,7 @@ import {
   FileType,
   ImageIcon,
   RotateCw,
+  Video,
   ZoomIn,
   ZoomOut,
 } from "lucide-react";
@@ -21,35 +22,38 @@ import { IResource } from "@/components/dashboard/resources/types/types";
 import PDFModal from "@/components/main/userResources/PDFModal";
 import { useDownloadResource } from "@/components/main/userResources/useDownloadResource";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 import { useGet } from "@/hooks/useGet";
 import { usePost } from "@/hooks/usePost";
 import { usePreview } from "@/hooks/usePreview";
 import { formatFileSize } from "@/utils/formatFileSize";
-import { Separator } from "@radix-ui/react-dropdown-menu";
 import { toast } from "react-toastify";
+import DownloadFilesCard from "./ResourceDownloadFilesCard";
 import { ResourceHeader } from "./ResourceHeader";
 import ResourceHeaderDetails from "./ResourceHeaderDetails";
-type FileInfo = {
+export type FileInfo = {
   id: number;
   title: string;
   filePath: string;
+};
+
+export const getFileIcon = (type: string) => {
+  switch (type) {
+    case "pdf":
+      return <FileText className="h-4 w-4 text-red-500" />;
+    case "doc":
+      return <FileType className="h-4 w-4 text-blue-500" />;
+    case "text":
+      return <FileText className="h-4 w-4 text-green-500" />;
+    case "image":
+    case "jpeg":
+    case "jpg":
+    case "png":
+      return <ImageIcon className="h-4 w-4 text-purple-500" />;
+    default:
+      return <FileText className="h-4 w-4" />;
+  }
 };
 export default function ResourceDetails() {
   const params = useParams();
@@ -120,7 +124,6 @@ export default function ResourceDetails() {
       setSelectAll(false);
     }
   };
-
   const handlePreview = async (id: number, filePath: string) => {
     try {
       const blob = await previewFile(filePath);
@@ -157,23 +160,6 @@ export default function ResourceDetails() {
     }
   };
 
-  const getFileIcon = (type: string) => {
-    switch (type) {
-      case "pdf":
-        return <FileText className="h-4 w-4 text-red-500" />;
-      case "doc":
-        return <FileType className="h-4 w-4 text-blue-500" />;
-      case "text":
-        return <FileText className="h-4 w-4 text-green-500" />;
-      case "image":
-      case "jpeg":
-      case "jpg":
-      case "png":
-        return <ImageIcon className="h-4 w-4 text-purple-500" />;
-      default:
-        return <FileText className="h-4 w-4" />;
-    }
-  };
   const renderFilePreview = (file: any) => {
     switch (file.fileType) {
       case "pdf":
@@ -204,6 +190,43 @@ export default function ResourceDetails() {
                 <Download className="h-4 w-4" />
                 Download
               </Button>
+            </div>
+          </div>
+        );
+      case "mp4":
+      case "mov":
+      case "webm":
+      case "mkv":
+        return (
+          <div className="bg-background rounded-lg border">
+            <div className="p-4 border-b flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Video className="h-5 w-5 text-blue-500" />
+                <span className="font-medium">{file.title}</span>
+              </div>
+            </div>
+
+            <div className="p-6 flex items-center justify-center bg-black rounded-b-lg min-h-[400px]">
+              <video
+                src={file.filePath}
+                controls
+                className="rounded-lg max-w-full h-auto"
+                style={{ backgroundColor: "black" }}
+              >
+                Your browser does not support the video tag.
+              </video>
+            </div>
+
+            <div className="p-4 border-t bg-muted/30">
+              <p className="text-sm text-muted-foreground">
+                <strong>Description:</strong> {file.description}
+              </p>
+              <p className="text-sm text-muted-foreground mt-1">
+                <strong>Language:</strong> {file.language?.name}
+              </p>
+              <p className="text-sm text-muted-foreground mt-1">
+                <strong>File size:</strong> {formatFileSize(file.fileSize)}
+              </p>
             </div>
           </div>
         );
@@ -380,7 +403,6 @@ export default function ResourceDetails() {
         </div>
 
         <div className="container">
-          {/* Resource Header */}
           <ResourceHeaderDetails
             title={resourceData?.title.en}
             description={resourceData?.description.en}
@@ -394,7 +416,6 @@ export default function ResourceDetails() {
             keywords={resourceData?.keywords}
           />
 
-          {/* Main Content Grid */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-10">
             <div className="lg:col-span-8 space-y-6 bg-slate-50 p-6 border rounded-lg">
               <h2 className="text-3xl font-semibold font-inter ">
@@ -426,6 +447,7 @@ export default function ResourceDetails() {
                   ))}
                 </TabsList>
                 {resourceData?.resourceFiles.map((file) => {
+                  console.log(file);
                   return (
                     <TabsContent
                       key={file.id}
@@ -451,6 +473,7 @@ export default function ResourceDetails() {
                             </div>
                           </div>
                         </div>
+
                         {renderFilePreview(file)}
                       </div>
                     </TabsContent>
@@ -458,132 +481,18 @@ export default function ResourceDetails() {
                 })}
               </Tabs>
             </div>
-
-            {/* Download Section - Right Side (4/12) */}
-            <div className="lg:col-span-4 space-y-6 ">
-              <Card className="sticky top-4 bg-slate-50">
-                <CardHeader>
-                  <CardTitle className="text-xl">Download Files</CardTitle>
-                  <CardDescription>
-                    Select and download resource files
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-6">
-                  {/* Select All and Download Button */}
-                  <div className="space-y-4">
-                    <div className="flex items-center space-x-3">
-                      <Checkbox
-                        id="select-all"
-                        checked={selectAll}
-                        onCheckedChange={handleSelectAll}
-                      />
-                      <Label
-                        htmlFor="select-all"
-                        className="text-base font-medium"
-                      >
-                        Select All Files
-                      </Label>
-                    </div>
-                    <Button
-                      onClick={handleDownloadSelected}
-                      disabled={selectedFiles.length === 0}
-                      className="w-full bg-inclusion-teal hover:bg-inclusion-teal/90"
-                      size="lg"
-                    >
-                      <Download className="mr-2 h-5 w-5" />
-                      Download Selected ({selectedFiles.length})
-                    </Button>
-                  </div>
-
-                  <Separator />
-
-                  {/* Individual Files */}
-                  <div className="space-y-4">
-                    <h4 className="font-semibold text-lg">Individual Files</h4>
-                    <TooltipProvider>
-                      <div className="space-y-3">
-                        {resourceData?.resourceFiles.map((file) => (
-                          <div
-                            key={file.id}
-                            className="flex items-center space-x-3 p-3 border rounded-lg bg-white transition-colors"
-                          >
-                            <Checkbox
-                              id={`file-${file.id}`}
-                              checked={selectedFiles.some(
-                                (f) => f.id === file.id
-                              )}
-                              onCheckedChange={(checked) =>
-                                handleFileSelect(
-                                  {
-                                    id: file.id,
-                                    title: file.title,
-                                    filePath: file.filePath,
-                                  },
-                                  checked === true
-                                )
-                              }
-                            />
-                            <div className="flex-1 min-w-0">
-                              <div className="flex items-center gap-2 mb-1">
-                                {getFileIcon(file.fileType)}
-                                <div className="font-medium text-sm truncate">
-                                  {file.title}
-                                </div>
-                              </div>
-                              <div className="text-xs text-muted-foreground mb-2 line-clamp-2">
-                                {file.description}
-                              </div>
-                              <div className="text-xs text-muted-foreground">
-                                {formatFileSize(file.fileSize)} •{" "}
-                                {file.language.name}{" "}
-                              </div>
-                            </div>
-                            <div className="flex gap-1">
-                              <Tooltip>
-                                <TooltipTrigger asChild>
-                                  <Button
-                                    size="sm"
-                                    onClick={() =>
-                                      handlePreview(file?.id, file.filePath)
-                                    }
-                                    className="h-8 w-8 p-0 bg-dashboard-primary hover:bg-dashboard-primary text-white"
-                                  >
-                                    <Eye className="h-4 w-4 bg-dashboard-primary text-white" />
-                                  </Button>
-                                </TooltipTrigger>
-                                <TooltipContent>
-                                  <p>Open file</p>
-                                </TooltipContent>
-                              </Tooltip>
-                              <Tooltip>
-                                <TooltipTrigger asChild>
-                                  <Button
-                                    size="sm"
-                                    onClick={() =>
-                                      download(
-                                        file.id,
-                                        file.title,
-                                        file.filePath,
-                                        resourceId
-                                      )
-                                    }
-                                    className="h-8 w-8 p-0 bg-dashboard-primary hover:bg-dashboard-primary text-white"
-                                  >
-                                    <Download className="h-4 w-4" />
-                                  </Button>
-                                </TooltipTrigger>
-                                <TooltipContent>
-                                  <p>Download file</p>
-                                </TooltipContent>
-                              </Tooltip>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </TooltipProvider>
-                  </div>
-                </CardContent>
-              </Card>
+            <div className="lg:col-span-4 space-y-6">
+              <DownloadFilesCard
+                resourceData={resourceData}
+                selectedFiles={selectedFiles}
+                selectAll={selectAll}
+                handleSelectAll={handleSelectAll}
+                handleFileSelect={handleFileSelect}
+                handleDownloadSelected={handleDownloadSelected}
+                handlePreview={handlePreview}
+                download={download}
+                resourceId={resourceId}
+              />
             </div>
           </div>
         </div>

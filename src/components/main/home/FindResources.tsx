@@ -7,6 +7,7 @@ import { useGet } from "@/hooks/useGet";
 import { useSearchDebounce } from "@/hooks/useSearchDebounce";
 import { useRouter } from "@/i18n/navigation";
 import { Search } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 
 export default function FindResources() {
@@ -25,6 +26,7 @@ export default function FindResources() {
     handleSearchChange(e);
     setShouldFetch(e.target.value.trim().length > 0);
   };
+  const t = useTranslations("Home");
 
   const handleSelectResource = (id: number) => {
     // navigate to resource detail page
@@ -38,8 +40,8 @@ export default function FindResources() {
       <div className="container">
         <div className="py-10 lg:py-20">
           <SectionTopTitle
-            title="Find Resources"
-            desc="Access a wide range of materials designed to inform, support, and empower. Whether you're looking for training guides, policy documents, toolkits, or educational content"
+            title={t("findResource")}
+            desc={t("resourceDescription")}
           />
 
           <div className="w-full lg:w-7/12 mx-auto mt-[60px] relative">
@@ -47,12 +49,12 @@ export default function FindResources() {
               <Input
                 value={search}
                 onChange={handleInputChange}
-                placeholder="Search for resources, guidelines, training materials..."
+                placeholder={t('searchPlaceholder')}
                 className="border border-[#7297FF] h-[46px] focus:border-[#7297FF] placeholder:text-[#B7B7B7] bg-white"
               />
               <Button className="bg-[#2A53CD] text-white h-[46px] flex items-center font-inter text-sm font-medium px-6">
                 <Search className="mr-2" />
-                Search now
+               {t('searchNow')}
               </Button>
             </div>
 

@@ -22,12 +22,22 @@
   "Home": {
     "platformStatistics": "Platform Statistics",
     "findResource": "Find Resource",
+    "resourceDescription": "Access a wide range of materials designed to inform, support, and empower. Whether you're looking for training guides, policy documents, toolkits, or educational content",
+    "searchPlaceholder": "Search for resources, guidelines, training materials...",
+    "searchNow": "Search Now",
     "quickAccess": "Quick Access",
     "joinOurCommunity": "Join Our Community",
+    "communityMessage": "Everyone has a place here whether you are a person with disability, a family member, a professional, or simply someone who cares about inclusion. Connect, share ideas, and be part of a vibrant community driving positive change and support for all.",
+    "joinNow": "Join Now",
+    "enterEmail": "Enter your email address to join with our community",
+    "privacyAgreement": "By entering your mail, you are agreeing to our privacy policy",
     "thankYouForYourSupport": "Thank You For Your Support",
+    "thankYouOrganizations": "Thank you to all the organizations that contributed resources and shared knowledge to support disability inclusion in humanitarian and development programs.",
     "withTheSupportOf": "With The Support Of",
     "resourceLibrary": "Resource Library",
     "featuredResources": "Featured Resources",
+    "training": "Training",
+    "news": "News ",
     "accessibleResources": "Accessible Resources",
     "essentialResources": "Essential Resources",
     "earnRecognizedCertificate": "Earn Recognized Certificate",
@@ -35,6 +45,10 @@
     "aboutUs": "About Us",
     "contactUs": "Contact Us",
     "frequentlyAskQuestions": "Frequently Ask Questions",
-    "technicalSupport": "Technical Support"
+    "technicalSupport": "Technical Support",
+    "totalResources": "Total Resources ",
+    "totalDownloads": "Total Downloads",
+    "activeUsers": "Active Users",
+    "trainingCompletion": "Training Completion"
   }
 }

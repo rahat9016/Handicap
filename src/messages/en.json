@@ -18,5 +18,23 @@
     "news": "News",
     "about": "About",
     "contact": "Contact"
+  },
+  "Home": {
+    "platformStatistics": "Platform Statistics",
+    "findResource": "Find Resource",
+    "quickAccess": "Quick Access",
+    "joinOurCommunity": "Join Our Community",
+    "thankYouForYourSupport": "Thank You For Your Support",
+    "withTheSupportOf": "With The Support Of",
+    "resourceLibrary": "Resource Library",
+    "featuredResources": "Featured Resources",
+    "accessibleResources": "Accessible Resources",
+    "essentialResources": "Essential Resources",
+    "earnRecognizedCertificate": "Earn Recognized Certificate",
+    "upcomingLiveEvents": "Upcoming Live Events",
+    "aboutUs": "About Us",
+    "contactUs": "Contact Us",
+    "frequentlyAskQuestions": "Frequently Ask Questions",
+    "technicalSupport": "Technical Support"
   }
 }

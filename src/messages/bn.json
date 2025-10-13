@@ -18,5 +18,23 @@
     "news": "সংবাদ",
     "about": "পরিচিতি",
     "contact": "যোগাযোগ"
+  },
+  "Home": {
+    "platformStatistics": "প্ল্যাটফর্ম পরিসংখ্যান",
+    "findResource": "রিসোর্স খুঁজুন",
+    "quickAccess": "দ্রুত অ্যাক্সেস",
+    "joinOurCommunity": "আমাদের কমিউনিটিতে যোগ দিন",
+    "thankYouForYourSupport": "আপনার সহযোগিতার জন্য ধন্যবাদ",
+    "withTheSupportOf": "সহযোগিতায়",
+    "resourceLibrary": "রিসোর্স লাইব্রেরি",
+    "featuredResources": "নির্বাচিত রিসোর্সসমূহ",
+    "accessibleResources": "ব্যবহারযোগ্য রিসোর্সসমূহ",
+    "essentialResources": "প্রয়োজনীয় ফিচারসমূহ",
+    "earnRecognizedCertificate": "সার্টিফিকেট অর্জন করুন",
+    "upcomingLiveEvents": "আসন্ন লাইভ ইভেন্টসমূহ",
+    "aboutUs": "আমাদের সম্পর্কে জানুন",
+    "contactUs": "যোগাযোগ করুন",
+    "frequentlyAskQuestions": "ব্যবহারকারীদের প্রশ্নসমূহ",
+    "technicalSupport": "টেকনিক্যাল সাপোর্ট"
   }
 }

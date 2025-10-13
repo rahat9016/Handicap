@@ -19,6 +19,7 @@ export interface ICourse {
   objectives: string;
   durationMinutes: number;
   isActive: boolean;
+  isApproved: boolean;
   courseType: string;
   isPublished: boolean;
   level: string; // e.g., BEGINNER, INTERMEDIATE, ADVANCED
@@ -89,7 +90,7 @@ export interface IVideoContent {
   courseId: number;
   createdAt: string;
   updatedAt: string;
-  quiz?:  IQuiz | null;
+  quiz?: IQuiz | null;
 }
 
 export interface IVariant {
@@ -128,8 +129,6 @@ export interface ICourseContent {
   content: IVideoContent | null;
   quiz: IQuiz | null;
 }
-
-
 
 // ====================== QUIZ =======================
 export interface IQuiz {

@@ -17,10 +17,10 @@ import { useAppSelector } from "@/lib/redux/hooks";
 import { buildQueryParams } from "@/utils/buildQueryParams";
 import { Search } from "lucide-react";
 import { useEffect, useState } from "react";
+import { LuFilter, LuFilterX } from "react-icons/lu";
 import ResourceCardSkeleton from "./ResourceCardSkeleton";
 import ResourceLibrary from "./ResourceLibrary";
 import ResourcesSorting from "./ResourcesSorting";
-import { LuFilter, LuFilterX } from "react-icons/lu";
 
 const ResourcesFilter = () => {
   const { search, handleSearchChange, debouncedSearch } =
@@ -56,7 +56,7 @@ const ResourcesFilter = () => {
 
   // API call
   const { data, isLoading, refetch } = useGet<IResource[]>(
-    `/resources?${queryString}`,
+    `/resources?${queryString}&isApproved=true`,
     ["resources", queryString]
   );
 

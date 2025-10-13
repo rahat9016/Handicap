@@ -13,12 +13,16 @@ import QuickAccessSkeleton from "./QuickAccessSkeleton";
 
 const QuickAccess = () => {
   const local = useLocale() as "en" | "bn";
-  const { data, isLoading } = useGet<IResource[]>("/resources", ["resources"], {
-    page: String(1),
-    limit: String(3),
-  });
+  const { data, isLoading } = useGet<IResource[]>(
+    "/resources/?isApproved=true",
+    ["resources"],
+    {
+      page: String(1),
+      limit: String(3),
+    }
+  );
   const { data: courseData, isLoading: isCourseLoading } = useGet<ICourse[]>(
-    "/course/published",
+    "/course/published/?isApproved=true",
     ["course"],
     {
       page: String(1),

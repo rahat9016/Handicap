@@ -1,12 +1,7 @@
 import { postService } from "@/services/auth";
 import { IGenericErrorResponse } from "@/types";
-import {
-  useMutation,
-  useQueryClient
-} from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
-//  mutationFn: (data: FormData | Record<string, unknown>) =>
-//       postService.request(endpoint, data),
 export const usePost = <T>(
   defaultEndpoint?: string,
   onSuccess?: (data: T) => void,
@@ -16,7 +11,10 @@ export const usePost = <T>(
 
   return useMutation({
     mutationFn: (
-      arg: FormData | Record<string, unknown> | { endpoint: string; data?: FormData | Record<string, unknown> }
+      arg:
+        | FormData
+        | Record<string, unknown>
+        | { endpoint: string; data?: FormData | Record<string, unknown> }
     ) => {
       if (typeof arg === "object" && "endpoint" in arg) {
         return postService.request(
@@ -26,7 +24,9 @@ export const usePost = <T>(
       }
 
       if (!defaultEndpoint) {
-        throw new Error("defaultEndpoint is required if endpoint is not provided");
+        throw new Error(
+          "defaultEndpoint is required if endpoint is not provided"
+        );
       }
 
       return postService.request(defaultEndpoint, arg);

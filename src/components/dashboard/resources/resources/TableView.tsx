@@ -1,4 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { StatusToggle } from "@/components/share/StatusToggle";
 import { ColumnDef, DataTable } from "@/components/ui/data-table";
+import { usePost } from "@/hooks/usePost";
 import { useAppSelector } from "@/lib/redux/hooks";
 import { format } from "date-fns";
 import { Eye, SlidersHorizontal, SquarePen } from "lucide-react";
@@ -18,41 +21,35 @@ export default function TableView({
   itemsPerPage,
   setItemsPerPage,
 }: IResourceProps) {
-  const { adminOrganizationPermission } = useAppSelector(
+  const { adminOrganizationPermission, hasPermission } = useAppSelector(
     (state) => state.permission
   );
-
+  const { mutateAsync } = usePost(
+    ``,
+    (data) => {
+      console.log("POST success", data);
+    },
+    [["resources"]]
+  );
   const columns: ColumnDef<IResource>[] = [
     {
       header: "Title EN",
       accessorKey: "title",
-      cell: (
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        _value: any,
-        row: IResource
-      ) => {
+      cell: (_value: any, row: IResource) => {
         return <div>{row?.title?.en && <span>{row.title.en}</span>}</div>;
       },
     },
     {
       header: "Title BN",
       accessorKey: "title",
-      cell: (
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        _value: any,
-        row: IResource
-      ) => {
+      cell: (_value: any, row: IResource) => {
         return <div>{row?.title?.en && <span>{row.title.bn}</span>}</div>;
       },
     },
     {
       header: "Description",
       accessorKey: "description",
-      cell: (
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        _value: any,
-        row: IResource
-      ) => {
+      cell: (_value: any, row: IResource) => {
         return (
           <div>{row?.description?.en && <span>{row.description.en}</span>}</div>
         );
@@ -61,7 +58,7 @@ export default function TableView({
     {
       header: "organization",
       accessorKey: "organization",
-      cell: (_value, row) => {
+      cell: (_value: any, row: any) => {
         return <span>{row?.organization?.name}</span>;
       },
     },
@@ -70,7 +67,7 @@ export default function TableView({
     {
       header: "Created date",
       accessorKey: "createdAt",
-      cell: (value) => {
+      cell: (value: string) => {
         const date = new Date(value as string);
         return <span>{format(date, "dd MMM yyyy")}</span>;
       },
@@ -78,7 +75,7 @@ export default function TableView({
     {
       header: "Is Active",
       accessorKey: "isCurrent",
-      cell: (value) => {
+      cell: (value: boolean) => {
         const isActive = value;
 
         return (
@@ -93,9 +90,26 @@ export default function TableView({
       },
     },
     {
+      header: "Is Approved",
+      accessorKey: "isApproved",
+      cell: (value: boolean) => {
+        const isActive = value;
+
+        return (
+          <span
+            className={`px-2 py-1 rounded-full text-xs font-medium ${
+              isActive ? "bg-[#bfffda] text-green" : "bg-rose-200 text-rose-700"
+            }`}
+          >
+            {isActive ? "Approved" : "Unapproved"}
+          </span>
+        );
+      },
+    },
+    {
       header: "Is Private",
       accessorKey: "isPrivate",
-      cell: (value) => {
+      cell: (value: boolean) => {
         const isActive = value;
 
         return (
@@ -112,7 +126,7 @@ export default function TableView({
     {
       header: "Action",
       accessorKey: "actions",
-      cell: (_value, row: IResource) => {
+      cell: (_value: any, row: IResource) => {
         return (
           <div className="flex items-center gap-5">
             {adminOrganizationPermission && (
@@ -135,7 +149,29 @@ export default function TableView({
         );
       },
     },
-  ];
+    hasPermission && {
+      header: "Approval",
+      accessorKey: "actions",
+      cell: (_value: any, row: IResource) => {
+        return (
+          <div className="flex items-center gap-5">
+            <StatusToggle
+              id={10}
+              status={row.isApproved}
+              onConfirm={async (_id, newStatus) => {
+                await mutateAsync({
+                  endpoint: `/resources/toggle-approved/${row.id}`,
+                  data: { isApproved: newStatus },
+                });
+              }}
+              levelValue_1="Approved"
+              levelValue_2="Unapproved"
+            />
+          </div>
+        );
+      },
+    },
+  ].filter(Boolean) as ColumnDef<IResource>[];
   return (
     <div>
       <DataTable

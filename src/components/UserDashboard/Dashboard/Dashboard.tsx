@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { ICourseEnrollment } from "@/app/[locale]/user-dashboard/my-courses/page";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -6,37 +6,46 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useGet } from "@/hooks/useGet";
 import { useRouter } from "@/i18n/navigation";
 import { useAppSelector } from "@/lib/redux/hooks";
-import {
-  BookOpen,
-  Play
-} from "lucide-react";
+import { Award, BookOpen, FileText, Play } from "lucide-react";
+import { IUserDashboard } from "./types/interface";
 
 export default function Dashboard() {
-  const router = useRouter()
-  const { userInformation:{firstName, lastName} } = useAppSelector(state => state.auth)
+  const router = useRouter();
+  const {
+    userInformation: { firstName, lastName },
+  } = useAppSelector((state) => state.auth);
   const { data: courseData } = useGet<ICourseEnrollment[]>(
-      `/course-enrollment/my-enrollments`,
-      ["course-published"]
-    );
-  const data = [
+    `/course-enrollment/my-enrollments`,
+    ["course-published"]
+  );
+  const { data } = useGet<IUserDashboard>(`/dashboard/user-dashboard`, [
+    "user-dashboard",
+  ]);
+  const userDashboardData = data?.data;
+  const cardData = [
     {
       icon: BookOpen,
-      shape: "/images/dashboard/cardShape2.svg",
       title: "Enrolled Courses",
-      count: courseData?.data?.length || 0,
+      count: userDashboardData?.statistics?.totalEnrolledCourses || 0,
     },
-    // {
-    //   icon: FileText,
-    //   shape: "/images/dashboard/cardShape1.svg",
-    //   title: "Completed Quizzes ",
-    //   count: 10,
-    // }
+    {
+      icon: FileText,
+      title: "Completed Quizzes ",
+      count: userDashboardData?.statistics?.totalQuizAttempts || 0,
+    },
+    {
+      icon: Award,
+      title: "Total Certificate ",
+      count: userDashboardData?.statistics?.totalCertificates || 0,
+    },
   ];
+
+  console.log(userDashboardData);
   return (
     <div>
       <div className="space-y-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {data.map((item, index) => (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3  gap-4">
+          {cardData.map((item, index) => (
             <Card
               key={index}
               className="group group hover:bg-dashboard-primary "
@@ -68,7 +77,9 @@ export default function Dashboard() {
               <CardTitle className="flex items-center gap-2">
                 <Avatar className="h-6 w-6">
                   <AvatarImage src="/user-icon.png" />
-                  <AvatarFallback>{firstName.charAt(0).toUpperCase()}</AvatarFallback>
+                  <AvatarFallback>
+                    {firstName.charAt(0).toUpperCase()}
+                  </AvatarFallback>
                 </Avatar>
                 Profile Overview
               </CardTitle>
@@ -85,9 +96,7 @@ export default function Dashboard() {
                   <h3 className="font-semibold text-card-foreground">
                     {firstName} {lastName}
                   </h3>
-                  <p className="text-sm text-muted-foreground">
-                    Student
-                  </p>
+                  <p className="text-sm text-muted-foreground">Student</p>
                 </div>
               </div>
             </CardContent>
@@ -119,7 +128,15 @@ export default function Dashboard() {
                         by {course?.course?.organization?.name}
                       </p>
                     </div>
-                    <Button onClick={() => router.push(`/user-dashboard/my-courses/${course?.course?.id}`)} size="sm" variant="outline">
+                    <Button
+                      onClick={() =>
+                        router.push(
+                          `/user-dashboard/my-courses/${course?.course?.id}`
+                        )
+                      }
+                      size="sm"
+                      variant="outline"
+                    >
                       <Play className="h-3 w-3 mr-1" />
                       Continue
                     </Button>
@@ -129,7 +146,6 @@ export default function Dashboard() {
             </CardContent>
           </Card>
         </div>
-
       </div>
     </div>
   );

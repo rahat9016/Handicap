@@ -1,6 +1,7 @@
 "use client";
 import { ICourse } from "@/components/main/training/types/traning";
 import { IOrganization } from "@/components/organizer/types";
+import { StatusToggle } from "@/components/share/StatusToggle";
 import { ColumnDef, DataTable } from "@/components/ui/data-table";
 import {
   DropdownMenu,
@@ -10,6 +11,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useGet } from "@/hooks/useGet";
 import { usePagination } from "@/hooks/usePagination";
+import { usePost } from "@/hooks/usePost";
 import { useSearchDebounce } from "@/hooks/useSearchDebounce";
 import { useRouter } from "@/i18n/navigation";
 import { useAppSelector } from "@/lib/redux/hooks";
@@ -54,6 +56,13 @@ export default function AllCourse() {
     : organizationId
     ? `/course/organization/${organizationId}`
     : "/course";
+  const { mutateAsync } = usePost(
+    ``,
+    (data) => {
+      console.log("POST success", data);
+    },
+    [["courseList"]]
+  );
   const shouldFetch = selectedId !== undefined || organizationId !== undefined;
 
   const { data, isLoading } = useGet<ICourse[]>(
@@ -152,6 +161,47 @@ export default function AllCourse() {
           );
         },
       },
+      {
+        header: "Is Approved",
+        accessorKey: "isApproved",
+        cell: (value: boolean) => {
+          const isActive = value;
+
+          return (
+            <span
+              className={`px-2 py-1 rounded-full text-xs font-medium ${
+                isActive
+                  ? "bg-[#bfffda] text-green"
+                  : "bg-rose-200 text-rose-700"
+              }`}
+            >
+              {isActive ? "Approved" : "Unapproved"}
+            </span>
+          );
+        },
+      },
+      hasPermission && {
+        header: "Approval",
+        accessorKey: "actions",
+        cell: (_value: string | number | undefined, row: ICourse) => {
+          return (
+            <div className="flex items-center gap-5">
+              <StatusToggle
+                id={10}
+                status={row.isApproved}
+                onConfirm={async (_id, newStatus) => {
+                  await mutateAsync({
+                    endpoint: `/course/toggle-approved/${row.id}`,
+                    data: { isApproved: newStatus },
+                  });
+                }}
+                levelValue_1="Approved"
+                levelValue_2="Unapproved"
+              />
+            </div>
+          );
+        },
+      },
       adminOrganizationPermission
         ? {
             header: "Action",
@@ -238,12 +288,6 @@ export default function AllCourse() {
         options={options}
         setSelectedId={setSelectedId}
       />
-      {/* <CreateUpdateCourseQuiz
-        isOpen={isModalOpen}
-        onClose={() => {
-          setIsModalOpen(false);
-        }}
-      /> */}
     </div>
   );
 }

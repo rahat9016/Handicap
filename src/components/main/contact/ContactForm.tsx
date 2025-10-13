@@ -4,6 +4,7 @@ import ControlledTextareaField from "@/components/share/ControlledTextareaField"
 import InputLabel from "@/components/share/InputLabel";
 import { Button } from "@/components/ui/button";
 import { useMutation } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
 import { FormProvider, useForm } from "react-hook-form";
 
 export default function ContactForm() {
@@ -31,6 +32,7 @@ export default function ContactForm() {
     //     });
     //   });
   };
+  const t = useTranslations("Contact");
   return (
     <div>
       <FormProvider {...methods}>
@@ -89,14 +91,13 @@ export default function ContactForm() {
                 className="bg-white"
               />
             </div>
-              <Button
-                disabled={isPending}
-                type="submit"
-                className="capitalize bg-primary text-white rounded-lg px-6 lg:px-10 py-3 h-10 lg:h-11"
-              >
-                {isPending ? "Sending..." : "Send Message"}
-              </Button>
-              
+            <Button
+              disabled={isPending}
+              type="submit"
+              className="capitalize bg-primary text-white rounded-lg px-6 lg:px-10 py-3 h-10 lg:h-11"
+            >
+              {isPending ? "Sending..." : "Send Message"}
+            </Button>
           </div>
         </form>
       </FormProvider>

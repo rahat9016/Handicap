@@ -71,6 +71,7 @@ const Courses = () => {
     <div className="bg-[#f3f3f3]">
       <div className="container px-4 sm:px-6 lg:px-8 py-6 lg:py-20 lg:pb-40">
         <div className="flex flex-col lg:flex-row lg:items-start gap-6 lg:gap-20">
+          
           {/* Sidebar - Desktop */}
           <div className="hidden lg:block w-full lg:w-[300px] lg:sticky lg:top-40 lg:self-start overflow-y-auto custom-scrollbar lg:h-[75vh] bg-white border p-4 rounded-md">
             <TrainingSorting />

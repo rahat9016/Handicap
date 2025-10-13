@@ -34,11 +34,11 @@
     "thankYouForYourSupport": "Thank You For Your Support",
     "thankYouOrganizations": "Thank you to all the organizations that contributed resources and shared knowledge to support disability inclusion in humanitarian and development programs.",
     "withTheSupportOf": "With The Support Of",
-    "resourceLibrary": "Resource Library",
-    "featuredResources": "Featured Resources",
+    "hubFundingInfo": "This hub is developed with funding from the Commonwealth of Australia represented by the Department of Foreign Affairs and Trade (DFAT) and is supported by Humanity & Inclusion and the Age and Disability Technical Working Group (ADTWG) under the ISCG.",
+
     "training": "Training",
     "news": "News ",
-    "accessibleResources": "Accessible Resources",
+
     "essentialResources": "Essential Resources",
     "earnRecognizedCertificate": "Earn Recognized Certificate",
     "upcomingLiveEvents": "Upcoming Live Events",
@@ -50,5 +50,26 @@
     "totalDownloads": "Total Downloads",
     "activeUsers": "Active Users",
     "trainingCompletion": "Training Completion"
+  },
+  "Footer": {
+    "inclusiveFutureMessage": "Working together to build an inclusive, accessible, and empowered future for persons with disabilities...",
+    "legal": "Legal",
+    "privacyPolicy": "Privacy Policy",
+    "termsOfService": "Terms of Service",
+    "accessibilityStatement": "Accessibility Statement"
+  },
+  "ResourceLibrary": {
+    "resourceLibrary": "Resource Library",
+    "disabilityResources": "Access our comprehensive collection of disability inclusion resources, including guidelines, training materials, research reports, and tools.",
+    "featuredResources": "Featured Resources",
+    "featuredResourcesDesc": "Explore a curated selection of high-impact tools, guides, and publications designed to advance disability inclusion in humanitarian action.",
+    "accessibleResources": "Accessible Resources",
+    "accessibleResourcesDesc": "Our resources are designed to be accessible to all users, including persons with disabilities—featuring formats that support screen readers, alternative text.",
+    "multipleFormats": "Multiple Formats",
+    "resourceFormatsInfo": "Resources are available in multiple formats (PDF, Word, Video, Audio) to accommodate different accessibility needs.",
+    "screenReaderCompatible": "Screen Reader Compatible",
+    "screenReaderDocsInfo": "All documents are optimized for screen readers, with proper headings, alternative text, and document structure.",
+    "multilingual": "Multilingual",
+    "multilingualResourcesInfo": "Many resources are available in both English and Bangla to ensure accessibility for local and international users."
   }
 }

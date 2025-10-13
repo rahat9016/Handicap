@@ -21,6 +21,7 @@ import { LuFilter, LuFilterX } from "react-icons/lu";
 import ResourceCardSkeleton from "./ResourceCardSkeleton";
 import ResourceLibrary from "./ResourceLibrary";
 import ResourcesSorting from "./ResourcesSorting";
+import { useTranslations } from "next-intl";
 
 const ResourcesFilter = () => {
   const { search, handleSearchChange, debouncedSearch } =
@@ -68,13 +69,14 @@ const ResourcesFilter = () => {
   }, [data]);
 
   const totalPages = Math.ceil(totalItems / itemsPerPage);
+  const t = useTranslations("ResourceLibrary");
 
   return (
     <div>
       <div className="container px-4 sm:px-6 lg:px-8 py-8 lg:py-16 xl:py-20">
         <SectionTopTitle
-          title="Resource Library"
-          desc="Access our comprehensive collection of disability inclusion resources, including guidelines, training materials, research reports, and tools."
+          title={t("resourceLibrary")}
+          desc={t("featuredResourcesDesc")}
         />
 
         {/* Mobile Filter Toggle Button - Outside the main layout */}

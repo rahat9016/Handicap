@@ -1,35 +1,33 @@
 import Paragraph from "@/components/share/Paragraph";
 import SectionTopTitle from "@/components/share/SectionTopTitle";
 import Title from "@/components/share/Title";
+import { useTranslations } from "next-intl";
 import Image from "next/image";
 
-const listEarn = [
-  "Official Recognition from Handicap Bangladesh and partner organizations",
-  "Build Your Credentials in disability inclusion and humanitarian practice",
-  "Boost Employability with verified, skill-based certification",
-  "Globally Accepted by NGOs, development agencies, and employers",
-  "Track Your Progress with a personalized learner dashboard",
-  "Issued Upon Completion of each course or training module",
-  "Step Toward Career Growth in inclusion, development, and rights-based sectors",
-];
-
 const EarnRecognizedCertificates = () => {
+  const t = useTranslations("Training");
+  const listEarn = [
+    t("officialRecognition"),
+    t("buildCredentials"),
+    t("boostEmployability"),
+    t("globallyAccepted"),
+    t("trackProgress"),
+    t("issuedUponCompletion"),
+    t("careerGrowthStep"),
+  ];
   return (
     <div className="bg-[#f3f3f3]">
       <div className="container py-10 lg:py-20">
         <SectionTopTitle
-          title="Earn Recognized Certificates"
-          desc="Gain official recognition for your learning and professional development through our certificate programs. Upon completing training courses on disability inclusion, inclusive education, accessible."
+          title={t("earnCertificates")}
+          desc={t("certificateInfo")}
         />
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-9 mt-14">
           <div>
-            <Paragraph>Success</Paragraph>
-            <Title>Earn Recognized Certificates</Title>
+            <Paragraph>{t("success")}</Paragraph>
+            <Title>{t("earnRecognizedCertificates")}</Title>
             <Paragraph className="mt-4">
-              Gain official recognition for your learning and professional
-              development through our certificate programs. Upon completing
-              training courses on disability inclusion, inclusive education,
-              accessible.
+              {t("certificateProgramInfo")}
             </Paragraph>
             <div className="flex flex-col gap-3 mt-9">
               {listEarn.map((item, index) => (

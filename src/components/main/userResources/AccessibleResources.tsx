@@ -23,6 +23,7 @@ export default function AccessibleResources() {
       description: t("multilingualResourcesInfo"),
     },
   ];
+  
   return (
     <div className="bg-white">
       <div className="container py-10 lg:py-20 xl:py-40">

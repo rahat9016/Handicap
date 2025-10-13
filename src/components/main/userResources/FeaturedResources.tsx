@@ -4,7 +4,7 @@ import SectionTopTitle from "@/components/share/SectionTopTitle";
 import Title from "@/components/share/Title";
 import { useGet } from "@/hooks/useGet";
 import { Building2, Eye } from "lucide-react";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { IFeaturedResource } from "./types/interface";
@@ -17,12 +17,13 @@ const FeaturedResources = () => {
   ]);
   const resources = data?.data || [];
   console.log(resources);
+  const t = useTranslations("ResourceLibrary");
   return (
     <div className="bg-[#8c8ccb10]">
       <div className="container px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16 xl:py-20 2xl:py-40">
         <SectionTopTitle
-          title="Featured Resources"
-          desc="Explore a curated selection of high-impact tools, guides, and publications designed to advance disability inclusion in humanitarian action."
+          title={t("featuredResources")}
+          desc={t("featuredResourcesDesc")}
         />
 
         <div className="mt-8 lg:mt-10 xl:mt-12 px-0 sm:px-4 lg:px-8 xl:px-16 2xl:px-[58px]">

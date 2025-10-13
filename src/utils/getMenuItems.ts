@@ -37,6 +37,20 @@ export function getMenuItems(
         icon: Folder,
         href: "/user-dashboard/certifications",
       },
+      {
+        label: "Settings",
+        icon: Settings,
+        children: [
+          {
+            label: "My Profile",
+            href: "/user-dashboard/user-profile",
+          },
+          {
+            label: "Change Password",
+            href: "/user-dashboard/change-password",
+          },
+        ],
+      },
     ];
   }
   const menuItems: (MenuItem | false)[] = [

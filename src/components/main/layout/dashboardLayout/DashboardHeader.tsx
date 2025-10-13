@@ -1,9 +1,9 @@
 "use client";
-import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { usePathname, useRouter } from "@/i18n/navigation";
 import { useAppSelector } from "@/lib/redux/hooks";
-import { Bell, Building2, ChevronLeft, Menu } from "lucide-react";
+import { Bell, Building2, ChevronLeft, Menu, User } from "lucide-react";
 import Link from "next/link";
 import { BiArrowBack } from "react-icons/bi";
 import UserSkeleton from "./Skeleton/UserSkeleton";
@@ -14,7 +14,7 @@ export default function DashboardHeader({
   toggleSidebar?: () => void;
 }) {
   const {
-    userInformation: { firstName, roleName },
+    userInformation: { firstName, roleName, profilePicture },
     loading,
   } = useAppSelector((state) => state.auth);
   const { organizationName, roleName: organizationRoleName } = useAppSelector(
@@ -24,7 +24,6 @@ export default function DashboardHeader({
   const router = useRouter();
   const pathname = usePathname();
   const isUser = pathname.startsWith("/user-dashboard");
-  console.log(pathname.startsWith("/user-dashboard"));
   return (
     <div
       className={`h-[70px] md:h-[90px] bg-white shadow-sm flex items-center px-3 md:px-6 border-b border-skeleton gap-3 md:gap-5 ${
@@ -90,8 +89,19 @@ export default function DashboardHeader({
         ) : (
           <div className="flex items-center gap-2 md:gap-4">
             <Avatar className="w-8 h-8 md:w-12 md:h-12">
-              <AvatarImage src="https://github.com/shadcn.png" />
+              {profilePicture ? (
+                <AvatarImage src={profilePicture} alt="Profile" />
+              ) : (
+                <AvatarImage
+                  src="https://github.com/shadcn.png"
+                  alt="Default Profile"
+                />
+              )}
+              <AvatarFallback>
+                <User />
+              </AvatarFallback>
             </Avatar>
+
             <div className="hidden sm:block">
               <h2 className="text-dashboard-primary font-semibold font-inter text-sm md:text-base truncate">
                 Hello, {firstName}

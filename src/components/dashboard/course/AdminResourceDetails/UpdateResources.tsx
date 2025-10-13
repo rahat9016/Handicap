@@ -45,7 +45,7 @@ export default function UpdateResources({
   const { data: languages } = useGet<ILanguage[]>("/languages", [
     "resource-languages",
   ]);
-  
+
   const {
     mutateAsync: patchAsync,
     error: patchError,
@@ -68,7 +68,6 @@ export default function UpdateResources({
     mode: "onChange",
   });
 
-  
   useEffect(() => {
     if (initialValues) {
       methods.reset({
@@ -99,11 +98,7 @@ export default function UpdateResources({
     }
   }, [isOpen, methods, patchReset]);
 
-  
-
-   
   const onSubmit = (data: any) => {
-    console.log({ data });
     const formData = new FormData();
 
     formData.append("title", data.title);
@@ -117,7 +112,6 @@ export default function UpdateResources({
     }
     formData.append("isPrivate", data.isPrivate);
 
-    
     // // If initialValues is provided, it means we are updating an existing resource
     patchAsync({
       url: `/resources/${initialValues?.id ? initialValues.id : data.id}`,
@@ -142,7 +136,6 @@ export default function UpdateResources({
     "name",
     "id"
   );
-
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>

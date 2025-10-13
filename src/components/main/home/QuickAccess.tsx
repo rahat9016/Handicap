@@ -4,7 +4,7 @@ import { INews } from "@/components/news/types/news";
 import SectionTopTitle from "@/components/share/SectionTopTitle";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useGet } from "@/hooks/useGet";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import Image from "next/image";
 import { useState } from "react";
 import { ICourse } from "../training/types/traning";
@@ -39,12 +39,13 @@ const QuickAccess = () => {
   );
   const [active, setActive] = useState(false);
   const [activeTab, setActiveTab] = useState("featured1");
+  const t = useTranslations("Home");
 
   return (
     <div className="relative w-full bg-white">
       <div className="container">
         <div className="py-10 lg:py-20">
-          <SectionTopTitle title="Quick Access" />
+          <SectionTopTitle title={t("quickAccess")} />
 
           <div className="w-full" tabIndex={0} onFocus={() => setActive(true)}>
             <Tabs value={activeTab} onValueChange={setActiveTab}>
@@ -63,7 +64,7 @@ const QuickAccess = () => {
                       src={"/images/home/icon__1.svg"}
                       alt="icon_1.svg"
                     />
-                    Featured Resources
+                    {t("featuredResources")}
                   </TabsTrigger>
 
                   <TabsTrigger
@@ -78,7 +79,7 @@ const QuickAccess = () => {
                       src={"/images/home/icon__2.svg"}
                       alt="icon_2.svg"
                     />
-                    Training
+                    {t("training")}
                   </TabsTrigger>
 
                   <TabsTrigger
@@ -93,7 +94,7 @@ const QuickAccess = () => {
                       src={"/images/home/icon__3.svg"}
                       alt="icon_3.svg"
                     />
-                    News
+                    {t('news')}
                   </TabsTrigger>
                 </TabsList>
               </div>

@@ -71,3 +71,52 @@ export interface IResource {
   totalDownloadCount: number;
   totalViewCount: number;
 }
+
+
+export interface AnalyticsSummary {
+  overview: Overview;
+  popularPages: PopularPage[];
+  trafficSources: TrafficSources;
+  deviceStats: DeviceStats;
+  period: Period;
+}
+export interface Period {
+  start: string;
+  end: string;
+}
+export interface DeviceStats {
+  desktop: number;
+  mobile: number;
+  tablet: number;
+  other: number;
+}
+export interface TrafficSources {
+  directTraffic: number;
+  organicSearch: number;
+  socialMedia: number;
+  referralTraffic: number;
+  emailTraffic: number;
+  otherTraffic: number;
+}
+export interface PopularPage {
+  pageUrl: string;
+  pageTitle: string;
+  pageViews: number;
+  uniqueVisitors: number;
+  averageTimeOnPage: number;
+  bounceRate: number;
+}
+export interface Overview {
+  totalVisitors: number;
+  totalPageViews: number;
+  uniqueVisitors: number;
+  returningVisitors: number;
+  averageSessionDuration: number;
+  bounceRate: number;
+  newVisitors: number;
+}
+
+export interface PopularPagesProps {
+  popularPages: PopularPage[] | undefined;
+  maxItems?: number;
+}

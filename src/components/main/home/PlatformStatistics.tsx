@@ -4,43 +4,45 @@ import { useGet } from "@/hooks/useGet";
 import Image from "next/image";
 import PlatformStatisticsSkeleton from "./PlatformStatisticsSkeleton";
 import { IDashboardStats } from "./types/interface";
+import { useTranslations } from "next-intl";
 
 export default function PlatformStatistics() {
   const { data, isLoading } = useGet<IDashboardStats>(`/dashboard/stats`, [
     "dashboard-stats",
   ]);
   const dashboardStatsData = data?.data;
+  const t = useTranslations("Home");
   return (
     <div className="container">
       <div className="py-10 lg:py-20">
-        <SectionTopTitle title="Platform Statistics" />
+        <SectionTopTitle title={t("platformStatistics")} />
         {isLoading ? (
           <PlatformStatisticsSkeleton />
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-[60px]">
             {[
               {
-                label: "Total Resources",
+                label: t("totalResources"),
                 value: dashboardStatsData?.totalResources.total ?? 0,
                 icon: "/images/home/icon_5.svg",
-                title: "Total Resources",
+                title: t("totalResources"),
                 desc: "Explore our growing library of tools, guides, training materials, and support documents",
                 weakThisMonth: `${
                   dashboardStatsData?.totalResources.thisMonth ?? 0
                 } this month`,
               },
               {
-                label: "Total Downloads",
+                label: t("totalDownloads"),
                 value: dashboardStatsData?.totalDownloads?.total ?? 0,
                 icon: "/images/home/icon_6.svg",
-                title: "Total Downloads",
+                title: t("totalDownloads"),
                 desc: "Our resources have been downloaded over 8,500 times, making a nationwide impact through accessible",
                 weakThisMonth: `${
                   dashboardStatsData?.totalDownloads?.thisMonth ?? 0
                 } this month`,
               },
               {
-                label: "Active Users",
+                label: t('activeUsers'),
                 value: dashboardStatsData?.activeUsers?.total ?? 0,
                 icon: "/images/home/icon_1.svg",
                 title: "Active Users",
@@ -50,7 +52,7 @@ export default function PlatformStatistics() {
                 } this week`,
               },
               {
-                label: "Training Completion",
+                label: t('trainingCompletion'),
                 value: dashboardStatsData?.trainingCompletion?.total ?? 0,
                 icon: "/images/home/icon.svg",
                 title: "Training Completions",

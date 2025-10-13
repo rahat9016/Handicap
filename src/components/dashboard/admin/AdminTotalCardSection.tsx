@@ -9,6 +9,7 @@ export default function AdminTotalCardSection({
   dashboardData: IDashboardData | undefined;
 }) {
   const { hasPermission } = useAppSelector((state) => state.permission);
+  
 
   const lastData = (dashboardData ?? {
     totalCourse: 0,

@@ -261,7 +261,7 @@ export default function AllCourse() {
           }
         : undefined,
     ].filter(Boolean) as ColumnDef<ICourse>[];
-  }, [adminOrganizationPermission, router]);
+  }, [adminOrganizationPermission, hasPermission, mutateAsync, router]);
 
   const options = mapToSelectOptions(organizationsData?.data, "name", "id");
 

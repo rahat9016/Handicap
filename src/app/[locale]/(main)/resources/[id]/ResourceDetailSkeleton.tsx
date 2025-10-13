@@ -3,7 +3,6 @@ import { Skeleton } from "@/components/ui/skeleton";
 export default function ResourceDetailSkeleton() {
   return (
     <main className="flex-1">
-      {/* Header Section */}
       <div className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container px-3 sm:px-4 md:px-6 py-3 sm:py-4">
           <div className="flex items-center gap-2 sm:gap-3 md:gap-4">
@@ -42,9 +41,9 @@ export default function ResourceDetailSkeleton() {
           {/* Keywords */}
           <div className="mt-3 sm:mt-4 pt-3 sm:pt-4 border-t flex flex-wrap gap-1 sm:gap-2">
             {Array.from({ length: 6 }).map((_, i) => (
-              <Skeleton 
-                key={i} 
-                className="h-5 sm:h-6 w-12 sm:w-16 md:w-20 rounded-full" 
+              <Skeleton
+                key={i}
+                className="h-5 sm:h-6 w-12 sm:w-16 md:w-20 rounded-full"
               />
             ))}
           </div>
@@ -67,9 +66,9 @@ export default function ResourceDetailSkeleton() {
             <Skeleton className="h-10 sm:h-11 md:h-12 w-full rounded-lg" />
             <div className="space-y-3 sm:space-y-4">
               {Array.from({ length: 4 }).map((_, i) => (
-                <Skeleton 
-                  key={i} 
-                  className="h-16 sm:h-18 md:h-20 w-full rounded-lg" 
+                <Skeleton
+                  key={i}
+                  className="h-16 sm:h-18 md:h-20 w-full rounded-lg"
                 />
               ))}
             </div>

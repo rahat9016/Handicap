@@ -90,6 +90,23 @@ export default function TableView({
       },
     },
     {
+      header: "Is Approved",
+      accessorKey: "isApproved",
+      cell: (value: boolean) => {
+        const isActive = value;
+
+        return (
+          <span
+            className={`px-2 py-1 rounded-full text-xs font-medium ${
+              isActive ? "bg-[#bfffda] text-green" : "bg-rose-200 text-rose-700"
+            }`}
+          >
+            {isActive ? "Approved" : "Unapproved"}
+          </span>
+        );
+      },
+    },
+    {
       header: "Is Private",
       accessorKey: "isPrivate",
       cell: (value: boolean) => {

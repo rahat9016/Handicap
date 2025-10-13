@@ -58,7 +58,7 @@ const Courses = () => {
 
   // API call
   const { data, isLoading } = useGet<ICourse[]>(
-    `/course/published?${queryString}`,
+    `/course/published?${queryString}&isApproved=true`,
     ["course-published", queryString]
   );
   useEffect(() => {

@@ -10,6 +10,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <div className="mt-24 md:mt-28 lg:mt-40">
         {children}
         <Footer />
+        {/* helllo */}
       </div>
     </section>
   );

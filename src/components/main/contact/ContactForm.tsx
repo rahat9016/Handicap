@@ -40,54 +40,54 @@ export default function ContactForm() {
           <div className="flex flex-col gap-6">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 lg:gap-5">
               <div>
-                <InputLabel label="First Name" required />
+                <InputLabel label={t("firstName")} required />
                 <ControlledInputField
                   name="firstName"
-                  placeholder="Enter your first name"
+                  placeholder={t("enterFirstName")}
                   className="bg-white"
                 />
               </div>
               <div>
-                <InputLabel label="Last Name" />
+                <InputLabel label={t("lastName")} />
                 <ControlledInputField
                   name="lastName"
-                  placeholder="Enter your last name"
+                  placeholder={t("enterLastName")}
                   className="bg-white"
                 />
               </div>
             </div>
             <div>
-              <InputLabel label="Organization" />
+              <InputLabel label={t("organization")} />
               <ControlledInputField
                 type="text"
                 name="organization"
-                placeholder="Enter your organization name here"
+                placeholder={t("organization_placeholder")}
                 className="bg-white"
               />
             </div>
 
             <div>
-              <InputLabel label="Email" />
+              <InputLabel label={t("email_label")} />
               <ControlledInputField
                 type="email"
                 name="email"
-                placeholder="Enter your valid email address here"
+                placeholder={t("email_placeholder")}
                 className="bg-white"
               />
             </div>
             <div>
-              <InputLabel label="Subject" />
+              <InputLabel label={t("subject_label")} />
               <ControlledInputField
                 name="subject"
-                placeholder="Enter the subject of your message"
+                placeholder={t("subject_placeholder")}
                 className="bg-white"
               />
             </div>
             <div>
-              <InputLabel label="Message" />
+              <InputLabel label={t("message_label")} />
               <ControlledTextareaField
                 name="message"
-                placeholder="Enter additional message"
+                placeholder={t("message_placeholder")}
                 className="bg-white"
               />
             </div>
@@ -96,7 +96,7 @@ export default function ContactForm() {
               type="submit"
               className="capitalize bg-primary text-white rounded-lg px-6 lg:px-10 py-3 h-10 lg:h-11"
             >
-              {isPending ? "Sending..." : "Send Message"}
+              {isPending ?t('sending') : t('sendMessage')}
             </Button>
           </div>
         </form>

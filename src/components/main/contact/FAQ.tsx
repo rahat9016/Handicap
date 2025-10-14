@@ -1,8 +1,10 @@
 import SectionTopTitle from "@/components/share/SectionTopTitle";
 import Image from "next/image";
 import FAQAccordion from "../../share/FAQAccordion";
+import { useTranslations } from "next-intl";
 
 export default function FAQ() {
+  const t = useTranslations('Contact');
   return (
     <div className="mt-20 bg-[#F3F3F4] py-10 lg:py-20">
       <div className="container">
@@ -19,8 +21,8 @@ export default function FAQ() {
             <SectionTopTitle
               className="mb-14"
               classDesc="lg:w-11/12"
-              title="Frequently Asked Questions"
-              desc="Find answers to common questions about the Disability Inclusion Resource Hub—covering how to access materials, who can benefit."
+              title={t('frequentlyAskedQuestions')}
+              desc={t('faqDescription')}
             />
             <FAQAccordion />
           </div>

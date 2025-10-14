@@ -49,11 +49,11 @@ export function CourseDevelopmentModal({
                 </span>
               </div>
 
-              <DialogTitle className="text-3xl sm:text-4xl font-bold tracking-tight text-balance">
+              <DialogTitle className="text-3xl sm:text-4xl font-bold tracking-tight text-center text-balance">
                 {t("videoCourseDevelopment")}
               </DialogTitle>
 
-              <DialogDescription className="text-base text-muted-foreground leading-relaxed text-pretty max-w-md mx-auto">
+              <DialogDescription className="text-base text-muted-foreground leading-relaxed text-pretty text-center max-w-md mx-auto">
                 {t("videoCourseInfo")}
               </DialogDescription>
             </DialogHeader>

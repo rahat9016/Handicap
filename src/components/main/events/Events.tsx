@@ -35,17 +35,15 @@ const Events = () => {
     setTotalItems,
     setItemsPerPage,
   } = usePagination();
-  const { courseCategories, sortBy, level, organizationIds } = useAppSelector(
+  const { eventTags, eventCategories } = useAppSelector(
     (state) => state.filter
   );
 
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
 
   const filters = {
-    sort: sortBy,
-    categoryIds: courseCategories,
-    level: level,
-    organizationIds: organizationIds,
+    tagIds: eventTags,
+    categoryIds: eventCategories,
     search: debouncedSearch,
   };
 

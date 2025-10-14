@@ -108,14 +108,26 @@
     "upcomingLiveEvents": "Upcoming Live Events ",
     "liveEventsInfo": "Stay connected and informed through our upcoming live events, including webinars, training sessions, community discussions, and expert panels focused on disability inclusion. These events provide valuable opportunities to learn, share experiences, and engage with practitioners, advocates, and persons with disabilities from across Bangladesh and beyond."
   },
-  "News":{},
+  "News": {},
   "About": {
     "aboutUs": "About Us",
     "aboutUsInfo": "The Disability Inclusion Resource Hub is a platform dedicated to promoting disability inclusion across humanitarian and development sectors. Funded by the Australian Department of Foreign Affairs and Trade (DFAT) and supported by Humanity & Inclusion and the Age and Disability Technical Working Group (ADTWG) under the ISCG, the hub brings together guidelines, tools, research, and training materials to build capacity, provide reference, support inclusive practices, and ensure the meaningful participation of persons with disabilities. By centralizing these resources, the hub enables organizations and communities to strengthen disability-inclusive programming and promote equity in emergency and development responses.",
     "ourMission": "Our Mission",
     "ourMissionInfo": "A humanitarian and development environment where persons with disabilities are fully included, empowered, and have full access to participation in programs, services, and decision-making processes.",
     "ourVision": "Our Vision",
-    "ourVisionInfo": "To provide accessible resources, practical tools, web based training, and guidance on disability inclusion, empowering organizations, communities, individuals, and relevant stakeholders to build capacity, implement inclusive practices, raise awareness, and advocate effectively for the rights of persons with disabilities in humanitarian and development contexts."
+    "ourVisionInfo": "To provide accessible resources, practical tools, web based training, and guidance on disability inclusion, empowering organizations, communities, individuals, and relevant stakeholders to build capacity, implement inclusive practices, raise awareness, and advocate effectively for the rights of persons with disabilities in humanitarian and development contexts.",
+    "whoWeServe": "Who We Serve",
+    "whoWeServeList": {
+      "1": "Persons with disabilities and their families",
+      "2": "Humanitarian and development practitioners",
+      "3": "Organizations of persons with disabilities and Community Based Organizations"
+    },
+    "organizations": "Organizations",
+    "organizationsList": {
+      "1": "Policymakers seeking evidence based guidance and resources",
+      "2": "Students, researchers, and volunteers seeking learning, research, or training opportunities",
+      "3": "The broader public interested in disability inclusion"
+    }
   },
   "Contact": {
     "contactUs": "Contact Us",

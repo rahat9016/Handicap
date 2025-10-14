@@ -4,6 +4,7 @@ export interface QueryFilters {
   sort?: string[];
   categoryIds?: string[];
   level?: string[];
+  tagIds?: string[];
   languageIds?: string[];
   organizationIds?: string[];
   keywordIds?: string[];
@@ -29,9 +30,7 @@ export const buildQueryParams = (
   filters.categoryIds?.forEach((id) =>
     params.append("categoryIds", id.toString())
   );
-  filters.level?.forEach((id) =>
-    params.append("levels", id.toString())
-  );
+  filters.level?.forEach((id) => params.append("levels", id.toString()));
   // languageIds (multiple)
   filters.languageIds?.forEach((id) =>
     params.append("languageIds", id.toString())
@@ -45,17 +44,18 @@ export const buildQueryParams = (
   filters.keywordIds?.forEach((id) =>
     params.append("keywordIds", id.toString())
   );
+  filters.tagIds?.forEach((id) => params.append("tagIds", id.toString()));
 
   // isCurrent (boolean)
   if (typeof filters.isCurrent === "boolean") {
     params.append("isCurrent", filters.isCurrent.toString());
   }
- 
+
   // search
   if (filters.search) {
     params.append("search", filters.search);
   }
-  
+
   // pagination
   if (pagination?.page !== undefined) {
     params.append("page", pagination.page.toString());
@@ -63,7 +63,6 @@ export const buildQueryParams = (
   if (pagination?.limit !== undefined) {
     params.append("limit", pagination.limit.toString());
   }
-
 
   return params.toString();
 };

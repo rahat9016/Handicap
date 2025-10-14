@@ -9,6 +9,10 @@ const initialState: IInitialState = {
   courseCategories: [],
   level: [],
   organizationIds: [],
+  newsTags: [],
+  newsCategories: [],
+  eventTags: [],
+  eventCategories: [],
 };
 
 const filteringSlice = createSlice({
@@ -27,6 +31,9 @@ const filteringSlice = createSlice({
     setKeywords: (state, action) => {
       state.keywords = action.payload;
     },
+    setNewsTags: (state, action) => {
+      state.newsTags = action.payload;
+    },
     setCourseCategories: (state, action) => {
       state.courseCategories = action.payload;
     },
@@ -36,6 +43,15 @@ const filteringSlice = createSlice({
     setOrganizationIds: (state, action) => {
       state.organizationIds = action.payload;
     },
+    setNewsCategories: (state, action) => {
+      state.newsCategories = action.payload;
+    },
+    setEventTags: (state, action) => {
+      state.eventTags = action.payload;
+    },
+    setEventCategories: (state, action) => {
+      state.eventCategories = action.payload;
+    },
     clearFilters: (state) => {
       state.sortBy = [];
       state.resourceTypes = [];
@@ -43,6 +59,11 @@ const filteringSlice = createSlice({
       state.keywords = [];
       state.courseCategories = [];
       state.level = [];
+      state.organizationIds = [];
+      state.newsTags = [];
+      state.newsCategories = [];
+      state.eventTags = [];
+      state.eventCategories = [];
     },
   },
 });
@@ -56,5 +77,9 @@ export const {
   setOrganizationIds,
   setLevel,
   clearFilters,
+  setNewsTags,
+  setNewsCategories,
+  setEventTags,
+  setEventCategories,
 } = filteringSlice.actions;
 export default filteringSlice.reducer;

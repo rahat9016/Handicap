@@ -6,9 +6,9 @@ export interface INews {
   content: string;
   featuredImage: string | null;
   isPublished: boolean;
-  publishDate: string; // ISO date string
-  createdAt: string;   // ISO date string
-  updatedAt: string;   // ISO date string
+  publishDate: string;
+  createdAt: string;
+  updatedAt: string;
   isActive: boolean;
   createdById: number;
   organizationId: number | null;
@@ -32,4 +32,10 @@ export interface INews {
     isActive: boolean;
     newsId: number;
   }[];
+}
+export interface INewsTags {
+  id: number;
+  name: string;
+  createdAt: string;
+  isActive: boolean;
 }

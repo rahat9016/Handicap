@@ -4,22 +4,19 @@ import { useGet } from "@/hooks/useGet";
 import EventCard from "./CourseCard";
 import EventCardSkeleton from "./EventCardSkeleton";
 import { IEventItem } from "./types/interface";
+import { useTranslations } from "next-intl";
 
 const UpcomingLiveEvents = () => {
   const { data, isLoading } = useGet<IEventItem[]>("/events/upcoming-events", [
     "events",
   ]);
+  const t = useTranslations("Events")
   return (
     <div className="bg-[#F4F8FF]">
       <div className="container px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16 xl:py-20 mb-20">
         <SectionTopTitle
-          title="Upcoming Live Events"
-          desc="Stay connected and informed through our upcoming live events,
-              including webinars, training sessions, community discussions, and
-              expert panels focused on disability inclusion. These events
-              provide valuable opportunities to learn, share experiences, and
-              engage with practitioners, advocates, and persons with
-              disabilities from across Bangladesh and beyond."
+          title={t("upcomingLiveEvents")}
+          desc={t("liveEventsInfo")}
         />
         <div className="flex flex-col lg:flex-row items-center gap-8 lg:gap-12 xl:gap-20 mt-4 lg:mt-8">
           {/* <div className="w-full lg:w-[40%] order-2 lg:order-1 -mt-0 lg:-mt-32 lg:-mb-32">

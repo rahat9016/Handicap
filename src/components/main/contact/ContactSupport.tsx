@@ -7,6 +7,7 @@ import { IContactInfo } from "@/types/types";
 import { CapFirst } from "@/utils/CapFirst";
 import { Clock4, Mail, MapPin, Phone, User } from "lucide-react";
 import ContactForm from "./ContactForm";
+import { useTranslations } from "next-intl";
 
 const ContactSupport = () => {
   const { data } = useGet<IContactInfo>("/contact-information", [
@@ -14,21 +15,18 @@ const ContactSupport = () => {
   ]);
   const ContactData = data?.data;
   console.log(ContactData?.contacts);
-
+  const t = useTranslations("Contact");
   return (
     <div>
       <div className="container px-4 sm:px-6 lg:px-8">
         <div className="py-8 sm:py-12 lg:py-16 xl:py-20">
-          <SectionTopTitle
-            title="Contact Us"
-            desc="We welcome your questions, feedback, and suggestions. Please feel free to reach out to us through the following channels."
-          />
+          <SectionTopTitle title={t("contactUs")} desc={t("contactUsInfo")} />
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 xl:gap-16 mt-6 lg:mt-10 xl:mt-14">
             <div className="order-2 lg:order-1">
               <div className="mb-6 lg:mb-8 xl:mb-10">
                 <Title className="mb-2 lg:mb-[6px] text-xl lg:text-2xl">
-                  Contact Information
+                  {t("contactUsInfo")}
                 </Title>
               </div>
 
@@ -37,7 +35,7 @@ const ContactSupport = () => {
                   <User className="text-blue w-5 h-5 lg:w-6 lg:h-6 mt-0.5 flex-shrink-0" />
                   <div>
                     <h4 className="leading-none text-blue font-semibold font-inter text-base lg:text-lg mb-1 lg:mb-[6px]">
-                      Name
+                      {t("name")}
                     </h4>
                     <div className="space-y-4">
                       {ContactData?.contacts?.map((contact, index) => (
@@ -58,7 +56,7 @@ const ContactSupport = () => {
                   <Mail className="text-blue w-5 h-5 lg:w-6 lg:h-6 mt-0.5 flex-shrink-0" />
                   <div>
                     <h4 className="leading-none text-blue font-semibold font-inter text-base lg:text-lg mb-1 lg:mb-[6px]">
-                      Email address
+                      {t("emailAddress")}
                     </h4>
                     {ContactData?.emails?.map((email, index) => (
                       <p
@@ -78,7 +76,7 @@ const ContactSupport = () => {
                   <Phone className="text-blue w-5 h-5 lg:w-6 lg:h-6 mt-0.5 flex-shrink-0" />
                   <div>
                     <h4 className="leading-none text-blue font-semibold font-inter text-base lg:text-lg mb-1 lg:mb-[6px]">
-                      Phone
+                      {t("phone")}
                     </h4>
                     {ContactData?.phones?.map((item, index) => (
                       <p
@@ -98,7 +96,7 @@ const ContactSupport = () => {
                   <MapPin className="text-blue w-5 h-5 lg:w-6 lg:h-6 mt-0.5 flex-shrink-0" />
                   <div>
                     <h4 className="leading-none text-blue font-semibold font-inter text-base lg:text-lg mb-1 lg:mb-[6px]">
-                      Office Address
+                      {t("officeAddress")}
                     </h4>
                     {ContactData?.addresses?.map((item, index) => (
                       <p
@@ -118,7 +116,7 @@ const ContactSupport = () => {
                   <Clock4 className="text-blue w-5 h-5 lg:w-6 lg:h-6 mt-0.5 flex-shrink-0" />
                   <div>
                     <h4 className="leading-none text-blue font-semibold font-inter text-base lg:text-lg mb-1 lg:mb-[6px]">
-                      Office Time
+                      {t("officeTime")}
                     </h4>
                     <p className="text-[#353535] text-sm lg:text-base font-inter font-normal">
                       {ContactData?.officeHours}
@@ -132,10 +130,10 @@ const ContactSupport = () => {
             <div className="order-1 lg:order-2">
               <div className="mb-6 lg:mb-8 xl:mb-10">
                 <Title className="mb-2 lg:mb-[6px] text-xl lg:text-2xl">
-                  Get in Touch
+                  {t("getInTouch")}
                 </Title>
                 <Paragraph className="text-sm lg:text-base">
-                  Fill out the form below to send us a message.
+                  {t("fillFormMessage")}
                 </Paragraph>
               </div>
 

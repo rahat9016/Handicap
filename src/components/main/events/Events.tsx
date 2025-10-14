@@ -21,6 +21,8 @@ import EventCardSkeleton from "./EventCardSkeleton";
 import EventLibrary from "./EventLibrary";
 import EventsSorting from "./EventsSorting";
 import { IEventItem } from "./types/interface";
+import { useTranslations } from "next-intl";
+import SectionTopTitle from "@/components/share/SectionTopTitle";
 
 const Events = () => {
   const { search, handleSearchChange, debouncedSearch } =
@@ -64,11 +66,13 @@ const Events = () => {
   }, [data]);
 
   const totalPages = Math.ceil(totalItems / itemsPerPage);
+  const t = useTranslations("Events");
 
   return (
     <div className="bg-[#f3f3f3]">
       <div className="container px-4 sm:px-6 lg:px-8 py-6 lg:py-20 lg:pb-40">
-        <div className="flex flex-col lg:flex-row lg:items-start gap-6 lg:gap-20">
+        <SectionTopTitle title={t("events")} desc={t("eventsSectionDesc")} />
+        <div className="flex flex-col lg:flex-row lg:items-start gap-6 lg:gap-20 mt-8 lg:mt-14">
           <div className="hidden lg:block w-full lg:w-[300px] lg:sticky lg:top-40 lg:self-start overflow-y-auto custom-scrollbar lg:h-[75vh] bg-white border p-4 rounded-md">
             <EventsSorting />
           </div>

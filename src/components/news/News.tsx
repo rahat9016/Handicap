@@ -33,7 +33,7 @@ const News = () => {
     setTotalItems,
     setItemsPerPage,
   } = usePagination();
-  const { courseCategories, sortBy, level, organizationIds } = useAppSelector(
+  const { newsCategories, sortBy, newsTags } = useAppSelector(
     (state) => state.filter
   );
 
@@ -41,9 +41,8 @@ const News = () => {
 
   const filters = {
     sort: sortBy,
-    categoryIds: courseCategories,
-    level: level,
-    organizationIds: organizationIds,
+    categoryIds: newsCategories,
+    tagIds: newsTags,
     search: debouncedSearch,
   };
 
@@ -55,10 +54,10 @@ const News = () => {
   });
 
   // API call
-  const { data, isLoading } = useGet<INews[]>(
-    `/news?${queryString}`,
-    ["news", queryString]
-  );
+  const { data, isLoading } = useGet<INews[]>(`/news?${queryString}`, [
+    "news",
+    queryString,
+  ]);
 
   useEffect(() => {
     if (data) setTotalItems(data.meta?.totalItems || 0);

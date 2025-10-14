@@ -1,4 +1,3 @@
-import { IOrganization } from "@/components/organizer/types";
 import ControlledCheckboxField from "@/components/share/ControlledCheckboxField";
 import {
   Accordion,
@@ -10,9 +9,8 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useGet } from "@/hooks/useGet";
 import {
-  setCourseCategories,
-  setLevel,
-  setOrganizationIds,
+  setNewsCategories,
+  setNewsTags,
   setSortBy,
 } from "@/lib/redux/features/filter/filterSlice";
 import { useAppDispatch } from "@/lib/redux/hooks";
@@ -21,17 +19,13 @@ import { Trash } from "lucide-react";
 import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { ICategory } from "../UserDashboard/MyCourse/types/traning";
+import { INewsTags } from "./types/news";
 
 const sortOptions = [
   { label: "Most View", value: "viewCount:desc" },
   { label: "Oldest First", value: "createdAt:desc" },
 ];
 
-const organizationOptions = [
-  { label: "Jayjay Din", value: "jayjay-din" },
-  { label: "Daily Amar Desh", value: "daily-amar-desh" },
-  { label: "Bangla Edition", value: "Bangla Edition" },
-];
 const NewsSorting = () => {
   const dispatch = useAppDispatch();
 
@@ -39,25 +33,24 @@ const NewsSorting = () => {
     ICategory[]
   >("/news-category", ["news-category"]);
 
-  const { data: newsTags, isLoading: isNewsTagsLoading } = useGet<
-    IOrganization[]
-  >("/news-tag", ["news-tag"]);
+  const { data: newsTags, isLoading: isNewsTagsLoading } = useGet<INewsTags[]>(
+    "/news-tag",
+    ["news-tag"]
+  );
 
   const methods = useForm({
     defaultValues: {
       sortBy: [],
-      courseTypes: [],
-      level: [],
-      organizationIds: [],
+      newsCategories: [],
+      newsTags: [],
     },
   });
-
+  console.log(methods.watch("sortBy"));
   useEffect(() => {
     const subscription = methods.watch((values) => {
       dispatch(setSortBy(values.sortBy));
-      dispatch(setCourseCategories(values.courseTypes));
-      dispatch(setLevel(values.level));
-      dispatch(setOrganizationIds(values.organizationIds));
+      dispatch(setNewsTags(values.newsTags));
+      dispatch(setNewsCategories(values.newsCategories));
     });
     return () => subscription.unsubscribe();
   }, [methods, dispatch]);
@@ -68,14 +61,13 @@ const NewsSorting = () => {
     "id"
   );
   const newsTagOptions = mapToSelectOptions(newsTags?.data, "name", "id");
-
   return (
     <div>
       <FormProvider {...methods}>
         <form className="space-y-8 text-sm">
           <Accordion
             type="multiple"
-            defaultValue={["sort", "courseCategory", "level", "organization"]}
+            defaultValue={["sort", "level", "newsCategories"]}
             className="w-full space-y-0"
           >
             <Button
@@ -111,7 +103,7 @@ const NewsSorting = () => {
                   </div>
                 ) : (
                   <ControlledCheckboxField
-                    name="level"
+                    name="newsTags"
                     options={newsTagOptions}
                   />
                 )}
@@ -119,7 +111,7 @@ const NewsSorting = () => {
             </AccordionItem>
 
             {/* ── Resource Type ─────────────────────────────── */}
-            <AccordionItem value="courseCategory" className="border-b-0">
+            <AccordionItem value="newsCategories" className="border-b-0">
               <AccordionTrigger className="font-bold hover:no-underline text-black text-sm border-b rounded-none mb-3">
                 News Category
               </AccordionTrigger>
@@ -135,31 +127,8 @@ const NewsSorting = () => {
                   </div>
                 ) : (
                   <ControlledCheckboxField
-                    name="courseTypes"
+                    name="newsCategories"
                     options={NewsCategoryOptions}
-                  />
-                )}
-              </AccordionContent>
-            </AccordionItem>
-            {/* ── Organization ─────────────────────────────── */}
-            <AccordionItem value="organization" className="border-b-0">
-              <AccordionTrigger className="font-bold hover:no-underline text-black text-sm border-b rounded-none mb-3">
-                News Portals
-              </AccordionTrigger>
-              <AccordionContent>
-                {isNewsTagsLoading ? (
-                  <div className="space-y-2">
-                    <Skeleton className="h-4 w-52" />
-                    <Skeleton className="h-4 w-52" />
-                    <Skeleton className="h-4 w-52" />
-                    <Skeleton className="h-4 w-52" />
-                    <Skeleton className="h-4 w-52" />
-                    <Skeleton className="h-4 w-52" />
-                  </div>
-                ) : (
-                  <ControlledCheckboxField
-                    name="organizationIds"
-                    options={organizationOptions}
                   />
                 )}
               </AccordionContent>

@@ -94,7 +94,7 @@ const QuickAccess = () => {
                       src={"/images/home/icon__3.svg"}
                       alt="icon_3.svg"
                     />
-                    {t('news')}
+                    {t("news")}
                   </TabsTrigger>
                 </TabsList>
               </div>

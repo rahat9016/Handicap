@@ -73,6 +73,8 @@
     "multilingualResourcesInfo": "Many resources are available in both English and Bangla to ensure accessibility for local and international users."
   },
   "Training": {
+    "training": "Training",
+    "trainingSectionDesc": "Explore a range of training courses and materials designed to enhance skills, knowledge, and inclusion practices.",
     "essentialFeatures": "Essential Features",
     "essentialFeaturesInfo": "The Disability Inclusion Resource Hub offers a range of essential features designed to enhance user experience and promote inclusive access. These include multilingual content, downloadable tools, accessible formats.",
     "primaryDonorInfo": "Australian Department of Foreign Affairs and Trade Primary donor supporting disability-inclusive development and humanitarian action in the region.",
@@ -101,9 +103,12 @@
     "realWorldProjects": "Real-world projects "
   },
   "Events": {
+    "events": "Events",
+    "eventsSectionDesc": "Stay updated with upcoming webinars, workshops, and live sessions focused on disability inclusion and community engagement.",
     "upcomingLiveEvents": "Upcoming Live Events ",
     "liveEventsInfo": "Stay connected and informed through our upcoming live events, including webinars, training sessions, community discussions, and expert panels focused on disability inclusion. These events provide valuable opportunities to learn, share experiences, and engage with practitioners, advocates, and persons with disabilities from across Bangladesh and beyond."
   },
+  "News":{},
   "About": {
     "aboutUs": "About Us",
     "aboutUsInfo": "The Disability Inclusion Resource Hub is a platform dedicated to promoting disability inclusion across humanitarian and development sectors. Funded by the Australian Department of Foreign Affairs and Trade (DFAT) and supported by Humanity & Inclusion and the Age and Disability Technical Working Group (ADTWG) under the ISCG, the hub brings together guidelines, tools, research, and training materials to build capacity, provide reference, support inclusive practices, and ensure the meaningful participation of persons with disabilities. By centralizing these resources, the hub enables organizations and communities to strengthen disability-inclusive programming and promote equity in emergency and development responses.",
@@ -122,6 +127,27 @@
     "officeAddress": "Office Address",
     "officeTime": "Office Time",
     "getInTouch": "Get in Touch",
-    "fillFormMessage": "Fill out the form below to send us a message."
+    "fillFormMessage": "Fill out the form below to send us a message.",
+    "firstName": "First Name",
+    "enterFirstName": "Enter your first name",
+    "lastName": "Last Name",
+    "enterLastName": "Enter your last name",
+    "organization": "Organization",
+    "organization_placeholder": "Enter your organization name here",
+    "email_label": "Email",
+    "email_placeholder": "Enter your valid email address here",
+    "subject_label": "Subject",
+    "subject_placeholder": "Enter the subject of your message",
+    "message_label": "Message",
+    "message_placeholder": "Enter additional message",
+    "sending": "Sending...",
+    "sendMessage": "Send Message",
+    "frequentlyAskedQuestions": "Frequently Asked Questions",
+    "faqDescription": "Find answers to common questions about the Disability Inclusion Resource Hub—covering how to access materials, who can benefit.",
+    "technicalSupport": "Technical Support",
+    "technicalSupportInfo": "Our dedicated technical support team is always ready to assist you with any questions, issues, or guidance you may need. We're just a message away!",
+    "emergencySupport": "Emergency Support",
+    "emergencySupportInfo": "For urgent technical issues affecting multiple users, please call:",
+    "supportAvailability": "Available 24/7 for critical platform outages"
   }
 }

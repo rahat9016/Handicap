@@ -3,6 +3,19 @@ import { useTranslations } from "next-intl";
 
 export default function AboutUs() {
   const t = useTranslations("About");
+
+  const whoWeServeList = [
+    t("whoWeServeList.1"),
+    t("whoWeServeList.2"),
+    t("whoWeServeList.3"),
+  ];
+
+  const organizationsList = [
+    t("organizationsList.1"),
+    t("organizationsList.2"),
+    t("organizationsList.3"),
+  ];
+
   return (
     <div>
       <div className="container">
@@ -27,29 +40,20 @@ export default function AboutUs() {
               {t("ourVisionInfo")}
             </p>
             <h3 className="text-primary text-lg font-inter font-medium mt-5 lg:mt-10">
-              Who We Serve
+              {t("whoWeServe")}
             </h3>
-
             <ul className="list-disc text-[#7A7A8E] text-justify text-sm font-inter font-normal mt-3 pl-10">
-              <li>Persons with disabilities and their families</li>
-              <li>Humanitarian and development practitioners</li>
-              <li>
-                Organizations of persons with disabilities and Community Based
-                Organizations
-              </li>
+              {whoWeServeList.map((item, index) => (
+                <li key={index}>{item}</li>
+              ))}
             </ul>
             <h3 className="text-primary text-lg font-inter font-medium mt-5 lg:mt-10">
-              Organizations
+              {t("organizations")}
             </h3>
             <ul className="list-disc text-[#7A7A8E] text-justify text-sm font-inter font-normal mt-3 pl-10">
-              <li>
-                Policymakers seeking evidence based guidance and resources
-              </li>
-              <li>
-                Students, researchers, and volunteers seeking learning,
-                research, or training opportunities
-              </li>
-              <li>The broader public interested in disability inclusion</li>
+              {organizationsList.map((item, index) => (
+                <li key={index}>{item}</li>
+              ))}
             </ul>
           </div>
         </div>

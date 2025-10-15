@@ -1,7 +1,6 @@
 import { postService } from "@/services/auth";
 import { IGenericErrorResponse } from "@/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "react-toastify";
 export const usePost = <T>(
   defaultEndpoint?: string,
   onSuccess?: (data: T) => void,
@@ -47,7 +46,7 @@ export const usePost = <T>(
     },
     onError: (error: IGenericErrorResponse) => {
       console.log("POST error", error);
-      toast.error(error.message || "Something went wrong.");
+      // toast.error(error.message || "Something went wrong.");
       throw error;
     },
   });

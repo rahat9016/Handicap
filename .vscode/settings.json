@@ -1,5 +1,8 @@
 {
-    "cSpell.words": [
-        "datas"
-    ]
+  "cSpell.words": ["datas"],
+  "eslint.enable": true,
+  "eslint.workingDirectories": [{ "mode": "auto" }],
+  "eslint.options": {
+    "overrideConfigFile": ".eslintrc.js"
+  }
 }

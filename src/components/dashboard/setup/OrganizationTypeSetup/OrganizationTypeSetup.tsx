@@ -46,11 +46,6 @@ export default function OrganizationTypeSetup() {
     setOrganization(row);
   };
 
-  // const { mutateAsync } = usePatch(
-  //     (data) => console.log("Success", data),
-  //     [["user"]]
-  //   );
-  // Update total items whenever data changes
   useEffect(() => {
     if (data) {
       setTotalItems(data.meta?.totalItems || 0);

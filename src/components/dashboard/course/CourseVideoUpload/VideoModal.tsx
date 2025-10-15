@@ -1,12 +1,12 @@
-import HlsPlayer from "@/components/main/training/trainingCourse/HlsPlayer";
-import YoutubeVideoPlayer from "@/components/main/training/trainingCourse/YoutubeVideoPlayer";
 import { IVideoContent } from "@/components/main/training/types/traning";
 import {
-    Dialog,
-    DialogContent,
-    DialogHeader,
-    DialogTitle,
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
 } from "@/components/ui/dialog";
+import HlsPlayer from "@/components/UserDashboard/MyCourse/trainingCourse/HlsPlayer";
+import YoutubeVideoPlayer from "@/components/UserDashboard/MyCourse/trainingCourse/YoutubeVideoPlayer";
 import extractYouTubeId from "@/utils/extractYouTubeId";
 import { getVideoUrl } from "@/utils/video";
 import { useParams } from "next/navigation";

@@ -1,3 +1,5 @@
+import { ILangType } from "@/types";
+
 interface IUser {
   id: number;
   firstName: string;
@@ -23,8 +25,6 @@ export interface IFaqItem {
 
 export interface IFaq {
   id: string | number;
-  question: string;
-  questionBn: string;
-  answer: string;
-  answerBn: string;
+  question: ILangType;
+  answer: ILangType;
 }

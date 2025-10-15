@@ -57,15 +57,14 @@ export function CourseDetails() {
     }
 
     mutateAsync({ courseId: id })
-      .then((res) => {
-        console.log(res);
+      .then(() => {
         toast.success("Course Enrolled Successfully");
       })
       .catch(() => toast.error("Something went wrong"));
   };
 
   const handleContinueClick = () => {
-    router.push("/user-dashboard/my-courses")
+    router.push("/user-dashboard/my-courses");
   };
 
   const formatDate = (dateString: string) => {

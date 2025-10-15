@@ -1,6 +1,5 @@
 import ErrorMessage from "@/components/common/Errors/ErrorMessage";
 import ControlledInputField from "@/components/share/ControlledInputField";
-import ControlledSelectField from "@/components/share/ControlledSelectField";
 import ControlledTextareaField from "@/components/share/ControlledTextareaField";
 import InputLabel from "@/components/share/InputLabel";
 import { Button } from "@/components/ui/button";
@@ -10,10 +9,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { useGet } from "@/hooks/useGet";
 import { usePatch } from "@/hooks/usePatch";
 import { usePost } from "@/hooks/usePost";
-import { mapToSelectOptions } from "@/utils/mapToSelectOptions";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
@@ -30,9 +27,6 @@ export default function CreateUpdateCategories({
   onClose: () => void;
   initialValues?: IResource | undefined;
 }) {
-  const { data } = useGet<IResource[]>("/resource-categories/all-parent", [
-    "categories",
-  ]);
   const {
     mutateAsync,
     error,
@@ -48,7 +42,10 @@ export default function CreateUpdateCategories({
     mutateAsync: patchAsync,
     error: patchError,
     reset: patchReset,
-  } = usePatch((data) => console.log("Success", data), [["resource-categories"]]);
+  } = usePatch(
+    (data) => console.log("Success", data),
+    [["resource-categories"]]
+  );
 
   const methods = useForm<CategoryForm>({
     resolver: yupResolver(categorySchema),
@@ -59,7 +56,6 @@ export default function CreateUpdateCategories({
       methods.reset({
         name: initialValues.name,
         description: initialValues.description,
-        category: String(initialValues.parentId) || "",
       });
     }
   }, [initialValues, methods]);
@@ -69,7 +65,6 @@ export default function CreateUpdateCategories({
       methods.reset({
         name: "",
         description: "",
-        category: "",
       });
       postReset();
       patchReset();
@@ -77,13 +72,14 @@ export default function CreateUpdateCategories({
   }, [isOpen, methods, patchReset, postReset]);
 
   const onSubmit = (data: CategoryForm) => {
-    const organizedData: { name: string; description: string | undefined; parentId?: number } = {
+    const organizedData: {
+      name: string;
+      description: string | undefined;
+      parentId?: number;
+    } = {
       name: data.name,
       description: data.description,
-    }
-    if(data.category !== ""){
-      organizedData.parentId = Number(data.category);
-    }
+    };
     if (initialValues) {
       patchAsync({
         url: `/resource-categories/${initialValues.id}`,
@@ -108,13 +104,13 @@ export default function CreateUpdateCategories({
       });
   };
 
-  const options = mapToSelectOptions(data?.data, "name", "id");
-  console.log(initialValues)
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="bg-white min-h-[20vh] w-[80vw] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>{initialValues ? "Edit Category" : "Create Category"}</DialogTitle>
+          <DialogTitle>
+            {initialValues ? "Edit Category" : "Create Category"}
+          </DialogTitle>
         </DialogHeader>
         <FormProvider {...methods}>
           <form onSubmit={methods.handleSubmit(onSubmit)} className="w-full">
@@ -126,14 +122,6 @@ export default function CreateUpdateCategories({
               />
             </div>
 
-            <div className="mb-4">
-              <InputLabel label="Category" />
-              <ControlledSelectField
-                options={options}
-                name="category"
-                placeholder="Select Category"
-              />
-            </div>
             <div className="mb-4">
               <InputLabel label="Description" />
               <ControlledTextareaField

@@ -1,23 +1,19 @@
 "use client";
 
-import DeleteDialog from "@/components/common/DeleteDialog";
 import { ColumnDef, DataTable } from "@/components/ui/data-table";
-import { useDelete } from "@/hooks/useDelete";
 import { useGet } from "@/hooks/useGet";
 import { usePagination } from "@/hooks/usePagination";
 import { useSearchDebounce } from "@/hooks/useSearchDebounce";
 import { useAppSelector } from "@/lib/redux/hooks";
 import { format } from "date-fns";
-import { Hash, SquarePen, Trash2 } from "lucide-react";
+import { Hash, SquarePen } from "lucide-react";
 import { useEffect, useState } from "react";
-import { toast } from "react-toastify";
 import CreateUpdateKeywords from "./CreateUpdateKeywords";
 import { IKeywords } from "./types/Keywords";
 
 export default function ResourceKeywords() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [keywords, setKeywords] = useState<IKeywords | undefined>();
-  const [deleteKeywords, setDeleteKeywords] = useState<IKeywords | undefined>();
   const { search, handleSearchChange, debouncedSearch } =
     useSearchDebounce(300);
   const {
@@ -39,20 +35,12 @@ export default function ResourceKeywords() {
       search: debouncedSearch,
     }
   );
-  const { mutateAsync: deleteAsync, isPending: isDeleting } = useDelete(
-    (data) => {
-      console.log("DELETE success", data);
-    },
-    [["resource-keywords"]]
-  );
+
   const { hasPermission } = useAppSelector((state) => state.permission);
 
   const handleEdit = (row: IKeywords) => {
     setKeywords(row);
     setIsModalOpen(true);
-  };
-  const handleDelete = (row: IKeywords) => {
-    setDeleteKeywords(row);
   };
 
   // Update total items whenever data changes
@@ -64,7 +52,6 @@ export default function ResourceKeywords() {
   }, [data]);
 
   const columns: ColumnDef<IKeywords>[] = [
-    { header: "ID", accessorKey: "id" },
     { header: "Name", accessorKey: "name" },
     {
       header: "Created date",
@@ -88,13 +75,6 @@ export default function ResourceKeywords() {
                 >
                   <SquarePen size={16} />
                   Edit
-                </button>
-                <button
-                  onClick={() => handleDelete(row)}
-                  className="text-darkLiver hover:text-rose-600 hover:underline text-sm flex items-center gap-1"
-                >
-                  <Trash2 size={16} className="text-rose-600" />
-                  Delete
                 </button>
               </div>
             );
@@ -130,24 +110,6 @@ export default function ResourceKeywords() {
           setKeywords(undefined);
         }}
         initialValues={keywords}
-      />
-      <DeleteDialog
-        open={!!deleteKeywords}
-        onOpenChange={(open) => !open && setDeleteKeywords(undefined)}
-        loading={isDeleting}
-        onConfirm={() => {
-          if (deleteKeywords) {
-            deleteAsync({ url: `/resource-keywords/${deleteKeywords.id}` })
-              .then(() => {
-                toast.success("Keyword deleted successfully");
-                setDeleteKeywords(undefined);
-              })
-              .catch((error) => {
-                toast.error("Failed to delete keyword");
-                console.error(error);
-              });
-          }
-        }}
       />
     </div>
   );

@@ -59,7 +59,6 @@ export default function ResourceCategories() {
   };
 
   const columns: ColumnDef<IResource>[] = [
-    { header: "ID", accessorKey: "id" },
     { header: "Name", accessorKey: "name" },
     { header: "Description", accessorKey: "description" },
     {

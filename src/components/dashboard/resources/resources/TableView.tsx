@@ -107,7 +107,7 @@ export default function TableView({
       },
     },
     {
-      header: "Is Private",
+      header: "Visibility",
       accessorKey: "isPrivate",
       cell: (value: boolean) => {
         const isActive = value;
@@ -118,7 +118,7 @@ export default function TableView({
               isActive ? "bg-[#bfffda] text-green" : "bg-rose-200 text-rose-700"
             }`}
           >
-            {isActive ? "Active" : "Inactive"}
+            {isActive ? "Private" : "Public"}
           </span>
         );
       },

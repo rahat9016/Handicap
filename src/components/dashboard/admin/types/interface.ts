@@ -72,8 +72,7 @@ export interface IResource {
   totalViewCount: number;
 }
 
-
-export interface AnalyticsSummary {
+export interface IAnalyticsSummary {
   overview: Overview;
   popularPages: PopularPage[];
   trafficSources: TrafficSources;

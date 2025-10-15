@@ -7,7 +7,6 @@ export default function Training() {
   return (
     <div>
       <HeroSection />
-      
       <Courses />
       <EssentialFeatures />
       <EarnRecognizedCertificates />

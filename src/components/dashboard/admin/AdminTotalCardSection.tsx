@@ -9,7 +9,6 @@ export default function AdminTotalCardSection({
   dashboardData: IDashboardData | undefined;
 }) {
   const { hasPermission } = useAppSelector((state) => state.permission);
-  
 
   const lastData = (dashboardData ?? {
     totalCourse: 0,
@@ -40,13 +39,13 @@ export default function AdminTotalCardSection({
       icon: "/images/dashboard/icon19.svg",
       shape: "/images/dashboard/cardShape4.svg",
       title: "Total Recourses",
-      count: lastData?.totalCourse,
+      count: lastData?.totalResources,
     },
     {
       icon: "/images/dashboard/icon24.svg",
       shape: "/images/dashboard/cardShape3.svg",
       title: "Total Training",
-      count: lastData?.totalResources,
+      count: lastData?.totalCourse,
     },
   ].filter(Boolean) as ITotalCard[];
 

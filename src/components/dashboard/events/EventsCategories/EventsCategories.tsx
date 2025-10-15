@@ -57,7 +57,6 @@ export default function EventsCategories() {
   };
 
   const columns: ColumnDef<ICategory>[] = [
-    { header: "ID", accessorKey: "id" },
     { header: "Name", accessorKey: "name" },
     { header: "Description", accessorKey: "description" },
     {

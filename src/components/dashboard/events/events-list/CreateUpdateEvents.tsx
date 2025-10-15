@@ -150,7 +150,8 @@ export default function CreateEventModal({
     formData.append("endDate", String(endDateIso));
     formData.append("isOnline", String(data.isOnline));
     formData.append("isPublished", String(data.isPublished));
-    formData.append("organizationId", String(data.organizationId));
+    if (data?.organizationId)
+      formData.append("organizationId", String(data.organizationId));
     formData.append("categoryIds", String(data.categoryIds));
     (data.tagIds || []).forEach((id) => {
       if (id) formData.append("tagIds", String(id));
@@ -292,10 +293,10 @@ export default function CreateEventModal({
                 />
               </div>
               <div>
-                <InputLabel label="Organization" required />
+                <InputLabel label="Organization" />
                 <ControlledSelectField
                   name="organizationId"
-                  placeholder="Please enter your tag"
+                  placeholder="Select organization"
                   options={organizationOptions}
                 />
               </div>

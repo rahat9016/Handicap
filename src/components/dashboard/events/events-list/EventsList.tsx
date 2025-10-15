@@ -13,10 +13,8 @@ import { IEvent } from "./types";
 
 export default function EventsList() {
   const [events, setEvents] = useState<IEvent>();
-  // const [selectedId, setSelectedId] = useState<string | undefined>(undefined);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const { hasPermission } = useAppSelector((state) => state.permission);
-  // const { organizationId } = useAppSelector((state) => state.organizer);
   const { search, handleSearchChange, debouncedSearch } =
     useSearchDebounce(300);
   const {

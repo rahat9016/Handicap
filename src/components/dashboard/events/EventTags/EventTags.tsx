@@ -64,7 +64,6 @@ export default function EventTags() {
   }, [data]);
 
   const columns: ColumnDef<ITags>[] = [
-    { header: "ID", accessorKey: "id" },
     { header: "Name", accessorKey: "name" },
     {
       header: "Created date",

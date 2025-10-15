@@ -49,9 +49,7 @@ export const eventSchema = Yup.object().shape({
   isOnline: Yup.boolean(),
 
   isPublished: Yup.boolean(),
-  organizationId: Yup.number()
-    .required("Organization ID is required")
-    .min(1, "Organization ID must be greater than 0"),
+  organizationId: Yup.number().optional(),
   categoryIds: Yup.number().required().required("Categories are required"),
   tagIds: Yup.array().of(Yup.number().required()).required("Tags are required"),
   images: Yup.array()

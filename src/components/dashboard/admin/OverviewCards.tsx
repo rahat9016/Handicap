@@ -41,7 +41,7 @@ export const OverviewCards: React.FC<OverviewCardsProps> = ({
       <StatCard
         title="Total Visitors"
         value={formatNumber(data?.totalVisitors ?? 0)}
-        icon={<Users className="w-8 h-8" />}
+        icon={<Users className="w-7 h-7" />}
         description="All time visitors"
         shape={<CircleShape />}
       />
@@ -49,7 +49,7 @@ export const OverviewCards: React.FC<OverviewCardsProps> = ({
       <StatCard
         title="Page Views"
         value={formatNumber(data?.totalPageViews ?? 0)}
-        icon={<Eye className="w-8 h-8" />}
+        icon={<Eye className="w-7 h-7" />}
         description="Total pages viewed"
         shape={<HexagonShape />}
       />
@@ -58,7 +58,7 @@ export const OverviewCards: React.FC<OverviewCardsProps> = ({
       {/* <StatCard
         title="Unique Visitors"
         value={formatNumber(data?.uniqueVisitors ?? 0)}
-        icon={<UserCheck className="w-8 h-8" />}
+        icon={<UserCheck className="w-7 h-7" />}
         description="First-time visitors"
         shape={<SquareShape />}
       /> */}
@@ -67,7 +67,7 @@ export const OverviewCards: React.FC<OverviewCardsProps> = ({
       {/* <StatCard
         title="Returning Visitors"
         value={formatNumber(data?.returningVisitors  ?? 0)}
-        icon={<UserCog className="w-8 h-8" />}
+        icon={<UserCog className="w-7 h-7" />}
         description="Repeat visitors"
         shape={<TriangleShape />}
       /> */}
@@ -75,7 +75,7 @@ export const OverviewCards: React.FC<OverviewCardsProps> = ({
       <StatCard
         title="Avg. Session"
         value={formatDuration(data?.averageSessionDuration ?? 0)}
-        icon={<Clock className="w-8 h-8" />}
+        icon={<Clock className="w-7 h-7" />}
         description="Average visit duration"
         shape={<CircleShape />}
       />
@@ -83,7 +83,7 @@ export const OverviewCards: React.FC<OverviewCardsProps> = ({
       <StatCard
         title="Bounce Rate"
         value={formatPercentage(data?.bounceRate ?? 0)}
-        icon={<TrendingDown className="w-8 h-8" />}
+        icon={<TrendingDown className="w-7 h-7" />}
         description="Single-page sessions"
         shape={<HexagonShape />}
       />
@@ -92,7 +92,7 @@ export const OverviewCards: React.FC<OverviewCardsProps> = ({
       {/* <StatCard
         title="New Visitors"
         value={formatNumber(data?.newVisitors ?? 0)}
-        icon={<UserPlus className="w-8 h-8" />}
+        icon={<UserPlus className="w-7 h-7" />}
         description="First-time visits"
         shape={<SquareShape />}
       /> */}

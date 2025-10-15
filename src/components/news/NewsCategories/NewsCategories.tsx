@@ -57,7 +57,6 @@ export default function NewsCategories() {
   };
 
   const columns: ColumnDef<INews>[] = [
-    { header: "ID", accessorKey: "id" },
     { header: "Name", accessorKey: "name" },
     { header: "Description", accessorKey: "description" },
     {

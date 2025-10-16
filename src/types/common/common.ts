@@ -34,7 +34,7 @@ export type ResponseSuccessType = {
 };
 export interface ILangType {
     bn: string | null;
-    en: string;
+    en: string | null;
   }
 export interface IPageSection {
   id: number;
@@ -45,10 +45,13 @@ export interface IPageSection {
   subtitle: ILangType;
   content: ILangType;
   buttonLabel: ILangType;
+  buttonLabel2: ILangType;
   buttonUrl: string;
+  buttonUrl2: string;
   configuration: string;
   isActive: boolean;
   createdAt: string;
   updatedAt: string;
   imageUrls: string[];
+  backgroundImageUrl:string
 }

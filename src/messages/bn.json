@@ -2,7 +2,7 @@
   "Header": {
     "wcag": "WCAG 2.1 AA অনুপালনযোগ্য",
     "gdpr": "GDPR অনুপালনযোগ্য",
-    "colorBlind": "রঙ-অন্ধ মোড উপলব্ধ",
+    "colorBlind": "কালার ব্লাইন্ড মোড চালু আছে",
     "accessibility": "প্রবেশযোগ্যতা বিবৃতি",
     "eventCalendar": "ইভেন্ট ক্যালেন্ডার",
     "privacyPolicy": "গোপনীয়তা নীতি",

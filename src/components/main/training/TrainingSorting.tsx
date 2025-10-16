@@ -24,7 +24,7 @@ import { ICategory } from "./types/traning";
 
 const sortOptions = [
   { label: "Most View", value: "viewCount:desc" },
-  { label: "Oldest First", value: "createdAt:asc" }, // fixed asc for oldest
+  { label: "Oldest First", value: "createdAt:asc" },
 ];
 const levelOptions = [
   { label: "Beginner", value: "BEGINNER" },
@@ -36,10 +36,10 @@ export default function TrainingSorting() {
   const dispatch = useAppDispatch();
   const { data: courseCategoryData, isLoading: isResourceLoading } = useGet<
     ICategory[]
-  >("/course-category", ["course-category"]);
+  >("/course-category?isActive=true", ["course-category"]);
   const { data: organizationData, isLoading: isOrganizationLoading } = useGet<
     IOrganization[]
-  >("/organizations", ["organizations"]);
+  >("/organizations?isActive=true", ["organizations"]);
 
   const methods = useForm({
     defaultValues: {
@@ -111,7 +111,10 @@ export default function TrainingSorting() {
                     ))}
                   </div>
                 ) : (
-                  <ControlledCheckboxField name="sortBy" options={sortOptions} />
+                  <ControlledCheckboxField
+                    name="sortBy"
+                    options={sortOptions}
+                  />
                 )}
               </AccordionContent>
             </AccordionItem>

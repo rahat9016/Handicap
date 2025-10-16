@@ -8,7 +8,7 @@ import { useAppSelector } from "@/lib/redux/hooks";
 import { format } from "date-fns";
 import { FileCog, SquarePen } from "lucide-react";
 import { useEffect, useState } from "react";
-import CreateUpdateCategories from "./CreateUpdateCategories";
+import CreateUpdateCategories from "./Form/CreateUpdateCategories";
 import { IResource } from "./types/Categories";
 
 export default function ResourceCategories() {
@@ -110,6 +110,7 @@ export default function ResourceCategories() {
   return (
     <div className="bg-white p-4 lg:p-8 min-h-[85vh] border border-skeleton rounded-2xl">
       <DataTable
+        key={hasPermission ? "with-action" : "no-action"}
         columns={columns}
         data={Array.isArray(data?.data) ? data.data : []}
         isLoading={isLoading}

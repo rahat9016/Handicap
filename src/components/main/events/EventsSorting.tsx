@@ -23,13 +23,13 @@ const EventsSorting = () => {
   const dispatch = useAppDispatch();
 
   const { data: eventTags, isLoading: isTagsLoading } = useGet<ITag[]>(
-    "/event-tags",
+    "/event-tags?isActive=true",
     ["event-tags"]
   );
 
   const { data: eventCategories, isLoading: isEventCategoriesLoading } = useGet<
     ICategory[]
-  >("/event-categories", ["event-categories"]);
+  >("/event-categories?isActive=true", ["event-categories"]);
 
   const methods = useForm({
     defaultValues: {

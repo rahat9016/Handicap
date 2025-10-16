@@ -25,7 +25,8 @@ export const languageSchema = yup.object({
     .string()
     .required("Native name is required")
     .max(50, "Native name must be at most 50 characters"),
+  isActive: yup.boolean().default(true).notRequired(),
 });
 
 export type OrganizerTypeSetupForm = InferType<typeof organizerTypeSetup>;
-export type LanguageForm = InferType<typeof languageSchema>;
+export type LanguageFormType = InferType<typeof languageSchema>;

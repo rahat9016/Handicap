@@ -8,7 +8,8 @@ import { format } from "date-fns";
 import { Languages, SquarePen } from "lucide-react";
 import { useEffect, useState } from "react";
 import { ILanguage } from "../types/setup";
-import CreateUpdateLanguageSetup from "./CreateUpdateLanguageSetup";
+import CreateUpdateLanguageSetup from "./Form/CreateUpdateLanguageSetup";
+
 export default function LanguageSetup() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [language, setLanguage] = useState<ILanguage | undefined>(undefined);
@@ -67,7 +68,6 @@ export default function LanguageSetup() {
         return <span>{format(date, "dd MMM yyyy")}</span>;
       },
     },
-
     {
       header: "Is Active",
       accessorKey: "isActive",

@@ -8,7 +8,7 @@ import { useAppSelector } from "@/lib/redux/hooks";
 import { format } from "date-fns";
 import { Hash, SquarePen } from "lucide-react";
 import { useEffect, useState } from "react";
-import CreateUpdateKeywords from "./CreateUpdateKeywords";
+import CreateUpdateKeywords from "./Form/CreateUpdateKeywords";
 import { IKeywords } from "./types/Keywords";
 
 export default function ResourceKeywords() {
@@ -53,6 +53,7 @@ export default function ResourceKeywords() {
 
   const columns: ColumnDef<IKeywords>[] = [
     { header: "Name", accessorKey: "name" },
+
     {
       header: "Created date",
       accessorKey: "createdAt",
@@ -60,6 +61,23 @@ export default function ResourceKeywords() {
         if (!value) return null;
         const date = new Date(value as string);
         return <span>{format(date, "dd MMM yyyy")}</span>;
+      },
+    },
+    {
+      header: "Is Active",
+      accessorKey: "isActive",
+      cell: (value: boolean) => {
+        const isActive = value;
+
+        return (
+          <span
+            className={`px-2 py-1 rounded-full text-xs font-medium ${
+              isActive ? "bg-[#bfffda] text-green" : "bg-rose-200 text-rose-700"
+            }`}
+          >
+            {isActive ? "Active" : "Inactive"}
+          </span>
+        );
       },
     },
     hasPermission
@@ -86,6 +104,7 @@ export default function ResourceKeywords() {
   return (
     <div className="bg-white p-4 lg:p-8 min-h-[85vh] border border-skeleton rounded-2xl">
       <DataTable
+        key={hasPermission ? "with-action" : "no-action"}
         columns={columns}
         data={Array.isArray(data?.data) ? data.data : []}
         isLoading={isLoading}

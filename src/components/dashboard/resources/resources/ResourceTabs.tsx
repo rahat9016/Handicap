@@ -15,7 +15,7 @@ import FileView from "./FileView";
 import TableView from "./TableView";
 
 export default function ResourceTabs(props: IResourceProps) {
-  const { hasPermission } = useAppSelector((state) => state.permission)
+  const { hasPermission } = useAppSelector((state) => state.permission);
   const { data: organizationsData } = useGet<IOrganization[]>(
     "/organizations",
     ["organizations"]
@@ -25,21 +25,34 @@ export default function ResourceTabs(props: IResourceProps) {
     <Tabs defaultValue="fileView" className="w-full">
       <div className="flex items-center gap-4 mb-4">
         <TabsList className="h-12">
-          <TabsTrigger value="fileView" className="h-10">File View</TabsTrigger>
-          <TabsTrigger value="tableView" className="h-10">Table View</TabsTrigger>
+          <TabsTrigger value="fileView" className="h-10">
+            File View
+          </TabsTrigger>
+          <TabsTrigger value="tableView" className="h-10">
+            Table View
+          </TabsTrigger>
         </TabsList>
-        {hasPermission && <Select onValueChange={(val) => props.setSelectedId(val)}>
-          <SelectTrigger className="w-[200px] h-12">
-            <SelectValue placeholder="Select organization" />
-          </SelectTrigger>
-          <SelectContent>
-            {options?.map((opt) => (
-              <SelectItem key={opt.value} value={opt.value}>
-                {opt.label}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>}
+        {hasPermission && (
+          <Select
+            value={props.selectedId ?? ""}
+            onValueChange={(val) => {
+              if (val === "all") props.setSelectedId(undefined);
+              else props.setSelectedId(val);
+            }}
+          >
+            <SelectTrigger className="w-[200px] h-12">
+              <SelectValue placeholder="Select organization" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All organizations</SelectItem>
+              {options?.map((opt) => (
+                <SelectItem key={opt.value} value={opt.value}>
+                  {opt.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        )}
       </div>
 
       <TabsContent value="fileView">

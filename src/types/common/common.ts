@@ -55,3 +55,5 @@ export interface IPageSection {
   imageUrls: string[];
   backgroundImageUrl:string
 }
+
+export type ErrorType = IGenericErrorResponse | null | undefined;

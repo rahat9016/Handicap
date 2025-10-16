@@ -6,7 +6,7 @@ import { useSearchDebounce } from "@/hooks/useSearchDebounce";
 import { FileCog, SquarePen } from "lucide-react";
 import { useEffect, useState } from "react";
 import { IOrganizationType } from "../types/setup";
-import CreateUpdateOrganizationTypeSetup from "./CreateUpdateOrganizationTypeSetup";
+import CreateUpdateOrganizationTypeSetup from "./Form/CreateUpdateOrganizationTypeSetup";
 interface IOrganization {
   actions?: string;
   id: number;
@@ -46,11 +46,6 @@ export default function OrganizationTypeSetup() {
     setOrganization(row);
   };
 
-  // const { mutateAsync } = usePatch(
-  //     (data) => console.log("Success", data),
-  //     [["user"]]
-  //   );
-  // Update total items whenever data changes
   useEffect(() => {
     if (data) {
       setTotalItems(data.meta?.totalItems || 0);

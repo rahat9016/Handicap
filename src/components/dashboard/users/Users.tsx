@@ -64,7 +64,6 @@ export default function Users() {
     { header: "Email", accessorKey: "email", sortable: true },
     { header: "Phone", accessorKey: "phone" },
     { header: "User Role", accessorKey: "roleName" },
-
     {
       header: "Action",
       accessorKey: "actions",

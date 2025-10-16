@@ -9,6 +9,7 @@ export const categorySchema = Yup.object({
   description: Yup.string()
     .optional()
     .max(500, "Description must not exceed 500 characters"),
+  isActive: Yup.boolean().default(true).notRequired(),
 });
 
-export type CategoryForm = InferType<typeof categorySchema>;
+export type CategoryFormType = InferType<typeof categorySchema>;

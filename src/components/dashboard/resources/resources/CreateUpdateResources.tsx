@@ -128,9 +128,10 @@ export default function CreateUpdateResources({
     const formData = new FormData();
 
     formData.append("title", data.title);
-    if (data.titleBn) formData.append("titleBn", data.titleBn); 
+    if (data.titleBn) formData.append("titleBn", data.titleBn);
     if (data.description) formData.append("description", data.description);
-    if (data.descriptionBn) formData.append("descriptionBn", data.descriptionBn);
+    if (data.descriptionBn)
+      formData.append("descriptionBn", data.descriptionBn);
     formData.append("languageId", data.languageId);
     formData.append("categoryId", data.categoryId);
     formData.append("organizationId", organizationId);
@@ -253,7 +254,7 @@ export default function CreateUpdateResources({
               {/* Keywords */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 lg:gap-5">
                 <div>
-                  <InputLabel label="Keywords" required />
+                  <InputLabel label="Keywords" />
                   <ControlledMultiSelectField
                     name="keywordIds"
                     placeholder="Please enter your keyword"

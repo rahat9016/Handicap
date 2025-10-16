@@ -1,8 +1,3 @@
-import ErrorMessage from "@/components/common/Errors/ErrorMessage";
-import ControlledInputField from "@/components/share/ControlledInputField";
-import ControlledTextareaField from "@/components/share/ControlledTextareaField";
-import InputLabel from "@/components/share/InputLabel";
-import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -11,12 +6,14 @@ import {
 } from "@/components/ui/dialog";
 import { usePatch } from "@/hooks/usePatch";
 import { usePost } from "@/hooks/usePost";
+import { getChangedFields } from "@/utils/getChangedFields";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import { CategoryForm, categorySchema } from "./Schema/Category";
-import { ICategory } from "./types/Categories";
+import { CategoryForm, categorySchema } from "../Schema/Category";
+import { ICategory } from "../types/Categories";
+import EventCategoryForm from "./EventCategoryForm";
 
 export default function CreateUpdateCategories({
   isOpen,
@@ -29,12 +26,13 @@ export default function CreateUpdateCategories({
 }) {
   const {
     mutateAsync,
-    error,
+    error: postError,
     reset: postReset,
+    isPending: isPostPending,
   } = usePost<CategoryForm>(
     "/event-categories",
-    (data) => {
-      console.log("POST success", data);
+    () => {
+      console.log("POST success");
     },
     [["event-categories"]]
   );
@@ -42,6 +40,7 @@ export default function CreateUpdateCategories({
     mutateAsync: patchAsync,
     error: patchError,
     reset: patchReset,
+    isPending: isPatchPending,
   } = usePatch((data) => console.log("Success", data), [["event-categories"]]);
 
   const methods = useForm<CategoryForm>({
@@ -52,7 +51,8 @@ export default function CreateUpdateCategories({
     if (initialValues) {
       methods.reset({
         name: initialValues.name,
-        description: initialValues.description
+        description: initialValues.description,
+        isActive: initialValues.isActive,
       });
     }
   }, [initialValues, methods]);
@@ -62,6 +62,7 @@ export default function CreateUpdateCategories({
       methods.reset({
         name: "",
         description: "",
+        isActive: false,
       });
       postReset();
       patchReset();
@@ -69,23 +70,21 @@ export default function CreateUpdateCategories({
   }, [isOpen, methods, patchReset, postReset]);
 
   const onSubmit = (data: CategoryForm) => {
-    const organizedData: { name: string; description: string | undefined; parentId?: number } = {
-      name: data.name,
-      description: data.description,
-    }
     if (initialValues) {
+      const newChangedData = getChangedFields(data, initialValues);
       patchAsync({
         url: `/event-categories/${initialValues.id}`,
-        data: organizedData,
+        data: newChangedData,
       }).then(() => {
         console.log("Events Category updated successfully");
         onClose();
-        // Reset the form after successful submission
         methods.reset();
       });
       return;
     }
-    mutateAsync(organizedData)
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { isActive, ...postData } = data;
+    mutateAsync(postData)
       .then(() => {
         toast.success("News Category created successfully");
         onClose();
@@ -96,40 +95,22 @@ export default function CreateUpdateCategories({
         console.error(error);
       });
   };
-
+  const isPending = isPostPending || isPatchPending;
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="bg-white min-h-[20vh] w-[80vw] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>{initialValues ? "Edit Category" : "Create Category"}</DialogTitle>
+          <DialogTitle>
+            {initialValues ? "Edit Category" : "Create Category"}
+          </DialogTitle>
         </DialogHeader>
         <FormProvider {...methods}>
-          <form onSubmit={methods.handleSubmit(onSubmit)} className="w-full">
-            <div className="mb-4">
-              <InputLabel label="Name" required />
-              <ControlledInputField
-                name="name"
-                placeholder="Enter the category name..."
-              />
-            </div>
-            <div className="mb-4">
-              <InputLabel label="Description" />
-              <ControlledTextareaField
-                name="description"
-                placeholder="Write down here the description..."
-              />
-            </div>
-            <ErrorMessage error={error} />
-            <ErrorMessage error={patchError} />
-            <div className="flex justify-end gap-3 mt-6">
-              <Button
-                type="submit"
-                className="bg-dashboard-primary hover:bg-dashboard-primary text-white"
-              >
-                {initialValues ? "Update" : "Create"}
-              </Button>
-            </div>
-          </form>
+          <EventCategoryForm
+            isEditMode={!!initialValues}
+            onSubmit={onSubmit}
+            error={postError || patchError}
+            isPending={isPending}
+          />
         </FormProvider>
       </DialogContent>
     </Dialog>

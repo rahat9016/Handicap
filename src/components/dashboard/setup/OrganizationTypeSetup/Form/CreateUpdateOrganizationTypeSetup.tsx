@@ -1,9 +1,3 @@
-import ErrorMessage from "@/components/common/Errors/ErrorMessage";
-import { ControlledCheckField } from "@/components/share/ControlledCheckField";
-import ControlledInputField from "@/components/share/ControlledInputField";
-import ControlledTextareaField from "@/components/share/ControlledTextareaField";
-import InputLabel from "@/components/share/InputLabel";
-import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -16,9 +10,10 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import { IUser } from "../../../organizer/types";
-import { organizerTypeSetup, OrganizerTypeSetupForm } from "../Schema/Setup";
-import { IOrganizationType } from "../types/setup";
+import { IUser } from "../../../../organizer/types";
+import { organizerTypeSetup, OrganizerTypeSetupForm } from "../../Schema/Setup";
+import { IOrganizationType } from "../../types/setup";
+import OrganizationTypeForm from "./OrganizationTypeForm";
 
 export default function CreateUpdateOrganizationTypeSetup({
   isOpen,
@@ -33,6 +28,7 @@ export default function CreateUpdateOrganizationTypeSetup({
     mutateAsync,
     error,
     reset: postReset,
+    isPending: isPostPending,
   } = usePost<IUser[]>(
     "/organization-types",
     (data) => {
@@ -40,7 +36,12 @@ export default function CreateUpdateOrganizationTypeSetup({
     },
     [["organization-types"]]
   );
-  const { mutateAsync: mutateAsyncPatch } = usePatch(
+  const {
+    mutateAsync: mutateAsyncPatch,
+    isPending: isPatchPending,
+    reset: patchReset,
+    error: patchError,
+  } = usePatch(
     (data) => console.log("Success", data),
     [["organization-types"]]
   );
@@ -67,9 +68,10 @@ export default function CreateUpdateOrganizationTypeSetup({
         isActive: false,
       });
       postReset();
+      patchReset();
     }
-  }, [isOpen, methods, postReset]);
-  
+  }, [isOpen, methods, postReset, patchReset]);
+
   const onSubmit = (data: OrganizerTypeSetupForm) => {
     const organizedData: {
       name: string;
@@ -87,21 +89,19 @@ export default function CreateUpdateOrganizationTypeSetup({
       }).then(() => {
         toast.success("Organizer type updated successfully");
         onClose();
-        // Reset the form after successful submission
         methods.reset();
-        console.log("Organizer type updated successfully");
       });
     } else {
       mutateAsync(organizedData).then(() => {
         console.log("Organizer type created successfully");
         toast.success("Organizer type created successfully");
         onClose();
-        // Reset the form after successful submission
         methods.reset();
       });
     }
   };
-
+  const isPending = isPostPending || isPatchPending;
+  // console.log(patchError);
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="bg-white min-h-[20vh] w-[80vw] overflow-y-auto">
@@ -111,7 +111,13 @@ export default function CreateUpdateOrganizationTypeSetup({
           </DialogTitle>
         </DialogHeader>
         <FormProvider {...methods}>
-          <form onSubmit={methods.handleSubmit(onSubmit)} className="w-full">
+          <OrganizationTypeForm
+            isEditMode={!!initialValues}
+            onSubmit={onSubmit}
+            error={error || patchError}
+            isPending={isPending}
+          />
+          {/* <form onSubmit={methods.handleSubmit(onSubmit)} className="w-full">
             <div className="mb-4">
               <InputLabel label="Type name" required />
               <ControlledInputField name="name" placeholder="Enter type name" />
@@ -141,7 +147,7 @@ export default function CreateUpdateOrganizationTypeSetup({
                 {initialValues ? "Update" : "Create"}
               </Button>
             </div>
-          </form>
+          </form> */}
         </FormProvider>
       </DialogContent>
     </Dialog>

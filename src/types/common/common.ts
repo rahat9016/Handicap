@@ -33,9 +33,9 @@ export type ResponseSuccessType = {
   meta?: IMeta;
 };
 export interface ILangType {
-    bn: string | null;
-    en: string;
-  }
+  bn: string | null;
+  en: string;
+}
 export interface IPageSection {
   id: number;
   pageId: string;
@@ -52,3 +52,5 @@ export interface IPageSection {
   updatedAt: string;
   imageUrls: string[];
 }
+
+export type ErrorType = IGenericErrorResponse | null | undefined;

@@ -3,10 +3,9 @@ import { InferType } from "yup";
 
 export const keywordsSchema = Yup.object({
   name: Yup.string()
-    .required('Keyword name is required')
-    .min(2, 'Keyword name must be at least 2 characters'),
-
+    .required("Keyword name is required")
+    .min(2, "Keyword name must be at least 2 characters"),
+  isActive: Yup.boolean().default(false).notRequired(),
 });
-
 
 export type KeywordsForm = InferType<typeof keywordsSchema>;

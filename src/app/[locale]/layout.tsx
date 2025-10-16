@@ -8,7 +8,6 @@ import { Inter } from "next/font/google";
 import { notFound } from "next/navigation";
 import "./globals.css";
 import { UserFetcher } from "./UserFetcher";
-// import { useAnalytics } from "@/hooks/useAnalytics";
 
 const inter = Inter({
   subsets: ["latin"],

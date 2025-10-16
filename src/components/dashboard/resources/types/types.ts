@@ -102,5 +102,6 @@ export interface IResourceProps {
   totalItems: number;
   itemsPerPage: number;
   setItemsPerPage: any;
+  selectedId?: string | undefined;
   setSelectedId: Dispatch<SetStateAction<string | undefined>>;
 }

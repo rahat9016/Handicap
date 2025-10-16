@@ -6,7 +6,7 @@ import { useSearchDebounce } from "@/hooks/useSearchDebounce";
 import { FileCog, SquarePen } from "lucide-react";
 import { useEffect, useState } from "react";
 import { IOrganizationType } from "../types/setup";
-import CreateUpdateOrganizationTypeSetup from "./CreateUpdateOrganizationTypeSetup";
+import CreateUpdateOrganizationTypeSetup from "./Form/CreateUpdateOrganizationTypeSetup";
 interface IOrganization {
   actions?: string;
   id: number;

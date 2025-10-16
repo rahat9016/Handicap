@@ -1,7 +1,3 @@
-import ErrorMessage from "@/components/common/Errors/ErrorMessage";
-import ControlledInputField from "@/components/share/ControlledInputField";
-import InputLabel from "@/components/share/InputLabel";
-import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -10,12 +6,14 @@ import {
 } from "@/components/ui/dialog";
 import { usePatch } from "@/hooks/usePatch";
 import { usePost } from "@/hooks/usePost";
+import { getChangedFields } from "@/utils/getChangedFields";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import { KeywordsForm, keywordsSchema } from "./Schema/Keywords";
-import { IKeywords } from "./types/Keywords";
+import { KeywordsForm, keywordsSchema } from "../Schema/Keywords";
+import { IKeywords } from "../types/Keywords";
+import KeywordForm from "./KeywordForm";
 
 export default function CreateUpdateKeywords({
   isOpen,
@@ -30,6 +28,7 @@ export default function CreateUpdateKeywords({
     mutateAsync,
     error,
     reset: postReset,
+    isPending: isPostPending,
   } = usePost<KeywordsForm>(
     "/resource-keywords",
     (data) => {
@@ -41,6 +40,7 @@ export default function CreateUpdateKeywords({
     mutateAsync: patchAsync,
     error: patchError,
     reset: patchReset,
+    isPending: isPatchPending,
   } = usePatch<KeywordsForm>(
     (data) => {
       console.log("PATCH success", data);
@@ -57,6 +57,7 @@ export default function CreateUpdateKeywords({
       methods.reset({
         ...initialValues,
         name: initialValues?.name,
+        isActive: initialValues?.isActive,
       });
     }
   }, [initialValues, methods]);
@@ -65,6 +66,7 @@ export default function CreateUpdateKeywords({
     if (!isOpen) {
       methods.reset({
         name: "",
+        isActive: false,
       });
       postReset();
       patchReset();
@@ -73,13 +75,14 @@ export default function CreateUpdateKeywords({
 
   const onSubmit = (data: KeywordsForm) => {
     const organizedData = {
-      name: data.name
-    }
-
+      name: data.name,
+    };
     if (initialValues) {
+      const newChangedData = getChangedFields(data, initialValues);
+      console.log(newChangedData);
       patchAsync({
         url: `/resource-keywords/${initialValues.id}`,
-        data: organizedData,
+        data: newChangedData,
       }).then(() => {
         toast.success("Keyword updated successfully");
         onClose();
@@ -99,33 +102,22 @@ export default function CreateUpdateKeywords({
         console.error(error);
       });
   };
-
+  const isPending = isPostPending || isPatchPending;
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="bg-white min-h-[20vh] w-[80vw] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>{initialValues ? "Update Keywords" : "Create Keywords"}</DialogTitle>
+          <DialogTitle>
+            {initialValues ? "Update Keywords" : "Create Keywords"}
+          </DialogTitle>
         </DialogHeader>
         <FormProvider {...methods}>
-          <form onSubmit={methods.handleSubmit(onSubmit)} className="w-full">
-            <div className="mb-4">
-              <InputLabel label="Name" required />
-              <ControlledInputField
-                name="name"
-                placeholder="Enter the category name..."
-              />
-            </div>
-            <ErrorMessage error={error} />
-            <ErrorMessage error={patchError} />
-            <div className="flex justify-end gap-3 mt-6">
-              <Button
-                type="submit"
-                className="bg-dashboard-primary hover:bg-dashboard-primary text-white"
-              >
-                {initialValues ? "Update" : "Create"}
-              </Button>
-            </div>
-          </form>
+          <KeywordForm
+            isEditMode={!!initialValues}
+            onSubmit={onSubmit}
+            error={error || patchError}
+            isPending={isPending}
+          />
         </FormProvider>
       </DialogContent>
     </Dialog>

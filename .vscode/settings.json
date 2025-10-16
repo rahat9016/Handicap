@@ -2,7 +2,7 @@
   "cSpell.words": ["datas"],
   "eslint.enable": true,
   "eslint.workingDirectories": [{ "mode": "auto" }],
-  "eslint.options": {
-    "overrideConfigFile": ".eslintrc.js"
-  }
+  // "eslint.options": {
+  //   "overrideConfigFile": ".eslintrc.js"
+  // }
 }

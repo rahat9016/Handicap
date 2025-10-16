@@ -1,5 +1,6 @@
 export interface IKeywords {
   id: number;
   name: string;
-  createdAt?: string;  
+  createdAt?: string;
+  isActive?: boolean;
 }

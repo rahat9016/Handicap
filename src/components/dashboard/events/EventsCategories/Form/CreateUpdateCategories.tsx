@@ -82,7 +82,8 @@ export default function CreateUpdateCategories({
       });
       return;
     }
-    const { isActive: _isActive, ...postData } = data;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { isActive, ...postData } = data;
     mutateAsync(postData)
       .then(() => {
         toast.success("News Category created successfully");

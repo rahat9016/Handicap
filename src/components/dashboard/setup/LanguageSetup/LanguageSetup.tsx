@@ -68,7 +68,6 @@ export default function LanguageSetup() {
         return <span>{format(date, "dd MMM yyyy")}</span>;
       },
     },
-
     {
       header: "Is Active",
       accessorKey: "isActive",

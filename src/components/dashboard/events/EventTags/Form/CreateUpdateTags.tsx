@@ -1,7 +1,3 @@
-import ErrorMessage from "@/components/common/Errors/ErrorMessage";
-import ControlledInputField from "@/components/share/ControlledInputField";
-import InputLabel from "@/components/share/InputLabel";
-import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -10,12 +6,14 @@ import {
 } from "@/components/ui/dialog";
 import { usePatch } from "@/hooks/usePatch";
 import { usePost } from "@/hooks/usePost";
+import { getChangedFields } from "@/utils/getChangedFields";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import { ITags } from "./types/Tags";
-import { TagsForm, tagsSchema } from "./Schema/Tags";
+import { TagsFormType, tagsSchema } from "../Schema/Tags";
+import { ITags } from "../types/Tags";
+import TagForm from "./TagForm";
 
 export default function CreateUpdateTags({
   isOpen,
@@ -30,7 +28,8 @@ export default function CreateUpdateTags({
     mutateAsync,
     error,
     reset: postReset,
-  } = usePost<TagsForm>(
+    isPending: isPostPending,
+  } = usePost<TagsFormType>(
     "/event-tags",
     (data) => {
       console.log("POST success", data);
@@ -41,14 +40,15 @@ export default function CreateUpdateTags({
     mutateAsync: patchAsync,
     error: patchError,
     reset: patchReset,
-  } = usePatch<TagsForm>(
+    isPending: isPatchPending,
+  } = usePatch<TagsFormType>(
     (data) => {
       console.log("PATCH success", data);
     },
     [["event-tags"]]
   );
 
-  const methods = useForm<TagsForm>({
+  const methods = useForm<TagsFormType>({
     resolver: yupResolver(tagsSchema),
   });
 
@@ -57,6 +57,7 @@ export default function CreateUpdateTags({
       methods.reset({
         ...initialValues,
         name: initialValues?.name,
+        isActive: initialValues?.isActive,
       });
     }
   }, [initialValues, methods]);
@@ -71,15 +72,16 @@ export default function CreateUpdateTags({
     }
   }, [isOpen, methods, patchReset, postReset]);
 
-  const onSubmit = (data: TagsForm) => {
+  const onSubmit = (data: TagsFormType) => {
     const organizedData = {
       name: data.name,
     };
 
     if (initialValues) {
+      const newChangedData = getChangedFields(data, initialValues);
       patchAsync({
         url: `/event-tags/${initialValues.id}`,
-        data: organizedData,
+        data: newChangedData,
       }).then(() => {
         toast.success("Keyword updated successfully");
         onClose();
@@ -87,7 +89,7 @@ export default function CreateUpdateTags({
       });
       return;
     }
-    // If initialValues is not provided, it means we are creating a new keyword
+
     mutateAsync(organizedData)
       .then(() => {
         toast.success("Keyword created successfully");
@@ -99,7 +101,7 @@ export default function CreateUpdateTags({
         console.error(error);
       });
   };
-
+  const isPending = isPostPending || isPatchPending;
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="bg-white min-h-[20vh] w-[80vw] overflow-y-auto">
@@ -109,7 +111,13 @@ export default function CreateUpdateTags({
           </DialogTitle>
         </DialogHeader>
         <FormProvider {...methods}>
-          <form onSubmit={methods.handleSubmit(onSubmit)} className="w-full">
+          <TagForm
+            isEditMode={!!initialValues}
+            onSubmit={onSubmit}
+            error={error || patchError}
+            isPending={isPending || isPatchPending}
+          />
+          {/* <form onSubmit={methods.handleSubmit(onSubmit)} className="w-full">
             <div className="mb-4">
               <InputLabel label="Name" required />
               <ControlledInputField
@@ -127,7 +135,7 @@ export default function CreateUpdateTags({
                 {initialValues ? "Update" : "Create"}
               </Button>
             </div>
-          </form>
+          </form> */}
         </FormProvider>
       </DialogContent>
     </Dialog>

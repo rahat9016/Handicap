@@ -52,11 +52,11 @@ export default function FileView({
           </Button>
         )}
       </div>
-      <div className="grid grid-cols-6 gap-4 border-t mt-4 pt-4">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4 border-t mt-4 pt-4">
         {isLoading
           ? Array.from({ length: 12 }).map((_, i) => (
               <div key={i} className="p-4 rounded-lg border">
-                <Skeleton className="w-[160px] h-[160px] mx-auto rounded-md" />
+                <Skeleton className="max-w-[160px] h-[160px] mx-auto rounded-md" />
                 <Skeleton className="h-4 mt-2 w-3/4 mx-auto" />
               </div>
             ))

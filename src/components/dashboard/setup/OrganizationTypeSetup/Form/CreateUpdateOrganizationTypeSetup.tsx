@@ -101,7 +101,6 @@ export default function CreateUpdateOrganizationTypeSetup({
     }
   };
   const isPending = isPostPending || isPatchPending;
-  // console.log(patchError);
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="bg-white min-h-[20vh] w-[80vw] overflow-y-auto">
@@ -117,37 +116,6 @@ export default function CreateUpdateOrganizationTypeSetup({
             error={error || patchError}
             isPending={isPending}
           />
-          {/* <form onSubmit={methods.handleSubmit(onSubmit)} className="w-full">
-            <div className="mb-4">
-              <InputLabel label="Type name" required />
-              <ControlledInputField name="name" placeholder="Enter type name" />
-            </div>
-            <div className="mb-4">
-              <InputLabel label="Description" />
-              <ControlledTextareaField
-                name="description"
-                placeholder="Enter description"
-              />
-            </div>
-            {initialValues && (
-              <div className="mb-4">
-                <InputLabel label="Is Active" />
-                <ControlledCheckField
-                  name="isActive"
-                  label="Active (Visible on website)"
-                />
-              </div>
-            )}
-            {error?.errors && <ErrorMessage error={error.errors[0]} />}
-            <div className="flex justify-end gap-3 mt-6">
-              <Button
-                type="submit"
-                className="bg-dashboard-primary hover:bg-dashboard-primary text-white"
-              >
-                {initialValues ? "Update" : "Create"}
-              </Button>
-            </div>
-          </form> */}
         </FormProvider>
       </DialogContent>
     </Dialog>

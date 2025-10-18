@@ -79,7 +79,6 @@ export default function CreateUpdateKeywords({
     };
     if (initialValues) {
       const newChangedData = getChangedFields(data, initialValues);
-      console.log(newChangedData);
       patchAsync({
         url: `/resource-keywords/${initialValues.id}`,
         data: newChangedData,

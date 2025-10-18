@@ -35,7 +35,7 @@ export async function logout() {
   await refreshDelete();
 
   // Remove user-specific information from localStorage
-  removeUserInfo("accessToken"); // Replace "userInfo" with the actual key you use
+  removeUserInfo("accessToken");
   Cookies.remove("accessToken");
   Cookies.remove("refreshToken");
   Cookies.remove("isAdmin");

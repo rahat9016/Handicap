@@ -2,16 +2,15 @@
 import { ColumnDef, DataTable } from "@/components/ui/data-table";
 import { useGet } from "@/hooks/useGet";
 import { usePagination } from "@/hooks/usePagination";
-
 import { useSearchDebounce } from "@/hooks/useSearchDebounce";
 import { useAppSelector } from "@/lib/redux/hooks";
 import { format } from "date-fns";
 import { NotebookText, SquarePen } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-
 import CreateUpdateNewsSectionModal from "./CreateUpdateNewsSection";
 import { INewsSection } from "./types";
+
 export default function NewsSections() {
   const { hasPermission } = useAppSelector((state) => state.permission);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);

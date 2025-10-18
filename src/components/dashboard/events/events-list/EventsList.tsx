@@ -2,13 +2,12 @@
 import { ColumnDef, DataTable } from "@/components/ui/data-table";
 import { useGet } from "@/hooks/useGet";
 import { usePagination } from "@/hooks/usePagination";
-
 import { useSearchDebounce } from "@/hooks/useSearchDebounce";
 import { useAppSelector } from "@/lib/redux/hooks";
 import { format } from "date-fns";
 import { CalendarDays, SquarePen } from "lucide-react";
 import { useEffect, useState } from "react";
-import CreateEventModal from "./CreateUpdateEvents";
+import CreateUpdateEvents from "./Form/CreateUpdateEvents";
 import { IEvent } from "./types";
 
 export default function EventsList() {
@@ -25,12 +24,6 @@ export default function EventsList() {
     setTotalItems,
     setItemsPerPage,
   } = usePagination();
-
-  // const endpoint = selectedId
-  //   ? `/resources/organization/${selectedId}`
-  //   : organizationId
-  //   ? `/resources/organization/${organizationId}`
-  //   : "/resources";
 
   const { data, isLoading } = useGet<IEvent[]>(
     "/events",
@@ -171,7 +164,7 @@ export default function EventsList() {
         setIsModalOpen={setIsModalOpen} // [create modal open state]
       />
 
-      <CreateEventModal
+      <CreateUpdateEvents
         isOpen={isModalOpen}
         onClose={() => {
           setIsModalOpen(false);

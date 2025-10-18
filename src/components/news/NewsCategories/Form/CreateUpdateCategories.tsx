@@ -1,8 +1,3 @@
-import ErrorMessage from "@/components/common/Errors/ErrorMessage";
-import ControlledInputField from "@/components/share/ControlledInputField";
-import ControlledTextareaField from "@/components/share/ControlledTextareaField";
-import InputLabel from "@/components/share/InputLabel";
-import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -11,12 +6,14 @@ import {
 } from "@/components/ui/dialog";
 import { usePatch } from "@/hooks/usePatch";
 import { usePost } from "@/hooks/usePost";
+import { getChangedFields } from "@/utils/getChangedFields";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import { CategoryForm, categorySchema } from "./Schema/Category";
-import { INews } from "./types/Categories";
+import { CategoryFormType, categorySchema } from "../Schema/Category";
+import { INews } from "../types/Categories";
+import CategoryForm from "./CategoryForm";
 
 export default function CreateUpdateCategories({
   isOpen,
@@ -31,7 +28,8 @@ export default function CreateUpdateCategories({
     mutateAsync,
     error,
     reset: postReset,
-  } = usePost<CategoryForm>(
+    isPending: isPostPending,
+  } = usePost<CategoryFormType>(
     "/news-category",
     (data) => {
       console.log("POST success", data);
@@ -42,9 +40,10 @@ export default function CreateUpdateCategories({
     mutateAsync: patchAsync,
     error: patchError,
     reset: patchReset,
+    isPending: isPatchPending,
   } = usePatch((data) => console.log("Success", data), [["news-category"]]);
 
-  const methods = useForm<CategoryForm>({
+  const methods = useForm<CategoryFormType>({
     resolver: yupResolver(categorySchema),
   });
 
@@ -52,7 +51,8 @@ export default function CreateUpdateCategories({
     if (initialValues) {
       methods.reset({
         name: initialValues.name,
-        description: initialValues.description
+        description: initialValues.description,
+        isActive: initialValues?.isActive,
       });
     }
   }, [initialValues, methods]);
@@ -62,25 +62,28 @@ export default function CreateUpdateCategories({
       methods.reset({
         name: "",
         description: "",
+        isActive: false,
       });
       postReset();
       patchReset();
     }
   }, [isOpen, methods, patchReset, postReset]);
 
-  const onSubmit = (data: CategoryForm) => {
-    const organizedData: { name: string; description: string | undefined; parentId?: number } = {
+  const onSubmit = (data: CategoryFormType) => {
+    const organizedData: {
+      name: string;
+      description: string | undefined;
+    } = {
       name: data.name,
       description: data.description,
-    }
+    };
+    const newChangedData = getChangedFields(data, initialValues);
     if (initialValues) {
       patchAsync({
         url: `/news-category/${initialValues.id}`,
-        data: organizedData,
+        data: newChangedData,
       }).then(() => {
-        console.log("News Category updated successfully");
         onClose();
-        // Reset the form after successful submission
         methods.reset();
       });
       return;
@@ -96,15 +99,23 @@ export default function CreateUpdateCategories({
         console.error(error);
       });
   };
-
+  const isPending = isPostPending || isPatchPending;
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="bg-white min-h-[20vh] w-[80vw] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>{initialValues ? "Edit Category" : "Create Category"}</DialogTitle>
+          <DialogTitle>
+            {initialValues ? "Edit Category" : "Create Category"}
+          </DialogTitle>
         </DialogHeader>
         <FormProvider {...methods}>
-          <form onSubmit={methods.handleSubmit(onSubmit)} className="w-full">
+          <CategoryForm
+            isEditMode={!!initialValues}
+            onSubmit={onSubmit}
+            error={error || patchError}
+            isPending={isPending}
+          />
+          {/* <form onSubmit={methods.handleSubmit(onSubmit)} className="w-full">
             <div className="mb-4">
               <InputLabel label="Name" required />
               <ControlledInputField
@@ -119,8 +130,16 @@ export default function CreateUpdateCategories({
                 placeholder="Write down here the description..."
               />
             </div>
-            <ErrorMessage error={error} />
-            <ErrorMessage error={patchError} />
+            {!!initialValues && (
+              <div className="mb-4">
+                <InputLabel label="Is Active" />
+                <ControlledCheckField
+                  name="isActive"
+                  label="Active (Visible on website)"
+                />
+              </div>
+            )}
+            <ErrorMessage error={error || patchError} />
             <div className="flex justify-end gap-3 mt-6">
               <Button
                 type="submit"
@@ -129,7 +148,7 @@ export default function CreateUpdateCategories({
                 {initialValues ? "Update" : "Create"}
               </Button>
             </div>
-          </form>
+          </form> */}
         </FormProvider>
       </DialogContent>
     </Dialog>

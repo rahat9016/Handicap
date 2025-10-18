@@ -3,16 +3,15 @@ import { InferType } from "yup";
 
 export const categorySchema = Yup.object({
   name: Yup.string()
-    .required('Category name is required')
-    .min(2, 'Category name must be at least 2 characters'),
+    .required("Category name is required")
+    .min(2, "Category name must be at least 2 characters"),
 
-  category: Yup.string()
-    .nullable(), 
+  category: Yup.string().nullable(),
 
   description: Yup.string()
     .optional()
-    .max(500, 'Description must not exceed 500 characters'),
+    .max(500, "Description must not exceed 500 characters"),
+  isActive: Yup.boolean().default(false).notRequired(),
 });
 
-
-export type CategoryForm = InferType<typeof categorySchema>;
+export type CategoryFormType = InferType<typeof categorySchema>;

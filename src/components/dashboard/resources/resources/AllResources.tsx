@@ -28,28 +28,25 @@ export default function AllResources() {
 
   const { search, handleSearchChange, debouncedSearch } =
     useSearchDebounce(300);
-  const endpoint = selectedId
-    ? `/resources/organization/${selectedId}`
-    : organizationId
-    ? `/resources/organization/${organizationId}`
-    : "/resources";
 
+  const endpoint = "/resources";
   const shouldFetch = selectedId !== undefined || organizationId !== undefined;
+
+  const orgId = selectedId ?? organizationId;
+
+  const queryParams: Record<string, string> = {
+    ...(itemsPerPage !== -1 && {
+      page: currentPage.toString(),
+      limit: itemsPerPage.toString(),
+    }),
+    ...(orgId && { organizationIds: orgId }),
+    ...(debouncedSearch && { search: debouncedSearch }),
+  };
 
   const { data, isLoading } = useGet<IResource[]>(
     endpoint,
-    [
-      "resources",
-      currentPage.toString(),
-      selectedId ?? organizationId ?? "all",
-    ],
-    {
-      ...(itemsPerPage !== -1 && {
-        page: currentPage.toString(),
-        limit: itemsPerPage.toString(),
-      }),
-      search: debouncedSearch,
-    },
+    ["resources", currentPage.toString(), orgId ?? "all"],
+    queryParams,
     { enabled: shouldFetch }
   );
 
@@ -84,6 +81,7 @@ export default function AllResources() {
         totalItems={totalItems}
         itemsPerPage={itemsPerPage}
         setItemsPerPage={setItemsPerPage}
+        selectedId={selectedId}
         setSelectedId={setSelectedId}
       />
       <CreateUpdateResources
@@ -94,7 +92,6 @@ export default function AllResources() {
         }}
         initialValues={resource}
       />
-
       {resource && (
         <ViewResourceDetails
           isOpen={isView}

@@ -1,9 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
-import DeleteDialog from "@/components/common/DeleteDialog";
 import { ColumnDef, DataTable } from "@/components/ui/data-table";
-import { useDelete } from "@/hooks/useDelete";
 import { useGet } from "@/hooks/useGet";
 import { usePagination } from "@/hooks/usePagination";
 import { useSearchDebounce } from "@/hooks/useSearchDebounce";
@@ -11,14 +9,12 @@ import { useAppSelector } from "@/lib/redux/hooks";
 import { format } from "date-fns";
 import { Hash, SquarePen } from "lucide-react";
 import { useEffect, useState } from "react";
-import { toast } from "react-toastify";
-import CreateUpdateTags from "./CreateUpdateTags";
+import CreateUpdateTags from "./Form/CreateUpdateTags";
 import { ITags } from "./types/Tags";
 
 export default function EventTags() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [tags, setTags] = useState<ITags | undefined>();
-  const [deleteTags, setDeleteTags] = useState<ITags | undefined>();
   const { search, handleSearchChange, debouncedSearch } =
     useSearchDebounce(300);
   const {
@@ -40,23 +36,14 @@ export default function EventTags() {
       search: debouncedSearch,
     }
   );
-  const { mutateAsync: deleteAsync, isPending: isDeleting } = useDelete(
-    (data) => {
-      console.log("DELETE success", data);
-    },
-    [["event-tags"]]
-  );
+
   const { hasPermission } = useAppSelector((state) => state.permission);
 
   const handleEdit = (row: ITags) => {
     setTags(row);
     setIsModalOpen(true);
   };
-  // const handleDelete = (row: ITags) => {
-  //   setDeleteTags(row);
-  // };
 
-  // Update total items whenever data changes
   useEffect(() => {
     if (data) {
       setTotalItems(data.meta?.totalItems || 0);
@@ -74,6 +61,23 @@ export default function EventTags() {
         return <span>{format(date, "dd MMM yyyy")}</span>;
       },
     },
+    {
+      header: "Is Active",
+      accessorKey: "isActive",
+      cell: (value: boolean | undefined) => {
+        const isActive = value;
+
+        return (
+          <span
+            className={`px-2 py-1 rounded-full text-xs font-medium ${
+              isActive ? "bg-[#bfffda] text-green" : "bg-rose-200 text-rose-700"
+            }`}
+          >
+            {isActive ? "Active" : "Inactive  "}
+          </span>
+        );
+      },
+    },
     hasPermission
       ? {
           header: "Action",
@@ -88,13 +92,6 @@ export default function EventTags() {
                   <SquarePen size={16} />
                   Edit
                 </button>
-                {/* <button
-                  onClick={() => handleDelete(row)}
-                  className="text-darkLiver hover:text-rose-600 hover:underline text-sm flex items-center gap-1"
-                >
-                  <Trash2 size={16} className="text-rose-600" />
-                  Delete
-                </button> */}
               </div>
             );
           },
@@ -126,26 +123,9 @@ export default function EventTags() {
         isOpen={isModalOpen}
         onClose={() => {
           setIsModalOpen(false);
+          setTags(undefined);
         }}
         initialValues={tags}
-      />
-      <DeleteDialog
-        open={!!deleteTags}
-        onOpenChange={(open) => !open && setDeleteTags(undefined)}
-        loading={isDeleting}
-        onConfirm={() => {
-          if (deleteTags) {
-            deleteAsync({ url: `/event-tags/${deleteTags.id}` })
-              .then(() => {
-                toast.success("Tags deleted successfully");
-                setDeleteTags(undefined);
-              })
-              .catch((error) => {
-                toast.error("Failed to delete Tags");
-                console.error(error);
-              });
-          }
-        }}
       />
     </div>
   );

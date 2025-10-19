@@ -111,9 +111,9 @@ const QuickAccess = () => {
                         <QuickAccessCard
                           key={item.id}
                           date={item.createdAt}
-                          title={item?.title?.[local] ?? item?.title?.en}
+                          title={item?.title?.[local] ?? item?.title?.en ?? ''}
                           desc={
-                            item?.description?.[local] ?? item?.description?.en
+                            item?.description?.[local] ?? item?.description?.en ?? ''
                           }
                           pathname={`/resources/${item.id}`}
                         />

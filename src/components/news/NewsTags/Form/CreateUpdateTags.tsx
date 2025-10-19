@@ -1,7 +1,3 @@
-import ErrorMessage from "@/components/common/Errors/ErrorMessage";
-import ControlledInputField from "@/components/share/ControlledInputField";
-import InputLabel from "@/components/share/InputLabel";
-import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -10,12 +6,14 @@ import {
 } from "@/components/ui/dialog";
 import { usePatch } from "@/hooks/usePatch";
 import { usePost } from "@/hooks/usePost";
+// import { getChangedFields } from "@/utils/getChangedFields";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import { ITags } from "./types/Tags";
-import { TagsForm, tagsSchema } from "./Schema/Tags";
+import { TagsFormType, tagsSchema } from "../Schema/Tags";
+import { ITags } from "../types/Tags";
+import TagsForm from "./TagsForm";
 
 export default function CreateUpdateTags({
   isOpen,
@@ -30,25 +28,24 @@ export default function CreateUpdateTags({
     mutateAsync,
     error,
     reset: postReset,
-  } = usePost<TagsForm>(
+    isPending: isPostPending,
+  } = usePost<TagsFormType>(
     "/news-tag",
-    (data) => {
-      console.log("POST success", data);
-    },
+    () => toast.success("Tag created successfully"),
     [["news-tag"]]
   );
+
   const {
     mutateAsync: patchAsync,
     error: patchError,
     reset: patchReset,
-  } = usePatch<TagsForm>(
-    (data) => {
-      console.log("PATCH success", data);
-    },
+    isPending: isPatchPending,
+  } = usePatch<TagsFormType>(
+    () => toast.success("Tag updated successfully"),
     [["news-tag"]]
   );
 
-  const methods = useForm<TagsForm>({
+  const methods = useForm<TagsFormType>({
     resolver: yupResolver(tagsSchema),
   });
 
@@ -57,6 +54,7 @@ export default function CreateUpdateTags({
       methods.reset({
         ...initialValues,
         name: initialValues?.name,
+        isActive: initialValues?.isActive,
       });
     }
   }, [initialValues, methods]);
@@ -65,23 +63,29 @@ export default function CreateUpdateTags({
     if (!isOpen) {
       methods.reset({
         name: "",
+        isActive: false,
       });
       postReset();
       patchReset();
     }
   }, [isOpen, methods, patchReset, postReset]);
 
-  const onSubmit = (data: TagsForm) => {
+  const onSubmit = (data: TagsFormType) => {
     const organizedData = {
       name: data.name,
     };
 
     if (initialValues) {
+      // const newChangedData = getChangedFields(data, initialValues);
+      const newData = {
+        name: data.name,
+        isActive: data.isActive,
+      };
       patchAsync({
         url: `/news-tag/${initialValues.id}`,
-        data: organizedData,
+        data: newData,
       }).then(() => {
-        toast.success("Keyword updated successfully");
+        // toast.success("Tag updated successfully");
         onClose();
         methods.reset();
       });
@@ -99,7 +103,7 @@ export default function CreateUpdateTags({
         console.error(error);
       });
   };
-
+  const isPending = isPostPending || isPatchPending;
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="bg-white min-h-[20vh] w-[80vw] overflow-y-auto">
@@ -109,25 +113,12 @@ export default function CreateUpdateTags({
           </DialogTitle>
         </DialogHeader>
         <FormProvider {...methods}>
-          <form onSubmit={methods.handleSubmit(onSubmit)} className="w-full">
-            <div className="mb-4">
-              <InputLabel label="Name" required />
-              <ControlledInputField
-                name="name"
-                placeholder="Enter the category name..."
-              />
-            </div>
-            <ErrorMessage error={error} />
-            <ErrorMessage error={patchError} />
-            <div className="flex justify-end gap-3 mt-6">
-              <Button
-                type="submit"
-                className="bg-dashboard-primary hover:bg-dashboard-primary text-white"
-              >
-                {initialValues ? "Update" : "Create"}
-              </Button>
-            </div>
-          </form>
+          <TagsForm
+            isEditMode={!!initialValues}
+            onSubmit={onSubmit}
+            error={error || patchError}
+            isPending={isPending}
+          />
         </FormProvider>
       </DialogContent>
     </Dialog>

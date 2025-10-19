@@ -1,5 +1,6 @@
 export interface ITags {
   id: number;
   name: string;
-  createdAt?: string;  
+  isActive: boolean;
+  createdAt?: string;
 }

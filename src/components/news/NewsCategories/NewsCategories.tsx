@@ -9,7 +9,7 @@ import { useAppSelector } from "@/lib/redux/hooks";
 import { format } from "date-fns";
 import { FileCog, SquarePen } from "lucide-react";
 import { useEffect, useState } from "react";
-import CreateUpdateCategories from "./CreateUpdateCategories";
+import CreateUpdateCategories from "./Form/CreateUpdateCategories";
 import { INews } from "./types/Categories";
 
 export default function NewsCategories() {
@@ -44,7 +44,6 @@ export default function NewsCategories() {
   );
   const { hasPermission } = useAppSelector((state) => state.permission);
 
-  // Update total items whenever data changes
   useEffect(() => {
     if (data) {
       setTotalItems(data.meta?.totalItems || 0);
@@ -129,6 +128,7 @@ export default function NewsCategories() {
         isOpen={isModalOpen}
         onClose={() => {
           setIsModalOpen(false);
+          setNewsCategory(undefined);
         }}
         initialValues={newsCategory}
       />

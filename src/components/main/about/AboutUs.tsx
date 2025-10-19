@@ -2,7 +2,7 @@
 import SectionTopTitle from "@/components/share/SectionTopTitle";
 import { useGet } from "@/hooks/useGet";
 import { IPageSection } from "@/types";
-import { useLocale, useTranslations } from "next-intl";
+import { useLocale } from "next-intl";
 
 export default function AboutUs() {
   const local = useLocale() as "en" | "bn";
@@ -27,20 +27,8 @@ export default function AboutUs() {
     ["organization"]
   );
 
-  console.log("data", data);
-  const t = useTranslations("About");
 
-  const whoWeServeList = [
-    t("whoWeServeList.1"),
-    t("whoWeServeList.2"),
-    t("whoWeServeList.3"),
-  ];
 
-  const organizationsList = [
-    t("organizationsList.1"),
-    t("organizationsList.2"),
-    t("organizationsList.3"),
-  ];
 
   return (
     <div>

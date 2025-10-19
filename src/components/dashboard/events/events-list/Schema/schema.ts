@@ -50,7 +50,9 @@ export const eventSchema = Yup.object().shape({
 
   isPublished: Yup.boolean(),
   organizationId: Yup.number().optional(),
-  categoryIds: Yup.number().required().required("Categories are required"),
+  categoryIds: Yup.array()
+    .of(Yup.number().required())
+    .required("categories are required"),
   tagIds: Yup.array().of(Yup.number().required()).required("Tags are required"),
   images: Yup.array()
     .of(imageSchema)
@@ -58,4 +60,4 @@ export const eventSchema = Yup.object().shape({
     .required("Images are required"),
 });
 
-export type EventForm = Yup.InferType<typeof eventSchema>;
+export type EventFormType = Yup.InferType<typeof eventSchema>;

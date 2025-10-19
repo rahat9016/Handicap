@@ -2,19 +2,19 @@
 import { ColumnDef, DataTable } from "@/components/ui/data-table";
 import { useGet } from "@/hooks/useGet";
 import { usePagination } from "@/hooks/usePagination";
-
 import { useSearchDebounce } from "@/hooks/useSearchDebounce";
 import { useAppSelector } from "@/lib/redux/hooks";
 import { format } from "date-fns";
 import { CalendarDays, SquarePen } from "lucide-react";
 import { useEffect, useState } from "react";
-import CreateEventModal from "./CreateUpdateEvents";
+import CreateUpdateEvents from "./Form/CreateUpdateEvents";
 import { IEvent } from "./types";
 
 export default function EventsList() {
   const [events, setEvents] = useState<IEvent>();
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const { hasPermission } = useAppSelector((state) => state.permission);
+  const { organizationId } = useAppSelector((state) => state.organizer);
   const { search, handleSearchChange, debouncedSearch } =
     useSearchDebounce(300);
   const {
@@ -26,15 +26,9 @@ export default function EventsList() {
     setItemsPerPage,
   } = usePagination();
 
-  // const endpoint = selectedId
-  //   ? `/resources/organization/${selectedId}`
-  //   : organizationId
-  //   ? `/resources/organization/${organizationId}`
-  //   : "/resources";
-
   const { data, isLoading } = useGet<IEvent[]>(
-    "/events",
-    ["events", currentPage.toString()],
+    organizationId ? `/events/organization/${organizationId}` : "/events",
+    ["events", currentPage.toString(), organizationId || "all"], // Include organizationId in query key
     {
       ...(itemsPerPage !== -1 && {
         page: currentPage.toString(),
@@ -167,11 +161,11 @@ export default function EventsList() {
         showSearch
         searchValue={search}
         onSearchChange={handleSearchChange}
-        IsCreate={hasPermission} // [If you need a create button, just pass true as a props]
-        setIsModalOpen={setIsModalOpen} // [create modal open state]
+        IsCreate={hasPermission}
+        setIsModalOpen={setIsModalOpen}
       />
 
-      <CreateEventModal
+      <CreateUpdateEvents
         isOpen={isModalOpen}
         onClose={() => {
           setIsModalOpen(false);

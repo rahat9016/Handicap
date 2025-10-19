@@ -35,14 +35,14 @@ const ResourcesSorting = () => {
 
   const { data: resourceData, isLoading: isResourceLoading } = useGet<
     IResource[]
-  >("/resource-categories", ["resource-categories"]);
+  >("/resource-categories?isActive=true", ["resource-categories"]);
   const { data: keywordsData, isLoading: isResourceKeywords } = useGet<
     IKeywords[]
-  >("/resource-keywords", ["resource-keywords"]);
+  >("/resource-keywords?isActive=true", ["resource-keywords"]);
 
   const { data: languagesData, isLoading: isLanguagesLoading } = useGet<
     ILanguage[]
-  >("/languages", ["languages"]);
+  >("/languages?isActive=true", ["languages"]);
 
   const methods = useForm({
     defaultValues: {

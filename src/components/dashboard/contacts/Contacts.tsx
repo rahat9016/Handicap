@@ -22,7 +22,7 @@ const Contacts = () => {
     setItemsPerPage,
   } = usePagination();
 
-  const { data, isLoading } = useGet(
+  const { data, isLoading, refetch } = useGet(
     "/contact-us",
     ["contact-us", currentPage.toString()],
     {
@@ -117,6 +117,7 @@ const Contacts = () => {
             setContact(undefined);
           }}
           contact={contact}
+          refetch={refetch}
         />
       )}
     </div>

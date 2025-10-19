@@ -46,7 +46,7 @@ export default function ActivityUser() {
     {
       header: "First Name",
       accessorKey: "user",
-      cell: (_value, row) => (
+      cell: (value: unknown, row: IUserActivity) => (
         <div>
           {row.user?.firstName || <span className="text-gray-400">N/A</span>}
         </div>
@@ -55,7 +55,7 @@ export default function ActivityUser() {
     {
       header: "Last Name",
       accessorKey: "user",
-      cell: (_value, row) => (
+      cell: (value: unknown, row: IUserActivity) => (
         <div>
           {row.user?.lastName || <span className="text-gray-400">N/A</span>}
         </div>
@@ -64,26 +64,30 @@ export default function ActivityUser() {
     {
       header: "Email",
       accessorKey: "details",
-      cell: (_value, row) => (
+      cell: (value: unknown, row: IUserActivity) => (
         <div>
-          {row.details.email || <span className="text-gray-400">N/A</span>}
+          {row.details?.email || row.user?.email || (
+            <span className="text-gray-400">N/A</span>
+          )}
         </div>
       ),
     },
     {
       header: "Title",
       accessorKey: "details",
-      cell: (_value, row) => (
+      cell: (value: unknown, row: IUserActivity) => (
         <div>
-          {row.details.title || <span className="text-gray-400">N/A</span>}
+          {row.details?.title || <span className="text-gray-400">N/A</span>}
         </div>
       ),
     },
     {
       header: "Role",
       accessorKey: "details",
-      cell: (_value, row) => {
-        const roleId = row.details.roleId;
+      cell: (value: unknown, row: IUserActivity) => {
+        const roleId = row.details?.roleId;
+        if (!roleId) return <span className="text-gray-400">N/A</span>;
+
         const roleName =
           roleId === 1
             ? UserRole.SUPER_ADMIN
@@ -98,7 +102,7 @@ export default function ActivityUser() {
     {
       header: "Activity Type",
       accessorKey: "activityType",
-      cell: (_value, row) => (
+      cell: (value: unknown, row: IUserActivity) => (
         <span className="text-sm font-medium text-blue-700 bg-blue-100 px-2 py-1 rounded-full">
           {row.activityType}
         </span>
@@ -107,7 +111,7 @@ export default function ActivityUser() {
     {
       header: "Entity Type",
       accessorKey: "entityType",
-      cell: (_value, row) => (
+      cell: (value: unknown, row: IUserActivity) => (
         <div>
           {row.entityType || <span className="text-gray-400">N/A</span>}
         </div>
@@ -116,31 +120,15 @@ export default function ActivityUser() {
     {
       header: "Entity ID",
       accessorKey: "entityId",
-      cell: (_value, row) => (
+      cell: (value: unknown, row: IUserActivity) => (
         <div>{row.entityId || <span className="text-gray-400">N/A</span>}</div>
-      ),
-    },
-    {
-      header: "IP Address",
-      accessorKey: "ipAddress",
-      cell: (_value, row) => (
-        <div>{row.ipAddress || <span className="text-gray-400">N/A</span>}</div>
-      ),
-    },
-    {
-      header: "Device Info",
-      accessorKey: "deviceInfo",
-      cell: (_value, row) => (
-        <div>
-          {row.deviceInfo || <span className="text-gray-400">N/A</span>}
-        </div>
       ),
     },
     {
       header: "Created date",
       accessorKey: "createdAt",
-      cell: (value) => {
-        const date = new Date(value as string);
+      cell: (value: unknown, row: IUserActivity) => {
+        const date = new Date(row.createdAt);
         return <span>{format(date, "dd MMM yyyy")}</span>;
       },
     },

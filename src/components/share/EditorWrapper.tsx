@@ -1,5 +1,6 @@
 "use client";
 
+import { cn } from "@/lib/utils";
 import Bold from "@tiptap/extension-bold";
 import BulletList from "@tiptap/extension-bullet-list";
 import HardBreak from "@tiptap/extension-hard-break";
@@ -10,9 +11,14 @@ import StarterKit from "@tiptap/starter-kit";
 interface EditorWrapperProps {
   value: string;
   onChange: (content: string) => void;
+  className?: string;
 }
 
-export default function EditorWrapper({ value, onChange }: EditorWrapperProps) {
+export default function EditorWrapper({
+  value,
+  onChange,
+  className,
+}: EditorWrapperProps) {
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
@@ -50,12 +56,21 @@ export default function EditorWrapper({ value, onChange }: EditorWrapperProps) {
   }
 
   return (
-    <div className="border-2 rounded-md p-3 bg-white focus-within:border-blue-500 transition-colors ">
+    <div
+      className={cn(
+        "border-2 rounded-md p-3 bg-white focus-within:border-blue-500 transition-colors ",
+        className
+      )}
+    >
       <div className="mb-2 flex gap-3 px-3">
         <button
           type="button"
           onClick={() => editor.chain().focus().toggleBold().run()}
-          className={`w-10 h-10 rounded-sm  bg-slate-100 ${editor.isActive("bold") ? "font-bold text-blue-600 bg-slate-200" : ""}`}
+          className={`w-10 h-10 rounded-sm  bg-slate-100 ${
+            editor.isActive("bold")
+              ? "font-bold text-blue-600 bg-slate-200"
+              : ""
+          }`}
           aria-label="Toggle Bold"
         >
           B
@@ -64,7 +79,11 @@ export default function EditorWrapper({ value, onChange }: EditorWrapperProps) {
         <button
           type="button"
           onClick={() => editor.chain().focus().toggleBulletList().run()}
-          className={`w-12 h-10 rounded-sm   ${editor.isActive("bulletList") ? "font-bold text-blue-600 bg-slate-200" : ""}`}
+          className={`w-12 h-10 rounded-sm   ${
+            editor.isActive("bulletList")
+              ? "font-bold text-blue-600 bg-slate-200"
+              : ""
+          }`}
           aria-label="Toggle Bullet List"
         >
           • List
@@ -73,7 +92,11 @@ export default function EditorWrapper({ value, onChange }: EditorWrapperProps) {
         <button
           type="button"
           onClick={() => editor.chain().focus().toggleOrderedList().run()}
-          className={`w-12 h-10 rounded-sm   ${editor.isActive("orderedList") ? "font-bold text-blue-600 bg-slate-200" : ""}`}
+          className={`w-12 h-10 rounded-sm   ${
+            editor.isActive("orderedList")
+              ? "font-bold text-blue-600 bg-slate-200"
+              : ""
+          }`}
           aria-label="Toggle Ordered List"
         >
           1. List

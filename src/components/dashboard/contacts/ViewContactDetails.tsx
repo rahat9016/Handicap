@@ -8,16 +8,22 @@ import {
 import { format } from "date-fns";
 import { Building2, Calendar, Mail, MessageSquare, User } from "lucide-react";
 import { IContactMessage } from "./types";
+import { useGet } from "@/hooks/useGet";
 
 export default function ViewDetails({
   isOpen,
   onClose,
   contact,
+  refetch,
 }: {
   isOpen: boolean;
   onClose: () => void;
   contact?: IContactMessage;
+  refetch: () => void;
 }) {
+  // /handicap/api/v1/contact-us/{id}/read
+  useGet(`/contact-us/${contact?.id}/read`, ["contact-us"]);
+  refetch();
   return (
     <div>
       <Dialog open={isOpen} onOpenChange={onClose}>

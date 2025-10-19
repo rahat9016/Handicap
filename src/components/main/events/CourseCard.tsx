@@ -19,19 +19,42 @@ export default function EventCard({
   tags,
   images,
 }: IEventItem) {
-  const eventImage =
-    images?.[0]?.imageUrl && images[0].imageUrl !== ""
-      ? images[0].imageUrl
-      : featuredImage || "/images/dashboard/gallery-add.svg";
+  console.log("images", images);
+
+  const getEventImage = () => {
+    // Check if images array has valid image URLs
+    const validImage = images?.find(
+      (img) =>
+        img?.imageUrl &&
+        (img.imageUrl.startsWith("/") || img.imageUrl.startsWith("http"))
+    );
+
+    if (validImage?.imageUrl) return validImage.imageUrl;
+
+    // Check if featuredImage is actually a valid URL/path
+    if (
+      featuredImage &&
+      (featuredImage.startsWith("/") || featuredImage.startsWith("http"))
+    ) {
+      return featuredImage;
+    }
+
+    // Fallback to placeholder
+    return "/images/dashboard/gallery-add.svg";
+  };
+  const eventImage = getEventImage();
+
+  console.log("Final event image:", eventImage);
 
   const category = categories?.[0]?.category?.name || "Uncategorized";
   const tag = tags?.[0]?.tag?.name || "";
+
   return (
     <div className="rounded-xl overflow-hidden border bg-white shadow-sm hover:shadow-md transition-all duration-300 flex flex-col">
       {/* Image */}
       <div className="relative w-full h-48 bg-gray-100">
         <Image
-          src={eventImage}
+          src={eventImage || "/images/dashboard/gallery-add.svg"}
           alt={title}
           fill
           className="object-cover"

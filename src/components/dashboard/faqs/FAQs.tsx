@@ -25,8 +25,8 @@ const FAQs = () => {
   } = usePagination();
 
   const { data, isLoading } = useGet<IFaqItem[]>(
-    "/faqs",
-    ["faqs", currentPage.toString()],
+    "/faqs/admin",
+    ["faqs-admin", currentPage.toString()],
     {
       ...(itemsPerPage !== -1 && {
         page: currentPage.toString(),

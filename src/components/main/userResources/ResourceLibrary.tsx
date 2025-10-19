@@ -29,8 +29,8 @@ export default function ResourceLibrary({
               <ResourceCard
                 id={resource.id}
                 key={index}
-                title={resource?.title?.[local] ?? resource?.title?.en}
-                description={resource?.description?.[local] ?? resource?.description?.en}
+                title={resource?.title?.[local] ?? resource?.title?.en ?? ''}
+                description={resource?.description?.[local] ?? resource?.description?.en ?? ""}
                 imageUrl={resource.filePath}
                 date={resource.createdAt}
                 size={resource.fileSize}

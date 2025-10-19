@@ -36,7 +36,7 @@ export const useGet = <T>(
       return value !== "" && value !== undefined && value !== null;
     })
   );
-  
+
   const finalQueryKey = [
     ...queryKey,
     ...Object.values(filteredParams).map(String),
@@ -55,11 +55,11 @@ export const useGet = <T>(
         const response = await axiosInstance.get(endpoint, { params: filteredParams });
         return response;
       } catch (error) {
-        if (error instanceof Error) {
-          toast.error(error.message || "Failed to fetch data.");
-        } else {
-          toast.error("Failed to fetch data.");
-        }
+        // if (error instanceof Error) {
+        //   toast.error(error.message || "Failed to fetch data.");
+        // } else {
+        //   toast.error("Failed to fetch data.");
+        // }
         throw error;
       }
     },

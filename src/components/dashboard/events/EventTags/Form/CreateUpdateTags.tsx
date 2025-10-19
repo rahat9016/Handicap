@@ -1,8 +1,3 @@
-import ErrorMessage from "@/components/common/Errors/ErrorMessage";
-import ControlledInputField from "@/components/share/ControlledInputField";
-import ControlledTextareaField from "@/components/share/ControlledTextareaField";
-import InputLabel from "@/components/share/InputLabel";
-import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -11,48 +6,58 @@ import {
 } from "@/components/ui/dialog";
 import { usePatch } from "@/hooks/usePatch";
 import { usePost } from "@/hooks/usePost";
+import { getChangedFields } from "@/utils/getChangedFields";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import { CategoryForm, categorySchema } from "./Schema/Category";
-import { INews } from "./types/Categories";
+import { TagsFormType, tagsSchema } from "../Schema/Tags";
+import { ITags } from "../types/Tags";
+import TagForm from "./TagForm";
 
-export default function CreateUpdateCategories({
+export default function CreateUpdateTags({
   isOpen,
   onClose,
   initialValues,
 }: {
   isOpen: boolean;
   onClose: () => void;
-  initialValues?: INews | undefined;
+  initialValues?: ITags | undefined;
 }) {
   const {
     mutateAsync,
     error,
     reset: postReset,
-  } = usePost<CategoryForm>(
-    "/news-category",
+    isPending: isPostPending,
+  } = usePost<TagsFormType>(
+    "/event-tags",
     (data) => {
       console.log("POST success", data);
     },
-    [["news-category"]]
+    [["event-tags"]]
   );
   const {
     mutateAsync: patchAsync,
     error: patchError,
     reset: patchReset,
-  } = usePatch((data) => console.log("Success", data), [["news-category"]]);
+    isPending: isPatchPending,
+  } = usePatch<TagsFormType>(
+    (data) => {
+      console.log("PATCH success", data);
+    },
+    [["event-tags"]]
+  );
 
-  const methods = useForm<CategoryForm>({
-    resolver: yupResolver(categorySchema),
+  const methods = useForm<TagsFormType>({
+    resolver: yupResolver(tagsSchema),
   });
 
   useEffect(() => {
     if (initialValues) {
       methods.reset({
-        name: initialValues.name,
-        description: initialValues.description
+        ...initialValues,
+        name: initialValues?.name,
+        isActive: initialValues?.isActive,
       });
     }
   }, [initialValues, methods]);
@@ -61,62 +66,63 @@ export default function CreateUpdateCategories({
     if (!isOpen) {
       methods.reset({
         name: "",
-        description: "",
       });
       postReset();
       patchReset();
     }
   }, [isOpen, methods, patchReset, postReset]);
 
-  const onSubmit = (data: CategoryForm) => {
-    const organizedData: { name: string; description: string | undefined; parentId?: number } = {
+  const onSubmit = (data: TagsFormType) => {
+    const organizedData = {
       name: data.name,
-      description: data.description,
-    }
+    };
+
     if (initialValues) {
+      const newChangedData = getChangedFields(data, initialValues);
       patchAsync({
-        url: `/news-category/${initialValues.id}`,
-        data: organizedData,
+        url: `/event-tags/${initialValues.id}`,
+        data: newChangedData,
       }).then(() => {
-        console.log("News Category updated successfully");
+        toast.success("Keyword updated successfully");
         onClose();
-        // Reset the form after successful submission
         methods.reset();
       });
       return;
     }
+
     mutateAsync(organizedData)
       .then(() => {
-        toast.success("News Category created successfully");
+        toast.success("Keyword created successfully");
         onClose();
         methods.reset();
       })
       .catch((error) => {
-        toast.error("Failed to create category");
+        toast.error("Failed to create keyword");
         console.error(error);
       });
   };
-
+  const isPending = isPostPending || isPatchPending;
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="bg-white min-h-[20vh] w-[80vw] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>{initialValues ? "Edit Category" : "Create Category"}</DialogTitle>
+          <DialogTitle>
+            {initialValues ? "Update Tags" : "Create Tags"}
+          </DialogTitle>
         </DialogHeader>
         <FormProvider {...methods}>
-          <form onSubmit={methods.handleSubmit(onSubmit)} className="w-full">
+          <TagForm
+            isEditMode={!!initialValues}
+            onSubmit={onSubmit}
+            error={error || patchError}
+            isPending={isPending || isPatchPending}
+          />
+          {/* <form onSubmit={methods.handleSubmit(onSubmit)} className="w-full">
             <div className="mb-4">
               <InputLabel label="Name" required />
               <ControlledInputField
                 name="name"
                 placeholder="Enter the category name..."
-              />
-            </div>
-            <div className="mb-4">
-              <InputLabel label="Description" />
-              <ControlledTextareaField
-                name="description"
-                placeholder="Write down here the description..."
               />
             </div>
             <ErrorMessage error={error} />
@@ -129,7 +135,7 @@ export default function CreateUpdateCategories({
                 {initialValues ? "Update" : "Create"}
               </Button>
             </div>
-          </form>
+          </form> */}
         </FormProvider>
       </DialogContent>
     </Dialog>

@@ -6,6 +6,8 @@ import { IPageSection } from "@/types";
 import { useLocale } from "next-intl";
 import Image from "next/image";
 import HeroSkeleton from "./Skeleton/HeroSkeleton";
+import { getWebUrl } from "@/config/envConfig";
+
 
 const HomeHeroSection = () => {
   const local = useLocale() as "en" | "bn";
@@ -14,6 +16,9 @@ const HomeHeroSection = () => {
     "/page-sections/query/first?page=HOME&sectionType=HERO",
     ["user"]
   );
+
+  const url =  `${getWebUrl()}${local}${data?.data?.buttonUrl}`
+  console.log('url', url)
 
   if (isLoading) {
     return <HeroSkeleton />;
@@ -61,32 +66,42 @@ const HomeHeroSection = () => {
             )}
 
             <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3 mt-6 md:mt-8">
-              <Button
-                onClick={() => router.push("/resources")}
-                className="w-full sm:w-auto px-4 py-3 h-[46px] bg-[#2A53CD] hover:bg-[#0490EF] text-white border text-sm cursor-pointer font-inter font-medium"
-              >
-                Browse Resources
-              </Button>
-              <Button
-                onClick={() => router.push("/training")}
-                className="w-full sm:w-auto px-4 py-3 h-[46px] bg-[#2A53CD] hover:bg-[#0490EF] text-white border text-sm cursor-pointer font-inter font-medium"
-              >
-                Start Training
-              </Button>
+              {data?.data.buttonLabel && (
+                <Button
+                  onClick={() => router.push(`${getWebUrl()}${local}${data?.data?.buttonUrl}`)}
+                  className="w-full sm:w-auto px-4 py-3 h-[46px] bg-[#2A53CD] hover:bg-[#0490EF] text-white border text-sm cursor-pointer font-inter font-medium"
+                >
+                  {data?.data?.buttonLabel?.[local] ??
+                    data?.data?.buttonLabel?.en}
+                </Button>
+              )}
+              {data?.data.buttonLabel2 && (
+                <Button
+                  onClick={() =>
+                    router.push(`${getWebUrl()}${local}${data?.data?.buttonUrl2}`)
+                  }
+                  className="w-full sm:w-auto px-4 py-3 h-[46px] bg-[#2A53CD] hover:bg-[#0490EF] text-white border text-sm cursor-pointer font-inter font-medium"
+                >
+                  {data?.data?.buttonLabel2?.[local] ??
+                    data?.data?.buttonLabel2?.en}
+                </Button>
+              )}
             </div>
           </div>
 
           {/* Image */}
-          {data?.data &&<div className="order-1 lg:order-2">
-            <Image
-              width={765}
-              height={460}
-              src={data?.data?.imageUrls?.[0] || "/placeholder-hero.jpg"}
-              alt="hero"
-              className="w-full h-[300px] sm:h-[350px] md:h-[400px] lg:h-[460px] object-cover rounded-lg"
-              priority
-            />
-          </div>}
+          {data?.data && (
+            <div className="order-1 lg:order-2">
+              <Image
+                width={765}
+                height={460}
+                src={data?.data?.imageUrls?.[0] || "/placeholder-hero.jpg"}
+                alt="hero"
+                className="w-full h-[300px] sm:h-[350px] md:h-[400px] lg:h-[460px] object-cover rounded-lg"
+                priority
+              />
+            </div>
+          )}
         </div>
       </div>
     </section>

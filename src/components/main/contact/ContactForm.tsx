@@ -3,36 +3,52 @@ import ControlledInputField from "@/components/share/ControlledInputField";
 import ControlledTextareaField from "@/components/share/ControlledTextareaField";
 import InputLabel from "@/components/share/InputLabel";
 import { Button } from "@/components/ui/button";
-import { useMutation } from "@tanstack/react-query";
+import { usePost } from "@/hooks/usePost";
 import { useTranslations } from "next-intl";
 import { FormProvider, useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { toast } from "react-toastify";
+import {
+  ContactFormType,
+  contactValidationSchema,
+} from "./schema/ContactSchema";
 
 export default function ContactForm() {
-  const { isPending } = useMutation({
-    // mutationFn: feedbackRequest,
-    onSuccess: () => {},
-  });
-  const methods = useForm({
-    // resolver: yupResolver(feedbackValidationSchema),
+  const { mutateAsync, error, isPending } = usePost(
+    "/contact-us",
+    (data) => {
+      console.log("POST success", data);
+    },
+    [["contact"]]
+  );
+
+  const methods = useForm<ContactFormType>({
+    resolver: yupResolver(contactValidationSchema),
+    mode: "onChange",
+    defaultValues: {
+      firstName: "",
+      lastName: "",
+      organization: "",
+      email: "",
+      subject: "",
+      message: "",
+    },
   });
 
-  const onSubmit = () => {
-    // mutateAsync(data)
-    //   .then((res) => {
-    //     if (res.success) {
-    //       methods.reset();
-    //       toast.success(res?.message, {
-    //         position: "bottom-left",
-    //       });
-    //     }
-    //   })
-    //   .catch((error) => {
-    //     toast.error(error?.message, {
-    //       position: "bottom-left",
-    //     });
-    //   });
+  const onSubmit = (data: ContactFormType) => {
+    mutateAsync(data)
+      .then(() => {
+        toast.success("Message sent successfully!");
+        methods.reset();
+      })
+      .catch((error) => {
+        console.error("Contact form error:", error);
+        toast.error(error?.message || "Failed to send message");
+      });
   };
+
   const t = useTranslations("Contact");
+
   return (
     <div>
       <FormProvider {...methods}>
@@ -56,6 +72,7 @@ export default function ContactForm() {
                 />
               </div>
             </div>
+
             <div>
               <InputLabel label={t("organization")} />
               <ControlledInputField
@@ -67,7 +84,7 @@ export default function ContactForm() {
             </div>
 
             <div>
-              <InputLabel label={t("email_label")} />
+              <InputLabel label={t("email_label")} required />
               <ControlledInputField
                 type="email"
                 name="email"
@@ -75,28 +92,39 @@ export default function ContactForm() {
                 className="bg-white"
               />
             </div>
+
             <div>
-              <InputLabel label={t("subject_label")} />
+              <InputLabel label={t("subject_label")} required />
               <ControlledInputField
                 name="subject"
                 placeholder={t("subject_placeholder")}
                 className="bg-white"
               />
             </div>
+
             <div>
-              <InputLabel label={t("message_label")} />
+              <InputLabel label={t("message_label")} required />
               <ControlledTextareaField
                 name="message"
                 placeholder={t("message_placeholder")}
-                className="bg-white"
+                className="bg-white min-h-[120px]"
               />
             </div>
+
+            {error && (
+              <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+                <p className="text-red-700 text-sm">
+                  {error.message || "Failed to send message. Please try again."}
+                </p>
+              </div>
+            )}
+
             <Button
               disabled={isPending}
               type="submit"
-              className="capitalize bg-primary text-white rounded-lg px-6 lg:px-10 py-3 h-10 lg:h-11"
+              className="capitalize bg-primary text-white rounded-lg px-6 lg:px-10 py-3 h-10 lg:h-11 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-primary/90 transition-colors"
             >
-              {isPending ?t('sending') : t('sendMessage')}
+              {isPending ? t("sending") : t("sendMessage")}
             </Button>
           </div>
         </form>

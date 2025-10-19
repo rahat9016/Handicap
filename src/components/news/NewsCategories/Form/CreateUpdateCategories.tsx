@@ -6,7 +6,7 @@ import {
 } from "@/components/ui/dialog";
 import { usePatch } from "@/hooks/usePatch";
 import { usePost } from "@/hooks/usePost";
-import { getChangedFields } from "@/utils/getChangedFields";
+// import { getChangedFields } from "@/utils/getChangedFields";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
@@ -70,6 +70,7 @@ export default function CreateUpdateCategories({
   }, [isOpen, methods, patchReset, postReset]);
 
   const onSubmit = (data: CategoryFormType) => {
+    console.log('data', data)
     const organizedData: {
       name: string;
       description: string | undefined;
@@ -77,11 +78,11 @@ export default function CreateUpdateCategories({
       name: data.name,
       description: data.description,
     };
-    const newChangedData = getChangedFields(data, initialValues);
+    // const newChangedData = getChangedFields(data, initialValues);
     if (initialValues) {
       patchAsync({
         url: `/news-category/${initialValues.id}`,
-        data: newChangedData,
+        data: data,
       }).then(() => {
         onClose();
         methods.reset();

@@ -1,12 +1,12 @@
-import HeroSection from "@/components/share/HeroSection";
 import Courses from "./Courses";
 import EarnRecognizedCertificates from "./EarnRecognizedCertificates";
 import EssentialFeatures from "./EssentialFeatures";
+import TrainingHero from "./TrainingHero";
 
 export default function Training() {
   return (
     <div>
-      <HeroSection />
+      <TrainingHero />
       <Courses />
       <EssentialFeatures />
       <EarnRecognizedCertificates />

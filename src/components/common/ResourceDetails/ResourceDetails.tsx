@@ -404,8 +404,8 @@ export default function ResourceDetails() {
 
         <div className="container">
           <ResourceHeaderDetails
-            title={resourceData?.title.en}
-            description={resourceData?.description.en}
+            title={resourceData?.title.en ?? undefined}
+            description={resourceData?.description.en ?? undefined}
             uploader={resourceData?.uploader}
             createdAt={resourceData?.createdAt}
             updatedAt={resourceData?.updatedAt}

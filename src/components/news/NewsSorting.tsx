@@ -31,10 +31,10 @@ const NewsSorting = () => {
 
   const { data: newsCategories, isLoading: isNewsCategoriesLoading } = useGet<
     ICategory[]
-  >("/news-category", ["news-category"]);
+  >("/news-category?isActive=true", ["news-category"]);
 
   const { data: newsTags, isLoading: isNewsTagsLoading } = useGet<INewsTags[]>(
-    "/news-tag",
+    "/news-tag?isActive=true",
     ["news-tag"]
   );
 

@@ -20,6 +20,7 @@ import { useEffect } from "react";
 import { FieldError, FormProvider, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { PageSectionForm, pageSectionSchema } from "./schema";
+import { FileUploadController } from "../resources/resources/FileUploadController";
 
 const EditorWrapper = dynamic(
   () => import("@/components/share/EditorWrapper"),
@@ -52,6 +53,12 @@ enum SectionType {
   VIDEO_EMBED = "VIDEO_EMBED",
   ACCORDION = "ACCORDION",
   TIMELINE = "TIMELINE",
+  NEWS_GALLERY = "NEWS_GALLERY",
+  ABOUT_US = "ABOUT_US",
+  OUR_MISSION = "OUR_MISSION",
+  OUR_VISION = "OUR_VISION",
+  WHO_WE_SERVE = "WHO_WE_SERVE",
+  ORGANIZATION = "ORGANIZATION",
 }
 
 const pageOptions = Object.values(PageIdentifier).map((value) => ({
@@ -107,15 +114,18 @@ export default function CreateSectionModal({
         ...initialValues,
         images: initialValues?.imageUrls,
         isActive: Boolean(initialValues?.isActive),
-        title: initialValues?.title?.en,
-        titleBn: initialValues?.title?.bn,
-        content: initialValues?.content?.en,
-        contentBn: initialValues?.content.bn ?? "",
-        subtitle: initialValues?.subtitle?.en,
+        title: initialValues?.title?.en ?? undefined, // Convert null to undefined
+        titleBn: initialValues?.title?.bn ?? undefined, // Convert null to undefined
+        content: initialValues?.content?.en ?? undefined, // Convert null to undefined
+        contentBn: initialValues?.content?.bn ?? "",
+        subtitle: initialValues?.subtitle?.en ?? undefined, // Convert null to undefined
         subtitleBn: initialValues?.subtitle?.bn ?? "",
-        buttonLabel: initialValues.buttonLabel.en ?? "",
-        buttonLabelBn: initialValues.buttonLabel.bn ?? "",
-        buttonUrl: initialValues?.buttonUrl,
+        buttonLabel: initialValues.buttonLabel?.en ?? "",
+        buttonLabelBn: initialValues.buttonLabel?.bn ?? "",
+        buttonUrl: initialValues?.buttonUrl ?? undefined, // Convert null to undefined
+        buttonLabel2: initialValues.buttonLabel2?.en ?? "",
+        buttonLabelBn2: initialValues.buttonLabel2?.bn ?? "",
+        buttonUrl2: initialValues?.buttonUrl2 ?? undefined, // Convert null to undefined
       });
     }
   }, [initialValues, methods]);
@@ -135,8 +145,14 @@ export default function CreateSectionModal({
     if (data.content) formData.append("content", data.content);
     if (data.contentBn) formData.append("contentBn", data.contentBn);
     if (data.buttonLabel) formData.append("buttonLabel", data.buttonLabel);
-    if (data.buttonLabelBn) formData.append("buttonLabelBn", data.buttonLabelBn);
+    if (data.buttonLabelBn)
+      formData.append("buttonLabelBn", data.buttonLabelBn);
     if (data.buttonUrl) formData.append("buttonUrl", data.buttonUrl);
+
+    if (data.buttonLabel2) formData.append("buttonLabel2", data.buttonLabel2);
+    if (data.buttonLabelBn2)
+      formData.append("buttonLabelBn2", data.buttonLabelBn2);
+    if (data.buttonUrl2) formData.append("buttonUrl2", data.buttonUrl2);
 
     // Handle image
     const currentImages = data.images || [];
@@ -147,6 +163,11 @@ export default function CreateSectionModal({
 
     // Append new files
     newFiles.forEach((file) => formData.append("images", file));
+    if (data.backgroundImage) {
+      if (data.backgroundImage instanceof File) {
+        formData.append("backgroundImage", data.backgroundImage);
+      }
+    }
 
     // Track deleted images
     let imagesToDelete: string[] = [];
@@ -298,6 +319,27 @@ export default function CreateSectionModal({
                   placeholder="URL for the button (e.g., '/about')"
                 />
               </div>
+              <div>
+                <InputLabel label="Button Label (English)" />
+                <ControlledInputField
+                  name="buttonLabel2"
+                  placeholder="Text for call-to-action button (EN)"
+                />
+              </div>
+              <div>
+                <InputLabel label="Button Label (Bangla)" />
+                <ControlledInputField
+                  name="buttonLabelBn2"
+                  placeholder="Text for call-to-action button (BN)"
+                />
+              </div>
+              <div>
+                <InputLabel label="Button URL" />
+                <ControlledInputField
+                  name="buttonUrl2"
+                  placeholder="URL for the button (e.g., '/about')"
+                />
+              </div>
               <div className="col-span-2">
                 <InputLabel label="Section Image" />
                 <MultipleImageFileInput
@@ -305,6 +347,14 @@ export default function CreateSectionModal({
                   errors={{
                     images: methods.formState.errors.images as FieldError,
                   }}
+                />
+              </div>
+              <div className="col-span-2">
+                <InputLabel label="Background Image" />
+                <FileUploadController
+                  name={`backgroundImage`}
+                  className="h-[224px] w-full"
+                  label="Upload File only (JPEG, JPG)"
                 />
               </div>
 

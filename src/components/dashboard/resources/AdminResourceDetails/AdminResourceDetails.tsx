@@ -30,9 +30,9 @@ export default function AdminResourceDetails() {
   const handleEdit = () => {
     const editData = {
       id: resourceData?.id,
-      title: resourceData?.title.en,
+      title: resourceData?.title.en ?? "",
       titleBn: resourceData?.title.bn ?? "",
-      description: resourceData?.description.en,
+      description: resourceData?.description.en ?? "",
       descriptionBn: resourceData?.description.bn ?? "",
       organization: resourceData?.organization?.id,
       isPrivate: resourceData?.isPrivate,
@@ -65,10 +65,15 @@ export default function AdminResourceDetails() {
             <Pencil /> Edit
           </Button>
           <ResourceHeaderDetails
-            title={resourceData?.title?.[local] ?? resourceData?.title?.en}
+            title={
+              resourceData?.title?.[local] ??
+              resourceData?.title?.en ??
+              undefined
+            }
             description={
               resourceData?.description?.[local] ??
-              resourceData?.description?.en
+              resourceData?.description?.en ??
+              undefined
             }
             uploader={resourceData?.uploader}
             createdAt={resourceData?.createdAt}
@@ -95,6 +100,7 @@ export default function AdminResourceDetails() {
               ...f,
               description: f.description ?? "",
             }))}
+            resourceId={Number(resourceId)}
           />
         </div>
       </div>

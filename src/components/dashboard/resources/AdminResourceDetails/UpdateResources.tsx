@@ -36,16 +36,17 @@ export default function UpdateResources({
   initialValues?: IResourceUpdate | undefined;
 }) {
   const { data: resourceCategories } = useGet<IResource[]>(
-    "/resource-categories",
+    "/resource-categories?isActive=true",
     ["resource-categories"]
   );
-  const { data: resourceKeywords } = useGet<IResource[]>("/resource-keywords", [
-    "resource-keywords",
-  ]);
-  const { data: languages } = useGet<ILanguage[]>("/languages", [
+  const { data: resourceKeywords } = useGet<IResource[]>(
+    "/resource-keywords?isActive=true",
+    ["resource-keywords"]
+  );
+  const { data: languages } = useGet<ILanguage[]>("/languages?isActive=true", [
     "resource-languages",
   ]);
-  console.log(initialValues)
+  console.log(initialValues);
   const {
     mutateAsync: patchAsync,
     error: patchError,
@@ -69,14 +70,19 @@ export default function UpdateResources({
     },
     mode: "onChange",
   });
-  
+
   useEffect(() => {
     if (initialValues) {
       methods.reset({
-        title: initialValues.title?? "",
+        title: initialValues.title ?? "", // Convert null to empty string
         titleBn: initialValues.titleBn ?? "",
-        description: initialValues.description,
-        descriptionBn: initialValues.descriptionBn,
+        description:
+          typeof initialValues.description === "string"
+            ? initialValues.description ?? ""
+            : initialValues.description && typeof initialValues.description === "object"
+            ? (initialValues.description as { en?: string }).en ?? ""
+            : "", // Convert null to empty string
+        descriptionBn: initialValues.descriptionBn ?? "",
         isPrivate: initialValues.isPrivate,
         languageId: String(initialValues.languageId),
         categoryId: String(initialValues.categoryId),
@@ -104,17 +110,15 @@ export default function UpdateResources({
     }
   }, [isOpen, methods, patchReset]);
 
-  
-
-   
   const onSubmit = (data: any) => {
     console.log({ data });
     const formData = new FormData();
 
     formData.append("title", data.title);
-    if (data.titleBn) formData.append("titleBn", data.titleBn); 
+    if (data.titleBn) formData.append("titleBn", data.titleBn);
     if (data.description) formData.append("description", data.description);
-    if (data.descriptionBn) formData.append("descriptionBn", data.descriptionBn);
+    if (data.descriptionBn)
+      formData.append("descriptionBn", data.descriptionBn);
     formData.append("languageId", data.languageId);
     formData.append("categoryId", data.categoryId);
     formData.append("organizationId", organizationId);
@@ -123,9 +127,6 @@ export default function UpdateResources({
       formData.append("keywordIds", data.keywordIds);
     }
     formData.append("isPrivate", data.isPrivate);
-
-    
-    // // If initialValues is provided, it means we are updating an existing resource
     patchAsync({
       url: `/resources/${initialValues?.id ? initialValues.id : data.id}`,
       data: formData,
@@ -149,7 +150,6 @@ export default function UpdateResources({
     "name",
     "id"
   );
-
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -196,24 +196,7 @@ export default function UpdateResources({
                   />
                 </div>
               </div>
-              {/* <div className="grid grid-cols-1 gap-3 lg:gap-5">
-                <div>
-                  <InputLabel label="Title" required />
-                  <ControlledInputField
-                    name="title"
-                    placeholder="Please enter your title"
-                    className="bg-white"
-                  />
-                </div>
-                <div>
-                  <InputLabel label="Description" />
-                  <ControlledTextareaField
-                    name="description"
-                    placeholder="Enter your description"
-                    className="bg-white"
-                  />
-                </div>
-              </div> */}
+
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 lg:gap-5">
                 <div>
                   <InputLabel label="Category" required />

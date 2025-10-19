@@ -38,17 +38,26 @@ export const pageSectionSchema = Yup.object().shape({
     .required("Order is required")
     .positive("Order must be positive")
     .integer("Order must be an integer"),
-  title: Yup.string().optional(),
+  title: Yup.string().optional().nullable(),
   titleBn: Yup.string().nullable(),
   subtitle: Yup.string().optional(),
   subtitleBn: Yup.string().nullable(),
-  content: Yup.string().optional(),
+  content: Yup.string().optional().nullable(),
   contentBn: Yup.string().nullable(),
   buttonLabel: Yup.string().notRequired().nullable(),
   buttonLabelBn: Yup.string().nullable(),
   buttonUrl: Yup.string().notRequired().nullable(),
+  buttonLabel2: Yup.string().notRequired().nullable(),
+  buttonLabelBn2: Yup.string().nullable(),
+  buttonUrl2: Yup.string().notRequired().nullable(),
   isActive: Yup.boolean().default(true),
   images: Yup.array().nullable().of(imageSchema),
+ backgroundImage: Yup.mixed<File | string>()
+    .nullable()
+    .notRequired()
+    .default(null),
 });
+
+
 
 export type PageSectionForm = InferType<typeof pageSectionSchema>;

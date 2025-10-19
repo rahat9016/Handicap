@@ -6,7 +6,7 @@ import {
 } from "@/components/ui/dialog";
 import { usePatch } from "@/hooks/usePatch";
 import { usePost } from "@/hooks/usePost";
-import { getChangedFields } from "@/utils/getChangedFields";
+// import { getChangedFields } from "@/utils/getChangedFields";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
@@ -76,12 +76,16 @@ export default function CreateUpdateTags({
     };
 
     if (initialValues) {
-      const newChangedData = getChangedFields(data, initialValues);
+      // const newChangedData = getChangedFields(data, initialValues);
+      const newData = {
+        name: data.name,
+        isActive: data.isActive,
+      };
       patchAsync({
         url: `/news-tag/${initialValues.id}`,
-        data: newChangedData,
+        data: newData,
       }).then(() => {
-        toast.success("Keyword updated successfully");
+        // toast.success("Tag updated successfully");
         onClose();
         methods.reset();
       });

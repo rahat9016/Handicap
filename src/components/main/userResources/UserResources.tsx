@@ -1,12 +1,12 @@
-import HeroSection from "@/components/share/HeroSection";
 import AccessibleResources from "./AccessibleResources";
 import FeaturedResources from "./FeaturedResources";
 import ResourcesFilter from "./ResourcesFilter";
+import ResourcesHero from "./ResourcesHero";
 
 export default function UserResources() {
   return (
     <div>
-      <HeroSection />
+      <ResourcesHero />
       <ResourcesFilter />
       <FeaturedResources />
       <AccessibleResources />

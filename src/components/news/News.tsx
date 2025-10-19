@@ -21,6 +21,8 @@ import ResourceCardSkeleton from "../main/userResources/ResourceCardSkeleton";
 import NewsLibrary from "./NewsLibrary";
 import NewsSorting from "./NewsSorting";
 import { INews } from "./types/news";
+import SectionTopTitle from "../share/SectionTopTitle";
+import { useTranslations } from "next-intl";
 
 const News = () => {
   const { search, handleSearchChange, debouncedSearch } =
@@ -64,11 +66,13 @@ const News = () => {
   }, [data]);
 
   const totalPages = Math.ceil(totalItems / itemsPerPage);
+  const t = useTranslations('News')
 
   return (
     <div className="bg-[#f3f3f3]">
       <div className="container px-4 sm:px-6 lg:px-8 py-6 lg:py-20 lg:pb-40">
-        <div className="flex flex-col lg:flex-row lg:items-start gap-6 lg:gap-20">
+        <SectionTopTitle title={t("news")} desc={t("newsSectionDesc")} />
+        <div className="flex flex-col lg:flex-row lg:items-start gap-6 lg:gap-20 mt-8 lg:mt-14">
           {/* Sidebar - Desktop */}
           <div className="hidden lg:block w-full lg:w-[300px] lg:sticky lg:top-40 lg:self-start overflow-y-auto custom-scrollbar lg:h-[75vh] bg-white border p-4 rounded-md">
             <NewsSorting />

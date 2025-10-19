@@ -140,14 +140,21 @@ export default function CreateUpdateEvents({
 
     formData.append("isOnline", String(data.isOnline));
     formData.append("isPublished", String(data.isPublished));
-    if (data?.organizationId)
+
+    if (data?.organizationId) {
       formData.append("organizationId", String(data.organizationId));
+    }
+
+    // FIXED: Append individual category IDs
     (data.categoryIds || []).forEach((id) => {
-      if (id) formData.append("categoryIds", String(data.categoryIds));
+      if (id) formData.append("categoryIds", String(id)); // Fixed: String(id) not String(data.categoryIds)
     });
+
+    // FIXED: This one was already correct
     (data.tagIds || []).forEach((id) => {
       if (id) formData.append("tagIds", String(id));
     });
+
     (data.images || []).forEach((img: File | string) => {
       if (img instanceof File) formData.append("images", img);
     });
@@ -157,20 +164,21 @@ export default function CreateUpdateEvents({
         url: `/events/${initialValues?.id}`,
         data: formData,
       }).then(() => {
-        toast.success("Page section updated successfully");
+        toast.success("Event updated successfully"); // Fixed message
         onClose();
         methods.reset();
       });
       return;
     }
+
     mutateAsync(formData)
       .then(() => {
-        toast.success("Section created successfully");
+        toast.success("Event created successfully"); // Fixed message
         onClose();
         methods.reset();
       })
       .catch(() => {
-        toast.error("Failed to create section");
+        toast.error("Failed to create event"); // Fixed message
       });
   };
   const categoryOptions = mapToSelectOptions(data?.data, "name", "id");

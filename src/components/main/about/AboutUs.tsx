@@ -27,9 +27,6 @@ export default function AboutUs() {
     ["organization"]
   );
 
-
-
-
   return (
     <div>
       <div className="container">

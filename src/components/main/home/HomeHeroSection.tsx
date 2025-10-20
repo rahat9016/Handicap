@@ -1,13 +1,12 @@
 "use client";
 import { Button } from "@/components/ui/button";
+import { getWebUrl } from "@/config/envConfig";
 import { useGet } from "@/hooks/useGet";
 import { useRouter } from "@/i18n/navigation";
 import { IPageSection } from "@/types";
 import { useLocale } from "next-intl";
 import Image from "next/image";
 import HeroSkeleton from "./Skeleton/HeroSkeleton";
-import { getWebUrl } from "@/config/envConfig";
-
 
 const HomeHeroSection = () => {
   const local = useLocale() as "en" | "bn";
@@ -16,9 +15,6 @@ const HomeHeroSection = () => {
     "/page-sections/query/first?page=HOME&sectionType=HERO",
     ["user"]
   );
-
-  const url =  `${getWebUrl()}${local}${data?.data?.buttonUrl}`
-  console.log('url', url)
 
   if (isLoading) {
     return <HeroSkeleton />;
@@ -68,7 +64,11 @@ const HomeHeroSection = () => {
             <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3 mt-6 md:mt-8">
               {data?.data.buttonLabel && (
                 <Button
-                  onClick={() => router.push(`${getWebUrl()}${local}${data?.data?.buttonUrl}`)}
+                  onClick={() =>
+                    router.push(
+                      `${getWebUrl()}${local}${data?.data?.buttonUrl}`
+                    )
+                  }
                   className="w-full sm:w-auto px-4 py-3 h-[46px] bg-[#2A53CD] hover:bg-[#0490EF] text-white border text-sm cursor-pointer font-inter font-medium"
                 >
                   {data?.data?.buttonLabel?.[local] ??
@@ -78,7 +78,9 @@ const HomeHeroSection = () => {
               {data?.data.buttonLabel2 && (
                 <Button
                   onClick={() =>
-                    router.push(`${getWebUrl()}${local}${data?.data?.buttonUrl2}`)
+                    router.push(
+                      `${getWebUrl()}${local}${data?.data?.buttonUrl2}`
+                    )
                   }
                   className="w-full sm:w-auto px-4 py-3 h-[46px] bg-[#2A53CD] hover:bg-[#0490EF] text-white border text-sm cursor-pointer font-inter font-medium"
                 >

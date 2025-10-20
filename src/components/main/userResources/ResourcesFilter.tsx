@@ -16,15 +16,18 @@ import { useSearchDebounce } from "@/hooks/useSearchDebounce";
 import { useAppSelector } from "@/lib/redux/hooks";
 import { buildQueryParams } from "@/utils/buildQueryParams";
 import { Search } from "lucide-react";
+import { useTranslations } from "next-intl";
+import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { LuFilter, LuFilterX } from "react-icons/lu";
 import ResourceCardSkeleton from "./ResourceCardSkeleton";
 import ResourceLibrary from "./ResourceLibrary";
 import ResourcesSorting from "./ResourcesSorting";
-import { useTranslations } from "next-intl";
 
 const ResourcesFilter = () => {
-  const { search, handleSearchChange, debouncedSearch } =
+  const searchParams = useSearchParams();
+  const [isFiltersOpen, setIsFiltersOpen] = useState(false);
+  const { search, handleSearchChange, debouncedSearch, setSearch } =
     useSearchDebounce(300);
   const {
     setCurrentPage,
@@ -38,14 +41,14 @@ const ResourcesFilter = () => {
     (state) => state.filter
   );
 
-  const [isFiltersOpen, setIsFiltersOpen] = useState(false);
+  const searchQuery = searchParams.get("search") || "";
 
   const filters = {
     sort: sortBy,
     categoryIds: resourceTypes,
     languageIds: languages,
     keywordIds: keywords,
-    search: debouncedSearch,
+    search: debouncedSearch || searchQuery,
   };
 
   const queryString = buildQueryParams(filters, {
@@ -67,6 +70,10 @@ const ResourcesFilter = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
+
+  useEffect(() => {
+    if (searchQuery) setSearch(searchQuery);
+  }, [searchQuery, setSearch]);
 
   const totalPages = Math.ceil(totalItems / itemsPerPage);
   const t = useTranslations("ResourceLibrary");

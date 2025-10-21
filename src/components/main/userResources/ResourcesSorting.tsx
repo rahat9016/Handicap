@@ -125,7 +125,7 @@ const ResourcesSorting = () => {
               <AccordionTrigger className="font-bold hover:no-underline text-black text-sm lg:text-base border-b rounded-none mb-3 px-0">
                 Resource Sector
               </AccordionTrigger>
-              <AccordionContent className="px-0 max-h-40 lg:max-h-60 overflow-y-auto">
+              <AccordionContent className="px-0 ">
                 {isResourceLoading ? (
                   <div className="space-y-2">
                     {Array.from({ length: 6 }, (_, i) => (

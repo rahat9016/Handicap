@@ -232,6 +232,7 @@ module.exports = {
         },
       });
     },
+    
     function ({ addUtilities }) {
       addUtilities({
         ".hide-scrollbar": {

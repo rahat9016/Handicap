@@ -34,9 +34,10 @@ export default function CreateUpdateOrganizerMappedModal({
   const { data: userData } = useGet<IUser[]>(`/user/users-for-organizations`, [
     "users-for-organizations",
   ]);
-  const { data: organizationData } = useGet<IOrganization[]>(`/organizations`, [
-    "organizations",
-  ]);
+  const { data: organizationData } = useGet<IOrganization[]>(
+    `/organizations?isActive=true`,
+    ["organizations"]
+  );
   const { data: roleData } = useGet<IRole[]>(`/roles/ADMIN`, ["roles"]);
 
   const { mutateAsync, error } = usePost<IUser[]>(
@@ -98,7 +99,9 @@ export default function CreateUpdateOrganizerMappedModal({
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="bg-white min-h-[50vh] w-[80vw] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>{initialValues ? "Update User Role" : "Create User Role"}</DialogTitle>
+          <DialogTitle>
+            {initialValues ? "Update User Role" : "Create User Role"}
+          </DialogTitle>
         </DialogHeader>
         <FormProvider {...methods}>
           <form onSubmit={methods.handleSubmit(onSubmit)} className="w-full">

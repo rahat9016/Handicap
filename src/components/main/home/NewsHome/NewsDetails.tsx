@@ -1,11 +1,11 @@
-"use client"
-import { useParams } from 'next/navigation';
-import React, { useEffect, useState } from 'react'
-import { INewsSection } from '@/components/news/AllNews/types';
-import { useGet } from '@/hooks/useGet';
-import Image from "next/image";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+"use client";
+import { INewsSection } from "@/components/news/AllNews/types";
 import { Button } from "@/components/ui/button";
+import { useGet } from "@/hooks/useGet";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import Image from "next/image";
+import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
 const NewsDetails = () => {
   const { id } = useParams();
 
@@ -90,7 +90,13 @@ const NewsDetails = () => {
       <h1 className="text-3xl font-bold mb-4">{title}</h1>
       <p className="text-lg text-gray-700 mb-6">{summary}</p>
       <div
-        className="prose max-w-none"
+        className="max-w-none 
+    [&>ul]:list-disc [&>ul]:ml-6
+    [&>ol]:list-decimal [&>ol]:ml-6
+    [&>li]:mb-1
+    [&>blockquote]:relative [&>blockquote]:pl-5 [&>blockquote]:italic 
+    [&>blockquote]:before:content-['❝'] [&>blockquote]:before:text-blue-600 
+    [&>blockquote]:before:absolute [&>blockquote]:before:-left-1 [&>blockquote]:before:top-0"
         dangerouslySetInnerHTML={{ __html: content }}
       />
     </div>

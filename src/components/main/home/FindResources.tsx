@@ -29,8 +29,18 @@ export default function FindResources() {
   const t = useTranslations("Home");
 
   const handleSelectResource = (id: number) => {
-    // navigate to resource detail page
     router.push(`/resources/${id}`);
+  };
+  const handleSearchNow = () => {
+    if (search.trim().length > 0) {
+      router.push(`/resources?search=${encodeURIComponent(search.trim())}`);
+    }
+  };
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      handleSearchNow();
+    }
   };
   return (
     <div
@@ -49,12 +59,16 @@ export default function FindResources() {
               <Input
                 value={search}
                 onChange={handleInputChange}
-                placeholder={t('searchPlaceholder')}
+                onKeyDown={handleKeyDown}
+                placeholder={t("searchPlaceholder")}
                 className="border border-[#7297FF] h-[46px] focus:border-[#7297FF] placeholder:text-[#B7B7B7] bg-white"
               />
-              <Button className="bg-[#2A53CD] text-white h-[46px] flex items-center font-inter text-sm font-medium px-6">
+              <Button
+                className="bg-[#2A53CD] text-white h-[46px] flex items-center font-inter text-sm font-medium px-6"
+                onClick={handleSearchNow}
+              >
                 <Search className="mr-2" />
-               {t('searchNow')}
+                {t("searchNow")}
               </Button>
             </div>
 

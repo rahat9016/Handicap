@@ -186,21 +186,21 @@ export default function CreateUpdateNewsSectionModal({
             className="w-full space-y-6"
           >
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-              <div>
+              <div className="col-span-2 lg:col-span-1">
                 <InputLabel label="Title" />
                 <ControlledInputField
                   name="title"
                   placeholder="Main heading for the section"
                 />
               </div>
-              <div>
+              <div className="col-span-2 lg:col-span-1">
                 <InputLabel label="Summary" />
                 <ControlledInputField
                   name="summary"
                   placeholder="Summary for the News"
                 />
               </div>
-              <div>
+              <div className="col-span-2 lg:col-span-1">
                 <InputLabel label="Category" required />
                 <ControlledMultiSelectField
                   name="categoryIds"
@@ -208,7 +208,7 @@ export default function CreateUpdateNewsSectionModal({
                   options={newsCategoryOptions}
                 />
               </div>
-              <div>
+              <div className="col-span-2 lg:col-span-1">
                 <InputLabel label="Tags" required />
                 <ControlledMultiSelectField
                   name="tagIds"

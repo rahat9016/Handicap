@@ -16,7 +16,7 @@ const FeaturedResources = () => {
     "FeatureResources",
   ]);
   const resources = data?.data || [];
-  console.log(resources);
+
   const t = useTranslations("ResourceLibrary");
   return (
     <div className="bg-[#8c8ccb10]">

@@ -31,7 +31,6 @@ export default function EventCard({
 
     if (validImage?.imageUrl) return validImage.imageUrl;
 
-    // Check if featuredImage is actually a valid URL/path
     if (
       featuredImage &&
       (featuredImage.startsWith("/") || featuredImage.startsWith("http"))
@@ -47,7 +46,7 @@ export default function EventCard({
   console.log("Final event image:", eventImage);
 
   const category = categories?.[0]?.category?.name || "Uncategorized";
-  const tag = tags?.[0]?.tag?.name || "";
+  // const tag = tags?.[0]?.tag?.name || "";
 
   return (
     <div className="rounded-xl overflow-hidden border bg-white shadow-sm hover:shadow-md transition-all duration-300 flex flex-col">
@@ -92,11 +91,14 @@ export default function EventCard({
             <span className="text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded-full">
               {category}
             </span>
-            {tag && (
-              <span className="flex items-center gap-1 text-xs bg-rose-100 text-rose-600 px-2 py-1 rounded-full">
-                <Tag className="w-3 h-3" /> {tag}
+            {tags.map((tag) => (
+              <span
+                key={tag.tagId}
+                className="flex items-center gap-1 text-xs bg-green/10 text-green px-2 py-1 rounded-full"
+              >
+                <Tag className="w-3 h-3" /> {tag.tag.name}
               </span>
-            )}
+            ))}
           </div>
         </div>
 

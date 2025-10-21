@@ -3,6 +3,7 @@ import HomeHeroSection from "./HomeHeroSection";
 import JoinOurCommunity from "./JoinOurCommunity";
 import OurHonorableFounders from "./OurHonorableFounders";
 import PlatformStatistics from "./PlatformStatistics";
+import PowerBiSection from "./PowerBiSection";
 import QuickAccess from "./QuickAccess";
 import ThankyouSection from "./ThankyouSection";
 import TrainingModule from "./TrainingModule";
@@ -14,6 +15,7 @@ const Home = () => {
       <HomeHeroSection />
       <WelcomeDisability />
       <PlatformStatistics />
+      <PowerBiSection />
       <FindResources />
       <QuickAccess />
       <TrainingModule />

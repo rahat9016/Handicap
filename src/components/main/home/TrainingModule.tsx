@@ -8,6 +8,7 @@ import { IPageSection } from "@/types";
 
 export default function TrainingModule() {
   const { data } = useGet("/news", ["news"], {
+    isActive: true,
     page: "1",
     limit: "3",
   });

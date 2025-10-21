@@ -16,9 +16,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import { IPowerBi } from "./types/interface";
 import { PowerBiForm, powerBiSchema } from "./Schema";
-
+import { IPowerBi } from "./types/interface";
 
 export default function CreateUpdatePowerBi({
   isOpen,
@@ -94,9 +93,7 @@ export default function CreateUpdatePowerBi({
     }
 
     // Include isActive for both create and update if needed
-    if (initialValues || data.isActive !== undefined) {
-      organizedData.isActive = data.isActive;
-    }
+    if (initialValues) organizedData.isActive = data.isActive;
 
     if (initialValues) {
       patchAsync({
@@ -161,17 +158,17 @@ export default function CreateUpdatePowerBi({
               />
             </div>
 
-            <div className="mb-4">
-              <InputLabel label="Active/Deactivate" />
-              <ControlledCheckField
-                name="isActive"
-                label="Active Report (Visible on website)"
-              />
-            </div>
+            {!!initialValues && (
+              <div className="mb-4">
+                <InputLabel label="Active/Deactivate" />
+                <ControlledCheckField
+                  name="isActive"
+                  label="Active Report (Visible on website)"
+                />
+              </div>
+            )}
 
-            <ErrorMessage error={error} />
-            <ErrorMessage error={patchError} />
-
+            <ErrorMessage error={error || patchError} />
             <div className="flex justify-end gap-3 mt-6">
               <Button
                 type="submit"

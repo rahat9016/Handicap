@@ -261,6 +261,37 @@ html {
   white-space: pre-wrap;  /* preserve line breaks */
   word-wrap: break-word;  /* break long words */
 }
+.tiptap {
+  :first-child {
+    margin-top: 0;
+  }
+
+  /* List styles */
+  ul,
+  ol {
+    padding: 0 1rem;
+    margin: 1.25rem 1rem 1.25rem 0.4rem;
+
+    li p {
+      margin-top: 0.25em;
+      margin-bottom: 0.25em;
+    }
+  }
+}
+
+.ProseMirror blockquote {
+  border-left: 3px solid #3b82f6;
+  padding-left: 1rem;
+  color: #374151;
+  margin: 0.5rem 0;
+}
+
+.ProseMirror img {
+  display: block;
+  margin: 0.5rem auto;
+  max-width: 100%;
+  border-radius: 0.5rem;
+}
 
 
 .fade-enter {

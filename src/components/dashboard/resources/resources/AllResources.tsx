@@ -29,7 +29,7 @@ export default function AllResources() {
   const { search, handleSearchChange, debouncedSearch } =
     useSearchDebounce(300);
 
-  const endpoint = "/resources";
+  const endpoint = "/resources/admin";
   const shouldFetch = selectedId !== undefined || organizationId !== undefined;
 
   const orgId = selectedId ?? organizationId;

@@ -35,10 +35,8 @@
     "thankYouOrganizations": "Thank you to all the organizations that contributed resources and shared knowledge to support disability inclusion in humanitarian and development programs.",
     "withTheSupportOf": "With The Support Of",
     "hubFundingInfo": "This hub is developed with funding from the Commonwealth of Australia represented by the Department of Foreign Affairs and Trade (DFAT) and is supported by Humanity & Inclusion and the Age and Disability Technical Working Group (ADTWG) under the ISCG.",
-
     "training": "Training",
     "news": "News ",
-
     "featuredResources": "Essential Resources",
     "earnRecognizedCertificate": "Earn Recognized Certificate",
     "upcomingLiveEvents": "Upcoming Live Events",
@@ -49,7 +47,9 @@
     "totalResources": "Total Resources ",
     "totalDownloads": "Total Downloads",
     "activeUsers": "Active Users",
-    "trainingCompletion": "Training Completion"
+    "trainingCompletion": "Training Completion",
+    "powerBi": "Power BI Reports",
+    "powerBiDesc": "Interactive data insights and business intelligence"
   },
   "Footer": {
     "inclusiveFutureMessage": "Working together to build an inclusive, accessible, and empowered future for persons with disabilities...",
@@ -91,7 +91,12 @@
     "globallyAccepted": "Globally Accepted by NGOs, development agencies, and employers",
     "trackProgress": "Track Your Progress with a personalized learner dashboard",
     "issuedUponCompletion": "Issued Upon Completion of each course or training module",
-    "careerGrowthStep": "Step Toward Career Growth in inclusion, development, and rights-based sectors"
+    "careerGrowthStep": "Step Toward Career Growth in inclusion, development, and rights-based sectors",
+    "comingSoon": "Coming Soon",
+    "trainingUnderDevelopment": "Our Training Courses Are Under Development",
+    "trainingUnderDevelopmentDesc": "We're working tirelessly to create comprehensive training programs that will enhance your skills and advance your career. Stay tuned for an amazing learning experience!"
+
+    
   },
   "TrainingModal": {
     "comingSoon": "Coming Soon",

@@ -7,6 +7,7 @@ import {
   LayoutDashboard,
   LucideIcon,
   Newspaper,
+  Power,
   Settings,
   Shapes,
   ShieldCheck,
@@ -115,13 +116,13 @@ export function getMenuItems(
       icon: CalendarDays,
       children: hasPermission
         ? [
-            { label: "Event List", href: "/admin/events/events-list" },
-            {
-              label: "Events Categories",
-              href: "/admin/events/events-categories",
-            },
-            { label: "Events Tags", href: "/admin/events/events-tags" },
-          ]
+          { label: "Event List", href: "/admin/events/events-list" },
+          {
+            label: "Events Categories",
+            href: "/admin/events/events-categories",
+          },
+          { label: "Events Tags", href: "/admin/events/events-tags" },
+        ]
         : [{ label: "Event List", href: "/admin/events/events-list" }],
     },
     {
@@ -167,6 +168,7 @@ export function getMenuItems(
       icon: Activity,
       href: "/admin/activity",
     },
+    hasPermission && { label: "PowerBi", icon: Power, href: "/admin/power-bi" },
   ];
 
   return menuItems.filter(Boolean) as MenuItem[];

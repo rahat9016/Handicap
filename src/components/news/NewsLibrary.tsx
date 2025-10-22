@@ -2,11 +2,12 @@ import NewsCard from "./NewsCard";
 import { INews } from "./types/news";
 
 export default function NewsLibrary({
-   news
+  news,
+  viewMode,
 }: {
-  news: INews[]
+  news: INews[];
+  viewMode?: string;
 }) {
-
   return (
     <div>
       {news.length === 0 ? (
@@ -19,15 +20,16 @@ export default function NewsLibrary({
           </p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {news
-            .map((news, index) => (
-              <NewsCard
-                key={index}
-                {...news}
-                // location={`/training/${course.id}`}
-              />
-            ))}
+        <div
+          className={
+            viewMode === "grid"
+              ? "grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6"
+              : "flex flex-col gap-y-4 divide-y divide-gray-200"
+          }
+        >
+          {news.map((news, index) => (
+            <NewsCard key={index} {...news} viewMode={viewMode} />
+          ))}
         </div>
       )}
     </div>

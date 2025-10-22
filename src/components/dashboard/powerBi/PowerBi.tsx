@@ -4,11 +4,11 @@ import { ColumnDef, DataTable } from "@/components/ui/data-table";
 import { useGet } from "@/hooks/useGet";
 import { usePagination } from "@/hooks/usePagination";
 import { useSearchDebounce } from "@/hooks/useSearchDebounce";
+import { useAppSelector } from "@/lib/redux/hooks";
 import { Power } from "lucide-react";
 import { useEffect, useState } from "react";
-import { IPowerBi } from "./types/interface";
 import CreateUpdatePowerBi from "./CreateUpdatePowerBi";
-import { useAppSelector } from "@/lib/redux/hooks";
+import { IPowerBi } from "./types/interface";
 
 export default function PowerBi() {
   const { search, handleSearchChange, debouncedSearch } =
@@ -89,9 +89,7 @@ export default function PowerBi() {
       cell: (value: unknown, row: IPowerBi) => (
         <span
           className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-            row.isActive
-              ? "bg-[#bfffda] text-green"
-              : "bg-red-100 text-red-800"
+            row.isActive ? "bg-[#bfffda] text-green" : "bg-red-100 text-red-800"
           }`}
         >
           {row.isActive ? "Active" : "Inactive"}
@@ -143,6 +141,7 @@ export default function PowerBi() {
         isOpen={isModalOpen}
         onClose={() => {
           setIsModalOpen(false);
+          setPowerBi(undefined);
         }}
         initialValues={powerBi}
       />

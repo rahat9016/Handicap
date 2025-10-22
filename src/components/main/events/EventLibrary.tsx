@@ -1,7 +1,13 @@
 import EventCard from "./CourseCard";
 import { IEventItem } from "./types/interface";
 
-export default function EventLibrary({ events }: { events: IEventItem[] }) {
+export default function EventLibrary({
+  events,
+  viewMode = "grid",
+}: {
+  events: IEventItem[];
+  viewMode?: "grid" | "list";
+}) {
   return (
     <div>
       {events.length === 0 ? (
@@ -12,9 +18,15 @@ export default function EventLibrary({ events }: { events: IEventItem[] }) {
           <p className="text-sm font-inter">Please select right event type</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div
+          className={
+            viewMode === "grid"
+              ? "grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6"
+              : "flex flex-col gap-y-4 divide-y divide-gray-200"
+          }
+        >
           {events.map((event, index) => (
-            <EventCard key={index} {...event} />
+            <EventCard key={index} {...event} viewMode={viewMode} />
           ))}
         </div>
       )}

@@ -36,6 +36,7 @@ interface ResourceCardProps {
   organizerName?: string;
   refetch: () => void;
   filesCount: number;
+  viewMode?: "grid" | "list";
 }
 
 // File type configuration
@@ -183,6 +184,7 @@ export default function ResourceCard({
   viewCount,
   organizerName,
   filesCount,
+  viewMode = "grid",
 }: ResourceCardProps) {
   const createdDate = new Date(date);
 
@@ -224,7 +226,7 @@ export default function ResourceCard({
       return (
         <iframe
           src={pdfFirstPageUrl}
-          className="w-full h-32 border-none"
+          className="w-full h-full border rounded-md overflow-hidden"
           title="PDF Preview"
           loading="lazy"
           scrolling="no"
@@ -250,10 +252,20 @@ export default function ResourceCard({
   };
 
   return (
-    <Card className="rounded-lg overflow-hidden border bg-white shadow-sm flex flex-col justify-between p-3">
-      <div className="relative w-full flex items-center justify-center mb-2">
+    <Card
+      className={`rounded-lg overflow-hidden border bg-white shadow-md flex ${
+        viewMode === "grid" ? "flex-col" : "flex-col lg:flex-row"
+      } justify-between p-3`}
+    >
+      <div
+        className={`relative w-full flex items-center justify-center ${
+          viewMode === "grid" ? "mb-2" : "mb-0 lg:min-w-[45%] xl:min-w-fit"
+        }`}
+      >
         <div
-          className="w-full max-h-32 overflow-hidden scroll-m-0 flex items-center justify-center bg-gray-50"
+          className={`w-full ${
+            viewMode === "grid" ? "max-h-32" : "h-full"
+          }  overflow-hidden scroll-m-0 flex items-center justify-center bg-gray-50`}
           style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
         >
           {renderPreview()}
@@ -276,7 +288,11 @@ export default function ResourceCard({
 
       <div className="flex flex-col justify-between gap-2">
         <div>
-          <Title className="lg:text-lg mb-3 line-clamp-1 text-black">
+          <Title
+            className={`lg:text-lg mb-3 ${
+              viewMode === "grid" ? "line-clamp-1" : ""
+            } text-black`}
+          >
             {title}
           </Title>
           <Paragraph className="line-clamp-2 text-sm text-gray-600 mb-2">

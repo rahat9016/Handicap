@@ -1,16 +1,16 @@
 "use client";
 import SectionTopTitle from "@/components/share/SectionTopTitle";
 import { useGet } from "@/hooks/useGet";
+import { useTranslations } from "next-intl";
 import EventCard from "./CourseCard";
 import EventCardSkeleton from "./EventCardSkeleton";
 import { IEventItem } from "./types/interface";
-import { useTranslations } from "next-intl";
 
 const UpcomingLiveEvents = () => {
   const { data, isLoading } = useGet<IEventItem[]>("/events/upcoming-events", [
     "events",
   ]);
-  const t = useTranslations("Events")
+  const t = useTranslations("Events");
   return (
     <div className="bg-[#F4F8FF]">
       <div className="container px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16 xl:py-20 mb-20">
@@ -52,7 +52,7 @@ const UpcomingLiveEvents = () => {
           </div> */}
 
           {/* Content Section */}
-          <div className="w-full lg:w-9/12 mx-auto order-1 lg:order-2">
+          <div className="w-full  mx-auto order-1 lg:order-2">
             {isLoading ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {Array.from({ length: 6 }, (_, index) => (
@@ -60,7 +60,7 @@ const UpcomingLiveEvents = () => {
                 ))}
               </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
                 {data?.data.map((event, index) => (
                   <EventCard key={index} {...event} />
                 ))}

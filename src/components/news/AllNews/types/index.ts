@@ -9,5 +9,5 @@ export interface INewsSection {
   createdAt?: string;
   updatedAt?: string;
   categories: { newsId: number; categoryId: number }[];
-  tags: { newsId: number;tagId: number }[];
+  tags: { newsId: number; tagId: number; name: string }[];
 }

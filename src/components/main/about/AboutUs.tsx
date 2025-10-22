@@ -39,7 +39,7 @@ export default function AboutUs() {
             classTitle="text-left w-9/12 mx-auto"
             classDesc="text-left lg:w-9/12"
           />
-          <div className="w-full lg:w-9/12 mx-auto mt-10 lg:mt-20">
+          <div className="w-full lg:w-9/12 mx-auto mt-6 lg:mt-10">
             <h3 className="text-primary text-lg font-inter font-medium">
               {ourMission?.data?.title?.[local] ??
                 ourMission?.data?.title.en ??
@@ -70,12 +70,7 @@ export default function AboutUs() {
                 whoWeServe?.data?.content.en ??
                 "--"}
             </p>
-            {/* <ul className="list-disc text-[#7A7A8E] text-justify text-sm font-inter font-normal mt-3 pl-10">
-              {whoWeServeList.map((item, index) => (
-                <li key={index}>{item}</li>
-              ))}
-            </ul> */}
-            <h3 className="text-primary text-lg font-inter font-medium mt-5 lg:mt-10">
+            <h3 className="text-primary text-lg font-inter font-medium  mt-6 lg:mt-10">
               {organization?.data?.title?.[local] ??
                 organization?.data?.title.en ??
                 "--"}
@@ -85,11 +80,6 @@ export default function AboutUs() {
                 organization?.data?.content.en ??
                 "--"}
             </p>
-            {/* <ul className="list-disc text-[#7A7A8E] text-justify text-sm font-inter font-normal mt-3 pl-10">
-              {organizationsList.map((item, index) => (
-                <li key={index}>{item}</li>
-              ))}
-            </ul> */}
           </div>
         </div>
       </div>

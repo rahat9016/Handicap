@@ -19,13 +19,15 @@ import { Search } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { LuFilter, LuFilterX } from "react-icons/lu";
+import { LuFilter, LuFilterX, LuGrid2X2, LuList } from "react-icons/lu";
 import ResourceCardSkeleton from "./ResourceCardSkeleton";
 import ResourceLibrary from "./ResourceLibrary";
 import ResourcesSorting from "./ResourcesSorting";
 
 const ResourcesFilter = () => {
   const searchParams = useSearchParams();
+  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
   const { search, handleSearchChange, debouncedSearch, setSearch } =
     useSearchDebounce(300);
@@ -85,10 +87,7 @@ const ResourcesFilter = () => {
           title={t("resourceLibrary")}
           desc={t("featuredResourcesDesc")}
         />
-
-        {/* Mobile Filter Toggle Button - Outside the main layout */}
-
-        <div className="flex flex-col lg:flex-row items-start gap-6 lg:gap-10 xl:gap-20 mt-8 lg:mt-14">
+        <div className="flex flex-col lg:flex-row items-start gap-5 lg:gap-6 xl:gap-8 mt-8 lg:mt-14">
           {/* Filters Sidebar */}
           <div
             className={`
@@ -127,7 +126,32 @@ const ResourcesFilter = () => {
                   </SelectContent>
                 </Select>
               </div>
+
               <div className="flex-1 w-full flex items-center gap-3 order-1 sm:order-2">
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => setViewMode("grid")}
+                    className={`p-2 rounded-md border ${
+                      viewMode === "grid"
+                        ? "bg-[#2A53CD] text-white"
+                        : "text-gray-600"
+                    }`}
+                    title="Grid View"
+                  >
+                    <LuGrid2X2 size={20} />
+                  </button>
+                  <button
+                    onClick={() => setViewMode("list")}
+                    className={`p-2 rounded-md border ${
+                      viewMode === "list"
+                        ? "bg-[#2A53CD] text-white"
+                        : "text-gray-600"
+                    }`}
+                    title="List View"
+                  >
+                    <LuList size={20} />
+                  </button>
+                </div>
                 <div className="relative w-full">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
                   <Input
@@ -138,7 +162,6 @@ const ResourcesFilter = () => {
                   />
                 </div>
 
-                {/* Small Screen Filter Button - Beside Search */}
                 <div
                   onClick={() => setIsFiltersOpen(!isFiltersOpen)}
                   className="flex lg:hidden bg-[#2A53CD] hover:bg-[#0490EF] text-white p-2 rounded-md"
@@ -165,6 +188,7 @@ const ResourcesFilter = () => {
                   <ResourceLibrary
                     resources={(data?.data as IResource[]) || []}
                     refetch={refetch}
+                    viewMode={viewMode}
                   />
                   {totalPages > 1 && (
                     <Pagination

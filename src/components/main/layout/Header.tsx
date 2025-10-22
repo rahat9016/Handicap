@@ -4,7 +4,7 @@ import { useAppSelector } from "@/lib/redux/hooks";
 import { Menu, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { usePathname } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { LanguageToggle } from "./LanguageToggle";
 import { navLinks } from "./navLinks";
 import { ProfileDropdown } from "./ProfileDropdown";
@@ -45,19 +45,20 @@ const Header = () => {
             tabIndex={0}
           >
             <div className="text-white text-xs sm:text-sm px-2 sm:px-4 py-2 flex flex-col sm:flex-row justify-between items-center gap-2 sm:gap-0">
+              <LanguageToggle />
               {/* Left Info */}
-              <div className="flex flex-wrap justify-center sm:justify-start gap-2 sm:gap-4">
+              {/* <div className="flex flex-wrap justify-center sm:justify-start gap-2 sm:gap-4">
                 <span tabIndex={0}>{t("wcag")}</span>
                 <span tabIndex={0}>{t("gdpr")}</span>
                 <span tabIndex={0}>{t("colorBlind")}</span>
-              </div>
+              </div> */}
 
               {/* Right Links */}
               <div className="flex flex-wrap justify-center sm:justify-end gap-2 sm:gap-4 items-center">
-                <LanguageToggle />
-                <Link href="/accessibility">{t("accessibility")}</Link>
+                {/* <LanguageToggle /> */}
+                {/* <Link href="/accessibility">{t("accessibility")}</Link> */}
                 <Link href="/event-calendar">{t("eventCalendar")}</Link>
-                <Link href="/privacy">{t("privacyPolicy")}</Link>
+                {/* <Link href="/privacy">{t("privacyPolicy")}</Link> */}
                 {email ? (
                   <ProfileDropdown />
                 ) : (

@@ -5,32 +5,48 @@ import ResourceCard from "./ResourceCard";
 
 export default function ResourceLibrary({
   resources,
-  refetch
+  refetch,
+  viewMode = "grid",
 }: {
   resources: IResource[];
   refetch: () => void;
+  viewMode?: "grid" | "list";
 }) {
   const local = useLocale() as "en" | "bn";
   const {
     userInformation: { id },
   } = useAppSelector((state) => state.auth);
-  
+
   return (
     <div>
       {resources.length === 0 ? (
         <div className="h-[100vh] flex flex-col items-center justify-center bg-slate-50 rounded-sm">
-          <h1 className="font-inter text-xl text-black">Resource data not available </h1>
-          <p className="text-sm font-inter">Please select right resource type</p>
+          <h1 className="font-inter text-xl text-black">
+            Resource data not available{" "}
+          </h1>
+          <p className="text-sm font-inter">
+            Please select right resource type
+          </p>
         </div>
       ) : (
-        <div className="grid gird-cols-1 md:grid-cols-2 lg:grid-cols-3  gap-6">
+        <div
+          className={
+            viewMode === "grid"
+              ? "grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6"
+              : "flex flex-col gap-y-4 divide-y divide-gray-200"
+          }
+        >
           {resources?.map((resource, index) => {
             return (
               <ResourceCard
                 id={resource.id}
                 key={index}
-                title={resource?.title?.[local] ?? resource?.title?.en ?? ''}
-                description={resource?.description?.[local] ?? resource?.description?.en ?? ""}
+                title={resource?.title?.[local] ?? resource?.title?.en ?? ""}
+                description={
+                  resource?.description?.[local] ??
+                  resource?.description?.en ??
+                  ""
+                }
                 imageUrl={resource.filePath}
                 date={resource.createdAt}
                 size={resource.fileSize}
@@ -45,6 +61,7 @@ export default function ResourceLibrary({
                 organizerName={resource.organization.name}
                 refetch={refetch}
                 filesCount={resource.filesCount}
+                viewMode={viewMode}
               />
             );
           })}

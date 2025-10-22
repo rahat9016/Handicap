@@ -2,7 +2,7 @@
 import { INewsSection } from "@/components/news/AllNews/types";
 import { Button } from "@/components/ui/button";
 import { useGet } from "@/hooks/useGet";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Tag } from "lucide-react";
 import Image from "next/image";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -89,6 +89,16 @@ const NewsDetails = () => {
       {/* News Info */}
       <h1 className="text-3xl font-bold mb-4">{title}</h1>
       <p className="text-lg text-gray-700 mb-6">{summary}</p>
+      <div className="w-1/2">
+        {newsData?.data?.tags.map((tag) => (
+          <span
+            key={tag.tagId}
+            className="flex items-center gap-1 text-xs bg-green/10 text-green px-2 py-1 rounded-full w-28 max-w-40"
+          >
+            <Tag className="w-3 h-3" /> {tag.name}
+          </span>
+        ))}
+      </div>
       <div
         className="max-w-none 
     [&>ul]:list-disc [&>ul]:ml-6

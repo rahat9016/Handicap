@@ -14,8 +14,8 @@ const Home = () => {
     <div className="pt-6">
       <HomeHeroSection />
       <WelcomeDisability />
-      <PlatformStatistics />
       <PowerBiSection />
+      <PlatformStatistics />
       <FindResources />
       <QuickAccess />
       <TrainingModule />

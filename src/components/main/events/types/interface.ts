@@ -60,6 +60,7 @@ export interface IEventItem {
   tags: IEventTag[];
   images: IEventImage[];
   organization: IOrganization;
+  viewMode: string;
 }
 
 export interface ICalendarDay {

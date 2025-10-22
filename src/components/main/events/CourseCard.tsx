@@ -18,6 +18,7 @@ export default function EventCard({
   categories,
   tags,
   images,
+  viewMode,
 }: IEventItem) {
   console.log("images", images);
 
@@ -49,14 +50,23 @@ export default function EventCard({
   // const tag = tags?.[0]?.tag?.name || "";
 
   return (
-    <div className="rounded-xl overflow-hidden border bg-white shadow-sm hover:shadow-md transition-all duration-300 flex flex-col">
-      {/* Image */}
-      <div className="relative w-full h-48 bg-gray-100">
+    <div
+      className={`rounded-xl overflow-hidden border bg-white shadow-sm hover:shadow-md transition-all duration-300 flex ${
+        viewMode === "grid" ? "flex-col" : "flex-col lg:flex-row"
+      }`}
+    >
+      <div
+        className={`relative ${
+          viewMode === "grid"
+            ? "w-full h-48"
+            : " w-full lg:w-[40%] min-h-48 lg:min-h-full"
+        }  bg-gray-100 `}
+      >
         <Image
           src={eventImage || "/images/dashboard/gallery-add.svg"}
           alt={title}
           fill
-          className="object-cover"
+          className="object-cover h-full"
           priority
         />
         {isOnline && (

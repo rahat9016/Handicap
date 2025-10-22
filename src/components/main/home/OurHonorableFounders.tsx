@@ -12,29 +12,37 @@ export default function OurHonorableFounders() {
             title={t("withTheSupportOf")}
             desc={t("hubFundingInfo")}
           />
-          <div className="flex gap-12 flex-col">
-            <Image
-              width={814}
-              height={114}
-              src={`/images/home/aus.png`}
-              alt="Founders "
-              className="h-32 w-auto mx-auto mt-5 py-4"
-            />
-            <div className=" flex justify-center items-center gap-12 max-lg:flex-col">
-              <Image
-                width={752}
-                height={316}
-                src={`/images/home/sponsor2.jpeg`}
-                alt="Founders"
-                className="h-32 w-auto  "
-              />
-              <Image
-                width={622}
-                height={308}
-                src={`/images/home/sponsor3.jpeg`}
-                alt="Founders"
-                className=" h-32 w-auto  "
-              />
+          <div className="w-9/12 mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5 mt-8">
+              <div className="flex items-center justify-center">
+                <Image
+                  width={814}
+                  height={114}
+                  src="/images/home/aus.png"
+                  alt="Founders"
+                  className="h-32 w-auto py-4"
+                />
+              </div>
+
+              <div className="flex items-center justify-center">
+                <Image
+                  width={752}
+                  height={316}
+                  src="/images/home/sponsor2.jpeg"
+                  alt="Founders"
+                  className="h-32 w-auto"
+                />
+              </div>
+
+              <div className="flex items-center justify-center">
+                <Image
+                  width={622}
+                  height={308}
+                  src="/images/home/sponsor3.jpeg"
+                  alt="Founders"
+                  className="h-32 w-auto"
+                />
+              </div>
             </div>
           </div>
         </div>

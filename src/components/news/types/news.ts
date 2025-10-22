@@ -32,6 +32,7 @@ export interface INews {
     isActive: boolean;
     newsId: number;
   }[];
+  viewMode?: string;
 }
 export interface INewsTags {
   id: number;

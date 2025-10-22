@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { FaQuestion } from "react-icons/fa";
 import { PiChats } from "react-icons/pi";
+import { TbBuildingCommunity } from "react-icons/tb";
 import { UserRole } from "./UserRoleEnum";
 
 export interface MenuItem {
@@ -178,6 +179,11 @@ export function getMenuItems(
       label: "Stakeholders",
       icon: Boxes,
       href: "/admin/stakeholders",
+    },
+    hasPermission && {
+      label: "Join Community Request",
+      icon: TbBuildingCommunity,
+      href: "/admin/join-our-community",
     },
   ];
 

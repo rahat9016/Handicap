@@ -15,7 +15,7 @@ const WelcomeDisability = () => {
   const local = useLocale() as "en" | "bn";
   const { data, isLoading } = useGet<IPageSection>(
     "/page-sections/query/first?page=HOME&sectionType=IMAGE_GALLERY",
-    [""]
+    ["home-image-gallery"]
   );
 
   if (isLoading) {
@@ -85,13 +85,19 @@ const WelcomeDisability = () => {
               )}
             </div>
 
-            <div
-              onClick={() => router.push("/about")}
-              className="whitespace-nowrap group flex items-center justify-center rounded-lg mt-10  w-full lg:w-[25%] border text-pureBlack hover:text-[#01014E] hover:shadow-lg text-base font-inter font-semibold px-4 py-2 cursor-pointer transition-all duration-300"
-            >
-              See more
-              <MoveRight className="ml-2 w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 duration-300" />
-            </div>
+            {data?.data?.buttonLabel && (
+              <div
+                onClick={() => router.push(data?.data?.buttonUrl)}
+                className="whitespace-nowrap group flex items-center justify-center rounded-lg mt-10  w-full lg:w-[25%] border text-pureBlack hover:text-[#01014E] hover:shadow-lg text-base font-inter font-semibold px-4 py-2 cursor-pointer transition-all duration-300"
+              >
+                {(
+                  data?.data?.buttonLabel?.[local] ??
+                  data?.data?.buttonLabel?.en ??
+                  ""
+                ).replace(/<[^>]*>/g, "")}
+                <MoveRight className="ml-2 w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 duration-300" />
+              </div>
+            )}
           </div>
         </div>
       </div>

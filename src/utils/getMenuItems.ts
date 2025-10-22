@@ -3,11 +3,11 @@ import {
   BadgeInfo,
   Building2,
   CalendarDays,
+  ChartNoAxesColumn,
   Folder,
   LayoutDashboard,
   LucideIcon,
   Newspaper,
-  Power,
   Settings,
   Shapes,
   ShieldCheck,
@@ -17,6 +17,7 @@ import {
 import { FaQuestion } from "react-icons/fa";
 import { PiChats } from "react-icons/pi";
 import { UserRole } from "./UserRoleEnum";
+import { TbBuildingCommunity } from "react-icons/tb";
 
 export interface MenuItem {
   label: string;
@@ -168,8 +169,10 @@ export function getMenuItems(
       icon: Activity,
       href: "/admin/activity",
     },
-    hasPermission && { label: "PowerBi", icon: Power, href: "/admin/power-bi" },
+    hasPermission && { label: "PowerBi", icon: ChartNoAxesColumn, href: "/admin/power-bi" },
+    hasPermission && { label: "Join Community Request", icon: TbBuildingCommunity, href: "/admin/join-our-community" },
   ];
 
   return menuItems.filter(Boolean) as MenuItem[];
 }
+

@@ -70,7 +70,7 @@ const ResourcesFilter = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
-
+  console.log(data);
   useEffect(() => {
     if (searchQuery) setSearch(searchQuery);
   }, [searchQuery, setSearch]);

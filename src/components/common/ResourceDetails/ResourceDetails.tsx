@@ -70,6 +70,7 @@ export default function ResourceDetails() {
     `/resources/${resourceId}`,
     ["resources", resourceId]
   );
+
   const { download } = useDownloadResource(refetch);
   const resourceData = data?.data;
   const { mutateAsync } = usePost(
@@ -321,10 +322,6 @@ export default function ResourceDetails() {
                 >
                   <RotateCw className="h-4 w-4" />
                 </Button>
-                <Button size="sm">
-                  <ExternalLink className="mr-2 h-4 w-4" />
-                  Open
-                </Button>
                 <Button size="sm" variant="outline">
                   <Download className="mr-2 h-4 w-4" />
                   Download
@@ -393,14 +390,15 @@ export default function ResourceDetails() {
         fileType={"application/pdf"}
       />
       <main>
-        <div>
-          <ResourceHeader
-            categoryName={resourceData?.category?.name}
-            initialBookmarked={false}
-            onBookmarkToggle={(state) => console.log("Bookmarked:", state)}
-            onShare={() => console.log("Shared")}
-          />
-        </div>
+        {resourceData && (
+          <div>
+            <ResourceHeader
+              categoryName={resourceData?.category?.name}
+              onBookmarkToggle={(state) => console.log("Bookmarked:", state)}
+              resourceData={resourceData as IResource}
+            />
+          </div>
+        )}
 
         <div className="container">
           <ResourceHeaderDetails
@@ -447,7 +445,6 @@ export default function ResourceDetails() {
                   ))}
                 </TabsList>
                 {resourceData?.resourceFiles.map((file) => {
-                  console.log(file);
                   return (
                     <TabsContent
                       key={file.id}

@@ -1,9 +1,10 @@
 import {
   Activity,
   BadgeInfo,
+  Boxes,
   Building2,
   CalendarDays,
-  ChartNoAxesColumn,
+  ChartNoAxesCombined,
   Folder,
   LayoutDashboard,
   LucideIcon,
@@ -16,8 +17,8 @@ import {
 } from "lucide-react";
 import { FaQuestion } from "react-icons/fa";
 import { PiChats } from "react-icons/pi";
-import { UserRole } from "./UserRoleEnum";
 import { TbBuildingCommunity } from "react-icons/tb";
+import { UserRole } from "./UserRoleEnum";
 
 export interface MenuItem {
   label: string;
@@ -117,13 +118,13 @@ export function getMenuItems(
       icon: CalendarDays,
       children: hasPermission
         ? [
-          { label: "Event List", href: "/admin/events/events-list" },
-          {
-            label: "Events Categories",
-            href: "/admin/events/events-categories",
-          },
-          { label: "Events Tags", href: "/admin/events/events-tags" },
-        ]
+            { label: "Event List", href: "/admin/events/events-list" },
+            {
+              label: "Events Categories",
+              href: "/admin/events/events-categories",
+            },
+            { label: "Events Tags", href: "/admin/events/events-tags" },
+          ]
         : [{ label: "Event List", href: "/admin/events/events-list" }],
     },
     {
@@ -169,10 +170,22 @@ export function getMenuItems(
       icon: Activity,
       href: "/admin/activity",
     },
-    hasPermission && { label: "PowerBi", icon: ChartNoAxesColumn, href: "/admin/power-bi" },
-    hasPermission && { label: "Join Community Request", icon: TbBuildingCommunity, href: "/admin/join-our-community" },
+    hasPermission && {
+      label: "PowerBi",
+      icon: ChartNoAxesCombined,
+      href: "/admin/power-bi",
+    },
+    hasPermission && {
+      label: "Stakeholders",
+      icon: Boxes,
+      href: "/admin/stakeholders",
+    },
+    hasPermission && {
+      label: "Join Community Request",
+      icon: TbBuildingCommunity,
+      href: "/admin/join-our-community",
+    },
   ];
 
   return menuItems.filter(Boolean) as MenuItem[];
 }
-

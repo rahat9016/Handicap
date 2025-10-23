@@ -59,7 +59,7 @@ const News = () => {
   });
 
   // API call
-  const { data, isLoading } = useGet<INews[]>(`/news?${queryString}`, [
+  const { data, isLoading } = useGet<INews[]>(`/news?isPublished=true&${queryString}`, [
     "news",
     queryString,
   ]);

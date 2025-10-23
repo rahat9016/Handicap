@@ -33,11 +33,11 @@ export default function CreateUpdateEvents({
   onClose,
   initialValues,
 }: CreateUpdateEventModalProps) {
-  const { data } = useGet<ICategory[]>("/event-categories", [
+  const { data } = useGet<ICategory[]>("/event-categories?isActive=true", [
     "event-categories",
   ]);
-  const { data: tagData } = useGet<ITag[]>("/event-tags", ["event-tags"]);
-  const { data: organizationData } = useGet<IOrganization[]>(`/organizations`, [
+  const { data: tagData } = useGet<ITag[]>("/event-tags?isActive=true", ["event-tags"]);
+  const { data: organizationData } = useGet<IOrganization[]>(`/organizations?isActive=true`, [
     "organizations",
   ]);
   const {

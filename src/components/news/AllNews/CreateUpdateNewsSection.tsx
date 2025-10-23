@@ -40,8 +40,8 @@ export default function CreateUpdateNewsSectionModal({
   onClose,
   initialValues,
 }: CreateUpdateSectionModalProps) {
-  const { data: tagsData } = useGet<ITags[]>("/news-tag", ["news-tag"]);
-  const { data: categoryData } = useGet<INews[]>("/news-category", [
+  const { data: tagsData } = useGet<ITags[]>("/news-tag?isActive=true", ["news-tag"]);
+  const { data: categoryData } = useGet<INews[]>("/news-category?isActive=true", [
     "news-category",
   ]);
   const newsTagsOptions = mapToSelectOptions(tagsData?.data, "name", "id");
@@ -70,7 +70,6 @@ export default function CreateUpdateNewsSectionModal({
   const methods = useForm<NewsSectionForm>({
     resolver: yupResolver(newsSectionSchema),
     defaultValues: {
-      isActive: true,
       isPublished: true,
     },
     mode: "onChange",
@@ -82,7 +81,6 @@ export default function CreateUpdateNewsSectionModal({
         summary: initialValues.summary,
         content: initialValues.content,
         isPublished: Boolean(initialValues.isPublished),
-        isActive: Boolean(initialValues?.isActive),
         images: initialValues?.images?.map((img) => img.imageUrl) ?? [],
         categoryIds:
           initialValues?.categories?.map((cat) => cat.categoryId) ?? [],
@@ -100,7 +98,6 @@ export default function CreateUpdateNewsSectionModal({
         summary: "",
         content: "",
         isPublished: false,
-        isActive: false,
         images: [],
         categoryIds: [],
         tagIds: [],
@@ -142,9 +139,7 @@ export default function CreateUpdateNewsSectionModal({
     (imagesToDelete || []).forEach((obj) => {
       if (obj) formData.append("removeImageIds", String(obj.id));
     });
-    if (isEditMode) {
-      formData.append("isActive", String(data.isActive));
-    }
+    
     if (isEditMode) {
       patchAsync({
         url: `/news/${initialValues?.id}`,
@@ -254,15 +249,7 @@ export default function CreateUpdateNewsSectionModal({
                   label="Published (Visible on website)"
                 />
               </div>
-              {isEditMode && (
-                <div className="mb-4">
-                  <InputLabel label="Is Active" />
-                  <ControlledCheckField
-                    name="isActive"
-                    label="Active (Visible on website)"
-                  />
-                </div>
-              )}
+              
             </div>
             <ErrorMessage error={error || patchError} />
             <div className="flex justify-end gap-3 pt-4">

@@ -36,7 +36,7 @@ export default function UserProfile() {
           </Button>
         </div>
 
-        <div>
+        <div className="flex gap-5">
           {isValid && (
             <Image
               src={userInformation?.profilePicture as string}
@@ -46,7 +46,7 @@ export default function UserProfile() {
               className="rounded-full w-[200px] h-[200px] object-cover col-span-2 mb-4"
             />
           )}
-          <div className="bg-slate-50 grid md:grid-cols-2 gap-6 p-4 rounded-lg border">
+          <div className="flex-1 bg-slate-50 grid md:grid-cols-2 gap-6 p-4 rounded-lg border">
             <div>
               <h3 className="text-black font-inter font-medium">First Name</h3>
               <Paragraph>{userInformation.firstName ?? "--------"}</Paragraph>

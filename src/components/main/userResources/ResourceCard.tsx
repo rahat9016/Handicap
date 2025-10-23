@@ -5,13 +5,15 @@ import Title from "@/components/share/Title";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { Link } from "@/i18n/navigation";
-import { formatFileSize } from "@/utils/formatFileSize";
 import { format } from "date-fns";
 import {
   Building2,
+  CalendarDays,
+  Download,
   Eye,
   File,
   FileCode,
+  Files,
   FileSpreadsheet,
   FileText,
   Image,
@@ -176,8 +178,6 @@ export default function ResourceCard({
   title,
   description,
   date,
-  size,
-  isFeatured,
   fileType,
   filePath,
   downloadCount,
@@ -258,8 +258,8 @@ export default function ResourceCard({
       } justify-between p-3`}
     >
       <div
-        className={`relative w-full flex items-center justify-center ${
-          viewMode === "grid" ? "mb-2" : "mb-0 lg:min-w-[45%] xl:min-w-fit"
+        className={`relative  flex items-center justify-center ${
+          viewMode === "grid" ? "mb-2 w-full" : "mb-0 w-full lg:w-[40%]"
         }`}
       >
         <div
@@ -271,12 +271,6 @@ export default function ResourceCard({
           {renderPreview()}
         </div>
 
-        {isFeatured && (
-          <Badge className="bg-[#F26419] text-white absolute left-3 top-3">
-            Featured
-          </Badge>
-        )}
-
         {fileTypeInfo && (
           <Badge
             className={`${fileTypeInfo.badgeColor} text-white absolute right-3 top-3`}
@@ -286,7 +280,11 @@ export default function ResourceCard({
         )}
       </div>
 
-      <div className="flex flex-col justify-between gap-2">
+      <div
+        className={`flex flex-col justify-between gap-2 ${
+          viewMode === "grid" ? "w-full" : "w-full lg:w-[60%]"
+        }`}
+      >
         <div>
           <Title
             className={`lg:text-lg mb-3 ${
@@ -303,14 +301,28 @@ export default function ResourceCard({
               <Building2 size={16} /> {organizerName}
             </Paragraph>
           )}
-          <div className="grid grid-cols-2 gap-2 mt-3 text-xs">
-            <Paragraph>{downloadCount} Downloads</Paragraph>
-            <Paragraph>{viewCount} Views</Paragraph>
-            <Paragraph>Date: {format(createdDate, "dd MMM yyyy")}</Paragraph>
-            <Paragraph>Size: {formatFileSize(size || 0)}</Paragraph>
-            <Paragraph>Files: {filesCount}</Paragraph>
-            <Paragraph className="flex items-center gap-1">
-              <FileIcon size={12} /> {fileTypeInfo?.extension || "Unknown"}
+          <div
+            className={`grid ${
+              viewMode === "grid" ? "grid-cols-2" : "grid-cols-5"
+            } gap-2 mt-3 text-xs`}
+          >
+            <Paragraph className="flex items-center gap-1 lg:text-xs">
+              <Download size={14} /> {downloadCount} Downloads
+            </Paragraph>
+            <Paragraph className="flex items-center gap-1 lg:text-xs">
+              <Eye size={14} />
+              {viewCount} Views
+            </Paragraph>
+            <Paragraph className="flex items-center gap-1 lg:text-xs">
+              <CalendarDays size={14} />
+              Date: {format(createdDate, "dd MMM yyyy")}
+            </Paragraph>
+            <Paragraph className="flex items-center gap-1 lg:text-xs">
+              <Files size={14} />
+              Files: {filesCount}
+            </Paragraph>
+            <Paragraph className="flex items-center gap-1 lg:text-xs">
+              <FileIcon size={14} /> {fileTypeInfo?.extension || "Unknown"}
             </Paragraph>
           </div>
         </div>
@@ -318,7 +330,7 @@ export default function ResourceCard({
         <div className="flex flex-col gap-2 mt-3">
           <Link
             href={`/resources/${id}`}
-            className="w-full h-10 bg-transparent hover:bg-transparent border border-[#00A896] text-[#00A896] flex items-center justify-center text-center text-sm font-medium"
+            className="w-full h-10 bg-transparent hover:bg-transparent border border-dashboard-primary text-dashboard-primary flex items-center justify-center text-center text-sm font-medium rounded-full"
           >
             <Eye className="w-4 h-4 mr-1" /> View Details
           </Link>

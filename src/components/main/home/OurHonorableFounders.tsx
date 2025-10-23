@@ -26,19 +26,18 @@ export default function OurHonorableFounders() {
 
               <div className="flex items-center justify-center">
                 <Image
-                  width={752}
-                  height={316}
-                  src="/images/home/sponsor2.jpeg"
+                  width={622}
+                  height={308}
+                  src="/images/home/sponsor3.jpeg"
                   alt="Founders"
                   className="h-32 w-auto"
                 />
               </div>
-
               <div className="flex items-center justify-center">
                 <Image
-                  width={622}
-                  height={308}
-                  src="/images/home/sponsor3.jpeg"
+                  width={752}
+                  height={316}
+                  src="/images/home/sponsor2.jpeg"
                   alt="Founders"
                   className="h-32 w-auto"
                 />

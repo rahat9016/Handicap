@@ -1,5 +1,8 @@
 {
-  "cSpell.words": ["datas"],
+  "cSpell.words": [
+    "datas",
+    "Uncategorized"
+  ],
   "eslint.enable": true,
   "eslint.workingDirectories": [{ "mode": "auto" }],
   // "eslint.options": {

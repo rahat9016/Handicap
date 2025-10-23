@@ -2,7 +2,7 @@
 import SectionTopTitle from "@/components/share/SectionTopTitle";
 import { useGet } from "@/hooks/useGet";
 import { useTranslations } from "next-intl";
-import EventCard from "./CourseCard";
+import EventCard from "./EventCard";
 import EventCardSkeleton from "./EventCardSkeleton";
 import { IEventItem } from "./types/interface";
 
@@ -60,7 +60,7 @@ const UpcomingLiveEvents = () => {
                 ))}
               </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
                 {data?.data.map((event, index) => (
                   <EventCard key={index} {...event} />
                 ))}

@@ -7,6 +7,7 @@ import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useGet } from "@/hooks/useGet";
 import { usePreview } from "@/hooks/usePreview";
+import { FileSearch } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { toast } from "react-toastify";
@@ -62,47 +63,65 @@ export default function EssentialFeatures() {
 
         <div className="w-full lg:w-9/12 mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-10 lg:mt-20">
-            {isLoading
-              ? Array.from({ length: 3 }).map((_, idx) => (
+            {isLoading ? (
+              // ===== Skeleton Loader =====
+              Array.from({ length: 3 }).map((_, idx) => (
+                <div
+                  key={idx}
+                  className="bg-[#F3F3F4] border border-[#AFC4FF] p-8 rounded-2xl"
+                >
+                  <Skeleton className="h-5 w-32 rounded-full mb-6" />
+                  <Skeleton className="h-6 w-40 mb-4" />
+                  <Skeleton className="h-16 w-full" />
+                </div>
+              ))
+            ) : data?.data && data.data.length > 0 ? (
+              // ===== Stakeholder Cards =====
+              data.data.map((item, idx) => {
+                const colorKey = getColorByIndex(idx);
+                return (
                   <div
-                    key={idx}
-                    className="bg-[#F3F3F4] border border-[#AFC4FF] p-8 rounded-2xl"
+                    key={item.id}
+                    className="bg-[#F3F3F4] border border-[#AFC4FF] group hover:bg-primary p-8 rounded-2xl transition-colors"
                   >
-                    <Skeleton className="h-5 w-32 rounded-full mb-6" />
-                    <Skeleton className="h-6 w-40 mb-4" />
-                    <Skeleton className="h-16 w-full" />
-                  </div>
-                ))
-              : data?.data?.map((item, idx) => {
-                  const colorKey = getColorByIndex(idx);
-                  return (
-                    <div
-                      key={item.id}
-                      className="bg-[#F3F3F4] border border-[#AFC4FF] group hover:bg-primary p-8 rounded-2xl transition-colors"
+                    <p
+                      className={`w-fit max-w-[150px] text-xs font-medium px-2 py-1 rounded-full ${colorClasses[colorKey]}`}
                     >
-                      <p
-                        className={`w-fit max-w-[150px] text-xs font-medium px-2 py-1 rounded-full ${colorClasses[colorKey]}`}
-                      >
-                        Stakeholder {String(idx + 1).padStart(2, "0")}
-                      </p>
+                      Stakeholder {String(idx + 1).padStart(2, "0")}
+                    </p>
 
-                      <h3 className="text-lg font-semibold text-primary group-hover:text-white mt-6 line-clamp-1">
-                        {item.name}
-                      </h3>
+                    <h3 className="text-lg font-semibold text-primary group-hover:text-white mt-6 line-clamp-1">
+                      {item.name}
+                    </h3>
 
-                      <p className="text-sm font-normal text-[#666666] group-hover:text-white mb-0 mt-3 line-clamp-3">
-                        {item.description}
-                      </p>
+                    <p className="text-sm font-normal text-[#666666] group-hover:text-white mb-0 mt-3 line-clamp-3">
+                      {item.description}
+                    </p>
 
-                      <Button
-                        className="mt-4 group-hover:bg-white group-hover:text-black"
-                        onClick={() => handlePreview(item.link)}
-                      >
-                        View PDF
-                      </Button>
-                    </div>
-                  );
-                })}
+                    <Button
+                      className="mt-4 group-hover:bg-white group-hover:text-black"
+                      onClick={() => handlePreview(item.link)}
+                    >
+                      View PDF
+                    </Button>
+                  </div>
+                );
+              })
+            ) : (
+              // ===== Empty State =====
+              <div className="col-span-full flex flex-col items-center justify-center text-center ">
+                <div className="flex items-center justify-center w-20 h-20 rounded-full bg-blue/10 text-blue">
+                  <FileSearch className="w-10 h-10" />
+                </div>
+                <h3 className="text-lg font-semibold text-black mb-2 mt-2">
+                  No Stakeholders Found
+                </h3>
+                <p className="text-sm text-black/50 max-w-md">
+                  It looks like there are no stakeholder profiles available
+                  right now. Please check back later or try refreshing the page.
+                </p>
+              </div>
+            )}
           </div>
         </div>
       </div>

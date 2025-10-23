@@ -1,4 +1,4 @@
-import EventCard from "./CourseCard";
+import EventCard from "./EventCard";
 import { IEventItem } from "./types/interface";
 
 export default function EventLibrary({

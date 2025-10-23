@@ -29,22 +29,28 @@ export default function AllResources() {
   const { search, handleSearchChange, debouncedSearch } =
     useSearchDebounce(300);
 
-  const shouldFetch = selectedId !== undefined || organizationId !== undefined;
+  const endpoint = organizationId
+    ? `/resources/organization/${organizationId}`
+    : "/resources/admin";
 
-  const orgId = selectedId ?? organizationId;
-  const endpoint = orgId ? "/resources" : "/resources/admin";
   const queryParams: Record<string, string> = {
     ...(itemsPerPage !== -1 && {
       page: currentPage.toString(),
       limit: itemsPerPage.toString(),
     }),
-    ...(orgId && { organizationIds: orgId }),
+    ...(selectedId && { organizationIds: selectedId }),
     ...(debouncedSearch && { search: debouncedSearch }),
   };
 
+  const shouldFetch = organizationId !== undefined || true;
+
   const { data, isLoading } = useGet<IResource[]>(
     endpoint,
-    ["resources", currentPage.toString(), orgId ?? "all"],
+    [
+      "resources",
+      currentPage.toString(),
+      organizationId ?? selectedId ?? "all",
+    ],
     queryParams,
     { enabled: shouldFetch }
   );

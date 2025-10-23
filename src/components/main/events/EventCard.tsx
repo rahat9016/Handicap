@@ -20,10 +20,7 @@ export default function EventCard({
   images,
   viewMode,
 }: IEventItem) {
-  console.log("images", images);
-
   const getEventImage = () => {
-    // Check if images array has valid image URLs
     const validImage = images?.find(
       (img) =>
         img?.imageUrl &&
@@ -39,15 +36,10 @@ export default function EventCard({
       return featuredImage;
     }
 
-    // Fallback to placeholder
     return "/images/dashboard/gallery-add.svg";
   };
   const eventImage = getEventImage();
-
-  console.log("Final event image:", eventImage);
-
   const category = categories?.[0]?.category?.name || "Uncategorized";
-  // const tag = tags?.[0]?.tag?.name || "";
 
   return (
     <div
@@ -59,14 +51,18 @@ export default function EventCard({
         className={`relative ${
           viewMode === "grid"
             ? "w-full h-48"
-            : " w-full lg:w-[40%] min-h-48 lg:min-h-full"
+            : " w-full lg:w-[30%] min-h-48 lg:min-h-full"
         }  bg-gray-100 `}
       >
         <Image
-          src={eventImage || "/images/dashboard/gallery-add.svg"}
+          src={eventImage}
           alt={title}
           fill
-          className="object-cover h-full"
+          className={`h-full ${
+            eventImage.includes("gallery-add.svg")
+              ? "object-contain object-center p-6"
+              : "object-cover"
+          }`}
           priority
         />
         {isOnline && (
@@ -75,8 +71,11 @@ export default function EventCard({
           </span>
         )}
       </div>
-
-      <div className="flex flex-col justify-between p-4 gap-2 flex-1">
+      <div
+        className={`flex flex-col justify-between p-4 gap-2 flex-1 ${
+          viewMode === "grid" ? "w-full" : "w-full lg:w-[70%]"
+        }`}
+      >
         <div>
           <h3 className="text-lg font-semibold line-clamp-1">{title}</h3>
 

@@ -39,7 +39,7 @@ const Events = () => {
   const { eventTags, eventCategories } = useAppSelector(
     (state) => state.filter
   );
-  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+  const [viewMode, setViewMode] = useState<"grid" | "list">("list");
 
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
 

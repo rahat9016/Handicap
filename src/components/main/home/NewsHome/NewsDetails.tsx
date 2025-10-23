@@ -89,16 +89,17 @@ const NewsDetails = () => {
       {/* News Info */}
       <h1 className="text-3xl font-bold mb-4">{title}</h1>
       <p className="text-lg text-gray-700 mb-6">{summary}</p>
-      <div className="w-1/2">
+      <div className="flex flex-wrap items-center gap-3 mb-5">
         {newsData?.data?.tags.map((tag) => (
           <span
             key={tag.tagId}
-            className="flex items-center gap-1 text-xs bg-green/10 text-green px-2 py-1 rounded-full w-28 max-w-40"
+            className="flex items-center gap-1 text-xs bg-green/10 text-green px-2 py-1 rounded-full"
           >
             <Tag className="w-3 h-3" /> {tag.name}
           </span>
         ))}
       </div>
+
       <div
         className="max-w-none 
     [&>ul]:list-disc [&>ul]:ml-6

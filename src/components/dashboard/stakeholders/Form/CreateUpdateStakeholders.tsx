@@ -58,7 +58,7 @@ export default function CreateUpdateStakeholders({
     formData.append("name", data.name);
     if (data.description) formData.append("description", data.description);
     if (initialValues) formData.append("isActive", String(data.isActive));
-    if (data.file) formData.append("file", data.file);
+    if (data.file instanceof File) formData.append("file", data.file);
 
     if (initialValues) {
       patchAsync({

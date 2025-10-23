@@ -57,7 +57,7 @@ const Events = () => {
   });
 
   // API call
-  const { data, isLoading } = useGet<IEventItem[]>(`/events?${queryString}`, [
+  const { data, isLoading } = useGet<IEventItem[]>(`/events?isPublished=true&${queryString}`, [
     "events",
     queryString,
   ]);

@@ -127,14 +127,14 @@ export function getMenuItems(
           ]
         : [{ label: "Event List", href: "/admin/events/events-list" }],
     },
-    {
-      label: "Course's",
-      icon: Shapes,
-      children: [
-        { label: "Course List", href: "/admin/course/course-list" },
-        { label: "Course Categories", href: "/admin/course/course-categories" },
-      ],
-    },
+    // {
+    //   label: "Course's",
+    //   icon: Shapes,
+    //   children: [
+    //     { label: "Course List", href: "/admin/course/course-list" },
+    //     { label: "Course Categories", href: "/admin/course/course-categories" },
+    //   ],
+    // },
     {
       label: "Settings",
       icon: Settings,

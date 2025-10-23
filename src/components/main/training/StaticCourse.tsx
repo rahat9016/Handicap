@@ -8,7 +8,7 @@ import { GraduationCap } from "lucide-react";
 const courses = [
   {
     title: "Age and Disability Inclusion in Humanitarian Action",
-    link: "https://chatgpt.com/c/68f9a897-9c14-8322-86e6-23d9df6f2f7e",
+    link: "https://kayaconnect.org/course/info.php?id=11732",
   },
   {
     title: "IASC e-Learning on Gender Equality in Humanitarian Action",

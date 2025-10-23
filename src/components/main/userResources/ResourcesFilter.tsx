@@ -26,7 +26,7 @@ import ResourcesSorting from "./ResourcesSorting";
 
 const ResourcesFilter = () => {
   const searchParams = useSearchParams();
-  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+  const [viewMode, setViewMode] = useState<"grid" | "list">("list");
 
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
   const { search, handleSearchChange, debouncedSearch, setSearch } =

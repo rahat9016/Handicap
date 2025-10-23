@@ -212,6 +212,7 @@ import Lottie from "lottie-react";
 import comingSoonAnimation from "../../../../public/json/coming-soon.json";
 import TrainingSorting from "./TrainingSorting";
 import { useState } from "react";
+import StaticCourse from "./StaticCourse";
 
 const Courses = () => {
   const t = useTranslations("Training");
@@ -226,14 +227,18 @@ const Courses = () => {
           desc={t("trainingSectionDesc")}
         />
 
+        <div>
+          <StaticCourse />
+        </div>
+
         <div className="flex flex-col lg:flex-row lg:items-start gap-6 lg:gap-20 mt-8 lg:mt-14">
           {/* Sidebar - Desktop */}
-          <div className="hidden lg:block w-full lg:w-[300px] lg:sticky lg:top-40 lg:self-start overflow-y-auto custom-scrollbar lg:h-[75vh] bg-white border p-4 rounded-md">
+          {/* <div className="hidden lg:block w-full lg:w-[300px] lg:sticky lg:top-40 lg:self-start overflow-y-auto custom-scrollbar lg:h-[75vh] bg-white border p-4 rounded-md">
             <TrainingSorting />
-          </div>
+          </div> */}
 
           {/* Main Content */}
-          <div className="w-full lg:w-10/12 lg:ml-auto">
+          <div className="w-full">
             {/* Top Controls */}
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
               {/* Mobile Filter Button */}

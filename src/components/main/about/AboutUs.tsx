@@ -65,11 +65,16 @@ export default function AboutUs() {
                 whoWeServe?.data?.title.en ??
                 "--"}
             </h3>
-            <p className="text-[#7A7A8E] text-justify text-sm font-inter font-normal mt-3 ">
-              {whoWeServe?.data?.content?.[local] ??
-                whoWeServe?.data?.content.en ??
-                "--"}
-            </p>
+            <p
+              className="text-[#7A7A8E] text-justify text-sm font-inter font-normal mt-3"
+              dangerouslySetInnerHTML={{
+                __html:
+                  whoWeServe?.data?.content?.[local] ??
+                  whoWeServe?.data?.content?.en ??
+                  "--",
+              }}
+            />
+
             <h3 className="text-primary text-lg font-inter font-medium  mt-6 lg:mt-10">
               {organization?.data?.title?.[local] ??
                 organization?.data?.title.en ??

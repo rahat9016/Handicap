@@ -26,7 +26,7 @@ import NewsSorting from "./NewsSorting";
 import { INews } from "./types/news";
 
 const News = () => {
-  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+  const [viewMode, setViewMode] = useState<"grid" | "list">("list");
 
   const { search, handleSearchChange, debouncedSearch } =
     useSearchDebounce(300);

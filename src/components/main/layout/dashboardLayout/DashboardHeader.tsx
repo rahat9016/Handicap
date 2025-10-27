@@ -3,9 +3,10 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { usePathname, useRouter } from "@/i18n/navigation";
 import { useAppSelector } from "@/lib/redux/hooks";
-import { Bell, Building2, ChevronLeft, Menu, User } from "lucide-react";
+import { Building2, ChevronLeft, Menu, User } from "lucide-react";
 import Link from "next/link";
 import { BiArrowBack } from "react-icons/bi";
+import Notification from "./Notification";
 import UserSkeleton from "./Skeleton/UserSkeleton";
 
 export default function DashboardHeader({
@@ -73,7 +74,8 @@ export default function DashboardHeader({
       </div>
 
       <div className="flex items-center gap-2 md:gap-4 ml-auto">
-        <div className="relative">
+        <Notification />
+        {/* <div className="relative">
           <div className="w-8 h-8 md:w-12 md:h-12 bg-dashboard-primary rounded-full flex items-center justify-center text-white">
             <Bell className="w-3 h-3 md:w-5 md:h-5" />
           </div>
@@ -82,7 +84,7 @@ export default function DashboardHeader({
               2
             </p>
           </div>
-        </div>
+        </div> */}
 
         {loading ? (
           <UserSkeleton />

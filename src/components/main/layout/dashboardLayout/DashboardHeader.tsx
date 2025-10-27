@@ -8,6 +8,7 @@ import Link from "next/link";
 import { BiArrowBack } from "react-icons/bi";
 import Notification from "./Notification";
 import UserSkeleton from "./Skeleton/UserSkeleton";
+import { NotificationBell } from "@/components/share/notification/NotificationBell";
 
 export default function DashboardHeader({
   toggleSidebar,
@@ -74,6 +75,7 @@ export default function DashboardHeader({
       </div>
 
       <div className="flex items-center gap-2 md:gap-4 ml-auto">
+
         <Notification />
         {/* <div className="relative">
           <div className="w-8 h-8 md:w-12 md:h-12 bg-dashboard-primary rounded-full flex items-center justify-center text-white">

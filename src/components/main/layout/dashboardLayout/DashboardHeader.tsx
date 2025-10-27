@@ -6,6 +6,7 @@ import { useAppSelector } from "@/lib/redux/hooks";
 import { Building2, ChevronLeft, Menu, User } from "lucide-react";
 import Link from "next/link";
 import { BiArrowBack } from "react-icons/bi";
+import Notification from "./Notification";
 import UserSkeleton from "./Skeleton/UserSkeleton";
 import { NotificationBell } from "@/components/share/notification/NotificationBell";
 
@@ -74,7 +75,18 @@ export default function DashboardHeader({
       </div>
 
       <div className="flex items-center gap-2 md:gap-4 ml-auto">
-        <NotificationBell />
+
+        <Notification />
+        {/* <div className="relative">
+          <div className="w-8 h-8 md:w-12 md:h-12 bg-dashboard-primary rounded-full flex items-center justify-center text-white">
+            <Bell className="w-3 h-3 md:w-5 md:h-5" />
+          </div>
+          <div className="w-4 h-4 md:w-[22px] md:h-[22px] bg-[#DC3545] rounded-full flex items-center justify-center absolute -top-1 -right-1 md:-top-2 md:-right-2">
+            <p className="font-inter font-semibold text-white text-[10px] md:text-xs">
+              2
+            </p>
+          </div>
+        </div> */}
 
         {loading ? (
           <UserSkeleton />

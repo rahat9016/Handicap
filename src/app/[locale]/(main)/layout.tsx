@@ -1,6 +1,7 @@
 import { AccessibilityControls } from "@/components/common/accessibility/AccessibilityControls";
 import Footer from "@/components/main/layout/Footer";
 import Header from "@/components/main/layout/Header";
+import { AnalyticsProvider } from "@/components/providers/AnalyticsProvider";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -8,9 +9,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <AccessibilityControls />
       <Header />
       <div className="mt-24 md:mt-28 lg:mt-40">
-        {children}
+        <AnalyticsProvider>{children}</AnalyticsProvider>
         <Footer />
-        {/* helllo */}
       </div>
     </section>
   );

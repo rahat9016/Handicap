@@ -1,5 +1,4 @@
 "use client";
-import { useAnalytics } from "@/hooks/useAnalytics";
 import { useGet } from "@/hooks/useGet";
 import {
   setLoading,
@@ -71,7 +70,7 @@ export const UserFetcher = () => {
     }
   }, [organizationData, dispatch]);
 
-  useAnalytics();
+
 
   return null;
 };

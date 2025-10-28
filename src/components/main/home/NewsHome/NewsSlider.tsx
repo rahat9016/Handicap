@@ -9,6 +9,7 @@ interface NewsSliderProps {
   slides: INewsSection[];
 }
 const NewsSlider = ({ slides }: NewsSliderProps) => {
+  console.log('slides', slides)
   const [currentSlide, setCurrentSlide] = useState(0);
   const [prevSlide, setPrevSlide] = useState(0);
   const [direction, setDirection] = useState<"left" | "right">("right");
@@ -18,7 +19,7 @@ const NewsSlider = ({ slides }: NewsSliderProps) => {
     const timer = setInterval(() => {
       goToNextSlide();
     }, 5000);
-
+    
     return () => clearInterval(timer);
   }, [slides.length]);
 

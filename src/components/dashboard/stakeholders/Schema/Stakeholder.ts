@@ -1,7 +1,7 @@
 import * as yup from "yup";
 import { InferType } from "yup";
 
-const FILE_SIZE = 5 * 1024 * 1024;
+const FILE_SIZE = 50 * 1024 * 1024;
 
 export const SUPPORTED_FORMATS = ["application/pdf"];
 

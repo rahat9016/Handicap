@@ -3,12 +3,13 @@ import { IPowerBi } from "@/components/dashboard/powerBi/types/interface";
 
 interface PowerBiCardProps {
   report: IPowerBi;
+  length: number;
+  index: number;
 }
 
-export function PowerBiCard({ report }: PowerBiCardProps) {
-
+export function PowerBiCard({ report,length,index }: PowerBiCardProps) {
   return (
-    <div className="bg-white rounded-lg border border-gray-300 p-4 col-span-1">
+    <div className={`bg-white rounded-lg border border-gray-300 p-4 ${length%2 !==0 && index ===(length-1) ? 'col-span-2':'col-span-1'}`}>
       <div className="border rounded-lg overflow-hidden">
         <iframe
           src={report?.link}
@@ -21,8 +22,9 @@ export function PowerBiCard({ report }: PowerBiCardProps) {
 
       {/* Description */}
       {report?.description && (
-        <div className="mt-4 p-3 bg-gray-50 rounded-lg">
-          <p className="text-gray-700 text-sm">{report?.description}</p>
+        <div className=" p-3 bg-gray-50 rounded-lg">
+          <p className="text-center text-gray-700 text-xl font-semibold">{report?.title}</p>
+          <p className="text-center text-gray-700 text-sm">{report?.description}</p>
         </div>
       )}
     </div>

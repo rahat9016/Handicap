@@ -31,7 +31,7 @@ const EventDetails = () => {
                 className="gap-2 bg-transparent w-full sm:w-auto"
               >
                 <ArrowLeft className="h-4 w-4" />
-                Back to Calendar
+                Back to Events
               </Button>
             </Link>
 

@@ -123,6 +123,28 @@ export default function TableView({
         );
       },
     },
+    hasPermission && {
+      header: "Feature",
+      accessorKey: "actions",
+      cell: (_value: any, row: IResource) => {
+        return (
+          <div className="flex items-center gap-5">
+            <StatusToggle
+              id={10}
+              status={row.featured}
+              onConfirm={async (_id, newStatus) => {
+                await mutateAsync({
+                  endpoint: `/resources/toggle-featured/${row.id}`,
+                  data: { featured: newStatus },
+                });
+              }}
+              levelValue_1="Featured"
+              levelValue_2="Not Featured"
+            />
+          </div>
+        );
+      },
+    },
     {
       header: "Action",
       accessorKey: "actions",

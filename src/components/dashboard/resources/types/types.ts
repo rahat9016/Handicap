@@ -68,6 +68,7 @@ export interface IResource {
   actions?: string;
   isPrivate?: boolean;
   isApproved: boolean;
+  featured: boolean;
   title: ILangType;
   description: ILangType;
   filePath: string;

@@ -8,7 +8,7 @@ import { IPageSection } from "@/types";
 
 export default function TrainingModule() {
   const { data } = useGet("/news", ["news"], {
-    isActive: true,
+    isPublished: true,
     page: "1",
     limit: "3",
   });
@@ -17,7 +17,6 @@ export default function TrainingModule() {
     "/page-sections/query/first?page=HOME&sectionType=NEWS_GALLERY",
     ["news-gallery"]
   );
-  console.log("data", newGalleryData?.data?.backgroundImageUrl);
 
   if (isLoading) {
     return <HeroSkeleton />;
@@ -30,7 +29,6 @@ export default function TrainingModule() {
         height={767}
         src={
           newGalleryData?.data?.backgroundImageUrl || ""
-          // newGalleryData?.data?.backgroundImageUrl || "/images/home/hero1.jpg"
         }
         alt="Background"
         className="absolute inset-0 w-full h-full object-cover"

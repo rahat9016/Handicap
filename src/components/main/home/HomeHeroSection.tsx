@@ -1,6 +1,5 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { getWebUrl } from "@/config/envConfig";
 import { useGet } from "@/hooks/useGet";
 import { useRouter } from "@/i18n/navigation";
 import { IPageSection } from "@/types";
@@ -66,7 +65,7 @@ const HomeHeroSection = () => {
                 <Button
                   onClick={() =>
                     router.push(
-                      `${getWebUrl()}${local}${data?.data?.buttonUrl}`
+                      `${data?.data?.buttonUrl}`
                     )
                   }
                   className="w-full sm:w-auto px-4 py-3 h-[46px] bg-[#2A53CD] hover:bg-[#0490EF] text-white border text-sm cursor-pointer font-inter font-medium"
@@ -79,7 +78,7 @@ const HomeHeroSection = () => {
                 <Button
                   onClick={() =>
                     router.push(
-                      `${getWebUrl()}${local}${data?.data?.buttonUrl2}`
+                      `${data?.data?.buttonUrl2}`
                     )
                   }
                   className="w-full sm:w-auto px-4 py-3 h-[46px] bg-[#2A53CD] hover:bg-[#0490EF] text-white border text-sm cursor-pointer font-inter font-medium"

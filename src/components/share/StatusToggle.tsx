@@ -1,38 +1,49 @@
-import { useState } from "react"
-import { toast } from "react-toastify"
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip"
-import { ConfirmToggleDialog } from "./ConfirmToggleDialog"
+import { useState } from "react";
+import { toast } from "react-toastify";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "../ui/tooltip";
+import { ConfirmToggleDialog } from "./ConfirmToggleDialog";
 
 interface StatusToggleProps {
-  id: string | number
-  status: boolean
-  onConfirm: (id: string | number, newStatus: boolean) => Promise<void> | void
-  levelValue_1?: string 
-  levelValue_2?: string
+  id: string | number;
+  status: boolean;
+  onConfirm: (id: string | number, newStatus: boolean) => Promise<void> | void;
+  levelValue_1?: string;
+  levelValue_2?: string;
 }
 
-export function StatusToggle({ id, status, onConfirm, levelValue_1 = "Active", levelValue_2 = "Inactive" }: StatusToggleProps) {
-  const [isDialogOpen, setIsDialogOpen] = useState(false)
-  const [pendingStatus, setPendingStatus] = useState<boolean | null>(null)
+export function StatusToggle({
+  id,
+  status,
+  onConfirm,
+  levelValue_1 = "Active",
+  levelValue_2 = "Inactive",
+}: StatusToggleProps) {
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [pendingStatus, setPendingStatus] = useState<boolean | null>(null);
 
   const handleToggle = (checked: boolean) => {
-    setPendingStatus(checked)
-    setIsDialogOpen(true)
-  }
+    setPendingStatus(checked);
+    setIsDialogOpen(true);
+  };
 
   const confirmToggle = async () => {
-    if (pendingStatus === null) return
+    if (pendingStatus === null) return;
     try {
-      await onConfirm(id, pendingStatus)
-      toast.success("Status updated successfully")
+      await onConfirm(id, pendingStatus);
+      toast.success("Status updated successfully");
     } catch (err) {
-        console.log(err)
-      toast.error("Failed to update status")
+      console.log(err);
+      toast.error("Failed to update status");
     } finally {
-      setIsDialogOpen(false)
-      setPendingStatus(null)
+      setIsDialogOpen(false);
+      setPendingStatus(null);
     }
-  }
+  };
 
   return (
     <div className="flex items-center gap-2">
@@ -56,7 +67,9 @@ export function StatusToggle({ id, status, onConfirm, levelValue_1 = "Active", l
             </label>
           </TooltipTrigger>
           <TooltipContent>
-            <p>{status ? `Click to ${levelValue_2}` : `Click to ${levelValue_1}`}</p>
+            <p>
+              {status ? `Click to ${levelValue_2}` : `Click to ${levelValue_1}`}
+            </p>
           </TooltipContent>
         </Tooltip>
       </TooltipProvider>
@@ -71,8 +84,10 @@ export function StatusToggle({ id, status, onConfirm, levelValue_1 = "Active", l
           setIsOpen={setIsDialogOpen}
           isActive={status}
           onConfirm={confirmToggle}
+          levelValue_1={levelValue_1}
+          levelValue_2={levelValue_2}
         />
       )}
     </div>
-  )
+  );
 }

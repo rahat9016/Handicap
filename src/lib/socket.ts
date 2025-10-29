@@ -18,7 +18,7 @@ export const connectSocket = (userId: number | string, token?: string) => {
 
   // If no socket exists, create a new one
   socket = io(
-    process.env.NEXT_PUBLIC_API_URL || "http://192.168.100.240:4047",
+    process.env.NEXT_PUBLIC_API_URL || "http://163.47.146.233:4035",
     {
       transports: ["websocket", "polling"],
       auth: { token },

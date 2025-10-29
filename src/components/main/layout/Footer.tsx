@@ -158,10 +158,12 @@ const Footer = () => {
         <div className="flex items-center gap-3 flex-wrap justify-center">
           <span>|</span>
           <span>Developed by</span>
-          <span
+          <Link
             className="text-white"
             tabIndex={0}
             aria-label="Developed By A T I Limited"
+            href={"https://atilimited.net/"}
+            target="_blank"
           >
             <Image
               width={67}
@@ -170,7 +172,7 @@ const Footer = () => {
               alt="ATI_Logo"
               className="h-5 w-auto lg:h-6"
             />
-          </span>
+          </Link>
         </div>
       </div>
     </footer>

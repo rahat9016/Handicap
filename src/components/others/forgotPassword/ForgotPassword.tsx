@@ -50,9 +50,9 @@ export default function ForgotPassword() {
   } = usePost("/auth/reset-password");
 
   const { mutate: resendOTP } = usePost("/auth/resend-otp-reset-password");
-  console.log(methods.getValues());
+
   const onSubmit: SubmitHandler<CombinedForm> = (data: CombinedForm) => {
-    console.log(data);
+
     if (step === 0) {
       forgotPassword(data as ForgotPasswordForm).then(() => {
         setStep(1);
@@ -73,7 +73,7 @@ export default function ForgotPassword() {
         email: data?.email as string,
         newPassword: data?.password as string,
       };
-      console.log(confirmData);
+      
       confirmPassword(confirmData).then(() => {
         toast.success("Password changed successfully");
         router.push("/login");

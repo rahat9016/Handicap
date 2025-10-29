@@ -2,7 +2,8 @@
 import { INewsSection } from "@/components/news/AllNews/types";
 import { Button } from "@/components/ui/button";
 import { useGet } from "@/hooks/useGet";
-import { ChevronLeft, ChevronRight, Tag } from "lucide-react";
+import { Link } from "@/i18n/navigation";
+import { ArrowLeft, ChevronLeft, ChevronRight, Tag } from "lucide-react";
 import Image from "next/image";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -38,6 +39,17 @@ const NewsDetails = () => {
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-8">
+      <div className="mb-6">
+        <Link href="/news" className="w-full sm:w-auto ">
+          <Button
+            variant="outline"
+            className="gap-2 bg-transparent w-full sm:w-auto"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Back to News
+          </Button>
+        </Link>
+      </div>
       {/* Image Slider */}
       {images.length > 0 && (
         <div className="relative w-full h-[400px] overflow-hidden rounded-xl mb-6">

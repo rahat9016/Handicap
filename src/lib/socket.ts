@@ -1,3 +1,4 @@
+import { baseURL } from "@/config/envConfig";
 import { io, Socket } from "socket.io-client";
 
 let socket: Socket | null = null;
@@ -18,7 +19,7 @@ export const connectSocket = (userId: number | string, token?: string) => {
 
   // If no socket exists, create a new one
   socket = io(
-    process.env.NEXT_PUBLIC_API_URL || "http://163.47.146.233:4035",
+    process.env.NEXT_PUBLIC_API_URL || baseURL,
     {
       transports: ["websocket", "polling"],
       auth: { token },

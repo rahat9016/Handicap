@@ -1,5 +1,5 @@
-export const baseURL = 'http://163.47.146.233:4035' // server API - 1
-// export const baseURL = 'http://163.47.146.233:4035' // UAT server API
+// export const baseURL = 'http://163.47.146.233:4035' // server API - 1
+export const baseURL = 'http://163.47.146.233:4035' // UAT server API
 // export const baseURL = 'http://192.168.100.240:4047/' // Local Server API
 export const getBaseUrl = (): string => {
   return (

@@ -58,7 +58,7 @@ export default function AdminChart({
     {}
   );
   const chartData = Array.isArray(data?.data?.data) ? data.data.data : [];
-  console.log(chartData);
+  
   return (
     <div>
       <div className="grid gap-6 grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3">

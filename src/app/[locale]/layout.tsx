@@ -8,7 +8,6 @@ import { Inter } from "next/font/google";
 import { notFound } from "next/navigation";
 import "./globals.css";
 import { UserFetcher } from "./UserFetcher";
-import { NotificationProvider } from "@/context/NotificationContext";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -41,10 +40,10 @@ export default async function RootLayout({
           <StoreProvider>
             <QueryProvider>
               <ToastProvider>
-                <NotificationProvider>
+                {/* <NotificationProvider> */}
                   <UserFetcher />
                   <main id="main-content">{children}</main>
-                </NotificationProvider>
+                {/* </NotificationProvider> */}
               </ToastProvider>
             </QueryProvider>
           </StoreProvider>

@@ -49,7 +49,7 @@ export default function AllResources() {
     [
       "resources",
       currentPage.toString(),
-      organizationId ?? selectedId ?? "all",
+      organizationId ?? selectedId ?? "all"
     ],
     queryParams,
     { enabled: shouldFetch }

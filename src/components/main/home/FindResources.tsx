@@ -45,7 +45,7 @@ export default function FindResources() {
   return (
     <div
       className="relative w-full bg-cover bg-center"
-      style={{ backgroundImage: `url('/images/home/FindResourcesBg.png')` }}
+      // style={{ backgroundImage: `url('/images/home/FindResourcesBg.png')` }}
     >
       <div className="container">
         <div className="py-10 lg:py-20">

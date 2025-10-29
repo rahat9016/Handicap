@@ -16,7 +16,7 @@ export default function QuickAccessCard({
 }: IQuickAccessCard) {
   const router = useRouter();
   return (
-    <div className="border border-[#AFC4FF] p-8 rounded-xl">
+    <div className="border border-[#AFC4FF] p-8 rounded-xl bg-white">
       <p className="text-sm font-medium font-inter bg-[#22C55E14] border border-[#22C55E66] text-[#22C55E] px-3 py-[6px] rounded-full w-[94px] max-w-[120px] text-center ">
         {date ? format(new Date(date), "MMM yyyy") : "N/A"}{" "}
       </p>

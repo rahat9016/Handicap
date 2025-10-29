@@ -42,7 +42,8 @@ const QuickAccess = () => {
   const t = useTranslations("Home");
 
   return (
-    <div className="relative w-full bg-white">
+    <div className="relative w-full bg-cover bg-center bg-no-repeat"
+      style={{ backgroundImage: `url('/images/home/bg.png')` }}>
       <div className="container">
         <div className="py-10 lg:py-20">
           <SectionTopTitle title={t("quickAccess")} />

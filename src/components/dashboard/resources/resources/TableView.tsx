@@ -128,7 +128,7 @@ export default function TableView({
       accessorKey: "actions",
       cell: (_value: any, row: IResource) => {
         return (
-          <div className="flex items-center gap-5">
+          <div  className="flex items-center gap-5">
             <StatusToggle
               id={10}
               status={row.featured}

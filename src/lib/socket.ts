@@ -6,20 +6,19 @@ let reconnectAttempts = 0;
 const maxReconnectAttempts = 10;
 
 export const connectSocket = (userId: number | string, token?: string) => {
+  // If socket exists and is connected, return it
+  if (socket?.connected) {
+    return socket;
+  }
 
   if (socket?.disconnected) {
     socket.connect();
     return socket;
   }
   
-  // If socket exists and is connected, return it
-  if (socket?.connected) {
-    return socket;
-  }
-
   // If no socket exists, create a new one
   socket = io(
-    process.env.NEXT_PUBLIC_API_URL || baseURL,
+    baseURL,
     {
       transports: ["websocket", "polling"],
       auth: { token },

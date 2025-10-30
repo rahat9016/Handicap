@@ -98,9 +98,9 @@ export default function Notification() {
           </div>
         )}
 
-        {notifications.map((note) => (
+        {notifications.map((note, index) => (
           <div
-            key={note.id}
+            key={`${note.createdAt}-${index}`}
             onClick={() => handleNotificationClick(note.id.toString(), note.isRead)}
             className={`flex flex-col items-start hover:bg-accent border-b cursor-pointer p-3 mb-1 ${
               !note.isRead ? "bg-light/80 " : "bg-transparent"

@@ -8,7 +8,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     <section className="bg-background text-primary content-center">
       <AccessibilityControls />
       <Header />
-      <div className="mt-24 md:mt-28 lg:mt-40">
+      <div className="mt-20 md:mt-24 lg:mt-40">
         <AnalyticsProvider>{children}</AnalyticsProvider>
         <Footer />
       </div>

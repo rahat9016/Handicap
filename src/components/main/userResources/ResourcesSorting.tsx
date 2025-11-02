@@ -78,8 +78,7 @@ const ResourcesSorting = () => {
   return (
     <div className="w-full">
       <FormProvider {...methods}>
-        <form className="space-y-6 lg:space-y-8 text-sm">
-          {/* Clear Button */}
+        <form className="space-y-4 lg:space-y-4 text-sm">
           <div className="flex justify-end">
             <Button
               onClick={(e) => {
@@ -146,7 +145,7 @@ const ResourcesSorting = () => {
               <AccordionTrigger className="font-bold hover:no-underline text-black text-sm lg:text-base border-b rounded-none mb-3 px-0">
                 Language
               </AccordionTrigger>
-              <AccordionContent className="px-0 max-h-32 lg:max-h-40 overflow-y-auto">
+              <AccordionContent className="px-0 overflow-y-auto">
                 {isLanguagesLoading ? (
                   <div className="space-y-2">
                     {Array.from({ length: 3 }, (_, i) => (
@@ -167,7 +166,7 @@ const ResourcesSorting = () => {
               <AccordionTrigger className="font-bold hover:no-underline text-black text-sm lg:text-base border-b rounded-none mb-3 px-0">
                 Keywords
               </AccordionTrigger>
-              <AccordionContent className="px-0 max-h-32 lg:max-h-40 overflow-y-auto">
+              <AccordionContent className="px-0 overflow-y-auto">
                 {isResourceKeywords ? (
                   <div className="space-y-2">
                     {Array.from({ length: 3 }, (_, i) => (

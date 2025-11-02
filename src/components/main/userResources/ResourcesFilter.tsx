@@ -1,7 +1,6 @@
 "use client";
 import { IResource } from "@/components/dashboard/resources/types/types";
 import Pagination from "@/components/share/Pagination";
-import SectionTopTitle from "@/components/share/SectionTopTitle";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -16,7 +15,6 @@ import { useSearchDebounce } from "@/hooks/useSearchDebounce";
 import { useAppSelector } from "@/lib/redux/hooks";
 import { buildQueryParams } from "@/utils/buildQueryParams";
 import { Search } from "lucide-react";
-import { useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { LuFilter, LuFilterX, LuGrid2X2, LuList } from "react-icons/lu";
@@ -78,22 +76,18 @@ const ResourcesFilter = () => {
   }, [searchQuery, setSearch]);
 
   const totalPages = Math.ceil(totalItems / itemsPerPage);
-  const t = useTranslations("ResourceLibrary");
 
   return (
     <div>
-      <div className="container px-4 sm:px-6 lg:px-8 py-8 lg:py-16 xl:py-20">
-        <SectionTopTitle
-          title={t("resourceLibrary")}
-          desc={t("featuredResourcesDesc")}
-        />
+      <div className="container px-4 sm:px-6 lg:px-8 py-0 lg:pb-16 xl:pb-20">
+
         <div className="flex flex-col lg:flex-row items-start gap-5 lg:gap-6 xl:gap-8 mt-8 lg:mt-14">
           {/* Filters Sidebar */}
           <div
             className={`
             w-full lg:w-80 xl:w-[300px] 
             ${isFiltersOpen ? "block" : "hidden lg:block"}
-            lg:sticky lg:top-32 self-start overflow-y-auto custom-scrollbar 
+            lg:sticky lg:top-48 self-start overflow-y-auto custom-scrollbar 
             max-h-[80vh] lg:max-h-[75vh] bg-white border p-4 rounded-md
             z-10 lg:z-auto shadow-lg lg:shadow-none
           `}
@@ -106,14 +100,14 @@ const ResourcesFilter = () => {
             {/* Controls Bar */}
             <div className="flex flex-col gap-5 lg:flex-row justify-between">
               <div className="flex-1 flex items-center gap-2 order-2 sm:order-1">
-                <span className="text-sm whitespace-nowrap">
+                <span className="text-sm whitespace-nowrap font-inter text-black">
                   Rows per page:
                 </span>
                 <Select
                   value={itemsPerPage === -1 ? "all" : itemsPerPage.toString()}
                   onValueChange={(value) => setItemsPerPage?.(value)}
                 >
-                  <SelectTrigger className="w-[80px] sm:w-[100px]">
+                  <SelectTrigger className="w-[80px] sm:w-[100px] h-[40px] bg-light text-black">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -131,10 +125,10 @@ const ResourcesFilter = () => {
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => setViewMode("grid")}
-                    className={`p-2 rounded-md border ${
+                    className={`p-2 rounded-md border w-10 h-10 flex items-center justify-center ${
                       viewMode === "grid"
                         ? "bg-[#2A53CD] text-white"
-                        : "text-gray-600"
+                        : "text-black"
                     }`}
                     title="Grid View"
                   >
@@ -142,10 +136,10 @@ const ResourcesFilter = () => {
                   </button>
                   <button
                     onClick={() => setViewMode("list")}
-                    className={`p-2 rounded-md border ${
+                    className={`p-2 rounded-md border w-10 h-10 flex items-center justify-center ${
                       viewMode === "list"
                         ? "bg-[#2A53CD] text-white"
-                        : "text-gray-600"
+                        : "text-black"
                     }`}
                     title="List View"
                   >
@@ -153,12 +147,12 @@ const ResourcesFilter = () => {
                   </button>
                 </div>
                 <div className="relative w-full">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-black w-4 h-4" />
                   <Input
                     placeholder="Search here..."
                     value={search}
                     onChange={handleSearchChange}
-                    className="border pl-10 pr-4 py-2 w-full"
+                    className="border pl-10 pr-4 py-2 w-full h-10 bg-light"
                   />
                 </div>
 

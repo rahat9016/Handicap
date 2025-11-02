@@ -253,7 +253,7 @@ export default function ResourceCard({
 
   return (
     <Card
-      className={`rounded-lg overflow-hidden border bg-white shadow-md flex ${
+      className={`rounded-lg overflow-hidden border border-gray bg-white shadow-none flex ${
         viewMode === "grid" ? "flex-col" : "flex-col lg:flex-row"
       } justify-between p-3`}
     >
@@ -330,7 +330,7 @@ export default function ResourceCard({
         <div className="flex flex-col gap-2 mt-3">
           <Link
             href={`/resources/${id}`}
-            className="w-full h-10 bg-transparent hover:bg-transparent border border-dashboard-primary text-dashboard-primary flex items-center justify-center text-center text-sm font-medium rounded-full"
+            className="w-full h-10 bg-dashboard-primary hover:bg-transparent border border-dashboard-primary text-white hover:text-dashboard-primary flex items-center justify-center text-center text-sm font-medium rounded-md duration-300 font-inter"
           >
             <Eye className="w-4 h-4 mr-1" /> View Details
           </Link>

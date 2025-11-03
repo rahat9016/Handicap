@@ -40,8 +40,8 @@ export default async function RootLayout({
           <StoreProvider>
             <QueryProvider>
               <ToastProvider>
-                  <UserFetcher />
-                  <main id="main-content">{children}</main>
+                <UserFetcher />
+                <main id="main-content">{children}</main>
               </ToastProvider>
             </QueryProvider>
           </StoreProvider>

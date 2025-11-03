@@ -1,11 +1,17 @@
-import React from "react";
+import { useTranslations } from "next-intl";
+import HeroSection from "../common/HeroSection";
 import News from "./News";
-import NewsHero from "./NewsHero";
 
 export default function NewsPage() {
+  const t = useTranslations("News");
   return (
     <div>
-      <NewsHero />
+      <HeroSection
+        page="NEWS"
+        sectionType="HERO"
+        title={t("news")}
+        desc={t("newsSectionDesc")}
+      />
       <News />
     </div>
   );

@@ -92,3 +92,10 @@ export interface Keyword {
 export interface Count {
   versions: number;
 }
+export interface IFilterFormValues {
+  sortBy: string[];
+  resourceTypes: string[];
+  languages: string[];
+  keywords: string[];
+  recommended: ("featured" | "isSuggested")[];
+}

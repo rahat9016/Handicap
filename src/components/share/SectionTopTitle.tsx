@@ -17,7 +17,7 @@ export default function SectionTopTitle({
     <div className={cn("text-center", className)}>
       <h1
         className={cn(
-          "text-xl lg:text-4xl font-inter text-primary font-semibold",
+          "text-xl lg:text-2xl xl:text-4xl font-inter text-primary font-semibold",
           classTitle
         )}
         tabIndex={0}

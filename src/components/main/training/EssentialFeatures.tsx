@@ -55,7 +55,7 @@ export default function EssentialFeatures() {
 
   return (
     <div className="container">
-      <div className="py-10 lg:py-20 lg:pt-[120px]">
+      <div className="py-10 lg:py-20 ">
         <SectionTopTitle
           title={t("essentialFeatures")}
           desc={t("essentialFeaturesInfo")}

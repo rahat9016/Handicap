@@ -47,7 +47,7 @@ const Pagination = ({
   if (totalPages > 1) pages.push(totalPages);
 
   return (
-    <div className="flex flex-col lg:flex-row items-center justify-between px-2 py-4 border-t">
+    <div className="flex flex-col lg:flex-row items-center justify-between px-2 py-4 border-t mt-4">
       <div className="text-sm text-muted-foreground">
         Showing{" "}
         <span className="font-medium">

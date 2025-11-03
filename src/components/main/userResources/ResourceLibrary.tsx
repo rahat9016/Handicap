@@ -31,9 +31,9 @@ export default function ResourceLibrary({
       ) : (
         <div
           className={
-            viewMode === "grid"
-              ? "grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6"
-              : "flex flex-col gap-y-4 divide-y divide-gray-200"
+            `pb-4 ${viewMode === "grid"
+              ? "grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 lg:gap-4"
+              : "flex flex-col gap-y-4"}`
           }
         >
           {resources?.map((resource, index) => {

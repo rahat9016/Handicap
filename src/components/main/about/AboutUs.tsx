@@ -28,7 +28,12 @@ export default function AboutUs() {
   );
 
   return (
-    <div>
+    <div
+      style={{
+        backgroundImage: `url('/images/about/ProjectObjectivesBg.png')`,
+      }}
+      className="bg-no-repeat bg-contain"
+    >
       <div className="container">
         <div className="py-10 lg:py-20">
           <SectionTopTitle
@@ -45,21 +50,33 @@ export default function AboutUs() {
                 ourMission?.data?.title.en ??
                 "--"}
             </h3>
-            <p className="text-[#7A7A8E] text-justify text-sm font-inter font-normal mt-3 ">
-              {ourMission?.data?.content?.[local] ??
-                ourMission?.data?.content.en ??
-                "--"}
-            </p>
-            <h3 className="text-primary text-lg font-inter font-medium mt-5 lg:mt-10">
-              {ourVision?.data?.title?.[local] ??
-                ourVision?.data?.title.en ??
-                "--"}
-            </h3>
-            <p className="text-[#7A7A8E] text-justify text-sm font-inter font-normal mt-3">
-              {ourVision?.data?.content?.[local] ??
-                ourVision?.data?.content.en ??
-                "--"}
-            </p>
+            <p
+              className="text-[#7A7A8E] text-justify text-sm font-inter font-normal mt-3 "
+              dangerouslySetInnerHTML={{
+                __html:
+                  ourMission?.data?.content?.[local] ??
+                  ourMission?.data?.content.en ??
+                  "--",
+              }}
+            ></p>
+            <h3
+              className="text-primary text-lg font-inter font-medium mt-5 lg:mt-10"
+              dangerouslySetInnerHTML={{
+                __html:
+                  ourVision?.data?.title?.[local] ??
+                  ourVision?.data?.title.en ??
+                  "--",
+              }}
+            ></h3>
+            <p
+              className="text-[#7A7A8E] text-justify text-sm font-inter font-normal mt-3"
+              dangerouslySetInnerHTML={{
+                __html:
+                  ourVision?.data?.content?.[local] ??
+                  ourVision?.data?.content.en ??
+                  "--",
+              }}
+            ></p>
             <h3 className="text-primary text-lg font-inter font-medium mt-5 lg:mt-10">
               {whoWeServe?.data?.title?.[local] ??
                 whoWeServe?.data?.title.en ??
@@ -80,11 +97,15 @@ export default function AboutUs() {
                 organization?.data?.title.en ??
                 "--"}
             </h3>
-            <p className="text-[#7A7A8E] text-justify text-sm font-inter font-normal mt-3 ">
-              {organization?.data?.content?.[local] ??
-                organization?.data?.content.en ??
-                "--"}
-            </p>
+            <p
+              className="text-[#7A7A8E] text-justify text-sm font-inter font-normal mt-3 "
+              dangerouslySetInnerHTML={{
+                __html:
+                  organization?.data?.content?.[local] ??
+                  organization?.data?.content.en ??
+                  "--",
+              }}
+            ></p>
           </div>
         </div>
       </div>

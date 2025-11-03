@@ -1,12 +1,19 @@
+import HeroSection from "@/components/common/HeroSection";
+import { useTranslations } from "next-intl";
 import AccessibleResources from "./AccessibleResources";
 import FeaturedResources from "./FeaturedResources";
 import ResourcesFilter from "./ResourcesFilter";
-import ResourcesHero from "./ResourcesHero";
 
 export default function UserResources() {
+  const t = useTranslations("ResourceLibrary");
   return (
     <div>
-      <ResourcesHero />
+      <HeroSection
+        page="RESOURCES"
+        sectionType="HERO"
+        title={t("resourceLibrary")}
+        desc={t("featuredResourcesDesc")}
+      />
       <ResourcesFilter />
       <FeaturedResources />
       <AccessibleResources />

@@ -11,7 +11,7 @@ import {
 interface ConfirmToggleDialogProps {
   isOpen: boolean;
   setIsOpen: (open: boolean) => void;
-  isActive: boolean;
+  isActive: boolean | undefined;
   onConfirm: () => void;
   levelValue_1: string;
   levelValue_2: string;

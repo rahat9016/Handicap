@@ -56,7 +56,7 @@ const ResourcesFilter = () => {
   const queryString = buildQueryParams(filters, {
     ...(itemsPerPage !== -1 && {
       page: currentPage,
-      limit: itemsPerPage,
+      limit: 9,
     }),
   });
 

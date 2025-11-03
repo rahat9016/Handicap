@@ -2,12 +2,6 @@ import { Link } from "@/i18n/navigation";
 import { Mail, Phone } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
-import {
-  FaFacebookF,
-  FaInstagram,
-  FaLinkedinIn,
-  FaTwitter,
-} from "react-icons/fa";
 
 const Footer = () => {
   const t = useTranslations("Footer");
@@ -107,39 +101,6 @@ const Footer = () => {
         </div>
       </div>
 
-      {/* Social Media Links */}
-      <div className="flex flex-col items-center justify-center gap-4 pt-6 lg:pt-8 mt-6 lg:mt-8">
-        <div className="flex items-center gap-6 sm:gap-10 lg:gap-20 bg-[#3D465A] border border-[#FFFFFF4D] h-12 lg:h-14 px-6 sm:px-10 lg:px-20 rounded-full">
-          <Link
-            href="#"
-            className="hover:text-[#5ABBFD] transition-colors duration-200 text-lg"
-            aria-label="Facebook Account Link"
-          >
-            <FaFacebookF />
-          </Link>
-          <Link
-            href="#"
-            className="hover:text-[#5ABBFD] transition-colors duration-200 text-lg"
-            aria-label="Twitter Account Link"
-          >
-            <FaTwitter />
-          </Link>
-          <Link
-            href="#"
-            className="hover:text-[#5ABBFD] transition-colors duration-200 text-lg"
-            aria-label="Instagram Account Link"
-          >
-            <FaInstagram />
-          </Link>
-          <Link
-            href="#"
-            className="hover:text-[#5ABBFD] transition-colors duration-200 text-lg"
-            aria-label="Linkedin Account Link"
-          >
-            <FaLinkedinIn />
-          </Link>
-        </div>
-      </div>
 
       {/* Copyright Section */}
       <div className="flex flex-col sm:flex-row items-center justify-center w-full py-6 lg:py-11 gap-4 sm:gap-0 mt-4 lg:mt-6">

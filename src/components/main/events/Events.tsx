@@ -1,31 +1,21 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
+import Toolbar from "@/components/common/Toolbar";
 import Pagination from "@/components/share/Pagination";
-import SectionTopTitle from "@/components/share/SectionTopTitle";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { useGet } from "@/hooks/useGet";
 import { usePagination } from "@/hooks/usePagination";
 import { useSearchDebounce } from "@/hooks/useSearchDebounce";
 import { useAppSelector } from "@/lib/redux/hooks";
 import { buildQueryParams } from "@/utils/buildQueryParams";
-import { Search } from "lucide-react";
-import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
-import { LuGrid2X2, LuList } from "react-icons/lu";
 import EventCardSkeleton from "./EventCardSkeleton";
 import EventLibrary from "./EventLibrary";
 import EventsSorting from "./EventsSorting";
 import { IEventItem } from "./types/interface";
 
 const Events = () => {
+  const [isFiltersOpen, setIsFiltersOpen] = useState(false);
   const { search, handleSearchChange, debouncedSearch } =
     useSearchDebounce(300);
   const {
@@ -48,7 +38,7 @@ const Events = () => {
     categoryIds: eventCategories,
     search: debouncedSearch,
   };
-
+// console.log(currentPage, itemsPerPage)
   const queryString = buildQueryParams(filters, {
     ...(itemsPerPage !== -1 && {
       page: currentPage,
@@ -57,85 +47,43 @@ const Events = () => {
   });
 
   // API call
-  const { data, isLoading } = useGet<IEventItem[]>(`/events?isPublished=true&${queryString}`, [
-    "events",
-    queryString,
-  ]);
+  const { data, isLoading } = useGet<IEventItem[]>(
+    `/events?isPublished=true&${queryString}`,
+    ["events", queryString]
+  );
   useEffect(() => {
     if (data) setTotalItems(data.meta?.totalItems || 0);
   }, [data]);
 
   const totalPages = Math.ceil(totalItems / itemsPerPage);
-  const t = useTranslations("Events");
 
   return (
     <div className="bg-[#f3f3f3]">
-      <div className="container px-4 sm:px-6 lg:px-8 py-6 lg:py-20 lg:pb-40">
-        <SectionTopTitle title={t("events")} desc={t("eventsSectionDesc")} />
-        <div className="flex flex-col lg:flex-row lg:items-start  gap-5 lg:gap-6 xl:gap-8 mt-8 lg:mt-14">
-          <div className="hidden lg:block w-full lg:w-[300px] lg:sticky lg:top-40 lg:self-start overflow-y-auto custom-scrollbar lg:h-[75vh] bg-white border p-4 rounded-md">
+      <div className="container px-4 sm:px-6 lg:px-8 py-0 lg:pb-16 xl:pb-20">
+        <div className="flex flex-col lg:flex-row lg:items-start  gap-5 lg:gap-6 xl:gap-8 pt-8 lg:pt-14">
+          <div
+            className={`
+            w-full lg:w-80 xl:w-[300px] 
+            ${isFiltersOpen ? "block" : "hidden lg:block"}
+            lg:sticky lg:top-48 self-start overflow-y-auto custom-scrollbar 
+            max-h-[80vh] lg:max-h-[75vh] bg-white border p-4 rounded-md
+            z-10 lg:z-auto shadow-lg lg:shadow-none
+          `}
+          >
             <EventsSorting />
           </div>
           <div className="w-full lg:w-10/12 lg:ml-auto">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
-              <div className="flex items-center gap-2">
-                <span className="text-sm whitespace-nowrap">
-                  Rows per page:
-                </span>
-                <Select
-                  value={itemsPerPage === -1 ? "all" : itemsPerPage.toString()}
-                  onValueChange={(value) => setItemsPerPage?.(value)}
-                >
-                  <SelectTrigger className="w-[80px] bg-white">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All</SelectItem>
-                    {[10, 20, 30, 40, 50].map((size) => (
-                      <SelectItem key={size} value={size.toString()}>
-                        {size}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="flex items-center gap-3">
-                <div className="flex items-center gap-2">
-                  <button
-                    onClick={() => setViewMode("grid")}
-                    className={`p-2 rounded-md border ${
-                      viewMode === "grid"
-                        ? "bg-[#2A53CD] text-white"
-                        : "text-gray-600"
-                    }`}
-                    title="Grid View"
-                  >
-                    <LuGrid2X2 size={20} />
-                  </button>
-                  <button
-                    onClick={() => setViewMode("list")}
-                    className={`p-2 rounded-md border ${
-                      viewMode === "list"
-                        ? "bg-[#2A53CD] text-white"
-                        : "text-gray-600"
-                    }`}
-                    title="List View"
-                  >
-                    <LuList size={20} />
-                  </button>
-                </div>
-                <div className="flex items-center w-full sm:w-[300px] border px-2 rounded-md bg-white">
-                  <Search className="min-w-[18px]" />
-                  <Input
-                    placeholder="Search here..."
-                    value={search}
-                    onChange={handleSearchChange}
-                    className="border-none shadow-none"
-                  />
-                </div>
-              </div>
-            </div>
-            <div className="border-t pt-4">
+            <Toolbar
+              search={search}
+              onSearchChange={handleSearchChange}
+              viewMode={viewMode}
+              onViewModeChange={setViewMode}
+              itemsPerPage={itemsPerPage}
+              onItemsPerPageChange={setItemsPerPage}
+              isFiltersOpen={isFiltersOpen}
+              onToggleFilters={() => setIsFiltersOpen((prev) => !prev)}
+            />
+            <div className="pt-4">
               {isLoading ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                   {Array.from({ length: 6 }, (_, index) => (

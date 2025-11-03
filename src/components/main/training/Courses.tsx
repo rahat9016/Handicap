@@ -202,17 +202,15 @@
 
 // export default Courses;
 
-/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
-import { useTranslations } from "next-intl";
-import { Filter } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import SectionTopTitle from "@/components/share/SectionTopTitle";
 import Lottie from "lottie-react";
-import comingSoonAnimation from "../../../../public/json/coming-soon.json";
-import TrainingSorting from "./TrainingSorting";
+import { Filter } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useState } from "react";
+import comingSoonAnimation from "../../../../public/json/coming-soon.json";
 import StaticCourse from "./StaticCourse";
+import TrainingSorting from "./TrainingSorting";
 
 const Courses = () => {
   const t = useTranslations("Training");
@@ -221,27 +219,12 @@ const Courses = () => {
   return (
     <div className="bg-[#f3f3f3] min-h-screen">
       <div className="container px-4 sm:px-6 lg:px-8 py-6 lg:py-20">
-        {/* Section Title */}
-        <SectionTopTitle
-          title={t("training")}
-          desc={t("trainingSectionDesc")}
-        />
-
         <div>
           <StaticCourse />
         </div>
-
-        <div className="flex flex-col lg:flex-row lg:items-start gap-6 lg:gap-20 mt-8 lg:mt-14">
-          {/* Sidebar - Desktop */}
-          {/* <div className="hidden lg:block w-full lg:w-[300px] lg:sticky lg:top-40 lg:self-start overflow-y-auto custom-scrollbar lg:h-[75vh] bg-white border p-4 rounded-md">
-            <TrainingSorting />
-          </div> */}
-
-          {/* Main Content */}
+        <div className="flex flex-col lg:flex-row lg:items-start gap-6 lg:gap-20 ">
           <div className="w-full">
-            {/* Top Controls */}
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
-              {/* Mobile Filter Button */}
               <div className="flex items-center gap-3 w-full sm:w-auto">
                 <div className="sm:flex lg:hidden">
                   <Button
@@ -255,11 +238,7 @@ const Courses = () => {
               </div>
             </div>
 
-            {/* Coming Soon Content */}
             <div className="text-center">
-              {/* Coming Soon Badge */}
-
-              {/* Main Lottie Animation */}
               <div className="w-64 h-64 lg:w-80 lg:h-80 mx-auto mb-8">
                 <Lottie
                   animationData={comingSoonAnimation}
@@ -268,17 +247,14 @@ const Courses = () => {
                 />
               </div>
 
-              {/* Big Coming Soon Text */}
               <h1 className="text-5xl lg:text-7xl font-bold  text-gray-900 mb-6">
                 {t("comingSoon")}
               </h1>
 
-              {/* Subtitle */}
               <p className="text-2xl lg:text-3xl text-gray-600 mb-8 max-w-2xl mx-auto font-light">
                 {t("trainingUnderDevelopment")}
               </p>
 
-              {/* Description */}
               <p className="text-lg text-gray-500 mb-12 max-w-3xl mx-auto leading-relaxed">
                 {t("trainingUnderDevelopmentDesc")}
               </p>
@@ -286,7 +262,6 @@ const Courses = () => {
           </div>
         </div>
 
-        {/* Mobile Filter Modal */}
         {isMobileFilterOpen && (
           <div className="fixed inset-0 bg-black bg-opacity-50 z-50 lg:hidden">
             <div className="fixed bottom-0 left-0 right-0 bg-white rounded-t-2xl p-4 max-h-[80vh] overflow-y-auto">

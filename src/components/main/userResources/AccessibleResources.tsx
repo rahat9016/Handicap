@@ -25,8 +25,8 @@ export default function AccessibleResources() {
   ];
   
   return (
-    <div className="bg-white">
-      <div className="container py-10 lg:py-20 xl:py-40">
+    <div style={{ backgroundImage: `url('/images/resources/bg.png')` }} >
+      <div className="container py-10 lg:py-20 xl:py-28">
         <SectionTopTitle
           title={t("accessibleResources")}
           desc={t("accessibleResourcesDesc")}

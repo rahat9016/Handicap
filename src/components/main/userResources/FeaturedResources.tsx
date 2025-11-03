@@ -20,13 +20,12 @@ const FeaturedResources = () => {
   const t = useTranslations("ResourceLibrary");
   return (
     <div className="bg-[#8c8ccb10]">
-      <div className="container px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16 xl:py-20 2xl:py-40">
+      <div className="container px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-14 xl:py-20">
         <SectionTopTitle
           title={t("featuredResources")}
           desc={t("featuredResourcesDesc")}
         />
-        ;
-        <div className="mt-8 lg:mt-10 xl:mt-12 px-0 sm:px-4 lg:px-8 xl:px-16 2xl:px-[58px]">
+        <div className="mt-8 lg:mt-8 xl:mt-12 px-0 sm:px-4 lg:px-8 xl:px-16 2xl:px-[58px]">
           {resources && resources.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 mt-8 lg:mt-12 xl:mt-16 2xl:mt-20">
               {resources.map((res, idx) => (

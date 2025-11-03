@@ -1,7 +1,7 @@
 "use client";
 
-import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import { motion } from "framer-motion";
 import { GraduationCap } from "lucide-react";
 
@@ -35,11 +35,8 @@ const courses = [
 
 export default function StaticCourse() {
   return (
-    <div className=" bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 px-6 sm:px-10 lg:px-20">
-      {/* Section Header */}
-      
-      {/* Course Cards */}
-      <div className="grid gap-8 sm:grid-cols-2 xl:grid-cols-3 mt-8">
+    <div className=" bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 ">
+      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
         {courses.map((course, i) => (
           <motion.div
             key={i}
@@ -50,17 +47,17 @@ export default function StaticCourse() {
             <Card className="rounded-2xl shadow-lg bg-white/80 backdrop-blur-sm border border-gray-100 hover:shadow-2xl transition-all duration-300 h-full flex flex-col">
               <CardContent className="p-6 flex flex-col items-center text-center flex-grow">
                 <div className="bg-gradient-to-r from-blue-100 to-blue-200 p-4 rounded-full mb-5">
-                  <GraduationCap className="w-8 h-8 text-blue-600" />
+                  <GraduationCap className="w-16 h-16 text-blue" />
                 </div>
 
-                <h2 className="text-lg sm:text-xl font-semibold text-gray-800 mb-4">
+                <h2 className="text-lg sm:text-xl font-semibold text-black mb-4 font-inter">
                   {course.title}
                 </h2>
 
                 <div className="mt-auto w-full">
                   <Button
                     asChild
-                    className="bg-blue hover:bg-blue text-white w-full py-2 rounded-lg transition-all"
+                    className="bg-blue hover:bg-blue text-white w-full py-2 rounded-lg transition-all font-inter"
                   >
                     <a
                       href={course.link}

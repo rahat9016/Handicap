@@ -10,4 +10,6 @@ export interface IInitialState {
   newsCategories: string[];
   eventTags: string[];
   eventCategories: string[];
+  featured: boolean,
+  IsSuggested: boolean,
 }

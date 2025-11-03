@@ -1,28 +1,29 @@
 "use client";
 import Paragraph from "@/components/share/Paragraph";
-import SectionTopTitle from "@/components/share/SectionTopTitle";
 import Title from "@/components/share/Title";
 import { useGet } from "@/hooks/useGet";
 import { IContactInfo } from "@/types/types";
 import { CapFirst } from "@/utils/CapFirst";
 import { Clock4, Mail, MapPin, Phone, User } from "lucide-react";
-import ContactForm from "./ContactForm";
 import { useTranslations } from "next-intl";
+import ContactForm from "./ContactForm";
 
 const ContactSupport = () => {
   const { data } = useGet<IContactInfo>("/contact-information", [
     "contact-info",
   ]);
   const ContactData = data?.data;
-  console.log(ContactData?.contacts);
   const t = useTranslations("Contact");
   return (
-    <div>
+    <div
+      style={{
+        backgroundImage: `url('/images/contact/bg.png')`,
+      }}
+      className="bg-no-repeat bg-contain bg-left"
+    >
       <div className="container px-4 sm:px-6 lg:px-8">
         <div className="py-8 sm:py-12 lg:py-16 xl:py-20">
-          <SectionTopTitle title={t("contactUs")} desc={t("contactUsInfo")} />
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 xl:gap-16 mt-6 lg:mt-10 xl:mt-14">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 xl:gap-16">
             <div className="order-2 lg:order-1">
               <div className="mb-6 lg:mb-8 xl:mb-10">
                 <Title className="mb-2 lg:mb-[6px] text-xl lg:text-2xl">

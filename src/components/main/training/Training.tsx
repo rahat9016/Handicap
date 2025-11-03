@@ -1,15 +1,20 @@
+import HeroSection from "@/components/common/HeroSection";
 import Courses from "./Courses";
-import EarnRecognizedCertificates from "./EarnRecognizedCertificates";
 import EssentialFeatures from "./EssentialFeatures";
-import TrainingHero from "./TrainingHero";
+import { useTranslations } from "next-intl";
 
 export default function Training() {
+  const t = useTranslations("Training");
   return (
     <div>
-      <TrainingHero />
+      <HeroSection
+        page="TRAINING"
+        sectionType="HERO"
+        title={t("training")}
+        desc={t("trainingSectionDesc")}
+      />
       <Courses />
       <EssentialFeatures />
-      <EarnRecognizedCertificates />
     </div>
   );
 }

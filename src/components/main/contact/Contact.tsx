@@ -1,12 +1,19 @@
-import HeroSection from "@/components/share/HeroSection";
+import HeroSection from "@/components/common/HeroSection";
+import { useTranslations } from "next-intl";
 import ContactSupport from "./ContactSupport";
 import FAQ from "./FAQ";
 import TechnicalSupport from "./TechnicalSupport";
 
 export default function Contact() {
+  const t = useTranslations("Contact");
   return (
     <div>
-      <HeroSection />
+      <HeroSection
+        page=""
+        sectionType=""
+        title={t("contactUs")}
+        desc={t("contactUsInfo")}
+      />
       <ContactSupport />
       <FAQ />
       <TechnicalSupport />

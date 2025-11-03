@@ -56,7 +56,7 @@ const EventsSorting = () => {
   return (
     <div>
       <FormProvider {...methods}>
-        <form className="space-y-8 text-sm">
+        <form className="space-y-4 lg:space-y-4 text-sm">
           <Accordion
             type="multiple"
             defaultValue={["eventTags", "eventCategories"]}

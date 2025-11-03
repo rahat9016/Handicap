@@ -8,7 +8,7 @@ import HeroSectionSkeleton from "./HeroSectionSkeleton";
 interface IHero {
   page: string;
   sectionType: string;
-  title: string;
+  title?: string;
   desc?: string;
   className?: string;
   classTitle?: string;
@@ -26,10 +26,10 @@ const HeroSection = ({
 }: IHero) => {
   const { data, isLoading } = useGet<IPageSection>(
     `/page-sections/query/first?page=${page}&sectionType=${sectionType}`,
-    [page, sectionType, "hero-section"]
+    [page, sectionType, "hero-section", "about-hero", "OUR_MISSION"]
   );
 
-  const imageUrl = data?.data?.imageUrls?.[0] ?? "";
+  const imageUrl = data?.data?.imageUrls?.[0] ?? "/images/common/heroBg.jpg";
 
   return (
     <div>
@@ -41,7 +41,7 @@ const HeroSection = ({
         >
           <Image
             src={imageUrl}
-            alt={title}
+            alt={title || "Handicap"}
             fill
             priority
             className="object-cover object-center w-full h-full"

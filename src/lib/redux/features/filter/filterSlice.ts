@@ -13,6 +13,8 @@ const initialState: IInitialState = {
   newsCategories: [],
   eventTags: [],
   eventCategories: [],
+  featured: false,
+  IsSuggested: false,
 };
 
 const filteringSlice = createSlice({
@@ -52,6 +54,12 @@ const filteringSlice = createSlice({
     setEventCategories: (state, action) => {
       state.eventCategories = action.payload;
     },
+    setFeatured: (state, action) => {
+      state.featured = action.payload;
+    },
+    setIsSuggested: (state, action) => {
+      state.IsSuggested = action.payload;
+    },
     clearFilters: (state) => {
       state.sortBy = [];
       state.resourceTypes = [];
@@ -64,6 +72,8 @@ const filteringSlice = createSlice({
       state.newsCategories = [];
       state.eventTags = [];
       state.eventCategories = [];
+      state.featured = false
+      state.IsSuggested = false
     },
   },
 });
@@ -81,5 +91,7 @@ export const {
   setNewsCategories,
   setEventTags,
   setEventCategories,
+  setFeatured,
+  setIsSuggested
 } = filteringSlice.actions;
 export default filteringSlice.reducer;

@@ -13,6 +13,8 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useGet } from "@/hooks/useGet";
 import {
+  setFeatured,
+  setIsSuggested,
   setKeywords,
   setLanguages,
   setResourceTypes,
@@ -23,6 +25,7 @@ import { mapToSelectOptions } from "@/utils/mapToSelectOptions";
 import { Trash } from "lucide-react";
 import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
+import { IFilterFormValues } from "./types/interface";
 
 const sortOptions = [
   { label: "Most Downloads", value: "totalDownloadCount:desc" },
@@ -32,7 +35,6 @@ const sortOptions = [
 
 const ResourcesSorting = () => {
   const dispatch = useAppDispatch();
-
   const { data: resourceData, isLoading: isResourceLoading } = useGet<
     IResource[]
   >("/resource-categories?isActive=true", ["resource-categories"]);
@@ -44,21 +46,26 @@ const ResourcesSorting = () => {
     ILanguage[]
   >("/languages?isActive=true", ["languages"]);
 
-  const methods = useForm({
+  const methods = useForm<IFilterFormValues>({
     defaultValues: {
       sortBy: [],
       resourceTypes: [],
       languages: [],
       keywords: [],
+      recommended: [],
     },
   });
 
   useEffect(() => {
     const subscription = methods.watch((values) => {
+      const selected = values.recommended ?? [] as string[];
+
       dispatch(setSortBy(values.sortBy));
       dispatch(setResourceTypes(values.resourceTypes));
       dispatch(setLanguages(values.languages));
       dispatch(setKeywords(values.keywords));
+      dispatch(setFeatured(selected.includes("featured")));
+    dispatch(setIsSuggested(selected.includes("isSuggested")));
     });
     return () => subscription.unsubscribe();
   }, [methods, dispatch]);
@@ -95,7 +102,13 @@ const ResourcesSorting = () => {
 
           <Accordion
             type="multiple"
-            defaultValue={["sort", "resourceType", "language", "keyword"]}
+            defaultValue={[
+              "sort",
+              "resourceType",
+              "language",
+              "keyword",
+              "recommended",
+            ]}
             className="w-full space-y-0"
           >
             {/* Sort By Section */}
@@ -114,6 +127,29 @@ const ResourcesSorting = () => {
                   <ControlledCheckboxField
                     name="sortBy"
                     options={sortOptions}
+                  />
+                )}
+              </AccordionContent>
+            </AccordionItem>
+
+            <AccordionItem value="recommended" className="border-b-0">
+              <AccordionTrigger className="font-bold hover:no-underline text-black text-sm lg:text-base border-b rounded-none mb-3 px-0">
+                Recommended
+              </AccordionTrigger>
+              <AccordionContent className="px-0">
+                {isResourceLoading ? (
+                  <div className="space-y-2">
+                    {Array.from({ length: 2 }, (_, i) => (
+                      <Skeleton key={i} className="h-4 w-full max-w-52" />
+                    ))}
+                  </div>
+                ) : (
+                  <ControlledCheckboxField
+                    name="recommended"
+                    options={[
+                      { label: "Featured", value: "featured" },
+                      { label: "Suggested", value: "isSuggested" },
+                    ]}
                   />
                 )}
               </AccordionContent>

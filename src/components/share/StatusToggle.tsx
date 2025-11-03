@@ -10,7 +10,7 @@ import { ConfirmToggleDialog } from "./ConfirmToggleDialog";
 
 interface StatusToggleProps {
   id: string | number;
-  status: boolean;
+  status: boolean | undefined;
   onConfirm: (id: string | number, newStatus: boolean) => Promise<void> | void;
   levelValue_1?: string;
   levelValue_2?: string;

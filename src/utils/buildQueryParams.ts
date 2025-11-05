@@ -10,8 +10,8 @@ export interface QueryFilters {
   keywordIds?: string[];
   isCurrent?: boolean;
   search?: string;
-  featured: boolean;
-  IsSuggested: boolean;
+  featured?: boolean;
+  IsSuggested?: boolean;
 }
 
 export interface Pagination {
@@ -53,7 +53,7 @@ export const buildQueryParams = (
     params.append("isCurrent", filters.isCurrent.toString());
   }
   if (filters.featured) params.append("featured", filters.featured.toString());
-  if (filters.IsSuggested) params.append("isSuggested", filters.featured.toString());
+  if (filters.IsSuggested) params.append("isSuggested", filters.IsSuggested.toString());
 
   // search
   if (filters.search) {

@@ -368,3 +368,114 @@ html {
   background-color: #002868; /* Darker color on hover */
 }
 
+.ProseMirror img {
+  cursor: grab; /* easier to see image interaction */
+}
+
+.resize-handle {
+  width: 10px;
+  height: 10px;
+  background: blue;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  cursor: se-resize;
+}
+.resize-handle {
+  width: 10px;
+  height: 10px;
+  background: blue;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  cursor: se-resize;
+}
+
+
+/* Add this to your global CSS file */
+/* Editor Styles */
+.ProseMirror {
+  img.resizable-image {
+    max-width: 100%;
+    height: auto;
+    
+    &[data-align="left"] {
+      float: left;
+      margin: 0 1rem 1rem 0;
+      clear: left;
+    }
+    
+    &[data-align="right"] {
+      float: right;
+      margin: 0 0 1rem 1rem;
+      clear: right;
+    }
+    
+    &[data-align="center"] {
+      display: block;
+      margin: 1rem auto;
+      float: none;
+      clear: both;
+    }
+    
+    &[data-align="inline"] {
+      display: inline-block;
+      vertical-align: middle;
+      margin: 0 0.25rem;
+      float: none;
+    }
+  }
+  
+  /* Clear floats */
+  p, div, h1, h2, h3, h4, h5, h6 {
+    &::after {
+      content: "";
+      display: table;
+      clear: both;
+    }
+  }
+}
+
+/* Preview Styles - IMPORTANT: Add these to your preview component */
+.preview-content {
+  img[data-align="left"] {
+    float: left;
+    margin: 0 1rem 1rem 0;
+    clear: left;
+    max-width: 100%;
+  }
+  
+  img[data-align="right"] {
+    float: right;
+    margin: 0 0 1rem 1rem;
+    clear: right;
+    max-width: 100%;
+  }
+  
+  img[data-align="center"] {
+    display: block;
+    margin: 1rem auto;
+    float: none;
+    clear: both;
+    max-width: 100%;
+  }
+  
+  img[data-align="inline"] {
+    display: inline-block;
+    vertical-align: middle;
+    margin: 0 0.25rem;
+    float: none;
+    max-width: 100%;
+  }
+  
+  /* Clear floats in preview */
+  p, div {
+    overflow: auto;
+    
+    &::after {
+      content: "";
+      display: table;
+      clear: both;
+    }
+  }
+}

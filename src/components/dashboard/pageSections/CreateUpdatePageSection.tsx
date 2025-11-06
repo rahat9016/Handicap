@@ -1,5 +1,4 @@
 // src/components/page-sections/CreateSectionModal.tsx
-import { ControlledCheckField } from "@/components/share/ControlledCheckField";
 import ControlledInputField from "@/components/share/ControlledInputField";
 import ControlledSelectField from "@/components/share/ControlledSelectField";
 import InputLabel from "@/components/share/InputLabel";
@@ -19,8 +18,8 @@ import dynamic from "next/dynamic";
 import { useEffect } from "react";
 import { FieldError, FormProvider, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import { PageSectionForm, pageSectionSchema } from "./schema";
 import { FileUploadController } from "../resources/resources/FileUploadController";
+import { PageSectionForm, pageSectionSchema } from "./schema";
 
 const EditorWrapper = dynamic(
   () => import("@/components/share/EditorWrapper"),
@@ -102,9 +101,7 @@ export default function CreateSectionModal({
   const isEditMode = !!initialValues;
   const methods = useForm<PageSectionForm>({
     resolver: yupResolver(pageSectionSchema),
-    defaultValues: {
-      isActive: true,
-    },
+
     mode: "onChange",
   });
 
@@ -113,7 +110,7 @@ export default function CreateSectionModal({
       methods.reset({
         ...initialValues,
         images: initialValues?.imageUrls,
-        isActive: Boolean(initialValues?.isActive),
+        // isActive: Boolean(initialValues?.isActive),
         title: initialValues?.title?.en ?? undefined, // Convert null to undefined
         titleBn: initialValues?.title?.bn ?? undefined, // Convert null to undefined
         content: initialValues?.content?.en ?? undefined, // Convert null to undefined
@@ -135,7 +132,7 @@ export default function CreateSectionModal({
     formData.append("pageId", data.pageId);
     formData.append("sectionType", data.sectionType);
     formData.append("order", data.order.toString());
-    formData.append("isActive", String(data.isActive));
+    // formData.append("isActive", String(data.isActive));
 
     // Optional fields
     if (data.title) formData.append("title", data.title);
@@ -359,12 +356,12 @@ export default function CreateSectionModal({
               </div>
 
               {/* Status Field */}
-              <div className="col-span-2 flex items-center gap-2">
+              {/* <div className="col-span-2 flex items-center gap-2">
                 <ControlledCheckField
                   name="isActive"
                   label="Active Section (Visible on website)"
                 />
-              </div>
+              </div> */}
             </div>
             {error?.errors?.length ||
               (patchError?.errors?.length && (

@@ -16,7 +16,6 @@ import { INews } from "./types/news";
 
 const News = () => {
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
-  const [viewMode, setViewMode] = useState<"grid" | "list">("list");
 
   const { search, handleSearchChange, debouncedSearch } =
     useSearchDebounce(300);
@@ -77,8 +76,6 @@ const News = () => {
             <Toolbar
               search={search}
               onSearchChange={handleSearchChange}
-              viewMode={viewMode}
-              onViewModeChange={setViewMode}
               itemsPerPage={itemsPerPage}
               onItemsPerPageChange={setItemsPerPage}
               isFiltersOpen={isFiltersOpen}
@@ -87,7 +84,7 @@ const News = () => {
 
             <div className="pt-4">
               {isLoading ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 gap-6">
                   {Array.from({ length: 6 }, (_, index) => (
                     <ResourceCardSkeleton key={index} />
                   ))}
@@ -96,7 +93,6 @@ const News = () => {
                 <div>
                   <NewsLibrary
                     news={(data?.data as INews[]) || []}
-                    viewMode={viewMode}
                   />
                   <Pagination
                     currentPage={currentPage}

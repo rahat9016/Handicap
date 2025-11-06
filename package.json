@@ -34,6 +34,7 @@
     "@tiptap/extension-bold": "^3.0.7",
     "@tiptap/extension-bullet-list": "^3.0.7",
     "@tiptap/extension-hard-break": "^3.0.7",
+    "@tiptap/extension-highlight": "^3.10.2",
     "@tiptap/extension-image": "^3.7.2",
     "@tiptap/extension-ordered-list": "^3.0.7",
     "@tiptap/extension-text-align": "^3.7.2",
@@ -79,6 +80,7 @@
     "socket.io-client": "^4.8.1",
     "tailwind-merge": "^3.3.1",
     "tailwindcss-animate": "^1.0.7",
+    "tiptap-extension-resizable-image": "^2.0.0",
     "yup": "^1.6.1",
     "zod": "^3.24.2"
   },

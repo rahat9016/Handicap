@@ -7,17 +7,15 @@ import PowerBiSection from "./PowerBiSection";
 import QuickAccess from "./QuickAccess";
 import ThankyouSection from "./ThankyouSection";
 import TrainingModule from "./TrainingModule";
-import WelcomeDisability from "./WelcomeDisability";
 
 const Home = () => {
   return (
-    <div className="pt-6">
+    <div>
       <HomeHeroSection />
-      <WelcomeDisability />
+      <QuickAccess />
       <PowerBiSection />
       <PlatformStatistics />
       <FindResources />
-      <QuickAccess />
       <TrainingModule />
       <JoinOurCommunity />
       <ThankyouSection />

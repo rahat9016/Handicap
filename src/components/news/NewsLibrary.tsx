@@ -20,13 +20,7 @@ export default function NewsLibrary({
           </p>
         </div>
       ) : (
-        <div
-          className={
-            viewMode === "grid"
-              ? "grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6"
-              : "flex flex-col gap-y-4 divide-y divide-gray-200"
-          }
-        >
+        <div className={"flex flex-col gap-y-4 divide-y divide-gray-200"}>
           {news.map((news, index) => (
             <NewsCard key={index} {...news} viewMode={viewMode} />
           ))}

@@ -1,10 +1,9 @@
 "use client";
 import { IPowerBi } from "@/components/dashboard/powerBi/types/interface";
-import { useGet } from "@/hooks/useGet";
-import React from "react";
-import { PowerBiCard } from "./PowerBiCard";
 import SectionTopTitle from "@/components/share/SectionTopTitle";
+import { useGet } from "@/hooks/useGet";
 import { useTranslations } from "next-intl";
+import { PowerBiCard } from "./PowerBiCard";
 
 export default function PowerBiSection() {
   const { data } = useGet<IPowerBi[]>("/powerbi?isActive=true", ["powerbi"], {
@@ -14,9 +13,11 @@ export default function PowerBiSection() {
 
   const t = useTranslations("Home");
 
-  console.log("data", data?.data);
+  // console.log("data", data?.data);
   return (
-    <div className="container mx-auto p-6">
+    <div className="bg-light">
+
+    <div className="container mx-auto py-10">
       <SectionTopTitle title={t("powerBi")} desc={t("powerBiDesc")} />
       <div className={`grid grid-cols-2 gap-4 mt-8`}>
         {data?.data?.map((powerBi: IPowerBi, index) => (
@@ -28,6 +29,7 @@ export default function PowerBiSection() {
           />
         ))}
       </div>
+    </div>
     </div>
   );
 }

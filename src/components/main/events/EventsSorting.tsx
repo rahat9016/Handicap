@@ -17,15 +17,15 @@ import { mapToSelectOptions } from "@/utils/mapToSelectOptions";
 import { Trash } from "lucide-react";
 import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { ICategory, ITag } from "../training/types/traning";
+import { ICategory } from "../training/types/traning";
 
 const EventsSorting = () => {
   const dispatch = useAppDispatch();
 
-  const { data: eventTags, isLoading: isTagsLoading } = useGet<ITag[]>(
-    "/event-tags?isActive=true",
-    ["event-tags"]
-  );
+  // const { data: eventTags, isLoading: isTagsLoading } = useGet<ITag[]>(
+  //   "/event-tags?isActive=true",
+  //   ["event-tags"]
+  // );
 
   const { data: eventCategories, isLoading: isEventCategoriesLoading } = useGet<
     ICategory[]
@@ -51,7 +51,7 @@ const EventsSorting = () => {
     "name",
     "id"
   );
-  const tagOptions = mapToSelectOptions(eventTags?.data, "name", "id");
+  // const tagOptions = mapToSelectOptions(eventTags?.data, "name", "id");
 
   return (
     <div>
@@ -59,7 +59,7 @@ const EventsSorting = () => {
         <form className="space-y-4 lg:space-y-4 text-sm">
           <Accordion
             type="multiple"
-            defaultValue={["eventTags", "eventCategories"]}
+            defaultValue={[ "eventCategories"]}
             className="w-full space-y-0"
           >
             <Button
@@ -73,7 +73,7 @@ const EventsSorting = () => {
               Clear
             </Button>
 
-            <AccordionItem value="eventTags" className="border-b-0">
+            {/* <AccordionItem value="eventTags" className="border-b-0">
               <AccordionTrigger className="font-bold hover:no-underline text-black text-sm border-b rounded-none mb-3">
                 Event Tags
               </AccordionTrigger>
@@ -91,7 +91,7 @@ const EventsSorting = () => {
                   />
                 )}
               </AccordionContent>
-            </AccordionItem>
+            </AccordionItem> */}
 
             {/* ── Resource Type ─────────────────────────────── */}
             <AccordionItem value="eventCategories" className="border-b-0">

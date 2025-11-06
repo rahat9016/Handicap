@@ -6,7 +6,6 @@ import ResourceCard from "./ResourceCard";
 export default function ResourceLibrary({
   resources,
   refetch,
-  viewMode = "grid",
 }: {
   resources: IResource[];
   refetch: () => void;
@@ -31,12 +30,11 @@ export default function ResourceLibrary({
       ) : (
         <div
           className={
-            `pb-4 ${viewMode === "grid"
-              ? "grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 lg:gap-4"
-              : "flex flex-col gap-y-4"}`
+            `pb-4 flex flex-col gap-y-4`
           }
         >
           {resources?.map((resource, index) => {
+            console.log(resource.featured)
             return (
               <ResourceCard
                 id={resource.id}
@@ -51,7 +49,7 @@ export default function ResourceLibrary({
                 date={resource.createdAt}
                 size={resource.fileSize}
                 ratings={3.2}
-                isFeatured
+                isFeatured={resource.featured}
                 isPdf
                 fileType={resource?.resourceFiles[0]?.fileType}
                 filePath={resource?.resourceFiles[0]?.filePath}
@@ -61,7 +59,6 @@ export default function ResourceLibrary({
                 organizerName={resource.organization.name}
                 refetch={refetch}
                 filesCount={resource.filesCount}
-                viewMode={viewMode}
               />
             );
           })}

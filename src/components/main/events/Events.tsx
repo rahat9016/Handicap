@@ -26,19 +26,17 @@ const Events = () => {
     setTotalItems,
     setItemsPerPage,
   } = usePagination();
-  const { eventTags, eventCategories } = useAppSelector(
+  const { eventCategories } = useAppSelector(
     (state) => state.filter
   );
-  const [viewMode, setViewMode] = useState<"grid" | "list">("list");
 
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
 
   const filters = {
-    tagIds: eventTags,
     categoryIds: eventCategories,
     search: debouncedSearch,
   };
-// console.log(currentPage, itemsPerPage)
+
   const queryString = buildQueryParams(filters, {
     ...(itemsPerPage !== -1 && {
       page: currentPage,
@@ -76,8 +74,6 @@ const Events = () => {
             <Toolbar
               search={search}
               onSearchChange={handleSearchChange}
-              viewMode={viewMode}
-              onViewModeChange={setViewMode}
               itemsPerPage={itemsPerPage}
               onItemsPerPageChange={setItemsPerPage}
               isFiltersOpen={isFiltersOpen}
@@ -85,7 +81,7 @@ const Events = () => {
             />
             <div className="pt-4">
               {isLoading ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 gap-6">
                   {Array.from({ length: 6 }, (_, index) => (
                     <EventCardSkeleton key={index} />
                   ))}
@@ -93,7 +89,6 @@ const Events = () => {
               ) : (
                 <div>
                   <EventLibrary
-                    viewMode={viewMode}
                     events={(data?.data as IEventItem[]) || []}
                   />
                   <Pagination

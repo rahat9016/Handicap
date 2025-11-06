@@ -15,7 +15,6 @@ import ResourcesSorting from "./ResourcesSorting";
 
 const ResourcesFilter = () => {
   const searchParams = useSearchParams();
-  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
 
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
   const { search, handleSearchChange, debouncedSearch, setSearch } =
@@ -90,8 +89,6 @@ const ResourcesFilter = () => {
             <Toolbar
               search={search}
               onSearchChange={handleSearchChange}
-              viewMode={viewMode}
-              onViewModeChange={setViewMode}
               itemsPerPage={itemsPerPage}
               onItemsPerPageChange={setItemsPerPage}
               isFiltersOpen={isFiltersOpen}
@@ -99,7 +96,7 @@ const ResourcesFilter = () => {
             />
             <div className="pt-4">
               {isLoading ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+                <div className="grid grid-cols-1 gap-4 sm:gap-6">
                   {Array.from({ length: 6 }, (_, index) => (
                     <ResourceCardSkeleton key={index} />
                   ))}
@@ -109,7 +106,6 @@ const ResourcesFilter = () => {
                   <ResourceLibrary
                     resources={(data?.data as IResource[]) || []}
                     refetch={refetch}
-                    viewMode={viewMode}
                   />
                   {totalPages > 1 && (
                     <Pagination

@@ -2,11 +2,11 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 export function ResourceCardSkeleton() {
   return (
-    <div className="rounded-lg overflow-hidden border bg-white shadow-sm flex flex-col">
+    <div className="rounded-lg overflow-hidden border bg-white shadow-sm flex flex-col lg:flex-row p-3">
       {/* Image */}
-      <Skeleton className="relative w-full h-56" />
+      <Skeleton className="relative w-full h-full lg:w-[40%]" />
 
-      <div className="p-3 flex flex-col justify-between flex-1">
+      <div className="p-3 flex flex-col justify-between gap-2 w-full lg:w-[60%]">
         <div>
           {/* Title */}
           <Skeleton className="h-5 w-3/4 mb-3" />

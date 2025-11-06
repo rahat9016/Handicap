@@ -7,7 +7,6 @@ import { MoveRight } from "lucide-react";
 import { useLocale } from "next-intl";
 import Image from "next/image";
 import shape_1 from "../../../../public/images/common/shape_1.png";
-import bg from "../../../../public/images/home/bg.png";
 import WelcomeSkeleton from "./Skeleton/WelcomeSkeleton copy";
 
 const WelcomeDisability = () => {
@@ -24,10 +23,10 @@ const WelcomeDisability = () => {
 
   return (
     <div
-      style={{
-        backgroundImage: `url(${bg.src})`,
-      }}
-      className="py-8 sm:py-12 lg:py-16 xl:py-20 bg-cover bg-center"
+      // style={{
+      //   backgroundImage: `url(${bg.src})`,
+      // }}
+      className="py-8 sm:py-12 lg:py-16 xl:py-20 bg-[#E6E6E6]"
     >
       <div className="container px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col items-center lg:flex-row gap-8 lg:gap-10 xl:gap-12">

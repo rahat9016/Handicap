@@ -1,109 +1,72 @@
 "use client";
-import { Button } from "@/components/ui/button";
 import { useGet } from "@/hooks/useGet";
-import { useRouter } from "@/i18n/navigation";
-import { IPageSection } from "@/types";
 import { useLocale } from "next-intl";
 import Image from "next/image";
-import HeroSkeleton from "./Skeleton/HeroSkeleton";
+import { useCallback } from "react";
+import HeroStatsSkeleton from "./HeroStatsSkeleton";
+import { IDisabilityStats, IStatField } from "./types/interface";
 
 const HomeHeroSection = () => {
   const local = useLocale() as "en" | "bn";
-  const router = useRouter();
-  const { data, isLoading } = useGet<IPageSection>(
-    "/page-sections/query/first?page=HOME&sectionType=HERO",
-    ["user"]
-  );
+  const { data, isLoading } = useGet<IDisabilityStats>("/landing-page-config", [
+    "user",
+  ]);
+  const stats = data?.data;
 
-  if (isLoading) {
-    return <HeroSkeleton />;
-  }
+  const startItems = useCallback((): IStatField[] => {
+    if (!stats) return [];
 
+    const fields = Object.keys(stats)
+      .filter((key) => key.startsWith("field"))
+      .map((key) => stats[key as keyof IDisabilityStats])
+      .filter(
+        (field): field is IStatField => !!field && typeof field === "object"
+      );
+
+    return fields;
+  }, [stats]);
   return (
     <section
       tabIndex={0}
       aria-label="Hero Section"
-      className="pb-16 md:pb-20 bg-white"
+      className="relative w-full h-[70vh] flex items-center justify-center"
     >
-      <div className="container px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 items-center gap-8 lg:gap-10">
-          {/* Text Content */}
-          <div className="order-2 lg:order-1 text-center lg:text-left">
-            <h1
-              className="text-3xl sm:text-4xl md:text-5xl font-bold leading-tight font-inter text-primary mb-4 md:mb-6"
-              tabIndex={0}
-            >
-              {data?.data?.title?.[local] ?? data?.data?.title?.en}
-            </h1>
+      <Image
+        src="/images/home/heroBg.jpg"
+        alt="Disability inclusion"
+        fill
+        className="object-cover"
+        priority
+      />
+      <div className="absolute inset-0 bg-black/40" />
 
-            {local === "en" ? (
+      <div className="w-full lg:w-9/12 xl:w-7/12 relative z-10 text-center text-white px-4">
+        <h1 className="text-2xl md:text-5xl font-semibold font-inter mb-8 lg:mb-16  lg:leading-[56px]">
+          The Disability Inclusion Resource Hub Is A Centralized Platform.
+        </h1>
+        {isLoading ? (
+          <HeroStatsSkeleton />
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-7 lg:gap-4 max-w-4xl mx-auto bg-white/10 backdrop-blur-md border border-white/30 rounded-lg px-6 py-5">
+            {startItems().map((item, index, array) => (
               <div
-                className="text-sm text-justify font-inter text-[#353535] font-normal mt-3 lg:mt-5 leading-[28px]"
-                tabIndex={0}
-                dangerouslySetInnerHTML={{
-                  __html:
-                    data?.data?.content?.[local] ??
-                    data?.data?.content?.en ??
-                    "",
-                }}
-              />
-            ) : (
-              <p
-                className="text-sm font-inter text-[#353535] font-normal mt-3 lg:mt-5 leading-[28px]"
-                tabIndex={0}
+                key={index}
+                className={`flex-1 text-center ${
+                  index !== array.length - 1
+                    ? "lg:border-r border-white/30"
+                    : ""
+                }`}
               >
-                {(
-                  data?.data?.content?.[local] ??
-                  data?.data?.content?.en ??
-                  ""
-                ).replace(/<[^>]*>/g, "")}
-              </p>
-            )}
-
-            <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3 mt-6 md:mt-8">
-              {data?.data.buttonLabel && (
-                <Button
-                  onClick={() =>
-                    router.push(
-                      `${data?.data?.buttonUrl}`
-                    )
-                  }
-                  className="w-full sm:w-auto px-4 py-3 h-[46px] bg-[#2A53CD] hover:bg-[#0490EF] text-white border text-sm cursor-pointer font-inter font-medium"
-                >
-                  {data?.data?.buttonLabel?.[local] ??
-                    data?.data?.buttonLabel?.en}
-                </Button>
-              )}
-              {data?.data.buttonLabel2 && (
-                <Button
-                  onClick={() =>
-                    router.push(
-                      `${data?.data?.buttonUrl2}`
-                    )
-                  }
-                  className="w-full sm:w-auto px-4 py-3 h-[46px] bg-[#2A53CD] hover:bg-[#0490EF] text-white border text-sm cursor-pointer font-inter font-medium"
-                >
-                  {data?.data?.buttonLabel2?.[local] ??
-                    data?.data?.buttonLabel2?.en}
-                </Button>
-              )}
-            </div>
+                <p className="font-medium font-inter text-base xl:text-lg leading-none">
+                  {item?.title?.[local] ?? item?.title?.en}
+                </p>
+                <p className="text-xl xl:text-4xl font-semibold mt-1 font-inter">
+                  {item?.value?.[local] ?? item?.value?.en}
+                </p>
+              </div>
+            ))}
           </div>
-
-          {/* Image */}
-          {data?.data && (
-            <div className="order-1 lg:order-2">
-              <Image
-                width={765}
-                height={460}
-                src={data?.data?.imageUrls?.[0] || "/placeholder-hero.jpg"}
-                alt="hero"
-                className="w-full h-[300px] sm:h-[350px] md:h-[400px] lg:h-[460px] object-cover rounded-lg"
-                priority
-              />
-            </div>
-          )}
-        </div>
+        )}
       </div>
     </section>
   );

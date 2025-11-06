@@ -1,11 +1,10 @@
 "use client";
 import { IResource } from "@/components/dashboard/resources/types/types";
 import { INews } from "@/components/news/types/news";
-import SectionTopTitle from "@/components/share/SectionTopTitle";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useGet } from "@/hooks/useGet";
 import { Link } from "@/i18n/navigation";
-import { FileSearch } from "lucide-react";
+import { FileSearch, MoveRight } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import Image from "next/image";
 import { useState } from "react";
@@ -42,17 +41,16 @@ const QuickAccess = () => {
 
   return (
     <div
-      className="relative w-full bg-cover bg-center bg-no-repeat"
-      style={{ backgroundImage: `url('/images/home/bg.png')` }}
+      className="relative w-full bg-white bg-center bg-no-repeat"
     >
       <div className="container">
-        <div className="py-10 lg:py-20">
-          <SectionTopTitle title={t("quickAccess")} />
+        <div className="py-10 xl:py-16">
+          {/* <SectionTopTitle title={t("quickAccess")} /> */}
 
           <div className="w-full" tabIndex={0} onFocus={() => setActive(true)}>
             <Tabs value={activeTab} onValueChange={setActiveTab}>
               {/* ----- Tab Buttons ----- */}
-              <div className="w-6/12 mx-auto mt-14">
+              <div className="w-6/12 mx-auto">
                 <TabsList className="w-full gap-2 lg:gap-5 flex flex-col lg:flex-row">
                   <TabsTrigger
                     className=" w-[220px] group bg-[#DBE4FF] py-2 text-[#0D0D0D] data-[state=active]:bg-black data-[state=active]:text-white flex gap-3"
@@ -128,9 +126,9 @@ const QuickAccess = () => {
                       <div className="flex justify-end">
                         <Link
                           href="/resources"
-                          className="mt-3 bg-transparent hover:bg-transparent underline text-black"
+                          className="mt-3 bg-transparent hover:bg-transparent underline text-black flex items-center gap-3"
                         >
-                          More Resources
+                          View All Resources <MoveRight />
                         </Link>
                       </div>
                     </div>
@@ -174,9 +172,10 @@ const QuickAccess = () => {
                       <div className="flex justify-end">
                         <Link
                           href="/resources"
-                          className="mt-3 bg-transparent hover:bg-transparent underline text-black"
+                          className="mt-3 bg-transparent hover:bg-transparent underline text-black flex items-center gap-3"
                         >
-                          More Suggested Resources
+                          View All Suggested Resources <MoveRight />
+                          
                         </Link>
                       </div>
                     </div>
@@ -217,9 +216,9 @@ const QuickAccess = () => {
                     <div className="flex justify-end">
                         <Link
                           href="/news"
-                          className="mt-3 bg-transparent hover:bg-transparent underline text-black"
+                          className="mt-3 bg-transparent hover:bg-transparent underline text-black flex items-center gap-3"
                         >
-                          More News
+                          View All News <MoveRight />
                         </Link>
                       </div>
                     </div>

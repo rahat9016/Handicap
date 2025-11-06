@@ -1,3 +1,4 @@
+
 export interface IDashboardStats {
   totalResources: {
     total: number;
@@ -26,3 +27,24 @@ export interface IDashboardStats {
     totalCertificates: number;
   };
 }
+
+
+export interface ILanguageText {
+  bn: string;
+  en: string;
+}
+
+export interface IStatField {
+  title: ILanguageText;
+  value: ILanguageText;
+}
+
+export interface IDisabilityStats {
+  id: number;
+  field1?: IStatField;
+  field2?: IStatField;
+  field3?: IStatField;
+  field4?: IStatField;
+  field5?: IStatField;
+}
+

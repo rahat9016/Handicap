@@ -11,13 +11,13 @@ import WelcomeDisability from "./WelcomeDisability";
 
 const Home = () => {
   return (
-    <div className="pt-6">
+    <div>
       <HomeHeroSection />
+      <QuickAccess />
       <WelcomeDisability />
       <PowerBiSection />
       <PlatformStatistics />
       <FindResources />
-      <QuickAccess />
       <TrainingModule />
       <JoinOurCommunity />
       <ThankyouSection />

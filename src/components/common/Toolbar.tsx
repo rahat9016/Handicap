@@ -10,13 +10,11 @@ import {
 } from "@/components/ui/select";
 import { Search } from "lucide-react";
 import React from "react";
-import { LuFilter, LuFilterX, LuGrid2X2, LuList } from "react-icons/lu";
+import { LuFilter, LuFilterX, } from "react-icons/lu";
 
 interface TableToolbar {
   search: string;
   onSearchChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  viewMode?: "grid" | "list";
-  onViewModeChange: (mode: "grid" | "list") => void;
   itemsPerPage: number;
   onItemsPerPageChange: (value: string) => void;
   isFiltersOpen: boolean;
@@ -26,8 +24,6 @@ interface TableToolbar {
 const Toolbar = ({
   search,
   onSearchChange,
-  viewMode = "grid",
-  onViewModeChange,
   itemsPerPage,
   onItemsPerPageChange,
   isFiltersOpen,
@@ -57,7 +53,7 @@ const Toolbar = ({
         </Select>
       </div>
       <div className="flex-1 w-full flex items-center gap-5">
-        <div className="flex items-center gap-2">
+        {/* <div className="flex items-center gap-2">
           <button
             onClick={() => onViewModeChange("grid")}
             className={`p-2 rounded-md border w-10 h-10 flex items-center justify-center ${
@@ -76,7 +72,7 @@ const Toolbar = ({
           >
             <LuList size={20} />
           </button>
-        </div>
+        </div> */}
         <div className="relative w-full">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-black w-4 h-4" />
           <Input

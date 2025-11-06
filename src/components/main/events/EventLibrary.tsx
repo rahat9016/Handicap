@@ -3,10 +3,8 @@ import { IEventItem } from "./types/interface";
 
 export default function EventLibrary({
   events,
-  viewMode = "grid",
 }: {
   events: IEventItem[];
-  viewMode?: "grid" | "list";
 }) {
   return (
     <div>
@@ -20,13 +18,11 @@ export default function EventLibrary({
       ) : (
         <div
           className={
-            viewMode === "grid"
-              ? "grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6"
-              : "flex flex-col gap-y-4 divide-y divide-gray-200"
+            "flex flex-col gap-y-4 divide-y divide-gray-200"
           }
         >
           {events.map((event, index) => (
-            <EventCard key={index} {...event} viewMode={viewMode} />
+            <EventCard key={index} {...event} />
           ))}
         </div>
       )}

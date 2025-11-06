@@ -184,7 +184,6 @@ export default function ResourceCard({
   viewCount,
   organizerName,
   filesCount,
-  viewMode = "grid",
 }: ResourceCardProps) {
   const createdDate = new Date(date);
 
@@ -252,20 +251,10 @@ export default function ResourceCard({
   };
 
   return (
-    <Card
-      className={`rounded-lg overflow-hidden border border-gray bg-white shadow-none flex ${
-        viewMode === "grid" ? "flex-col" : "flex-col lg:flex-row"
-      } justify-between p-3`}
-    >
-      <div
-        className={`relative  flex items-center justify-center ${
-          viewMode === "grid" ? "mb-2 w-full" : "mb-0 w-full lg:w-[40%]"
-        }`}
-      >
+    <Card className="rounded-lg overflow-hidden border border-gray bg-white shadow-none flex flex-col lg:flex-row justify-between p-3">
+      <div className="relative flex items-center justify-center mb-0 w-full lg:w-[40%]">
         <div
-          className={`w-full ${
-            viewMode === "grid" ? "max-h-32" : "h-full"
-          }  overflow-hidden scroll-m-0 flex items-center justify-center bg-gray-50`}
+          className="w-full h-full overflow-hidden flex items-center justify-center bg-gray-50"
           style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
         >
           {renderPreview()}
@@ -280,46 +269,33 @@ export default function ResourceCard({
         )}
       </div>
 
-      <div
-        className={`flex flex-col justify-between gap-2 ${
-          viewMode === "grid" ? "w-full" : "w-full lg:w-[60%]"
-        }`}
-      >
+      <div className="flex flex-col justify-between gap-2 w-full lg:w-[60%]">
         <div>
-          <Title
-            className={`lg:text-lg mb-3 ${
-              viewMode === "grid" ? "line-clamp-1" : ""
-            } text-black`}
-          >
-            {title}
-          </Title>
+          <Title className="lg:text-lg mb-3 text-black">{title}</Title>
+
           <Paragraph className="line-clamp-2 text-sm text-gray-600 mb-2">
             {description}
           </Paragraph>
+
           {organizerName && (
             <Paragraph className="flex items-center gap-2 text-sm">
               <Building2 size={16} /> {organizerName}
             </Paragraph>
           )}
-          <div
-            className={`grid ${
-              viewMode === "grid" ? "grid-cols-2" : "grid-cols-5"
-            } gap-2 mt-3 text-xs`}
-          >
+
+          <div className="grid grid-cols-5 gap-2 mt-3 text-xs">
             <Paragraph className="flex items-center gap-1 lg:text-xs">
               <Download size={14} /> {downloadCount} Downloads
             </Paragraph>
             <Paragraph className="flex items-center gap-1 lg:text-xs">
-              <Eye size={14} />
-              {viewCount} Views
+              <Eye size={14} /> {viewCount} Views
             </Paragraph>
             <Paragraph className="flex items-center gap-1 lg:text-xs">
               <CalendarDays size={14} />
               Date: {format(createdDate, "dd MMM yyyy")}
             </Paragraph>
             <Paragraph className="flex items-center gap-1 lg:text-xs">
-              <Files size={14} />
-              Files: {filesCount}
+              <Files size={14} /> Files: {filesCount}
             </Paragraph>
             <Paragraph className="flex items-center gap-1 lg:text-xs">
               <FileIcon size={14} /> {fileTypeInfo?.extension || "Unknown"}

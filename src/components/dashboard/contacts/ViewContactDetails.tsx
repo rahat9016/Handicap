@@ -5,10 +5,10 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { useGet } from "@/hooks/useGet";
 import { format } from "date-fns";
 import { Building2, Calendar, Mail, MessageSquare, User } from "lucide-react";
 import { IContactMessage } from "./types";
-import { useGet } from "@/hooks/useGet";
 
 export default function ViewDetails({
   isOpen,

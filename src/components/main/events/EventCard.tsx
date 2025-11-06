@@ -18,7 +18,6 @@ export default function EventCard({
   categories,
   tags,
   images,
-  viewMode,
 }: IEventItem) {
   const getEventImage = () => {
     const validImage = images?.find(
@@ -43,16 +42,10 @@ export default function EventCard({
 
   return (
     <div
-      className={`rounded-xl overflow-hidden border bg-white shadow-sm hover:shadow-md transition-all duration-300 flex ${
-        viewMode === "grid" ? "flex-col" : "flex-col lg:flex-row"
-      }`}
+      className={`rounded-xl overflow-hidden border bg-white shadow-sm hover:shadow-md transition-all duration-300 flex flex-col lg:flex-row`}
     >
       <div
-        className={`relative ${
-          viewMode === "grid"
-            ? "w-full h-48"
-            : " w-full lg:w-[30%] min-h-48 lg:min-h-full"
-        }  bg-gray-100 `}
+        className={`relative w-full lg:w-[30%] min-h-48 lg:min-h-full  bg-gray-100 `}
       >
         <Image
           src={eventImage}
@@ -72,9 +65,7 @@ export default function EventCard({
         )}
       </div>
       <div
-        className={`flex flex-col justify-between p-4 gap-2 flex-1 ${
-          viewMode === "grid" ? "w-full" : "w-full lg:w-[70%]"
-        }`}
+        className={`flex flex-col justify-between p-4 gap-2 flex-1 w-full lg:w-[70%]`}
       >
         <div>
           <h3 className="text-lg font-semibold line-clamp-1">{title}</h3>

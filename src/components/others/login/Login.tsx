@@ -89,7 +89,7 @@ export default function Login() {
         console.error("Login failed:", error);
       });
   };
-
+  console.log({callbackUrl})
   useEffect(() => {
     if (isSuccess && data?.data) {
       dispatch(setUserInformation(data.data));

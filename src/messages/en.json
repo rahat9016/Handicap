@@ -22,6 +22,7 @@
   "Home": {
     "platformStatistics": "Platform Statistics",
     "findResource": "Find Resource",
+    
     "resourceDescription": "Access a wide range of materials designed to inform, support, and empower. Whether you're looking for training guides, policy documents, toolkits, or educational content",
     "searchPlaceholder": "Search for resources, guidelines, training materials...",
     "searchNow": "Search Now",
@@ -36,6 +37,7 @@
     "withTheSupportOf": "With The Support Of",
     "hubFundingInfo": "This hub is developed with funding from the Commonwealth of Australia represented by the Department of Foreign Affairs and Trade (DFAT) and is supported by Humanity & Inclusion and the Age and Disability Technical Working Group (ADTWG) under the ISCG.",
     "training": "Training",
+    "recommended": "Recommended",
     "news": "News ",
     "featuredResources": "Essential Resources",
     "earnRecognizedCertificate": "Earn Recognized Certificate",

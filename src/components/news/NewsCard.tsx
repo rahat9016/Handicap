@@ -11,21 +11,14 @@ export default function NewsCard({
   title,
   images,
   summary,
-  viewMode,
 }: INews) {
   const isValid = isValidUrl(images[0]?.imageUrl);
   return (
     <div
-      className={`rounded-xl overflow-hidden border bg-white shadow-sm hover:shadow-md transition-all duration-300 flex ${
-        viewMode === "grid" ? "flex-col" : "flex-col lg:flex-row"
-      }`}
+      className={`rounded-xl overflow-hidden border bg-white shadow-sm hover:shadow-md transition-all duration-300 flex flex-col lg:flex-row min-h-52`}
     >
       <div
-        className={`relative ${
-          viewMode === "grid"
-            ? "w-full h-48"
-            : " w-full lg:w-[40%] min-h-48 lg:min-h-full"
-        }  bg-gray-100 `}
+        className={`relative w-full lg:w-[40%] min-h-52 lg:min-h-full bg-gray-100 `}
       >
         {isValid ? (
           <Image

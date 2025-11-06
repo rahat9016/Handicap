@@ -20,7 +20,7 @@ export default function OurHonorableFounders() {
                   height={114}
                   src="/images/home/aus.png"
                   alt="Founders"
-                  className="h-32 w-auto py-4"
+                  className="h-32 w-auto py-4 -mt-6"
                 />
               </div>
 

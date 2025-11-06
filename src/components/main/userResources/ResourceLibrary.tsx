@@ -34,6 +34,7 @@ export default function ResourceLibrary({
           }
         >
           {resources?.map((resource, index) => {
+            console.log(resource.featured)
             return (
               <ResourceCard
                 id={resource.id}
@@ -48,7 +49,7 @@ export default function ResourceLibrary({
                 date={resource.createdAt}
                 size={resource.fileSize}
                 ratings={3.2}
-                isFeatured
+                isFeatured={resource.featured}
                 isPdf
                 fileType={resource?.resourceFiles[0]?.fileType}
                 filePath={resource?.resourceFiles[0]?.filePath}

@@ -13,7 +13,7 @@ export default function PlatformStatistics() {
   const dashboardStatsData = data?.data;
   const t = useTranslations("Home");
   return (
-    <div className="bg-light">
+    <div className="bg-white">
       <div className="container">
         <div className="py-10 lg:py-20">
           <SectionTopTitle title={t("platformStatistics")} />

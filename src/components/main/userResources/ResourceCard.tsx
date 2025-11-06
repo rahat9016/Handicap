@@ -184,6 +184,7 @@ export default function ResourceCard({
   viewCount,
   organizerName,
   filesCount,
+  isFeatured=false
 }: ResourceCardProps) {
   const createdDate = new Date(date);
 
@@ -259,7 +260,13 @@ export default function ResourceCard({
         >
           {renderPreview()}
         </div>
-
+        {isFeatured && (
+          <Badge
+            className={`bg-rose-500 text-white absolute left-3 top-3`}
+          >
+            Featured
+          </Badge>
+        )}
         {fileTypeInfo && (
           <Badge
             className={`${fileTypeInfo.badgeColor} text-white absolute right-3 top-3`}

@@ -23,7 +23,7 @@ export default function QuickAccessCard({
       <p className="text-base font-inter font-semibold group-hover:text-white text-primary mt-3">
         {title}
       </p>
-      <p className="text-sm font-inter font-medium text-[#666666] mt-3">
+      <p className="text-sm font-inter font-medium text-[#666666] mt-3 line-clamp-2">
         {desc}
       </p>
       <Button

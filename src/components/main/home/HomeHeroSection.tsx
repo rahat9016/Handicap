@@ -29,7 +29,7 @@ const HomeHeroSection = () => {
     <section
       tabIndex={0}
       aria-label="Hero Section"
-      className="relative w-full h-[70vh] flex items-center justify-center"
+      className="relative w-full h-[30vh] md:h-[41vh] [@media(min-width:2560px)]:h-[60vh]   flex items-center justify-center"
     >
       <Image
         src="/images/home/heroBg.jpg"
@@ -41,13 +41,13 @@ const HomeHeroSection = () => {
       <div className="absolute inset-0 bg-black/40" />
 
       <div className="w-full lg:w-9/12 xl:w-7/12 relative z-10 text-center text-white px-4">
-        <h1 className="text-2xl md:text-5xl font-semibold font-inter mb-8 lg:mb-16  lg:leading-[56px]">
+        <h1 className="text-[2.2vh] md:text-[4vh] lg:text-[5vh] text-white font-semibold font-inter drop-shadow-lg">
           The Disability Inclusion Resource Hub Is A Centralized Platform.
         </h1>
         {isLoading ? (
           <HeroStatsSkeleton />
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-7 lg:gap-4 max-w-4xl mx-auto bg-white/10 backdrop-blur-md border border-white/30 rounded-lg px-6 py-5">
+          <div className="grid grid-cols-3 md:grid-cols-5 gap-4 w-[90vw] md:w-[70vw] lg:w-[50vw] mx-auto bg-white/10 backdrop-blur-md border border-white/30 rounded-lg px-6 py-2 md:py-5 mt-4">
             {startItems().map((item, index, array) => (
               <div
                 key={index}
@@ -57,10 +57,10 @@ const HomeHeroSection = () => {
                     : ""
                 }`}
               >
-                <p className="font-medium font-inter text-base xl:text-lg leading-none">
+                <p className="font-medium font-inter leading-none text-[1vh] lg:text-[2vh]">
                   {item?.title?.[local] ?? item?.title?.en}
                 </p>
-                <p className="text-xl xl:text-4xl font-semibold mt-1 font-inter">
+                <p className="text-[1vh] lg:text-[2vh]  font-semibold mt-1 font-inter">
                   {item?.value?.[local] ?? item?.value?.en}
                 </p>
               </div>

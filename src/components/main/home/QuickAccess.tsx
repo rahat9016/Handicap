@@ -44,7 +44,7 @@ const QuickAccess = () => {
       className="relative w-full bg-white bg-center bg-no-repeat"
     >
       <div className="container">
-        <div className="py-10 xl:py-16">
+        <div className="py-6 xl:py-8">
           {/* <SectionTopTitle title={t("quickAccess")} /> */}
 
           <div className="w-full" tabIndex={0} onFocus={() => setActive(true)}>
@@ -133,8 +133,8 @@ const QuickAccess = () => {
                       </div>
                     </div>
                   ) : (
-                    <div className="col-span-full flex flex-col items-center justify-center text-center ">
-                      <div className="flex items-center justify-center w-20 h-20 rounded-full bg-blue/10 text-blue">
+                    <div className="col-span-full flex flex-col items-center justify-center text-center py-11">
+                      <div className="flex items-center justify-center w-20 h-20 rounded-full bg-blue/10 text-blue ">
                         <FileSearch className="w-10 h-10" />
                       </div>
                       <h3 className="text-lg font-semibold text-black mb-2 mt-2">
@@ -180,7 +180,7 @@ const QuickAccess = () => {
                       </div>
                     </div>
                   ) : (
-                    <div className="col-span-full flex flex-col items-center justify-center text-center ">
+                    <div className="col-span-full flex flex-col items-center justify-center text-center py-11">
                       <div className="flex items-center justify-center w-20 h-20 rounded-full bg-blue/10 text-blue">
                         <FileSearch className="w-10 h-10" />
                       </div>
@@ -223,7 +223,7 @@ const QuickAccess = () => {
                       </div>
                     </div>
                   ) : (
-                    <div className="col-span-full flex flex-col items-center justify-center text-center ">
+                    <div className="col-span-full flex flex-col items-center justify-center text-center py-11">
                       <div className="flex items-center justify-center w-20 h-20 rounded-full bg-blue/10 text-blue">
                         <FileSearch className="w-10 h-10" />
                       </div>

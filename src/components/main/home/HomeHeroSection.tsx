@@ -60,8 +60,11 @@ const HomeHeroSection = () => {
                 <p className="font-medium font-inter leading-none text-[1vh] lg:text-[2vh]">
                   {item?.title?.[local] ?? item?.title?.en}
                 </p>
-                <p className="text-[1vh] lg:text-[2vh]  font-semibold mt-1 font-inter">
-                  {item?.value?.[local] ?? item?.value?.en}
+                <p className="text-[1vh] lg:text-[2vh] font-semibold mt-1 font-inter">
+                  {item?.value?.[local] === "ডিফল্ট মান" ||
+                  item?.value?.en === "Default Value"
+                    ? "0"
+                    : item?.value?.[local] ?? item?.value?.en}
                 </p>
               </div>
             ))}

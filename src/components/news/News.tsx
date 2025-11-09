@@ -59,10 +59,10 @@ const News = () => {
 
   const totalPages = Math.ceil(totalItems / itemsPerPage);
   return (
-    <div >
+    <div className="bg-[#f6f6f6]">
       <div className="container px-4 sm:px-6 lg:px-8 py-6 lg:py-20">
         <div className="flex flex-col lg:flex-row lg:items-start gap-5 lg:gap-6 xl:gap-8">
-          <div className={`
+          {/* <div className={`
             w-full lg:w-80 xl:w-[300px] 
             ${isFiltersOpen ? "block" : "hidden lg:block"}
             lg:sticky lg:top-48 self-start overflow-y-auto custom-scrollbar 
@@ -70,9 +70,9 @@ const News = () => {
             z-10 lg:z-auto shadow-lg lg:shadow-none
           `}>
             <NewsSorting />
-          </div>
+          </div> */}
 
-          <div className="w-full lg:w-10/12 lg:ml-auto">
+          <div className="w-full ">
             <Toolbar
               search={search}
               onSearchChange={handleSearchChange}

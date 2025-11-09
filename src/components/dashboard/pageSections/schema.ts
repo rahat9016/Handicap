@@ -34,10 +34,10 @@ const imageSchema = Yup.mixed<File | string>()
 export const pageSectionSchema = Yup.object().shape({
   pageId: Yup.string().required("Page ID is required"),
   sectionType: Yup.string().required("Section type is required"),
-  order: Yup.number()
-    .required("Order is required")
-    .positive("Order must be positive")
-    .integer("Order must be an integer"),
+  // order: Yup.number()
+  //   .required("Order is required")
+  //   .positive("Order must be positive")
+  //   .integer("Order must be an integer"),
   title: Yup.string().optional().nullable(),
   titleBn: Yup.string().nullable(),
   subtitle: Yup.string().optional(),

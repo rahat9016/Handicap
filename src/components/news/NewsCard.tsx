@@ -28,13 +28,15 @@ export default function NewsCard({
             className="object-cover"
           />
         ) : (
-          <Image
+          <div className="w-full h-full flex items-center justify-center">
+            <Image
             src="/images/dashboard/gallery-add.svg"
             alt="Not Found"
             width={120}
             height={120}
-            className="object-contain mx-auto py-2"
+            className="object-contain mx-auto my-auto py-2"
           />
+          </div>
         )}
       </div>
 

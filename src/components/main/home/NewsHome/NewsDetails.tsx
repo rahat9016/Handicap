@@ -122,6 +122,7 @@ const NewsDetails = () => {
     [&>blockquote]:before:absolute [&>blockquote]:before:-left-1 [&>blockquote]:before:top-0"
         dangerouslySetInnerHTML={{ __html: content }}
       />
+      {/* <RichTextDisplay content={content} /> */}
     </div>
   );
 };

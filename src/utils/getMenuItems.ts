@@ -110,7 +110,7 @@ export function getMenuItems(
       children: [
         { label: "News List", href: "/admin/news/news-list" },
         { label: "News Categories", href: "/admin/news/news-categories" },
-        { label: "News Tags", href: "/admin/news/news-tags" },
+        // { label: "News Tags", href: "/admin/news/news-tags" },
       ],
     },
     {

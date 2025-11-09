@@ -21,7 +21,6 @@ import { useEffect } from "react";
 import { FieldError, FormProvider, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { INews } from "../NewsCategories/types/Categories";
-import { ITags } from "../NewsTags/types/Tags";
 import { NewsSectionForm, newsSectionSchema } from "./schema";
 import { INewsSection } from "./types";
 const EditorWrapper = dynamic(
@@ -40,11 +39,11 @@ export default function CreateUpdateNewsSectionModal({
   onClose,
   initialValues,
 }: CreateUpdateSectionModalProps) {
-  const { data: tagsData } = useGet<ITags[]>("/news-tag?isActive=true", ["news-tag"]);
+  // const { data: tagsData } = useGet<ITags[]>("/news-tag?isActive=true", ["news-tag"]);
   const { data: categoryData } = useGet<INews[]>("/news-category?isActive=true", [
     "news-category",
   ]);
-  const newsTagsOptions = mapToSelectOptions(tagsData?.data, "name", "id");
+  // const newsTagsOptions = mapToSelectOptions(tagsData?.data, "name", "id");
   const newsCategoryOptions = mapToSelectOptions(
     categoryData?.data,
     "name",
@@ -84,7 +83,7 @@ export default function CreateUpdateNewsSectionModal({
         images: initialValues?.images?.map((img) => img.imageUrl) ?? [],
         categoryIds:
           initialValues?.categories?.map((cat) => cat.categoryId) ?? [],
-        tagIds: initialValues?.tags?.map((tag) => tag.tagId) ?? [],
+        // tagIds: initialValues?.tags?.map((tag) => tag.tagId) ?? [],
       });
     }
     const categoryIds = initialValues;
@@ -100,7 +99,7 @@ export default function CreateUpdateNewsSectionModal({
         isPublished: false,
         images: [],
         categoryIds: [],
-        tagIds: [],
+        // tagIds: [],
       });
       postReset();
     }
@@ -116,9 +115,9 @@ export default function CreateUpdateNewsSectionModal({
     (data.categoryIds || []).forEach((id) => {
       if (id) formData.append("categoryIds", String(id));
     });
-    (data.tagIds || []).forEach((id) => {
-      if (id) formData.append("tagIds", String(id));
-    });
+    // (data.tagIds || []).forEach((id) => {
+    //   if (id) formData.append("tagIds", String(id));
+    // });
     const currentImages = data.images || [];
     const newFiles = currentImages.filter((img) => img instanceof File);
     newFiles.forEach((file) => formData.append("images", file));
@@ -203,14 +202,14 @@ export default function CreateUpdateNewsSectionModal({
                   options={newsCategoryOptions}
                 />
               </div>
-              <div className="col-span-2 lg:col-span-1">
+              {/* <div className="col-span-2 lg:col-span-1">
                 <InputLabel label="Tags" required />
                 <ControlledMultiSelectField
                   name="tagIds"
                   placeholder="Please enter your tags"
                   options={newsTagsOptions}
                 />
-              </div>
+              </div> */}
               <div className="col-span-2">
                 <InputLabel label="Content" />
                 <EditorWrapper

@@ -15,9 +15,9 @@ import { EditorContent, useEditor } from "@tiptap/react";
 
 import StarterKit from "@tiptap/starter-kit";
 import { TextSelection } from "prosemirror-state";
-import ImageResize from "tiptap-extension-resize-image";
 import { FontSizeExtension } from "./FontSizeExtension";
 import ImageUploader from "./ImageUploader";
+import ImageResize from "tiptap-extension-resize-image";
 
 interface EditorWrapperProps {
   value: string;
@@ -45,6 +45,11 @@ export default function EditorWrapper({
       Image.configure({
         inline: true,
         allowBase64: true,
+        // HTMLAttributes: {
+        //   class: "rounded-md max-w-full my-2",
+        //   style:
+        //     "display: inline-block; width: auto; height: auto; vertical-align: middle;",
+        // },
       }),
       Highlight.configure({
         multicolor: true,
@@ -52,7 +57,12 @@ export default function EditorWrapper({
           class: "bg-yellow/20 px-1 rounded",
         },
       }),
-
+      // ResizableImage.configure({
+      //   allowBase64: true,
+      //   HTMLAttributes: {
+      //     class: "resizable-image  inline-block",
+      //   },
+      // }),
       Bold,
       Underline,
       BulletList,

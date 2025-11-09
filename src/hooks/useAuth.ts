@@ -8,6 +8,7 @@ export const useAuth = (onSuccess?: () => void) => {
   return useMutation({
     mutationFn: authService.login,
     onSuccess: (data) => {
+      console.log(data)
       const encryptedId = encryptData(String(data.id), "ABC123!@#");
       const encryptedRoleId = encryptData(String(data.roleId), "ABC123!@#");
 

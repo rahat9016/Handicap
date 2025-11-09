@@ -131,7 +131,7 @@ export default function CreateSectionModal({
     const formData = new FormData();
     formData.append("pageId", data.pageId);
     formData.append("sectionType", data.sectionType);
-    formData.append("order", data.order.toString());
+    // formData.append("order", data.order.toString());
     // formData.append("isActive", String(data.isActive));
 
     // Optional fields
@@ -237,14 +237,14 @@ export default function CreateSectionModal({
                 />
               </div>
 
-              <div>
+              {/* <div>
                 <InputLabel label="Order" required />
                 <ControlledInputField
                   name="order"
                   type="number"
                   placeholder="Enter display order (e.g., 1, 2, 3...)"
                 />
-              </div>
+              </div> */}
 
               {/* Content Fields */}
               <div>

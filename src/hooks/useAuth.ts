@@ -11,6 +11,7 @@ export const useAuth = (onSuccess?: () => void) => {
       console.log(data)
       const encryptedId = encryptData(String(data.id), "ABC123!@#");
       const encryptedRoleId = encryptData(String(data.roleId), "ABC123!@#");
+      const encryptedParentRoleId = encryptData(String(data.parentRoleId), "ABC123!@#");
 
        // 🔑 If parentRoleId exists, set adminPermission = true
       const encryptedAdminPermission = encryptData(
@@ -22,6 +23,7 @@ export const useAuth = (onSuccess?: () => void) => {
       Cookies.set("refreshToken", data.refreshToken, { expires: 2 });
       Cookies.set("userId", encryptedId, { expires: 1 });
       Cookies.set("roleId", encryptedRoleId, { expires: 1 });
+      Cookies.set("parentRoleId", encryptedParentRoleId, { expires: 1 });
       Cookies.set("adminPermission", encryptedAdminPermission, { expires: 1 });
       
       // Set admin cookie if the user is a developer

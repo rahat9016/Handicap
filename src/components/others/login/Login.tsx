@@ -70,12 +70,16 @@ export default function Login() {
             dispatch(setAdminOrganizationPermission(true));
           else dispatch(setPermission(false));
         }
+        console.log('call 1')
         let destination = callbackUrl;
-
+        console.log('call 2')
+        
         if (res?.role === "USER") {
+          console.log('call 3')
           // ✅ Send USER to user dashboard
           destination = "/user-dashboard";
         } else if (res?.parentRoleId === 2) {
+          console.log('call 4')
           destination = "/organization-list";
         } else if (res?.parentRoleId === null) {
           destination = callbackUrl;
@@ -89,7 +93,7 @@ export default function Login() {
         console.error("Login failed:", error);
       });
   };
-  console.log({callbackUrl})
+  console.log({ callbackUrl });
   useEffect(() => {
     if (isSuccess && data?.data) {
       dispatch(setUserInformation(data.data));

@@ -29,6 +29,7 @@ interface ResourceCardProps {
   size: number;
   ratings?: number;
   isFeatured?: boolean;
+  isSuggested?: boolean;
   isPdf?: boolean;
   fileType?: string;
   filePath?: string;
@@ -182,6 +183,7 @@ export default function ResourceCard({
   filePath,
   downloadCount,
   viewCount,
+  isSuggested,
   organizerName,
   filesCount,
   isFeatured=false
@@ -265,6 +267,13 @@ export default function ResourceCard({
             className={`bg-rose-500 text-white absolute left-3 top-3`}
           >
             Featured
+          </Badge>
+        )}
+        {isSuggested && (
+          <Badge
+            className={`bg-orange-500 text-white absolute left-[84px] top-3`}
+          >
+            Suggested
           </Badge>
         )}
         {fileTypeInfo && (

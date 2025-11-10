@@ -62,7 +62,7 @@ export function getMenuItems(
     hasPermission && {
       label: "Content",
       icon: Upload,
-      children: [{ label: "Page Sections", href: "/admin/page-sections" }],
+      children: [{ label: "Page Sections", href: "/admin/page-sections" }, { label: "Hero Config", href: "/admin/landing-page-config" }],
     },
     hasPermission && {
       label: "Organization Manage",

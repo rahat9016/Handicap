@@ -51,7 +51,7 @@ export default function AboutUs() {
                 "--"}
             </h3>
             <p
-              className="text-[#7A7A8E] text-justify text-sm font-inter font-normal mt-3 "
+              className="text-[#666666] text-justify text-sm font-inter font-normal mt-3 "
               dangerouslySetInnerHTML={{
                 __html:
                   ourMission?.data?.content?.[local] ??
@@ -69,7 +69,7 @@ export default function AboutUs() {
               }}
             ></h3>
             <p
-              className="text-[#7A7A8E] text-justify text-sm font-inter font-normal mt-3"
+              className="text-[#666666] text-justify text-sm font-inter font-normal mt-3"
               dangerouslySetInnerHTML={{
                 __html:
                   ourVision?.data?.content?.[local] ??
@@ -83,7 +83,7 @@ export default function AboutUs() {
                 "--"}
             </h3>
             <p
-              className="text-[#7A7A8E] text-justify text-sm font-inter font-normal mt-3"
+              className="text-[#666666] text-justify text-sm font-inter font-normal mt-3"
               dangerouslySetInnerHTML={{
                 __html:
                   whoWeServe?.data?.content?.[local] ??
@@ -98,7 +98,7 @@ export default function AboutUs() {
                 "--"}
             </h3>
             <p
-              className="text-[#7A7A8E] text-justify text-sm font-inter font-normal mt-3 "
+              className="text-[#666666] text-justify text-sm font-inter font-normal mt-3 "
               dangerouslySetInnerHTML={{
                 __html:
                   organization?.data?.content?.[local] ??

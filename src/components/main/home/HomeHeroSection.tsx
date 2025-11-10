@@ -42,7 +42,7 @@ const HomeHeroSection = () => {
 
       <div className="w-full lg:w-9/12 xl:w-7/12 relative z-10 text-center text-white px-4">
         <h1 className="text-[2.2vh] md:text-[4vh] lg:text-[5vh] text-white font-semibold font-inter drop-shadow-lg">
-          The Disability Inclusion Resource Hub Is A Centralized Platform.
+          The Disability Inclusion Resource Hub Is <br/>A Centralized Platform.
         </h1>
         {isLoading ? (
           <HeroStatsSkeleton />

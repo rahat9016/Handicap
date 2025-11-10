@@ -42,12 +42,12 @@ const HomeHeroSection = () => {
 
       <div className="w-full lg:w-9/12 xl:w-7/12 relative z-10 text-center text-white px-4">
         <h1 className="text-[2.2vh] md:text-[4vh] lg:text-[5vh] text-white font-semibold font-inter drop-shadow-lg">
-          The Disability Inclusion Resource Hub Is A Centralized Platform.
+          The Disability Inclusion Resource Hub Is <br/>A Centralized Platform.
         </h1>
         {isLoading ? (
           <HeroStatsSkeleton />
         ) : (
-          <div className="grid grid-cols-3 md:grid-cols-5 gap-4 w-[90vw] md:w-[70vw] lg:w-[50vw] mx-auto bg-white/10 backdrop-blur-md border border-white/30 rounded-lg px-6 py-2 md:py-5 mt-4">
+          <div className="grid grid-cols-3 md:grid-cols-5 gap-4 w-[90vw] md:w-[70vw] lg:w-[75%] xl:w-[50vw] mx-auto bg-white/10 backdrop-blur-md border border-white/30 rounded-lg px-6 py-2 md:py-5 mt-4">
             {startItems().map((item, index, array) => (
               <div
                 key={index}
@@ -57,10 +57,10 @@ const HomeHeroSection = () => {
                     : ""
                 }`}
               >
-                <p className="font-medium font-inter leading-none text-[1vh] lg:text-[2vh]">
+                <p className="font-medium font-inter leading-none text-[1vh] lg:text-[2vh] px-1">
                   {item?.title?.[local] ?? item?.title?.en}
                 </p>
-                <p className="text-[1vh] lg:text-[2vh] font-semibold mt-1 font-inter">
+                <p className="text-[1vh] lg:text-[2vh] font-medium mt-1 font-inter">
                   {item?.value?.[local] === "ডিফল্ট মান" ||
                   item?.value?.en === "Default Value"
                     ? "0"

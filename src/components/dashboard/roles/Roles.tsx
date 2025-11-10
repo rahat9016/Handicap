@@ -61,23 +61,23 @@ export default function Roles() {
         return <span>{format(date, "dd MMM yyyy")}</span>;
       },
     },
-    {
-      header: "Is Active",
-      accessorKey: "isSystemRole",
-      cell: (value) => {
-        const isActive = value;
+    // {
+    //   header: "Is Active",
+    //   accessorKey: "isSystemRole",
+    //   cell: (value) => {
+    //     const isActive = value;
 
-        return (
-          <span
-            className={`px-2 py-1 rounded-full text-xs font-medium ${
-              isActive ? "bg-[#bfffda] text-green" : "bg-rose-200 text-rose-700"
-            }`}
-          >
-            {isActive ? "Active" : "Inactive  "}
-          </span>
-        );
-      },
-    },
+    //     return (
+    //       <span
+    //         className={`px-2 py-1 rounded-full text-xs font-medium ${
+    //           isActive ? "bg-[#bfffda] text-green" : "bg-rose-200 text-rose-700"
+    //         }`}
+    //       >
+    //         {isActive ? "Active" : "Inactive  "}
+    //       </span>
+    //     );
+    //   },
+    // },
   ];
   return (
     <div className="bg-white p-4 lg:p-8 min-h-[85vh] border border-skeleton rounded-2xl">

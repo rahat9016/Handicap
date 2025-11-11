@@ -123,6 +123,8 @@ export default function CreateSectionModal({
         buttonLabel2: initialValues.buttonLabel2?.en ?? "",
         buttonLabelBn2: initialValues.buttonLabel2?.bn ?? "",
         buttonUrl2: initialValues?.buttonUrl2 ?? undefined, // Convert null to undefined
+        backgroundImage: initialValues.backgroundImageUrl ?? undefined
+
       });
     }
   }, [initialValues, methods]);

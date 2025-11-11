@@ -55,10 +55,10 @@ const Footer = () => {
               >
                 <Mail className="w-5 h-5 flex-shrink-0 mt-0.5" />
                 <Link
-                  href="mailto:p.baidya@hi.org"
+                  href="mailto:info@disabilityinclusionresourcehub.com"
                   className="mt-0.5 hover:text-white transition-colors"
                 >
-                  p.baidya@hi.org
+                  info@disabilityinclusionresourcehub.com
                 </Link>
               </div>
               <div

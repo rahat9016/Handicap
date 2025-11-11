@@ -1,5 +1,6 @@
 "use client";
 import { useGet } from "@/hooks/useGet";
+import { IPageSection } from "@/types";
 import { useLocale } from "next-intl";
 import Image from "next/image";
 import { useCallback } from "react";
@@ -11,7 +12,14 @@ const HomeHeroSection = () => {
   const { data, isLoading } = useGet<IDisabilityStats>("/landing-page-config", [
     "user",
   ]);
+  const { data: heroData } = useGet<IPageSection>(
+    "/page-sections/query/first?page=HOME&sectionType=HERO",
+    ["page-sections"]
+  );
+console.log(heroData)
+
   const stats = data?.data;
+  const hero = heroData?.data
 
   const startItems = useCallback((): IStatField[] => {
     if (!stats) return [];
@@ -29,10 +37,10 @@ const HomeHeroSection = () => {
     <section
       tabIndex={0}
       aria-label="Hero Section"
-      className="relative w-full h-[30vh] md:h-[41vh] [@media(min-width:2560px)]:h-[60vh]   flex items-center justify-center"
+      className="relative w-full h-[30vh] md:h-[45vh] [@media(min-width:2560px)]:h-[60vh]   flex items-center justify-center"
     >
       <Image
-        src="/images/home/heroBg.jpg"
+        src={hero?.backgroundImageUrl ||"/images/home/heroBg.jpg"}
         alt="Disability inclusion"
         fill
         className="object-cover"
@@ -40,14 +48,14 @@ const HomeHeroSection = () => {
       />
       <div className="absolute inset-0 bg-black/40" />
 
-      <div className="w-full lg:w-9/12 xl:w-7/12 relative z-10 text-center text-white px-4">
-        <h1 className="text-[2.2vh] md:text-[4vh] lg:text-[5vh] text-white font-semibold font-inter drop-shadow-lg">
+      <div className="w-full lg:w-10/12 xl:w-9/12 relative z-10 text-center text-white px-4">
+        <h1 className="text-[2vh] md:text-[3vh] xl:text-[5vh] text-white font-semibold font-inter drop-shadow-lg">
           The Disability Inclusion Resource Hub Is <br/>A Centralized Platform.
         </h1>
         {isLoading ? (
           <HeroStatsSkeleton />
         ) : (
-          <div className="grid grid-cols-3 md:grid-cols-5 gap-4 w-[90vw] md:w-[70vw] lg:w-[75%] xl:w-[50vw] mx-auto bg-white/10 backdrop-blur-md border border-white/30 rounded-lg px-6 py-2 md:py-5 mt-4">
+          <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-4 xl:w-[65vw] mx-auto bg-white/10 backdrop-blur-md border border-white/30 rounded-lg px-6 py-2 md:py-5 mt-4">
             {startItems().map((item, index, array) => (
               <div
                 key={index}
@@ -57,10 +65,10 @@ const HomeHeroSection = () => {
                     : ""
                 }`}
               >
-                <p className="font-medium font-inter leading-none text-[1vh] lg:text-[2vh] px-1">
+                <p className="font-medium font-inter leading-none text-[1vh]  md:text-[1.5vh] xl:text-[2vh] px-1">
                   {item?.title?.[local] ?? item?.title?.en}
                 </p>
-                <p className="text-[1vh] lg:text-[2vh] font-medium mt-1 font-inter">
+                <p className="text-[1vh] md:text-[1.5vh]  lg:text-[2vh] font-medium mt-1 font-inter">
                   {item?.value?.[local] === "ডিফল্ট মান" ||
                   item?.value?.en === "Default Value"
                     ? "0"

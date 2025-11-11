@@ -45,7 +45,7 @@ const CreateUpdateFAQs = ({
     mutateAsync: patchAsync,
     error: patchError,
     reset: patchReset,
-  } = usePatch((data) => console.log("Success", data), [["faqs"]]);
+  } = usePatch(() =>  [["faqs"]]);
 
   const isEditMode = !!initialValues;
   const methods = useForm<FAQsSchema>({

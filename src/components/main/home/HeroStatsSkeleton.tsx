@@ -2,7 +2,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 export default function HeroStatsSkeleton() {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-7 lg:gap-4 max-w-4xl mx-auto bg-white/10 backdrop-blur-md border border-white/30 rounded-lg px-6 py-5">
+    <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-4 max-w-4xl mx-auto bg-white/10 backdrop-blur-md border border-white/30 rounded-lg px-6 py-5">
       {[...Array(5)].map((_, i) => (
         <div
           key={i}

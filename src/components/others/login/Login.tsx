@@ -37,7 +37,7 @@ export default function Login() {
     resolver: yupResolver(userLoginSchema),
     defaultValues: {
       email: "",
-      password: "12345678",
+      password: "",
     },
   });
 

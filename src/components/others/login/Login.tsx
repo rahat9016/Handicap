@@ -107,7 +107,7 @@ export default function Login() {
         style={{ backgroundImage: `url('/images/common/loginBg.png')` }}
         className="flex flex-col bg-contain bg-top bg-no-repeat py-20 px-4"
       >
-        <div className="w-full lg:w-4/12 mx-auto px-6 py-7 lg:px-8 bg-white shadow-xl rounded-md">
+        <div className="w-full lg:w-4/12 mx-auto px-6 py-7 lg:px-8 bg-white shadow-md rounded-md border">
           <div className="flex flex-col items-center">
             <Image width={97} height={43} src="/logo.png" alt="logo" />
             <Title>Login To Your Account</Title>

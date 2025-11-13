@@ -16,10 +16,10 @@ const HomeHeroSection = () => {
     "/page-sections/query/first?page=HOME&sectionType=HERO",
     ["page-sections"]
   );
-console.log(heroData)
+  console.log(heroData);
 
   const stats = data?.data;
-  const hero = heroData?.data
+  const hero = heroData?.data;
 
   const startItems = useCallback((): IStatField[] => {
     if (!stats) return [];
@@ -39,18 +39,20 @@ console.log(heroData)
       aria-label="Hero Section"
       className="relative w-full h-[30vh] md:h-[45vh] [@media(min-width:2560px)]:h-[60vh]   flex items-center justify-center"
     >
-      <Image
-        src={hero?.backgroundImageUrl ||"/images/home/heroBg.jpg"}
-        alt="Disability inclusion"
-        fill
-        className="object-cover"
-        priority
-      />
+      {hero?.backgroundImageUrl && (
+        <Image
+          src={hero?.backgroundImageUrl ?? ""}
+          alt="Disability inclusion"
+          fill
+          className="object-cover"
+          priority
+        />
+      )}
       <div className="absolute inset-0 bg-black/40" />
 
       <div className="w-full lg:w-10/12 xl:w-9/12 relative z-10 text-center text-white px-4">
         <h1 className="text-[2vh] md:text-[3vh] xl:text-[5vh] text-white font-semibold font-inter drop-shadow-lg">
-          The Disability Inclusion Resource Hub Is <br/>A Centralized Platform.
+          The Disability Inclusion Resource Hub Is <br />A Centralized Platform.
         </h1>
         {isLoading ? (
           <HeroStatsSkeleton />

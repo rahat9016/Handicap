@@ -94,23 +94,23 @@ export default function PageSections() {
         return <div>{row?.title?.bn && <span>{row.title.bn}</span>}</div>;
       },
     },
-    {
-      header: "Is Active",
-      accessorKey: "isActive",
-      cell: (value) => {
-        const isActive = value;
+    // {
+    //   header: "Is Active",
+    //   accessorKey: "isActive",
+    //   cell: (value) => {
+    //     const isActive = value;
 
-        return (
-          <span
-            className={`px-2 py-1 rounded-full text-xs font-medium ${
-              isActive ? "bg-[#bfffda] text-green" : "bg-rose-200 text-rose-700"
-            }`}
-          >
-            {isActive ? "Active" : "Inactive"}
-          </span>
-        );
-      },
-    },
+    //     return (
+    //       <span
+    //         className={`px-2 py-1 rounded-full text-xs font-medium ${
+    //           isActive ? "bg-[#bfffda] text-green" : "bg-rose-200 text-rose-700"
+    //         }`}
+    //       >
+    //         {isActive ? "Active" : "Inactive"}
+    //       </span>
+    //     );
+    //   },
+    // },
 
     {
       header: "Action",

@@ -368,114 +368,129 @@ html {
   background-color: #002868; /* Darker color on hover */
 }
 
-.ProseMirror img {
-  cursor: grab; /* easier to see image interaction */
-}
 
-.resize-handle {
-  width: 10px;
-  height: 10px;
-  background: blue;
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  cursor: se-resize;
-}
-.resize-handle {
-  width: 10px;
-  height: 10px;
-  background: blue;
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  cursor: se-resize;
-}
-
-
-/* Add this to your global CSS file */
-/* Editor Styles */
 .ProseMirror {
-  img.resizable-image {
+  position: relative;
+  
+  .resizable-image {
     max-width: 100%;
     height: auto;
+    cursor: pointer;
+    transition: outline 0.2s;
     
-    &[data-align="left"] {
-      float: left;
-      margin: 0 1rem 1rem 0;
-      clear: left;
+    &:hover {
+      outline: 2px solid #3b82f6;
     }
     
-    &[data-align="right"] {
-      float: right;
-      margin: 0 0 1rem 1rem;
-      clear: right;
-    }
-    
-    &[data-align="center"] {
-      display: block;
-      margin: 1rem auto;
-      float: none;
-      clear: both;
-    }
-    
-    &[data-align="inline"] {
-      display: inline-block;
-      vertical-align: middle;
-      margin: 0 0.25rem;
-      float: none;
+    &.selected {
+      outline: 2px solid #3b82f6;
+      background-color: rgba(59, 130, 246, 0.1);
     }
   }
   
-  /* Clear floats */
-  p, div, h1, h2, h3, h4, h5, h6 {
-    &::after {
-      content: "";
-      display: table;
-      clear: both;
+  /* Resize handle container */
+  .image-container {
+    position: relative;
+    display: inline-block;
+    margin: 8px 0;
+    
+    &:hover .resize-handle {
+      opacity: 1;
     }
   }
 }
 
-/* Preview Styles - IMPORTANT: Add these to your preview component */
-.preview-content {
-  img[data-align="left"] {
-    float: left;
-    margin: 0 1rem 1rem 0;
-    clear: left;
-    max-width: 100%;
+/* Resize Handle */
+.resize-handle {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background: #3b82f6;
+  border: 2px solid white;
+  border-radius: 50%;
+  cursor: se-resize;
+  opacity: 0;
+  transition: opacity 0.2s;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  
+  &:hover {
+    background: #2563eb;
+    transform: scale(1.1);
   }
   
-  img[data-align="right"] {
-    float: right;
-    margin: 0 0 1rem 1rem;
-    clear: right;
-    max-width: 100%;
+  &:active {
+    background: #1d4ed8;
+    transform: scale(0.95);
+  }
+}
+
+/* Additional resize handles for more control */
+.resize-handle-top-left {
+  top: -10px;
+  left: -10px;
+  cursor: nw-resize;
+}
+
+.resize-handle-top-right {
+  top: -10px;
+  right: -10px;
+  cursor: ne-resize;
+}
+
+.resize-handle-bottom-left {
+  bottom: -10px;
+  left: -10px;
+  cursor: sw-resize;
+}
+
+.resize-handle-bottom-right {
+  bottom: -10px;
+  right: -10px;
+  cursor: se-resize;
+}
+
+/* Manual Resize Controls in Toolbar */
+.resize-controls {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  padding: 8px;
+  background: #f8fafc;
+  border-radius: 6px;
+  margin: 8px 0;
+}
+
+.resize-input {
+  width: 60px;
+  padding: 4px 8px;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  text-align: center;
+  
+  &:focus {
+    outline: none;
+    border-color: #3b82f6;
+  }
+}
+
+.resize-button {
+  padding: 4px 8px;
+  border: 1px solid #d1d5db;
+  background: white;
+  border-radius: 4px;
+  cursor: pointer;
+  
+  &:hover {
+    background: #f3f4f6;
   }
   
-  img[data-align="center"] {
-    display: block;
-    margin: 1rem auto;
-    float: none;
-    clear: both;
-    max-width: 100%;
-  }
-  
-  img[data-align="inline"] {
-    display: inline-block;
-    vertical-align: middle;
-    margin: 0 0.25rem;
-    float: none;
-    max-width: 100%;
-  }
-  
-  /* Clear floats in preview */
-  p, div {
-    overflow: auto;
-    
-    &::after {
-      content: "";
-      display: table;
-      clear: both;
-    }
+  &:active {
+    background: #e5e7eb;
   }
 }

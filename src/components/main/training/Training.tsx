@@ -1,7 +1,6 @@
 import HeroSection from "@/components/common/HeroSection";
-import Courses from "./Courses";
-import EssentialFeatures from "./EssentialFeatures";
 import { useTranslations } from "next-intl";
+import Courses from "./Courses";
 
 export default function Training() {
   const t = useTranslations("Training");
@@ -14,7 +13,7 @@ export default function Training() {
         desc={t("trainingSectionDesc")}
       />
       <Courses />
-      <EssentialFeatures />
+      {/* <EssentialFeatures /> */}
     </div>
   );
 }

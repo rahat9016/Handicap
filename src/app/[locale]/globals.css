@@ -494,3 +494,38 @@ html {
     background: #e5e7eb;
   }
 }
+
+/* Ultra-specific selectors to beat Tailwind reset */
+.text-editor-container .editor-content .ProseMirror ul {
+  list-style-type: disc !important;
+  padding-left: 1.5em !important;
+  margin: 1em 0 !important;
+}
+
+.text-editor-container .editor-content .ProseMirror ol {
+  list-style-type: decimal !important;
+  padding-left: 1.5em !important;
+  margin: 1em 0 !important;
+}
+
+.text-editor-container .content-preview .preview-content ul {
+  list-style-type: disc !important;
+  padding-left: 1.5em !important;
+  margin: 1em 0 !important;
+}
+
+.text-editor-container .content-preview .preview-content ol {
+  list-style-type: decimal !important;
+  padding-left: 1.5em !important;
+  margin: 1em 0 !important;
+}
+
+/* List items */
+.text-editor-container .editor-content .ProseMirror ul li,
+.text-editor-container .editor-content .ProseMirror ol li,
+.text-editor-container .content-preview .preview-content ul li,
+.text-editor-container .content-preview .preview-content ol li {
+  margin: 0.5em 0 !important;
+  padding-left: 0.5em !important;
+  display: list-item !important;
+}

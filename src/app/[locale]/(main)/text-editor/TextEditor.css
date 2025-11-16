@@ -1,5 +1,5 @@
 .text-editor-container {
-  max-width: 800px;
+  /* max-width: 800px; */
   margin: 20px auto;
   border: 1px solid #e1e5e9;
   border-radius: 8px;
@@ -391,6 +391,115 @@
 .save-button:hover {
   background: #059669;
 }
+/* Font Size Dropdown */
+.font-size-select {
+  padding: 6px 8px;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  background: white;
+  color: #374151;
+  font-size: 14px;
+  cursor: pointer;
+  min-width: 80px;
+}
 
-/* Keep all your existing editor styles below... */
-/* ... your existing .text-editor-container, .toolbar, .editor-content styles ... */
+.font-size-select:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Font size preview in dropdown */
+.font-size-select option {
+  font-size: 14px; /* Base size for dropdown text */
+}
+
+/* Apply font sizes to editor content */
+.ProseMirror [style*="font-size"] {
+  line-height: 1.4;
+}
+
+.ProseMirror blockquote.custom-blockquote {
+  border-left: 3px solid #3b82f6;
+  margin: 1.5em 0;
+  padding: 0.5em 1em;
+  background: #f8fafc;
+  border-radius: 0 4px 4px 0;
+  font-style: italic;
+  color: #475569;
+}
+
+.ProseMirror blockquote.custom-blockquote p {
+  margin: 0;
+}
+.ProseMirror blockquote.custom-blockquote p {
+  margin: 0;
+} 
+/* Preview blockquote styling */
+.preview-content blockquote {
+  border-left: 3px solid #3b82f6;
+  margin: 1.5em 0;
+  padding: 0.5em 1em;
+  background: #f8fafc;
+  border-radius: 0 4px 4px 0;
+  font-style: italic;
+  color: #475569;
+}
+
+.preview-content blockquote p {
+  margin: 0;
+}
+
+/* Highlight Styling */
+.ProseMirror mark {
+  border-radius: 2px;
+  padding: 0 2px;
+}
+
+.ProseMirror mark[style*="background-color: #fffb0080"] {
+  background-color: #fffb0080 !important;
+}
+
+.ProseMirror mark[style*="background-color: #ff000080"] {
+  background-color: #ff000080 !important;
+}
+
+.ProseMirror mark[style*="background-color: #00ff0080"] {
+  background-color: #00ff0080 !important;
+}
+
+.ProseMirror mark[style*="background-color: #0000ff80"] {
+  background-color: #0000ff80 !important;
+}
+
+/* Preview highlight styling */
+.preview-content mark {
+  border-radius: 2px;
+  padding: 0 2px;
+}
+
+/* Color Swatches for Highlight */
+.color-swatch {
+  width: 24px;
+  height: 24px;
+  border: 2px solid #e5e7eb;
+  border-radius: 4px;
+  cursor: pointer;
+  margin: 0 2px;
+  transition: all 0.2s ease;
+}
+
+.color-swatch:hover {
+  border-color: #3b82f6;
+  transform: scale(1.1);
+}
+
+.color-swatch:active {
+  transform: scale(0.95);
+}
+
+/* Active state for highlight button */
+.toolbar-button.is-active[title="Highlight Text"] {
+  background: #fffb0080;
+  color: #000;
+}

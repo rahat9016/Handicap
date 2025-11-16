@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import { usePost } from "@/hooks/usePost";
-import { Color } from "@tiptap/extension-color";
+
 import TextAlign from "@tiptap/extension-text-align";
 import { TextStyle } from "@tiptap/extension-text-style";
 import Underline from "@tiptap/extension-underline";
@@ -30,6 +30,7 @@ import ResizableImage from "./extensions/resizable-image";
 import useForceUpdate from "./hooks/useForceUpdate";
 import { TextEditorProps } from "./types/editor";
 import getCurrentImageWrap from "./utils/getCurrentImageWrap";
+import { Color } from "@tiptap/extension-text-style";
 
 const TextEditor = ({ value, onChange }: TextEditorProps) => {
   const [isClient, setIsClient] = useState(false);

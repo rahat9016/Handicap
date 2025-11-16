@@ -1,505 +1,415 @@
-.text-editor-container {
-  /* max-width: 800px; */
-  margin: 20px auto;
-  border: 1px solid #e1e5e9;
-  border-radius: 8px;
-  background: white;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
-
-/* Toolbar Styles */
-.toolbar {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  padding: 12px;
-  border-bottom: 1px solid #e1e5e9;
-  background: #f8f9fa;
-  align-items: center;
-}
-
-.toolbar-group {
-  display: flex;
-  gap: 4px;
-  align-items: center;
-  padding: 4px 8px;
-  border-right: 1px solid #e1e5e9;
-}
-
-.toolbar-group:last-child {
-  border-right: none;
-}
-
-.toolbar-group span {
-  font-size: 12px;
-  color: #666;
-  margin-right: 4px;
-  white-space: nowrap;
-}
-
-.toolbar-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 6px 12px;
-  border: 1px solid #d1d5db;
-  background: white;
-  color: #374151;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 14px;
-  transition: all 0.2s ease;
-  min-width: 40px;
-}
-
-.toolbar-button:hover {
-  background: #f3f4f6;
-  border-color: #9ca3af;
-}
-
-.toolbar-button.is-active {
-  background: #000;
-  color: #fff;
-  border-color: #000;
-}
-
-.toolbar-button:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-/* Editor Content Styles */
-.editor-content {
-  padding: 20px;
-  min-height: 400px;
-}
-
-.ProseMirror {
-  outline: none;
-  min-height: 300px;
-}
-
-.ProseMirror p {
-  margin: 0 0 1em 0;
-  line-height: 1.6;
-}
-
-.ProseMirror h1,
-.ProseMirror h2,
-.ProseMirror h3 {
-  margin: 1em 0 0.5em 0;
-  line-height: 1.2;
-}
-
-.ProseMirror h1 {
-  font-size: 2em;
-}
-
-.ProseMirror h2 {
-  font-size: 1.5em;
-}
-
-.ProseMirror h3 {
-  font-size: 1.25em;
-}
-
-.ProseMirror ul,
-.ProseMirror ol {
-  padding-left: 1.5em;
-  margin: 1em 0;
-}
-
-.ProseMirror li {
-  margin: 0.5em 0;
-}
-
-/* Image Resize Container */
-.image-resize-container {
-  position: relative;
-  display: inline-block;
-  margin: 0.5em 0;
-  border: 2px solid transparent;
-  border-radius: 4px;
-  transition: border-color 0.2s ease;
-  line-height: 0;
-}
-
-.image-resize-container.selected {
-  border-color: #3b82f6;
-}
-
-.image-resize-container:hover {
-  border-color: #3b82f6;
-}
-
-.image-resize-container:hover .resize-handle,
-.image-resize-container.selected .resize-handle {
-  opacity: 1 !important;
-}
-
-/* Resize Handle */
-.resize-handle {
-  position: absolute;
-  bottom: 2px;
-  right: 2px;
-  width: 12px;
-  height: 12px;
-  background: #3b82f6;
-  border: 1px solid white;
-  border-radius: 2px;
-  cursor: se-resize;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 8px;
-  color: white;
-  opacity: 0;
-  transition: opacity 0.2s ease;
-  z-index: 10;
-}
-
-.resize-handle:hover {
-  background: #2563eb;
-}
-
-/* Resizable Image */
-.resizable-image {
-  max-width: 100%;
-  height: auto;
-  display: block;
-  cursor: pointer;
-}
-
-/* Text Wrapping Modes */
-
-/* 1. Inline - Image behaves like text */
-.image-resize-container[data-wrap="inline"] {
-  display: inline;
-  vertical-align: middle;
-  margin: 0 4px !important;
-}
-
-.image-resize-container[data-wrap="inline"] .resizable-image {
-  display: inline;
-  vertical-align: middle;
-  margin: 0 !important;
-}
-
-/* 2. Wrap - Text wraps around image */
-.image-resize-container[data-wrap="wrap"] {
-  float: left;
-  margin: 0 12px 6px 0 !important;
-  clear: both;
-}
-
-.image-resize-container[data-wrap="wrap"] .resizable-image {
-  display: block;
-}
-
-/* 3. Break - Image breaks text flow */
-.image-resize-container[data-wrap="break"] {
-  display: block;
-  text-align: center;
-  margin: 12px auto !important;
-  float: none !important;
-  clear: both;
-}
-
-.image-resize-container[data-wrap="break"] .resizable-image {
-  display: inline-block;
-  margin: 0 auto;
-}
-
-/* Clear floats for proper text wrapping */
-.ProseMirror::after {
-  content: "";
-  display: table;
-  clear: both;
-}
-
-/* Content Preview */
-.content-preview {
-  padding: 20px;
-  border-top: 1px solid #e1e5e9;
-  background: #f8f9fa;
-}
-
-.content-preview h3 {
-  margin: 0 0 10px 0;
-  font-size: 14px;
-  color: #666;
-}
-
-.content-preview pre {
-  background: white;
-  padding: 12px;
-  border: 1px solid #e1e5e9;
-  border-radius: 4px;
-  font-size: 12px;
-  white-space: pre-wrap;
-  word-wrap: break-word;
-  max-height: 200px;
-  overflow-y: auto;
-  margin-bottom: 12px;
-}
-
-.save-button {
-  background: #10b981;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 14px;
-  transition: background 0.2s ease;
-}
-
-.save-button:hover {
-  background: #059669;
-}
-
-/* Content Preview with proper styling */
-.content-preview {
-  padding: 20px;
-  border-top: 1px solid #e1e5e9;
-  background: #f8f9fa;
-}
-
-.content-preview h3 {
-  margin: 0 0 10px 0;
-  font-size: 14px;
-  color: #666;
-}
-
-/* Preview content that applies the same styles as editor */
-.preview-content {
-  background: white;
-  padding: 20px;
-  border: 1px solid #e1e5e9;
-  border-radius: 4px;
-  margin-bottom: 12px;
-  min-height: 100px;
-}
-
-/* Apply the same typography styles to preview */
-.preview-content p {
-  margin: 0 0 1em 0;
-  line-height: 1.6;
-}
-
-.preview-content h1,
-.preview-content h2,
-.preview-content h3 {
-  margin: 1em 0 0.5em 0;
-  line-height: 1.2;
-}
-
-.preview-content h1 {
-  font-size: 2em;
-}
-
-.preview-content h2 {
-  font-size: 1.5em;
-}
-
-.preview-content h3 {
-  font-size: 1.25em;
-}
-
-.preview-content ul,
-.preview-content ol {
-  padding-left: 1.5em;
-  margin: 1em 0;
-}
-
-.preview-content li {
-  margin: 0.5em 0;
-}
-
-/* Text Wrapping Modes for Preview */
-
-/* 1. Inline - Image behaves like text */
-.preview-content .image-wrap-inline {
-  display: inline;
-  vertical-align: middle;
-  margin: 0 4px !important;
-}
-
-.preview-content .image-wrap-inline .resizable-image {
-  display: inline;
-  vertical-align: middle;
-  margin: 0 !important;
-}
-
-/* 2. Wrap - Text wraps around image */
-.preview-content .image-wrap-wrap {
-  float: left;
-  margin: 0 12px 6px 0 !important;
-  clear: both;
-}
-
-.preview-content .image-wrap-wrap .resizable-image {
-  display: block;
-}
-
-/* 3. Break - Image breaks text flow */
-.preview-content .image-wrap-break {
-  display: block;
-  text-align: center;
-  margin: 12px auto !important;
-  float: none !important;
-  clear: both;
-}
-
-.preview-content .image-wrap-break .resizable-image {
-  display: inline-block;
-  margin: 0 auto;
-}
-
-/* Clear floats for proper text wrapping in preview */
-.preview-content::after {
-  content: "";
-  display: table;
-  clear: both;
-}
-
-/* Rest of your existing CSS remains the same */
-.preview-content pre {
-  background: white;
-  padding: 12px;
-  border: 1px solid #e1e5e9;
-  border-radius: 4px;
-  font-size: 12px;
-  white-space: pre-wrap;
-  word-wrap: break-word;
-  max-height: 200px;
-  overflow-y: auto;
-  margin-bottom: 12px;
-}
-
-.save-button {
-  background: #10b981;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 14px;
-  transition: background 0.2s ease;
-}
-
-.save-button:hover {
-  background: #059669;
-}
-/* Font Size Dropdown */
-.font-size-select {
-  padding: 6px 8px;
-  border: 1px solid #d1d5db;
-  border-radius: 4px;
-  background: white;
-  color: #374151;
-  font-size: 14px;
-  cursor: pointer;
-  min-width: 80px;
-}
-
-.font-size-select:focus {
-  outline: none;
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-}
-
-/* Font size preview in dropdown */
-.font-size-select option {
-  font-size: 14px; /* Base size for dropdown text */
-}
-
-/* Apply font sizes to editor content */
-.ProseMirror [style*="font-size"] {
-  line-height: 1.4;
-}
-
-.ProseMirror blockquote.custom-blockquote {
-  border-left: 3px solid #3b82f6;
-  margin: 1.5em 0;
-  padding: 0.5em 1em;
-  background: #f8fafc;
-  border-radius: 0 4px 4px 0;
-  font-style: italic;
-  color: #475569;
-}
-
-.ProseMirror blockquote.custom-blockquote p {
-  margin: 0;
-}
-.ProseMirror blockquote.custom-blockquote p {
-  margin: 0;
-} 
-/* Preview blockquote styling */
-.preview-content blockquote {
-  border-left: 3px solid #3b82f6;
-  margin: 1.5em 0;
-  padding: 0.5em 1em;
-  background: #f8fafc;
-  border-radius: 0 4px 4px 0;
-  font-style: italic;
-  color: #475569;
-}
-
-.preview-content blockquote p {
-  margin: 0;
-}
-
-/* Highlight Styling */
-.ProseMirror mark {
-  border-radius: 2px;
-  padding: 0 2px;
-}
-
-.ProseMirror mark[style*="background-color: #fffb0080"] {
-  background-color: #fffb0080 !important;
-}
-
-.ProseMirror mark[style*="background-color: #ff000080"] {
-  background-color: #ff000080 !important;
-}
-
-.ProseMirror mark[style*="background-color: #00ff0080"] {
-  background-color: #00ff0080 !important;
-}
-
-.ProseMirror mark[style*="background-color: #0000ff80"] {
-  background-color: #0000ff80 !important;
-}
-
-/* Preview highlight styling */
-.preview-content mark {
-  border-radius: 2px;
-  padding: 0 2px;
-}
-
-/* Color Swatches for Highlight */
-.color-swatch {
-  width: 24px;
-  height: 24px;
-  border: 2px solid #e5e7eb;
-  border-radius: 4px;
-  cursor: pointer;
-  margin: 0 2px;
-  transition: all 0.2s ease;
-}
-
-.color-swatch:hover {
-  border-color: #3b82f6;
-  transform: scale(1.1);
-}
-
-.color-swatch:active {
-  transform: scale(0.95);
-}
-
-/* Active state for highlight button */
-.toolbar-button.is-active[title="Highlight Text"] {
-  background: #fffb0080;
-  color: #000;
-}
+"use client";
+import { usePost } from "@/hooks/usePost";
+
+import TextAlign from "@tiptap/extension-text-align";
+import { Color, TextStyle } from "@tiptap/extension-text-style";
+import Underline from "@tiptap/extension-underline";
+import { EditorContent, useEditor } from "@tiptap/react";
+import React, {
+  ChangeEvent,
+  useEffect,
+  useRef,
+  useState
+} from "react";
+import "./TextEditor.css";
+
+import Highlight from "@tiptap/extension-highlight";
+import {
+  CiCircleList,
+  CiTextAlignCenter,
+  CiTextAlignLeft,
+  CiTextAlignRight,
+} from "react-icons/ci";
+import { HiOutlineNumberedList } from "react-icons/hi2";
+import HeadingButtons from "./HeadingButtons";
+import ToolbarButton from "./Toolbar";
+import CustomBlockquote from "./extensions/blockquote";
+import FontSize from "./extensions/font-size";
+import ResizableImage from "./extensions/resizable-image";
+import useForceUpdate from "./hooks/useForceUpdate";
+import getCurrentImageWrap from "./utils/getCurrentImageWrap";
+
+const TextEditor: React.FC = () => {
+  const [isClient, setIsClient] = useState(false);
+  const [currentFontSize, setCurrentFontSize] = useState<string>("");
+  const forceUpdate = useForceUpdate();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const fontSizes = [8, 10, 12, 14, 16, 18, 20, 24, 28, 32, 36, 40, 48, 56, 64];
+
+  const { mutateAsync, isPending } = usePost("/public-images", (data) => {
+    console.log("Upload success", data);
+  });
+
+  const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append("image", file);
+
+    try {
+      const res = await mutateAsync(formData);
+      if (res.imageUrl) {
+        editor
+          ?.chain()
+          .focus()
+          .setImage({
+            src: res.imageUrl,
+            alt: file.name,
+            title: file.name,
+            width: "300px",
+            height: "auto",
+          })
+          .run();
+      }
+    } catch (err) {
+      console.error("Upload failed", err);
+      alert("Image upload failed. Please try again.");
+    } finally {
+      if (e.target) e.target.value = "";
+    }
+  };
+
+  const getCurrentFontSize = (): string => {
+    if (!editor) return "";
+    const fontSize = editor.getAttributes("textStyle").fontSize;
+    return fontSize ? fontSize.replace("px", "") : "";
+  };
+
+  const updateFontSizeState = () => {
+    setCurrentFontSize(getCurrentFontSize());
+  };
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  const editor = useEditor({
+    extensions: [
+      CustomBlockquote,
+      Underline,
+      TextStyle,
+      Color,
+      FontSize,
+      Highlight.configure({
+        multicolor: true,
+      }),
+      TextAlign.configure({
+        types: ["heading", "paragraph", "image"],
+      }),
+      ResizableImage.configure({
+        HTMLAttributes: {
+          class: "resizable-image",
+        },
+        inline: false,
+      }),
+    ],
+    content: `
+      <p>Start editing your content here...</p>
+    `,
+    immediatelyRender: false,
+    onUpdate: ({ editor }) => {
+      const html = editor.getHTML();
+      console.log("Editor content:", html);
+      updateFontSizeState();
+      forceUpdate();
+    },
+    onSelectionUpdate: () => {
+      updateFontSizeState();
+      forceUpdate();
+    },
+    onTransaction: ({ transaction }) => {
+      if (transaction.docChanged || transaction.selectionSet) {
+        updateFontSizeState();
+        forceUpdate();
+      }
+    },
+  });
+
+  useEffect(() => {
+    if (editor) {
+      updateFontSizeState();
+    }
+  }, [editor]);
+
+  if (!isClient || !editor) {
+    return <div>Loading editor...</div>;
+  }
+
+  const setImageWrap = (wrap: "inline" | "wrap" | "break") => {
+    editor.chain().focus().setImageWrap(wrap).run();
+  };
+
+  // Function to set font size
+  const setFontSize = (fontSize: string) => {
+    if (fontSize === "") {
+      editor.chain().focus().unsetFontSize().run();
+      setCurrentFontSize("");
+    } else {
+      editor.chain().focus().setFontSize(`${fontSize}px`).run();
+      setCurrentFontSize(fontSize);
+    }
+  };
+
+  const setHighlight = (color: string = "#fffb0080") => {
+    if (color === "remove") {
+      editor.chain().focus().unsetHighlight().run();
+    } else {
+      editor.chain().focus().setHighlight({ color }).run();
+    }
+  };
+
+  // Function to wrap selected text with quotation marks
+  const wrapWithQuotationMarks = () => {
+    const { from, to } = editor.state.selection;
+
+    if (from === to) {
+      // No text selected, just insert quotation marks at cursor
+      editor.chain().focus().insertContent("❝ ❞").run();
+    } else {
+      // Get selected text
+      const selectedText = editor.state.doc.textBetween(from, to);
+
+      // Wrap the selected text with quotation marks
+      editor
+        .chain()
+        .focus()
+        .deleteRange({ from, to })
+        .insertContent(`❝${selectedText}❞`)
+        .run();
+    }
+  };
+
+
+
+  const applyHeadingToSelection = (level: 1 | 2 | 3) => {
+    if (!editor) return;
+
+    const { from, to } = editor.state.selection;
+
+    if (from === to) {
+      editor.chain().focus().toggleHeading({ level }).run();
+    } else {
+      const selectedText = editor.state.doc.textBetween(from, to);
+
+      editor
+        .chain()
+        .focus()
+        .deleteRange({ from, to })
+        .insertContent({
+          type: "heading",
+          attrs: { level },
+          content: [{ type: "text", text: selectedText }],
+        })
+        .run();
+    }
+  };
+
+  return (
+    <div className="text-editor-container">
+      <div className="toolbar">
+        {/* Font Size Dropdown */}
+        <div className="toolbar-group">
+          <span>Font Size:</span>
+          <select
+            value={currentFontSize}
+            onChange={(e) => setFontSize(e.target.value)}
+            className="font-size-select"
+            title="Font Size"
+          >
+            <option value="">Default</option>
+            {fontSizes.map((size) => (
+              <option key={size} value={size}>
+                {size}px
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className="toolbar-group">
+          <ToolbarButton
+            onClick={() => editor.chain().focus().toggleBold().run()}
+            isActive={editor.isActive("bold")}
+            title="Bold"
+          >
+            <strong>B</strong>
+          </ToolbarButton>
+          <ToolbarButton
+            onClick={() => editor.chain().focus().toggleItalic().run()}
+            isActive={editor.isActive("italic")}
+            title="Italic"
+          >
+            <em>I</em>
+          </ToolbarButton>
+          <ToolbarButton
+            onClick={() => editor.chain().focus().toggleUnderline().run()}
+            isActive={editor.isActive("underline")}
+            title="Underline"
+          >
+            <u>U</u>
+          </ToolbarButton>
+        </div>
+
+        <div className="toolbar-group">
+          <ToolbarButton
+            onClick={() => editor.chain().focus().toggleBlockquote().run()}
+            isActive={editor.isActive("blockquote")}
+            title="Block Quote"
+          >
+            📄
+          </ToolbarButton>
+          <ToolbarButton
+            onClick={wrapWithQuotationMarks}
+            isActive={false}
+            title="Wrap with Quotation Marks"
+          >
+            ❝ ❞
+          </ToolbarButton>
+          <ToolbarButton
+            onClick={() => setHighlight("#fffb0080")}
+            isActive={editor.isActive("highlight")}
+            title="Highlight Text"
+          >
+            🖍️
+          </ToolbarButton>
+          <ToolbarButton
+            onClick={() => setHighlight("remove")}
+            isActive={false}
+            title="Remove Highlight"
+          >
+            🗑️
+          </ToolbarButton>
+        </div>
+        <div className="toolbar-group">
+          <HeadingButtons editor={editor} applyHeadingToSelection={applyHeadingToSelection} />
+        </div>
+        <div className="toolbar-group">
+          <ToolbarButton
+            onClick={() => editor.chain().focus().setTextAlign("left").run()}
+            isActive={editor.isActive({ textAlign: "left" })}
+            title="Align Left"
+          >
+            <CiTextAlignLeft />
+          </ToolbarButton>
+          <ToolbarButton
+            onClick={() => editor.chain().focus().setTextAlign("center").run()}
+            isActive={editor.isActive({ textAlign: "center" })}
+            title="Align Center"
+          >
+            <CiTextAlignCenter />
+          </ToolbarButton>
+          <ToolbarButton
+            onClick={() => editor.chain().focus().setTextAlign("right").run()}
+            isActive={editor.isActive({ textAlign: "right" })}
+            title="Align Right"
+          >
+            <CiTextAlignRight />
+          </ToolbarButton>
+        </div>
+        <div className="toolbar-group">
+          <ToolbarButton
+            onClick={() => editor.chain().focus().toggleBulletList().run()}
+            isActive={editor.isActive("bulletList")}
+            title="Bullet List"
+          >
+            <CiCircleList />
+          </ToolbarButton>
+          <ToolbarButton
+            onClick={() => editor.chain().focus().toggleOrderedList().run()}
+            isActive={editor.isActive("orderedList")}
+            title="Numbered List"
+          >
+            <HiOutlineNumberedList />
+          </ToolbarButton>
+        </div>
+        <div className="toolbar-group">
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleFileChange}
+            ref={fileInputRef}
+            style={{ display: "none" }}
+          />
+          <ToolbarButton
+            onClick={() => fileInputRef.current?.click()}
+            isActive={false}
+            disabled={isPending}
+            title="Insert Image"
+          >
+            {isPending ? "📤" : "🖼️"}
+          </ToolbarButton>
+        </div>
+
+        <div className="toolbar-group">
+          <span>Text Wrap:</span>
+          <ToolbarButton
+            onClick={() => setImageWrap("inline")}
+            isActive={getCurrentImageWrap(editor) === "inline"}
+            title="Inline - Image behaves like text"
+          >
+            Inline
+          </ToolbarButton>
+          <ToolbarButton
+            onClick={() => setImageWrap("wrap")}
+            isActive={getCurrentImageWrap(editor) === "wrap"}
+            title="Wrap - Text wraps around image"
+          >
+            Wrap
+          </ToolbarButton>
+          <ToolbarButton
+            onClick={() => setImageWrap("break")}
+            isActive={getCurrentImageWrap(editor) === "break"}
+            title="Break - Image breaks text flow"
+          >
+            Break
+          </ToolbarButton>
+        </div>
+
+        <div className="toolbar-group">
+          <span>Highlight:</span>
+          <button
+            onClick={() => setHighlight("#fffb0080")}
+            className="color-swatch"
+            style={{ backgroundColor: "#fffb0080" }}
+            title="Yellow Highlight"
+          />
+          <button
+            onClick={() => setHighlight("#ff000080")}
+            className="color-swatch"
+            style={{ backgroundColor: "#ff000080" }}
+            title="Red Highlight"
+          />
+          <button
+            onClick={() => setHighlight("#00ff0080")}
+            className="color-swatch"
+            style={{ backgroundColor: "#00ff0080" }}
+            title="Green Highlight"
+          />
+          <button
+            onClick={() => setHighlight("#0000ff80")}
+            className="color-swatch"
+            style={{ backgroundColor: "#0000ff80" }}
+            title="Blue Highlight"
+          />
+        </div>
+      </div>
+
+      <div className="editor-content">
+        <EditorContent editor={editor} />
+      </div>
+
+      <div className="content-preview">
+        <h3>Rendered Output Preview (with inline CSS):</h3>
+        <div
+          className="preview-content"
+          dangerouslySetInnerHTML={{ __html: editor.getHTML() }}
+        />
+        <h3>HTML Output Preview:</h3>
+        <pre>{editor.getHTML()}</pre>
+      </div>
+    </div>
+  );
+};
+
+export default TextEditor;

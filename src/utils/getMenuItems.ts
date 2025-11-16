@@ -1,7 +1,6 @@
 import {
   Activity,
   BadgeInfo,
-  Boxes,
   Building2,
   CalendarDays,
   ChartNoAxesCombined,
@@ -13,7 +12,7 @@ import {
   Shapes,
   ShieldCheck,
   Upload,
-  User2,
+  User2
 } from "lucide-react";
 import { FaQuestion } from "react-icons/fa";
 import { PiChats } from "react-icons/pi";
@@ -175,11 +174,11 @@ export function getMenuItems(
       icon: ChartNoAxesCombined,
       href: "/admin/power-bi",
     },
-    hasPermission && {
-      label: "Stakeholders",
-      icon: Boxes,
-      href: "/admin/stakeholders",
-    },
+    // hasPermission && {
+    //   label: "Stakeholders",
+    //   icon: Boxes,
+    //   href: "/admin/stakeholders",
+    // },
     hasPermission && {
       label: "Join Community Request",
       icon: TbBuildingCommunity,

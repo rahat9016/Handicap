@@ -24,4 +24,5 @@ export type ResizableImageAttributes = ImageAttributes & {
   width?: string;
   height?: string;
   wrap?: "inline" | "wrap" | "break";
+  align?: string
 };

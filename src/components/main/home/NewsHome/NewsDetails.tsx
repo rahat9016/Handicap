@@ -113,19 +113,6 @@ const NewsDetails = () => {
       </div>
 
       <div
-        id="newDetails"
-        className={
-          `preview-content rich-text-content
-    max-w-full 
-    break-words break-all whitespace-pre-wrap
-    [&>ul]:list-disc [&>ul]:ml-6
-    [&>ol]:list-decimal [&>ol]:ml-6
-    [&>li]:mb-1 [&>li]:clearfix
-    [&>blockquote]:relative [&>blockquote]:pl-5 [&>blockquote]:italic
-    [&>blockquote]:before:content-['❝'] [&>blockquote]:before:text-blue
-    [&>blockquote]:before:absolute [&>blockquote]:before:-left-1 [&>blockquote]:before:top-0
-  `
-        }
         dangerouslySetInnerHTML={{ __html: content }}
       />
       {/* <RichTextDisplay content={content} /> */}

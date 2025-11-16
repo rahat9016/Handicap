@@ -1,525 +1,43 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import { usePost } from "@/hooks/usePost";
-import { type CommandProps } from "@tiptap/core";
 import { Color } from "@tiptap/extension-color";
-import Image from "@tiptap/extension-image";
 import TextAlign from "@tiptap/extension-text-align";
 import { TextStyle } from "@tiptap/extension-text-style";
 import Underline from "@tiptap/extension-underline";
 import { EditorContent, useEditor } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
-import React, { ChangeEvent, useEffect, useRef, useState } from "react";
+import React, {
+  ChangeEvent,
+  useEffect,
+  useRef,
+  useState
+} from "react";
 import "./TextEditor.css";
-import { ResizableImageAttributes, ToolbarButtonProps } from "./types/editor";
-import { NodeSelection } from "prosemirror-state";
 
-// Custom image extension with resize functionality and text wrapping
-// const ResizableImage = Image.extend({
-//   name: "resizableImage",
-
-//   addAttributes() {
-//     return {
-//       ...this.parent?.(),
-//       width: {
-//         default: "300px",
-//         parseHTML: (element) =>
-//           element.getAttribute("data-width") || element.style.width || "300px",
-//         renderHTML: (attributes) => {
-//           let style = `width: ${attributes.width}; height: ${
-//             attributes.height || "auto"
-//           }; max-width: 100%;`;
-
-//           // Add inline styles based on wrap mode
-//           if (attributes.wrap === "inline") {
-//             style += " display: inline; vertical-align: middle; margin: 0 4px;";
-//           } else if (attributes.wrap === "wrap") {
-//             style += " float: left; margin: 0 12px 6px 0; clear: both;";
-//           } else if (attributes.wrap === "break") {
-//             style +=
-//               " display: block; margin: 12px auto; float: none; clear: both;";
-//           }
-
-//           return {
-//             "data-width": attributes.width,
-//             "data-height": attributes.height,
-//             "data-wrap": attributes.wrap,
-//             class: `resizable-image image-wrap-${attributes.wrap}`,
-//             style: style,
-//           };
-//         },
-//       },
-//       height: {
-//         default: "auto",
-//         parseHTML: (element) =>
-//           element.getAttribute("data-height") || element.style.height || "auto",
-//         renderHTML: (attributes) => {
-//           return {}; // Handled in width attribute
-//         },
-//       },
-//       wrap: {
-//         default: "inline",
-//         parseHTML: (element) => element.getAttribute("data-wrap") || "inline",
-//         renderHTML: (attributes) => {
-//           return {}; // Handled in width attribute
-//         },
-//       },
-//     };
-//   },
-
-//   addCommands() {
-//     return {
-//       setImage:
-//         (options: ImageAttributes) =>
-//         ({ commands }: any) => {
-//           return commands.insertContent({
-//             type: this.name,
-//             attrs: options,
-//           });
-//         },
-//       updateImage:
-//         (options: Partial<ImageAttributes>) =>
-//         ({ chain }: any) => {
-//           return chain().updateAttributes(this.name, options).run();
-//         },
-//       setImageSize:
-//         (width: string, height: string = "auto") =>
-//         ({ chain }: any) => {
-//           return chain().updateAttributes(this.name, { width, height }).run();
-//         },
-//       setImageWrap:
-//         (wrap: "inline" | "wrap" | "break") =>
-//         ({ chain }: any) => {
-//           return chain().updateAttributes(this.name, { wrap }).run();
-//         },
-//     };
-//   },
-
-//   addNodeView() {
-//     return ({ node, getPos, editor }) => {
-//       const dom = document.createElement("span");
-//       dom.className = `image-resize-container image-wrap-${node.attrs.wrap}`;
-//       dom.setAttribute("data-wrap", node.attrs.wrap);
-
-//       const img = document.createElement("img");
-//       img.src = node.attrs.src;
-//       img.alt = node.attrs.alt;
-//       img.title = node.attrs.title;
-//       img.className = "resizable-image";
-//       img.style.width = node.attrs.width;
-//       img.style.height = node.attrs.height;
-//       img.style.maxWidth = "100%";
-
-//       // Apply wrap style
-//       if (node.attrs.wrap === "wrap") {
-//         img.style.float = "left";
-//         img.style.marginRight = "12px";
-//         img.style.marginBottom = "6px";
-//       } else if (node.attrs.wrap === "break") {
-//         img.style.float = "none";
-//         img.style.display = "block";
-//         img.style.marginLeft = "auto";
-//         img.style.marginRight = "auto";
-//       } else {
-//         // inline
-//         img.style.float = "none";
-//         img.style.display = "inline";
-//         img.style.verticalAlign = "middle";
-//         img.style.margin = "0 4px";
-//       }
-
-//       // Create resize handle
-//       const resizeHandle = document.createElement("div");
-//       resizeHandle.className = "resize-handle";
-//       resizeHandle.innerHTML = "↘";
-//       resizeHandle.style.cssText = `
-//         position: absolute;
-//         bottom: 2px;
-//         right: 2px;
-//         width: 12px;
-//         height: 12px;
-//         background: #3b82f6;
-//         border: 1px solid white;
-//         border-radius: 2px;
-//         cursor: se-resize;
-//         display: flex;
-//         align-items: center;
-//         justify-content: center;
-//         font-size: 8px;
-//         color: white;
-//         opacity: 0;
-//         transition: opacity 0.2s ease;
-//         z-index: 10;
-//       `;
-
-//       dom.appendChild(img);
-//       dom.appendChild(resizeHandle);
-
-//       // Show resize handle on hover
-//       let isSelected = false;
-
-//       const updateResizeHandle = () => {
-//         if (isSelected) {
-//           resizeHandle.style.opacity = "1";
-//         } else {
-//           resizeHandle.style.opacity = "0";
-//         }
-//       };
-
-//       // Handle image selection
-//       const handleClick = (e: Event) => {
-//         e.preventDefault();
-//         e.stopPropagation();
-
-//         const pos = getPos();
-//         if (pos !== undefined) {
-//           editor.commands.setNodeSelection(pos);
-//           isSelected = true;
-//           updateResizeHandle();
-//         }
-//       };
-
-//       img.addEventListener("click", handleClick);
-
-//       // Handle editor selection changes
-//       const updateSelection = () => {
-//         const { selection } = editor.state;
-//         isSelected =
-//           selection.from <= getPos() &&
-//           selection.to >= getPos() + node.nodeSize;
-//         updateResizeHandle();
-//       };
-
-//       editor.on("selectionUpdate", updateSelection);
-
-//       // Resize functionality
-//       let isResizing = false;
-//       let startX: number,
-//         startY: number,
-//         startWidth: number,
-//         startHeight: number;
-
-//       const startResize = (e: MouseEvent) => {
-//         e.preventDefault();
-//         e.stopPropagation();
-//         isResizing = true;
-//         startX = e.clientX;
-//         startY = e.clientY;
-//         startWidth = parseInt(img.style.width) || img.offsetWidth;
-//         startHeight = parseInt(img.style.height) || img.offsetHeight;
-
-//         document.addEventListener("mousemove", resize);
-//         document.addEventListener("mouseup", stopResize);
-//       };
-
-//       const resize = (e: MouseEvent) => {
-//         if (!isResizing) return;
-
-//         const deltaX = e.clientX - startX;
-//         const deltaY = e.clientY - startY;
-
-//         const newWidth = Math.max(50, startWidth + deltaX);
-//         const newHeight = Math.max(50, startHeight + deltaY);
-
-//         img.style.width = `${newWidth}px`;
-//         img.style.height = `${newHeight}px`;
-//       };
-
-//       const stopResize = () => {
-//         if (!isResizing) return;
-
-//         isResizing = false;
-//         document.removeEventListener("mousemove", resize);
-//         document.removeEventListener("mouseup", stopResize);
-
-//         // Update the node attributes
-//         const pos = getPos();
-//         if (pos !== undefined) {
-//           editor.commands.command(({ tr }) => {
-//             tr.setNodeMarkup(pos, undefined, {
-//               ...node.attrs,
-//               width: img.style.width,
-//               height: img.style.height,
-//             });
-//             return true;
-//           });
-//         }
-//       };
-
-//       resizeHandle.addEventListener("mousedown", startResize);
-
-//       // Cleanup
-//       return {
-//         dom,
-//         destroy: () => {
-//           img.removeEventListener("click", handleClick);
-//           resizeHandle.removeEventListener("mousedown", startResize);
-//           document.removeEventListener("mousemove", resize);
-//           document.removeEventListener("mouseup", stopResize);
-//           editor.off("selectionUpdate", updateSelection);
-//         },
-//       };
-//     };
-//   },
-// });
-
-import { type Editor, type NodeViewProps } from "@tiptap/core";
-
-export const ResizableImage = Image.extend({
-  name: "resizableImage",
-
-  addAttributes() {
-    return {
-      src: {
-        default: null,
-      },
-      alt: {
-        default: null,
-      },
-      title: {
-        default: null,
-      },
-      width: {
-        default: "300px",
-        parseHTML: (element: HTMLElement) =>
-          element.getAttribute("data-width") || element.style.width || "300px",
-        renderHTML: (attributes: ResizableImageAttributes ) => {
-          const { width, height, wrap } = attributes;
-          let style = `width: ${width}; height: ${height || "auto"}; max-width: 100%;`;
-
-          if (wrap === "inline") {
-            style += " display: inline; vertical-align: middle; margin: 0 4px;";
-          } else if (wrap === "wrap") {
-            style += " float: left; margin: 0 12px 6px 0; clear: both;";
-          } else if (wrap === "break") {
-            style += " display: block; margin: 12px auto; float: none; clear: both;";
-          }
-
-          return {
-            "data-width": width,
-            "data-height": height,
-            "data-wrap": wrap,
-            class: `resizable-image image-wrap-${wrap}`,
-            style,
-          };
-        },
-      },
-      height: {
-        default: "auto",
-        parseHTML: (element: HTMLElement) =>
-          element.getAttribute("data-height") || element.style.height || "auto",
-        renderHTML: () => ({}), // handled in width
-      },
-      wrap: {
-        default: "inline",
-        parseHTML: (element: HTMLElement) =>
-          element.getAttribute("data-wrap") || "inline",
-        renderHTML: () => ({}),
-      },
-    };
-  },
-
-  addCommands() {
-    return {
-      setImage:
-        (options: ResizableImageAttributes) =>
-        ({ commands }: CommandProps) =>
-          commands.insertContent({
-            type: this.name,
-            attrs: options,
-          }),
-      updateImage:
-        (options: Partial<ResizableImageAttributes>) =>
-        ({ chain }: CommandProps) =>
-          chain().updateAttributes(this.name, options).run(),
-      setImageSize:
-        (width: string, height: string = "auto") =>
-        ({ chain }: CommandProps) =>
-          chain().updateAttributes(this.name, { width, height }).run(),
-      setImageWrap:
-        (wrap: "inline" | "wrap" | "break") =>
-        ({ chain }: CommandProps) =>
-          chain().updateAttributes(this.name, { wrap }).run(),
-    };
-  },
-
-  addNodeView() {
-    return ({ node, getPos, editor }: NodeViewProps & { editor: Editor }) => {
-      const dom = document.createElement("span");
-      dom.className = `image-resize-container image-wrap-${node.attrs.wrap}`;
-      dom.setAttribute("data-wrap", node.attrs.wrap);
-
-      const img = document.createElement("img");
-      img.src = node.attrs.src;
-      img.alt = node.attrs.alt || "";
-      img.title = node.attrs.title || "";
-      img.className = "resizable-image";
-      img.style.width = node.attrs.width;
-      img.style.height = node.attrs.height;
-      img.style.maxWidth = "100%";
-
-      // Apply wrapping styles
-      switch (node.attrs.wrap) {
-        case "wrap":
-          img.style.float = "left";
-          img.style.marginRight = "12px";
-          img.style.marginBottom = "6px";
-          break;
-        case "break":
-          img.style.display = "block";
-          img.style.margin = "12px auto";
-          img.style.float = "none";
-          break;
-        default:
-          img.style.display = "inline";
-          img.style.verticalAlign = "middle";
-          img.style.margin = "0 4px";
-      }
-
-      // Resize handle
-      const resizeHandle = document.createElement("div");
-      resizeHandle.className = "resize-handle";
-      resizeHandle.innerHTML = "↘";
-      resizeHandle.style.cssText = `
-        position: absolute;
-        bottom: 2px;
-        right: 2px;
-        width: 12px;
-        height: 12px;
-        background: #3b82f6;
-        border: 1px solid white;
-        border-radius: 2px;
-        cursor: se-resize;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 8px;
-        color: white;
-        opacity: 0;
-        transition: opacity 0.2s ease;
-        z-index: 10;
-      `;
-
-      dom.appendChild(img);
-      dom.appendChild(resizeHandle);
-
-      let isSelected = false;
-
-      const updateResizeHandle = () => {
-        resizeHandle.style.opacity = isSelected ? "1" : "0";
-      };
-
-      const handleClick = (e: MouseEvent) => {
-        e.preventDefault();
-        e.stopPropagation();
-        const pos = getPos();
-        if (pos !== undefined) {
-          editor.commands.setNodeSelection(pos);
-          isSelected = true;
-          updateResizeHandle();
-        }
-      };
-
-      img.addEventListener("click", handleClick);
-
-      const updateSelection = () => {
-        const { selection } = editor.state;
-        const pos = getPos();
-        if (pos === undefined) return;
-        isSelected = selection.from <= pos && selection.to >= pos + node.nodeSize;
-        updateResizeHandle();
-      };
-
-      editor.on("selectionUpdate", updateSelection);
-
-      // Resize logic
-      let isResizing = false;
-      let startX = 0,
-        startY = 0,
-        startWidth = 0,
-        startHeight = 0;
-
-      const startResize = (e: MouseEvent) => {
-        e.preventDefault();
-        e.stopPropagation();
-        isResizing = true;
-        startX = e.clientX;
-        startY = e.clientY;
-        startWidth = parseInt(img.style.width) || img.offsetWidth;
-        startHeight = parseInt(img.style.height) || img.offsetHeight;
-
-        document.addEventListener("mousemove", resize);
-        document.addEventListener("mouseup", stopResize);
-      };
-
-      const resize = (e: MouseEvent) => {
-        if (!isResizing) return;
-        const deltaX = e.clientX - startX;
-        const deltaY = e.clientY - startY;
-        const newWidth = Math.max(50, startWidth + deltaX);
-        const newHeight = Math.max(50, startHeight + deltaY);
-        img.style.width = `${newWidth}px`;
-        img.style.height = `${newHeight}px`;
-      };
-
-      const stopResize = () => {
-        if (!isResizing) return;
-        isResizing = false;
-        document.removeEventListener("mousemove", resize);
-        document.removeEventListener("mouseup", stopResize);
-
-        const pos = getPos();
-        if (pos !== undefined) {
-          editor.commands.command(({ tr }) => {
-            tr.setNodeMarkup(pos, undefined, {
-              ...node.attrs,
-              width: img.style.width,
-              height: img.style.height,
-            });
-            return true;
-          });
-        }
-      };
-
-      resizeHandle.addEventListener("mousedown", startResize);
-
-      return {
-        dom,
-        destroy: () => {
-          img.removeEventListener("click", handleClick);
-          resizeHandle.removeEventListener("mousedown", startResize);
-          document.removeEventListener("mousemove", resize);
-          document.removeEventListener("mouseup", stopResize);
-          editor.off("selectionUpdate", updateSelection);
-        },
-      };
-    };
-  },
-});
-
-// Toolbar Button Component
-const ToolbarButton: React.FC<ToolbarButtonProps> = ({
-  onClick,
-  isActive,
-  children,
-  title,
-  disabled = false,
-}) => (
-  <button
-    onClick={onClick}
-    className={`toolbar-button ${isActive ? "is-active" : ""}`}
-    type="button"
-    title={title}
-    disabled={disabled}
-  >
-    {children}
-  </button>
-);
+import Highlight from "@tiptap/extension-highlight";
+import {
+  CiCircleList,
+  CiTextAlignCenter,
+  CiTextAlignLeft,
+  CiTextAlignRight,
+} from "react-icons/ci";
+import { HiOutlineNumberedList } from "react-icons/hi2";
+import HeadingButtons from "./HeadingButtons";
+import ToolbarButton from "./Toolbar";
+import CustomBlockquote from "./extensions/blockquote";
+import FontSize from "./extensions/font-size";
+import ResizableImage from "./extensions/resizable-image";
+import useForceUpdate from "./hooks/useForceUpdate";
+import getCurrentImageWrap from "./utils/getCurrentImageWrap";
 
 const TextEditor: React.FC = () => {
   const [isClient, setIsClient] = useState(false);
+  const [currentFontSize, setCurrentFontSize] = useState<string>("");
+  const forceUpdate = useForceUpdate();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Use your custom usePost hook
+  const fontSizes = [8, 10, 12, 14, 16, 18, 20, 24, 28, 32, 36, 40, 48, 56, 64];
+
   const { mutateAsync, isPending } = usePost("/public-images", (data) => {
     console.log("Upload success", data);
   });
@@ -541,8 +59,8 @@ const TextEditor: React.FC = () => {
             src: res.imageUrl,
             alt: file.name,
             title: file.name,
-            width: 300,
-            height: undefined,
+            width: "300px",
+            height: "auto",
           })
           .run();
       }
@@ -550,8 +68,18 @@ const TextEditor: React.FC = () => {
       console.error("Upload failed", err);
       alert("Image upload failed. Please try again.");
     } finally {
-      e.target.value = "";
+      if (e.target) e.target.value = "";
     }
+  };
+
+  const getCurrentFontSize = (): string => {
+    if (!editor) return "";
+    const fontSize = editor.getAttributes("textStyle").fontSize;
+    return fontSize ? fontSize.replace("px", "") : "";
+  };
+
+  const updateFontSizeState = () => {
+    setCurrentFontSize(getCurrentFontSize());
   };
 
   useEffect(() => {
@@ -560,10 +88,14 @@ const TextEditor: React.FC = () => {
 
   const editor = useEditor({
     extensions: [
-      StarterKit,
+      CustomBlockquote,
       Underline,
       TextStyle,
       Color,
+      FontSize,
+      Highlight.configure({
+        multicolor: true,
+      }),
       TextAlign.configure({
         types: ["heading", "paragraph", "image"],
       }),
@@ -581,44 +113,121 @@ const TextEditor: React.FC = () => {
     onUpdate: ({ editor }) => {
       const html = editor.getHTML();
       console.log("Editor content:", html);
+      updateFontSizeState();
+      forceUpdate();
+    },
+    onSelectionUpdate: () => {
+      updateFontSizeState();
+      forceUpdate();
+    },
+    onTransaction: ({ transaction }) => {
+      if (transaction.docChanged || transaction.selectionSet) {
+        updateFontSizeState();
+        forceUpdate();
+      }
     },
   });
+
+  useEffect(() => {
+    if (editor) {
+      updateFontSizeState();
+    }
+  }, [editor]);
 
   if (!isClient || !editor) {
     return <div>Loading editor...</div>;
   }
 
-  // Function to set image text wrapping
   const setImageWrap = (wrap: "inline" | "wrap" | "break") => {
     editor.chain().focus().setImageWrap(wrap).run();
   };
 
-  // Check current image wrap mode
-//   const getCurrentImageWrap = (): "inline" | "wrap" | "break" => {
-//     const node = editor.state.selection.node;
-//     return node?.attrs?.wrap || "inline";
-//   };
-const getCurrentImageWrap = (): "inline" | "wrap" | "break" => {
-  const { selection } = editor.state;
-
-  if (selection instanceof NodeSelection && selection.node) {
-    const wrap = selection.node.attrs?.wrap;
-    if (wrap === "inline" || wrap === "wrap" || wrap === "break") {
-      return wrap;
+  // Function to set font size
+  const setFontSize = (fontSize: string) => {
+    if (fontSize === "") {
+      editor.chain().focus().unsetFontSize().run();
+      setCurrentFontSize("");
+    } else {
+      editor.chain().focus().setFontSize(`${fontSize}px`).run();
+      setCurrentFontSize(fontSize);
     }
-  }
+  };
 
-  return "inline"; // default
-};
-  const handleSaveContent = () => {
-    const content = editor.getHTML();
-    console.log("Final content:", content);
-    alert("Content saved! Check console for HTML output.");
+  const setHighlight = (color: string = "#fffb0080") => {
+    if (color === "remove") {
+      editor.chain().focus().unsetHighlight().run();
+    } else {
+      editor.chain().focus().setHighlight({ color }).run();
+    }
+  };
+
+  // Function to wrap selected text with quotation marks
+  const wrapWithQuotationMarks = () => {
+    const { from, to } = editor.state.selection;
+
+    if (from === to) {
+      // No text selected, just insert quotation marks at cursor
+      editor.chain().focus().insertContent("❝ ❞").run();
+    } else {
+      // Get selected text
+      const selectedText = editor.state.doc.textBetween(from, to);
+
+      // Wrap the selected text with quotation marks
+      editor
+        .chain()
+        .focus()
+        .deleteRange({ from, to })
+        .insertContent(`❝${selectedText}❞`)
+        .run();
+    }
+  };
+
+
+
+  const applyHeadingToSelection = (level: 1 | 2 | 3) => {
+    if (!editor) return;
+
+    const { from, to } = editor.state.selection;
+
+    if (from === to) {
+      editor.chain().focus().toggleHeading({ level }).run();
+    } else {
+      const selectedText = editor.state.doc.textBetween(from, to);
+
+      editor
+        .chain()
+        .focus()
+        .deleteRange({ from, to })
+        .insertContent({
+          type: "heading",
+          attrs: { level },
+          content: [{ type: "text", text: selectedText }],
+        })
+        .run();
+    }
   };
 
   return (
     <div className="text-editor-container">
       <div className="toolbar">
+        {/* Font Size Dropdown */}
+        <div className="toolbar-group">
+          <span>Font Size:</span>
+          <select
+            value={currentFontSize}
+            onChange={(e) => setFontSize(e.target.value)}
+            className="font-size-select"
+            title="Font Size"
+          >
+            <option value="">Default</option>
+            {fontSizes.map((size) => (
+              <option key={size} value={size}>
+                {size}px
+              </option>
+            ))}
+          </select>
+        </div>
+
         <div className="toolbar-group">
           <ToolbarButton
             onClick={() => editor.chain().focus().toggleBold().run()}
@@ -645,58 +254,76 @@ const getCurrentImageWrap = (): "inline" | "wrap" | "break" => {
 
         <div className="toolbar-group">
           <ToolbarButton
-            onClick={() =>
-              editor.chain().focus().toggleHeading({ level: 1 }).run()
-            }
-            isActive={editor.isActive("heading", { level: 1 })}
-            title="Heading 1"
+            onClick={() => editor.chain().focus().toggleBlockquote().run()}
+            isActive={editor.isActive("blockquote")}
+            title="Block Quote"
           >
-            H1
+            📄
           </ToolbarButton>
           <ToolbarButton
-            onClick={() =>
-              editor.chain().focus().toggleHeading({ level: 2 }).run()
-            }
-            isActive={editor.isActive("heading", { level: 2 })}
-            title="Heading 2"
+            onClick={wrapWithQuotationMarks}
+            isActive={false}
+            title="Wrap with Quotation Marks"
           >
-            H2
+            ❝ ❞
           </ToolbarButton>
           <ToolbarButton
-            onClick={() =>
-              editor.chain().focus().toggleHeading({ level: 3 }).run()
-            }
-            isActive={editor.isActive("heading", { level: 3 })}
-            title="Heading 3"
+            onClick={() => setHighlight("#fffb0080")}
+            isActive={editor.isActive("highlight")}
+            title="Highlight Text"
           >
-            H3
+            🖍️
+          </ToolbarButton>
+          <ToolbarButton
+            onClick={() => setHighlight("remove")}
+            isActive={false}
+            title="Remove Highlight"
+          >
+            🗑️
           </ToolbarButton>
         </div>
-
+        <div className="toolbar-group">
+          <HeadingButtons editor={editor} applyHeadingToSelection={applyHeadingToSelection} />
+        </div>
         <div className="toolbar-group">
           <ToolbarButton
             onClick={() => editor.chain().focus().setTextAlign("left").run()}
             isActive={editor.isActive({ textAlign: "left" })}
             title="Align Left"
           >
-            ⬅️
+            <CiTextAlignLeft />
           </ToolbarButton>
           <ToolbarButton
             onClick={() => editor.chain().focus().setTextAlign("center").run()}
             isActive={editor.isActive({ textAlign: "center" })}
             title="Align Center"
           >
-            🔘
+            <CiTextAlignCenter />
           </ToolbarButton>
           <ToolbarButton
             onClick={() => editor.chain().focus().setTextAlign("right").run()}
             isActive={editor.isActive({ textAlign: "right" })}
             title="Align Right"
           >
-            ➡️
+            <CiTextAlignRight />
           </ToolbarButton>
         </div>
-
+        <div className="toolbar-group">
+          <ToolbarButton
+            onClick={() => editor.chain().focus().toggleBulletList().run()}
+            isActive={editor.isActive("bulletList")}
+            title="Bullet List"
+          >
+            <CiCircleList />
+          </ToolbarButton>
+          <ToolbarButton
+            onClick={() => editor.chain().focus().toggleOrderedList().run()}
+            isActive={editor.isActive("orderedList")}
+            title="Numbered List"
+          >
+            <HiOutlineNumberedList />
+          </ToolbarButton>
+        </div>
         <div className="toolbar-group">
           <input
             type="file"
@@ -715,30 +342,57 @@ const getCurrentImageWrap = (): "inline" | "wrap" | "break" => {
           </ToolbarButton>
         </div>
 
-        {/* Image Text Wrapping Controls */}
         <div className="toolbar-group">
           <span>Text Wrap:</span>
           <ToolbarButton
             onClick={() => setImageWrap("inline")}
-            isActive={getCurrentImageWrap() === "inline"}
+            isActive={getCurrentImageWrap(editor) === "inline"}
             title="Inline - Image behaves like text"
           >
             Inline
           </ToolbarButton>
           <ToolbarButton
             onClick={() => setImageWrap("wrap")}
-            isActive={getCurrentImageWrap() === "wrap"}
+            isActive={getCurrentImageWrap(editor) === "wrap"}
             title="Wrap - Text wraps around image"
           >
             Wrap
           </ToolbarButton>
           <ToolbarButton
             onClick={() => setImageWrap("break")}
-            isActive={getCurrentImageWrap() === "break"}
+            isActive={getCurrentImageWrap(editor) === "break"}
             title="Break - Image breaks text flow"
           >
             Break
           </ToolbarButton>
+        </div>
+
+        <div className="toolbar-group">
+          <span>Highlight:</span>
+          <button
+            onClick={() => setHighlight("#fffb0080")}
+            className="color-swatch"
+            style={{ backgroundColor: "#fffb0080" }}
+            title="Yellow Highlight"
+          />
+          <button
+            onClick={() => setHighlight("#ff000080")}
+            className="color-swatch"
+            style={{ backgroundColor: "#ff000080" }}
+            title="Red Highlight"
+          />
+          <button
+            onClick={() => setHighlight("#00ff0080")}
+            className="color-swatch"
+            style={{ backgroundColor: "#00ff0080" }}
+            title="Green Highlight"
+          />
+          <button
+            onClick={() => setHighlight("#0000ff80")}
+            className="color-swatch"
+            style={{ backgroundColor: "#0000ff80" }}
+            title="Blue Highlight"
+          />
         </div>
       </div>
 
@@ -746,7 +400,6 @@ const getCurrentImageWrap = (): "inline" | "wrap" | "break" => {
         <EditorContent editor={editor} />
       </div>
 
-      {/* Content Preview */}
       <div className="content-preview">
         <h3>Rendered Output Preview (with inline CSS):</h3>
         <div
@@ -755,9 +408,6 @@ const getCurrentImageWrap = (): "inline" | "wrap" | "break" => {
         />
         <h3>HTML Output Preview:</h3>
         <pre>{editor.getHTML()}</pre>
-        <button onClick={handleSaveContent} className="save-button">
-          Save Content
-        </button>
       </div>
     </div>
   );

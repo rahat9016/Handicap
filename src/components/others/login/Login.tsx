@@ -1,5 +1,6 @@
 "use client";
 
+import ErrorMessage from "@/components/common/Errors/ErrorMessage";
 import { IUser } from "@/components/organizer/types";
 import ControlledInputField from "@/components/share/ControlledInputField";
 import HeroSection from "@/components/share/HeroSection";
@@ -21,12 +22,15 @@ import {
 import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
 import { LoginFormData } from "@/schemas/auth";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { Eye, EyeOff } from "lucide-react";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import { LoginForm, userLoginSchema } from "./Schema/Login";
 export default function Login() {
+  const [showPassword, setShowPassword] = useState(false);
+
   const searchParams = useSearchParams();
   const dispatch = useAppDispatch();
   const {
@@ -70,16 +74,13 @@ export default function Login() {
             dispatch(setAdminOrganizationPermission(true));
           else dispatch(setPermission(false));
         }
-        console.log('call 1')
         let destination = callbackUrl;
-        console.log('call 2')
-        
+
         if (res?.role === "USER") {
-          console.log('call 3')
           // ✅ Send USER to user dashboard
           destination = "/user-dashboard";
         } else if (res?.parentRoleId === 2) {
-          console.log('call 4')
+          console.log("call 4");
           destination = "/organization-list";
         } else if (res?.parentRoleId === null) {
           destination = callbackUrl;
@@ -93,7 +94,6 @@ export default function Login() {
         console.error("Login failed:", error);
       });
   };
-  console.log({ callbackUrl });
   useEffect(() => {
     if (isSuccess && data?.data) {
       dispatch(setUserInformation(data.data));
@@ -124,28 +124,39 @@ export default function Login() {
                     placeholder="Enter your email"
                   />
                 </div>
-
                 <div>
                   <div className="mt-3">
                     <InputLabel label="Password" required />
-                    <ControlledInputField
-                      name="password"
-                      type="password"
-                      placeholder="Enter your password"
-                    />
+                    <div className="relative">
+                      <ControlledInputField
+                        name="password"
+                        type={showPassword ? "text" : "password"}
+                        placeholder="Enter your password"
+                        className="pr-10" 
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute inset-y-0 right-3 flex items-center text-black"
+                      >
+                        {showPassword ? (
+                          <EyeOff size={20} />
+                        ) : (
+                          <Eye size={20} />
+                        )}
+                      </button>
+                    </div>
                   </div>
                   <Link
                     href="/forgot-password"
-                    className="font-medium text-primary mt-3 block text-right"
+                    className="font-medium text-primary mt-3 block text-right font-inter"
                   >
                     Forgot password?
                   </Link>
                 </div>
-                {error && error?.errors && (
-                  <div className="text-rose-600 bg-rose-200 text-center py-2 rounded-sm font-inter text-sm mt-3">
-                    {error?.errors[0]}
-                  </div>
-                )}
+                <div className="mt-2">
+                  <ErrorMessage error={error} />
+                </div>
                 <div>
                   <Button
                     disabled={isPending}

@@ -1,13 +1,12 @@
 import { useEffect, useRef, useCallback } from 'react';
-import { usePathname, useSearchParams } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { analyticsClient } from '@/lib/analytics-client';
 import { ReferrerDetection } from '@/lib/reffer-detection';
 
 
 export const useAnalytics = () => {
     const pathname = usePathname();
-    const searchParams = useSearchParams();
-
+    const sessionEnded = useRef(false);
     const sessionId = useRef<string>('');
     const pageViewStartTime = useRef<number>(0);
     const currentPage = useRef<string>('');
@@ -61,27 +60,16 @@ export const useAnalytics = () => {
         console.log('Tracking page view for:', pageTitle);
         // Ensure session exists
         if (!sessionId.current) {
-            const sessionCreated = await startSession();
-            if (!sessionCreated) {
-                console.error('Cannot track page view - session creation failed');
-                return;
-            }
+           await startSession();
         }
 
-        // Small delay to ensure session is created
-        await new Promise(resolve => setTimeout(resolve, 100));
-
-        const timeOnPage = pageViewStartTime.current
-            ? Math.floor((Date.now() - pageViewStartTime.current) / 1000)
-            : 0;
-
-        // Track previous page view if it exists
-        if (currentPage.current && timeOnPage > 0) {
+        if (currentPage.current) {
+             const timeOnPage = Date.now() - pageViewStartTime.current;
             const pageViewData = {
                 pageUrl: currentPage.current,
                 pageTitle: document.title,
                 referrer: ReferrerDetection.getValidReferrer(),
-                timeOnPage,
+                  timeOnPage: Math.floor(timeOnPage / 1000),
                 isBounce: timeOnPage < 10,
                 organizationId: getOrganizationId() || undefined,
             };
@@ -114,6 +102,8 @@ export const useAnalytics = () => {
 
     // End session
     const endSession = useCallback(async () => {
+        if (sessionEnded.current || !sessionId.current) return;
+        sessionEnded.current = true;
         if (!sessionId.current) return;
 
         // Track final page view
@@ -180,8 +170,22 @@ export const useAnalytics = () => {
 
     // Handle route changes (Next.js App Router)
     useEffect(() => {
-        trackPageView(window.location.href, document.title);
-    }, [pathname, searchParams, trackPageView]);
+        if (pathname !== currentPage.current) {
+
+            trackPageView(window.location.href, document.title);
+        }
+    }, [pathname]);
+
+    useEffect(() => {
+        const handleBeforeUnload = () => {
+            if (!sessionEnded.current) {
+                endSession();
+            }
+        };
+
+        window.addEventListener('beforeunload', handleBeforeUnload);
+        return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+    }, [endSession]);
 
     return {
         sessionId: sessionId.current,

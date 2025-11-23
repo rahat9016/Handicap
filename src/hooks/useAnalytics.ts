@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useRef, useCallback } from 'react';
 import { usePathname } from 'next/navigation';
 import { analyticsClient } from '@/lib/analytics-client';

@@ -113,15 +113,9 @@ const NewsDetails = () => {
       </div>
 
       <div
-        className="max-w-none 
-    [&>ul]:list-disc [&>ul]:ml-6
-    [&>ol]:list-decimal [&>ol]:ml-6
-    [&>li]:mb-1
-    [&>blockquote]:relative [&>blockquote]:pl-5 [&>blockquote]:italic 
-    [&>blockquote]:before:content-['❝'] [&>blockquote]:before:text-blue-600 
-    [&>blockquote]:before:absolute [&>blockquote]:before:-left-1 [&>blockquote]:before:top-0"
         dangerouslySetInnerHTML={{ __html: content }}
       />
+      {/* <RichTextDisplay content={content} /> */}
     </div>
   );
 };

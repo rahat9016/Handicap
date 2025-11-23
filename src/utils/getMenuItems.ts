@@ -1,7 +1,6 @@
 import {
   Activity,
   BadgeInfo,
-  Boxes,
   Building2,
   CalendarDays,
   ChartNoAxesCombined,
@@ -13,7 +12,7 @@ import {
   Shapes,
   ShieldCheck,
   Upload,
-  User2,
+  User2
 } from "lucide-react";
 import { FaQuestion } from "react-icons/fa";
 import { PiChats } from "react-icons/pi";
@@ -62,7 +61,7 @@ export function getMenuItems(
     hasPermission && {
       label: "Content",
       icon: Upload,
-      children: [{ label: "Page Sections", href: "/admin/page-sections" }],
+      children: [{ label: "Page Sections", href: "/admin/page-sections" }, { label: "Hero Config", href: "/admin/landing-page-config" }],
     },
     hasPermission && {
       label: "Organization Manage",
@@ -110,7 +109,7 @@ export function getMenuItems(
       children: [
         { label: "News List", href: "/admin/news/news-list" },
         { label: "News Categories", href: "/admin/news/news-categories" },
-        { label: "News Tags", href: "/admin/news/news-tags" },
+        // { label: "News Tags", href: "/admin/news/news-tags" },
       ],
     },
     {
@@ -175,11 +174,11 @@ export function getMenuItems(
       icon: ChartNoAxesCombined,
       href: "/admin/power-bi",
     },
-    hasPermission && {
-      label: "Stakeholders",
-      icon: Boxes,
-      href: "/admin/stakeholders",
-    },
+    // hasPermission && {
+    //   label: "Stakeholders",
+    //   icon: Boxes,
+    //   href: "/admin/stakeholders",
+    // },
     hasPermission && {
       label: "Join Community Request",
       icon: TbBuildingCommunity,

@@ -1,7 +1,10 @@
 import ControlledInputField from "@/components/share/ControlledInputField";
 import InputLabel from "@/components/share/InputLabel";
+import { Eye, EyeOff } from "lucide-react";
+import { useState } from "react";
 
 export default function SignUpForm() {
+  const [showPassword, setShowPassword] = useState(false);
   return (
     <div className="flex flex-col gap-6 mt-8">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 lg:gap-5">
@@ -39,11 +42,25 @@ export default function SignUpForm() {
         </div>
         <div>
           <InputLabel label="Password" required />
-          <ControlledInputField
-            name="password"
-            type="password"
-            placeholder="Enter your password"
-          />
+          <div className="relative">
+                      <ControlledInputField
+                        name="password"
+                        type={showPassword ? "text" : "password"}
+                        placeholder="Enter your password"
+                        className="pr-10" 
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute inset-y-0 right-3 flex items-center text-black"
+                      >
+                        {showPassword ? (
+                          <EyeOff size={20} />
+                        ) : (
+                          <Eye size={20} />
+                        )}
+                      </button>
+                    </div>
         </div>
       </div>
     </div>

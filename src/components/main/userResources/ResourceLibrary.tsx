@@ -50,6 +50,7 @@ export default function ResourceLibrary({
                 size={resource.fileSize}
                 ratings={3.2}
                 isFeatured={resource.featured}
+                isSuggested={resource.isSuggested}
                 isPdf
                 fileType={resource?.resourceFiles[0]?.fileType}
                 filePath={resource?.resourceFiles[0]?.filePath}

@@ -42,7 +42,7 @@ export default function AboutUs() {
               data?.data?.content?.[local] ?? data?.data?.content.en ?? "--"
             }
             classTitle="text-left w-9/12 mx-auto"
-            classDesc="text-left lg:w-9/12"
+            classDesc="text-left lg:w-9/12 font-normal"
           />
           <div className="w-full lg:w-9/12 mx-auto mt-6 lg:mt-10">
             <h3 className="text-primary text-lg font-inter font-medium">
@@ -51,7 +51,7 @@ export default function AboutUs() {
                 "--"}
             </h3>
             <p
-              className="text-[#7A7A8E] text-justify text-sm font-inter font-normal mt-3 "
+              className="text-[#666666] text-justify text-xs lg:text-sm font-inter font-normal mt-3 "
               dangerouslySetInnerHTML={{
                 __html:
                   ourMission?.data?.content?.[local] ??
@@ -69,7 +69,7 @@ export default function AboutUs() {
               }}
             ></h3>
             <p
-              className="text-[#7A7A8E] text-justify text-sm font-inter font-normal mt-3"
+              className="text-[#666666] text-justify text-xs lg:text-sm font-inter font-normal mt-3"
               dangerouslySetInnerHTML={{
                 __html:
                   ourVision?.data?.content?.[local] ??
@@ -83,7 +83,7 @@ export default function AboutUs() {
                 "--"}
             </h3>
             <p
-              className="text-[#7A7A8E] text-justify text-sm font-inter font-normal mt-3"
+              className="text-[#666666] text-justify text-xs lg:text-sm font-inter font-normal mt-3"
               dangerouslySetInnerHTML={{
                 __html:
                   whoWeServe?.data?.content?.[local] ??
@@ -98,7 +98,7 @@ export default function AboutUs() {
                 "--"}
             </h3>
             <p
-              className="text-[#7A7A8E] text-justify text-sm font-inter font-normal mt-3 "
+              className="text-[#666666] text-justify text-xs lg:text-sm font-inter font-normal mt-3 "
               dangerouslySetInnerHTML={{
                 __html:
                   organization?.data?.content?.[local] ??

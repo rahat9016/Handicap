@@ -1,7 +1,6 @@
 import { Link } from "@/i18n/navigation";
 import { Mail, Phone } from "lucide-react";
 import { useTranslations } from "next-intl";
-import Image from "next/image";
 
 const Footer = () => {
   const t = useTranslations("Footer");
@@ -55,10 +54,10 @@ const Footer = () => {
               >
                 <Mail className="w-5 h-5 flex-shrink-0 mt-0.5" />
                 <Link
-                  href="mailto:p.baidya@hi.org"
+                  href="mailto:info@disabilityinclusionresourcehub.com"
                   className="mt-0.5 hover:text-white transition-colors"
                 >
-                  p.baidya@hi.org
+                  info@disabilityinclusionresourcehub.com
                 </Link>
               </div>
               <div
@@ -115,7 +114,7 @@ const Footer = () => {
       </div>
 
       {/* Developer Credit */}
-      <div className="container px-4 sm:px-6 lg:px-8 text-xs text-[#B3B3B3] flex justify-center sm:justify-end pb-4 lg:pb-3">
+      {/* <div className="container px-4 sm:px-6 lg:px-8 text-xs text-[#B3B3B3] flex justify-center sm:justify-end pb-4 lg:pb-3">
         <div className="flex items-center gap-3 flex-wrap justify-center">
           <span>|</span>
           <span>Developed by</span>
@@ -135,7 +134,7 @@ const Footer = () => {
             />
           </Link>
         </div>
-      </div>
+      </div> */}
     </footer>
   );
 };

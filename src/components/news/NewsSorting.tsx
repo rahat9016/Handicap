@@ -19,7 +19,7 @@ import { Trash } from "lucide-react";
 import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { ICategory } from "../UserDashboard/MyCourse/types/traning";
-import { INewsTags } from "./types/news";
+
 
 const sortOptions = [
   { label: "Most View", value: "viewCount:desc" },
@@ -33,10 +33,10 @@ const NewsSorting = () => {
     ICategory[]
   >("/news-category?isActive=true", ["news-category"]);
 
-  const { data: newsTags, isLoading: isNewsTagsLoading } = useGet<INewsTags[]>(
-    "/news-tag?isActive=true",
-    ["news-tag"]
-  );
+  // const { data: newsTags, isLoading: isNewsTagsLoading } = useGet<INewsTags[]>(
+  //   "/news-tag?isActive=true",
+  //   ["news-tag"]
+  // );
 
   const methods = useForm({
     defaultValues: {
@@ -60,7 +60,7 @@ const NewsSorting = () => {
     "name",
     "id"
   );
-  const newsTagOptions = mapToSelectOptions(newsTags?.data, "name", "id");
+  // const newsTagOptions = mapToSelectOptions(newsTags?.data, "name", "id");
   return (
     <div>
       <FormProvider {...methods}>
@@ -90,7 +90,7 @@ const NewsSorting = () => {
               </AccordionContent>
             </AccordionItem>
             {/* ── Level ─────────────────────────────────────── */}
-            <AccordionItem value="level" className="border-b-0">
+            {/* <AccordionItem value="level" className="border-b-0">
               <AccordionTrigger className="font-bold hover:no-underline text-black text-sm border-b rounded-none mb-3">
                 News Tag
               </AccordionTrigger>
@@ -108,7 +108,7 @@ const NewsSorting = () => {
                   />
                 )}
               </AccordionContent>
-            </AccordionItem>
+            </AccordionItem> */}
 
             {/* ── Resource Type ─────────────────────────────── */}
             <AccordionItem value="newsCategories" className="border-b-0">

@@ -36,7 +36,7 @@ export const newsSectionSchema = Yup.object().shape({
   categoryIds: Yup.array()
     .of(Yup.number())
     .required("At least one category is required"),
-  tagIds: Yup.array().of(Yup.number()).required("At least one tag is required"),
+  // tagIds: Yup.array().of(Yup.number()).required("At least one tag is required"),
   images: Yup.array().of(imageSchema).nullable(),
   isActive: Yup.boolean().optional(),
 });

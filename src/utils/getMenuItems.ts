@@ -5,6 +5,7 @@ import {
   CalendarDays,
   ChartNoAxesCombined,
   Folder,
+  GraduationCap,
   LayoutDashboard,
   LucideIcon,
   Newspaper,
@@ -183,6 +184,11 @@ export function getMenuItems(
       label: "Join Community Request",
       icon: TbBuildingCommunity,
       href: "/admin/join-our-community",
+    },
+    hasPermission && {
+      label: "Training",
+      icon: GraduationCap,
+      href: "/admin/training",
     },
   ];
 

@@ -28,7 +28,7 @@ const QuickAccess = () => {
     limit: String(3),
   });
   const { data: newsData, isLoading: isNewsLoading } = useGet<INews[]>(
-    "/news",
+    "/news?isActive=true",
     ["news"],
     {
       page: String(1),
@@ -106,7 +106,7 @@ const QuickAccess = () => {
                     <QuickAccessSkeleton />
                   ) : data?.data && data.data.length > 0 ? (
                     <div>
-                      <div className="md:grid gap-6 md:grid-cols-2 lg:grid-cols-3 justify-center w-full">
+                      <div className="md:grid gap-y-6 gap-6 md:grid-cols-2 lg:grid-cols-3 justify-center w-full">
                         {data?.data?.map((item) => (
                           <QuickAccessCard
                             key={item.id}
@@ -152,7 +152,7 @@ const QuickAccess = () => {
                     <QuickAccessSkeleton />
                   ) : suggestedData?.data && suggestedData.data.length > 0 ? (
                     <div>
-                      <div className="md:grid gap-6 md:grid-cols-2 lg:grid-cols-3 justify-center w-full">
+                      <div className="md:grid gap-y-6 gap-6 md:grid-cols-2 lg:grid-cols-3 justify-center w-full">
                         {suggestedData?.data?.map((item) => (
                           <QuickAccessCard
                             key={item.id}
@@ -201,8 +201,7 @@ const QuickAccess = () => {
                     <QuickAccessSkeleton />
                   ) : newsData?.data && newsData.data.length > 0 ? (
                     <div>
-
-                    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 justify-center">
+                    <div className="grid gap-y-6 gap-6 md:grid-cols-2 lg:grid-cols-3 justify-center">
                       {newsData?.data?.map((item) => (
                         <QuickAccessCard
                           key={item.id}

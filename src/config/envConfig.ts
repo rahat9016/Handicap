@@ -10,7 +10,7 @@ export const getBaseUrl = (): string => {
   ); // server API - 1
   // return (
   //   process.env.NEXT_PUBLIC_API_BASE_URL ||
-  //   `${baseURL}/handicap/api/v1`
+  //   `${baseURL}/handicap/api/v1`and
   // );
   // return (
   //   process.env.NEXT_PUBLIC_API_BASE_URL ||

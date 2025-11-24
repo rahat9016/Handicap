@@ -2,11 +2,11 @@ import * as Yup from "yup";
 import { InferType } from "yup";
 
 export const trainingSchema = Yup.object({
-  name: Yup.string()
+  title: Yup.string()
     .required("Category name is required")
     .min(2, "Category name must be at least 2 characters"),
 
-  link: Yup.string()
+  linkUrl: Yup.string()
     .url("Please enter a valid URL"),
   isActive: Yup.boolean().default(true).notRequired(),
 });

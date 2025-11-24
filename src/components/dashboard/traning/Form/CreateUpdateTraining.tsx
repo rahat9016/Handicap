@@ -30,11 +30,11 @@ export default function CreateUpdateTraining({
     reset: postReset,
     isPending: isPostPending,
   } = usePost<TrainingFormType>(
-    "/resource-categories",
+    "/link-courses",
     (data) => {
       console.log("POST success", data);
     },
-    [["resource-categories"], ["categories"]]
+    [["link-courses"], []]
   );
   const {
     mutateAsync: patchAsync,
@@ -43,7 +43,7 @@ export default function CreateUpdateTraining({
     isPending: isPatchPending,
   } = usePatch(
     (data) => console.log("Success", data),
-    [["resource-categories"]]
+    [["link-courses"]]
   );
 
   const methods = useForm<TrainingFormType>({
@@ -53,8 +53,9 @@ export default function CreateUpdateTraining({
   useEffect(() => {
     if (initialValues) {
       methods.reset({
-        name: initialValues.name,
-        link: initialValues.link
+        title: initialValues.title,
+        linkUrl: initialValues.linkUrl,
+        isActive: initialValues.isActive
       });
     }
   }, [initialValues, methods]);
@@ -62,8 +63,8 @@ export default function CreateUpdateTraining({
   useEffect(() => {
     if (!isOpen) {
       methods.reset({
-        name: "",
-        link:"",
+        title: "",
+        linkUrl:"",
         isActive: false,
       });
       postReset();
@@ -73,19 +74,19 @@ export default function CreateUpdateTraining({
 
   const onSubmit = (data: TrainingFormType) => {
     const organizedData: {
-      name: string;
-      link: string | undefined
+      title: string;
+      linkUrl: string | undefined
     } = {
-      name: data.name,
-      link: data.link
+      title: data.title,
+      linkUrl: data.linkUrl
     };
     if (initialValues) {
       const newChangedData = getChangedFields(data, initialValues);
       patchAsync({
-        url: `/resource-categories/${initialValues.id}`,
+        url: `/link-courses/${initialValues.id}`,
         data: newChangedData,
       }).then(() => {
-        console.log("Resource updated successfully");
+        console.log("Course updated successfully");
         onClose();
         // Reset the form after successful submission
         methods.reset();

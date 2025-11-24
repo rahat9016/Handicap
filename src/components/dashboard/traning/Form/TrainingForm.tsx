@@ -27,14 +27,14 @@ export default function TrainingForm({
       <div className="mb-4">
         <InputLabel label="Name" required />
         <ControlledInputField
-          name="name"
-          placeholder="Enter the category name..."
+          name="title"
+          placeholder="Enter the course name..."
         />
       </div>
       <div className="mb-4">
         <InputLabel label="Course Link" required />
         <ControlledInputField
-          name="link"
+          name="linkUrl"
           placeholder="Enter the course link..."
         />
       </div>

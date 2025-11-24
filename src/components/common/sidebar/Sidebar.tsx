@@ -17,7 +17,6 @@ import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
 import { cn } from "@/lib/utils";
 import { getMenuItems } from "@/utils/getMenuItems";
 import { LogOut } from "lucide-react";
-import Image from "next/image";
 import { usePathname } from "next/navigation";
 
 interface SidebarProps {
@@ -65,19 +64,21 @@ export default function Sidebar({
           onClick={() => router.push("/")}
           className="flex flex-col items-center gap-3 mb-4 cursor-pointer "
         >
-          <Image
+          {/* <Image
             width={109}
             height={48}
             src="/logo.png"
             alt="logo"
             className="w-20 h-9 sm:w-[109px] sm:h-[48px]"
-          />
+          /> */}
           <div className="text-center">
-            <h3 className="font-inter text-base sm:text-lg font-bold mb-1 text-erieBlack">
-              Handicap International
+            <h3 className="font-inter text-base sm:text-lg font-bold mb-1 text-[#0077CC]">
+              Disability Inclusion  Resource Hub
+              {/* Handicap International */}
             </h3>
             <p className="font-inter text-xs sm:text-sm font-normal text-[#4D4D4D]">
-              Disability Inclusion Resource Hub
+              
+              {/* Disability Inclusion Resource Hub */}
             </p>
           </div>
         </div>

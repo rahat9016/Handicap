@@ -28,9 +28,9 @@ export default function TrainingList() {
     useSearchDebounce(300);
 
   const { data, isLoading } = useGet<ITraining[]>(
-    "/resource-categories",
+    "/link-courses",
     [
-      "resource-categories",
+      "link-courses",
       currentPage.toString(),
       itemsPerPage.toString(),
       debouncedSearch,
@@ -59,8 +59,8 @@ export default function TrainingList() {
   };
 
   const columns: ColumnDef<ITraining>[] = [
-    { header: "Name", accessorKey: "name" },
-    { header: "Course Link", accessorKey: "link" },
+    { header: "Name", accessorKey: "title" },
+    { header: "Course Link", accessorKey: "linkUrl" },
     {
       header: "Created date",
       accessorKey: "createdAt",

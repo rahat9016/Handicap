@@ -1,5 +1,6 @@
 export interface ITraining {
   id: number;
-  name: string;
-  link: string;
+  title: string;
+  linkUrl: string;
+  isActive?:boolean
 }

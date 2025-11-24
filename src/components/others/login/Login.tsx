@@ -23,7 +23,6 @@ import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
 import { LoginFormData } from "@/schemas/auth";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Eye, EyeOff } from "lucide-react";
-import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
@@ -108,8 +107,8 @@ export default function Login() {
         className="flex flex-col bg-contain bg-top bg-no-repeat py-20 px-4"
       >
         <div className="w-full lg:w-4/12 mx-auto px-6 py-7 lg:px-8 bg-white shadow-md rounded-md border">
-          <div className="flex flex-col items-center">
-            <Image width={97} height={43} src="/logo.png" alt="logo" />
+          <div className="flex flex-col items-center mb-5">
+            {/* <Image width={97} height={43} src="/logo.png" alt="logo" /> */}
             <Title>Login To Your Account</Title>
             <Paragraph>We’re glad to see you again</Paragraph>
           </div>

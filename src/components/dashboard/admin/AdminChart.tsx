@@ -58,7 +58,7 @@ export default function AdminChart({
     {}
   );
   const chartData = Array.isArray(data?.data?.data) ? data.data.data : [];
-  
+
   return (
     <div>
       <div className="grid gap-6 grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3">
@@ -140,7 +140,12 @@ export default function AdminChart({
             </div>
             <div className="py-4 flex flex-col gap-2 px-[28px]">
               {hasPermission && (
-                <Button className="group bg-white hover:bg-dashboard-primary flex items-center justify-start gap-2 w-full h-[58px] border border-skeleton hover:text-white text-darkLiver font-inter font-medium text-base">
+                <Button
+                  onClick={() =>
+                    router.push("/admin/organizer/all-organization")
+                  }
+                  className="group bg-white hover:bg-dashboard-primary flex items-center justify-start gap-2 w-full h-[58px] border border-skeleton hover:text-white text-darkLiver font-inter font-medium text-base"
+                >
                   <Image
                     width={24}
                     height={24}
@@ -185,13 +190,16 @@ export default function AdminChart({
           </CardContent>
         </Card>
 
-        <Card className="col-span-3 lg:col-span-2 xl:col-span-1 py-0 px-0 border border-skeleton">
+        <Card className="col-span-3 lg:col-span-3 xl:col-span-3 py-0 px-0 border border-skeleton">
           <CardContent className="px-0 flex flex-col gap-2">
             <div className="border-b p-8 border-skeleton flex items-center justify-between">
               <h2 className="font-semibold text-lg text-erieBlack font-inter">
                 Top Resources
               </h2>
-              <Button className="bg-transparent hover:bg-dashboard-primary hover:text-white border border-gray font-inter text-xs text-[#8C8C8C] font-medium ">
+              <Button
+                onClick={() => router.push("/admin/resources/resources-list")}
+                className="bg-transparent hover:bg-dashboard-primary hover:text-white border border-gray font-inter text-xs text-[#8C8C8C] font-medium "
+              >
                 View All <ChevronRight />
               </Button>
             </div>
@@ -254,7 +262,7 @@ export default function AdminChart({
             </ul>
           </CardContent>
         </Card>
-        <Card className="col-span-3 lg:col-span-2 xl:col-span-1 py-0 px-0 border border-skeleton">
+        <Card className="hidden col-span-3 lg:col-span-2 xl:col-span-1 py-0 px-0 border border-skeleton">
           <CardContent className="px-0 flex flex-col gap-2">
             <div className="p-8 pb-[28px] flex items-center justify-between">
               <h2 className="font-semibold text-lg text-erieBlack font-inter">

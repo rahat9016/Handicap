@@ -26,3 +26,15 @@ export const truncateText = (text: string, maxLength: number): string => {
   if (text.length <= maxLength) return text;
   return text.substring(0, maxLength) + '...';
 };
+
+export function getRouterTitle(url: string) {
+  try {
+    const path = new URL(url).pathname; 
+    const parts = path.split("/");   
+
+    return parts.slice(2).join(" / ") || "Home"; 
+  } catch (e) {
+    console.log(e)
+    return "";
+  }
+}

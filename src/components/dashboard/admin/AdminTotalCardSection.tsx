@@ -38,7 +38,7 @@ export default function AdminTotalCardSection({
     {
       icon: "/images/dashboard/icon19.svg",
       shape: "/images/dashboard/cardShape4.svg",
-      title: "Total Recourses",
+      title: "Total Resources",
       count: lastData?.totalResources,
     },
     {

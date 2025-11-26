@@ -168,9 +168,9 @@ export default function ResourceDetails() {
           <div className="bg-muted rounded-lg p-8 flex flex-col items-center justify-center min-h-[500px]">
             <FileText className="h-20 w-20 text-red-500 mb-4" />
             <h3 className="text-xl font-semibold mb-2">PDF Document</h3>
-            <p className="text-muted-foreground text-center mb-4 max-w-md">
+            {/* <p className="text-muted-foreground text-center mb-4 max-w-md">
               {file.description}
-            </p>
+            </p> */}
             <div className="text-sm text-muted-foreground mb-6">
               {formatFileSize(file.fileSize)} • {file.language?.name}
             </div>

@@ -8,7 +8,7 @@ import { ILangType, IPageSection } from "@/types";
 import { NotebookText, SquarePen } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import CreateUpdatePageSectionModal from "./CreateUpdatePageSection";
+import CreateUpdatePageSectionModal from "./Form/CreateUpdatePageSection";
 
 export default function PageSections() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -94,24 +94,6 @@ export default function PageSections() {
         return <div>{row?.title?.bn && <span>{row.title.bn}</span>}</div>;
       },
     },
-    // {
-    //   header: "Is Active",
-    //   accessorKey: "isActive",
-    //   cell: (value) => {
-    //     const isActive = value;
-
-    //     return (
-    //       <span
-    //         className={`px-2 py-1 rounded-full text-xs font-medium ${
-    //           isActive ? "bg-[#bfffda] text-green" : "bg-rose-200 text-rose-700"
-    //         }`}
-    //       >
-    //         {isActive ? "Active" : "Inactive"}
-    //       </span>
-    //     );
-    //   },
-    // },
-
     {
       header: "Action",
       accessorKey: "id",

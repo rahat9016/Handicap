@@ -463,11 +463,13 @@ export function DataTable<T>({
                       .filter((c) =>
                         visibleColumns.has(c.accessorKey as string)
                       )
-                      .map((column) => {
+                      .map((column, idx) => {
                         const value = row[column.accessorKey];
                         return (
                           <TableCell
-                            key={`${rowIndex}-${String(column.accessorKey)}`}
+                            key={`${rowIndex}-${idx}-${String(
+                              column.accessorKey
+                            )}`}
                             className="max-w-[200px] truncate whitespace-nowrap"
                           >
                             {column?.cell

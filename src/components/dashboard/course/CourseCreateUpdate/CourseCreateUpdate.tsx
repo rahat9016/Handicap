@@ -68,7 +68,7 @@ export default function CourseCreateUpdate() {
         objectives: courseData.data.objectives,
         thumbNail: courseData.data.thumbnailUrl,
         categoryId: String(courseData.data.CourseCategory?.id),
-        organizationId: organizationId,
+        organizationId: organizationId ?? "",
         courseType: courseData.data.courseType
         // isPrivate: courseData.data.isPrivate,
       });
@@ -79,7 +79,7 @@ export default function CourseCreateUpdate() {
     const formData = new FormData();
     formData.append("title", data.title);
     formData.append("categoryId", data.categoryId);
-    formData.append("organizationId", organizationId);
+    formData.append("organizationId", organizationId??"");
     formData.append("courseType", data.courseType);
     if (data.description) formData.append("description", data.description);
     if (data.objectives) formData.append("objectives", data.objectives);

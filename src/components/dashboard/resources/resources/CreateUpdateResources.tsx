@@ -134,7 +134,7 @@ export default function CreateUpdateResources({
       formData.append("descriptionBn", data.descriptionBn);
     formData.append("languageId", data.languageId);
     formData.append("categoryId", data.categoryId);
-    formData.append("organizationId", organizationId);
+    formData.append("organizationId", organizationId ?? "");
 
     if (data.keywordIds && data.keywordIds.length > 0) {
       formData.append("keywordIds", data.keywordIds);

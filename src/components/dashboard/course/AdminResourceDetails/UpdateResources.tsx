@@ -76,7 +76,7 @@ export default function UpdateResources({
         isPrivate: initialValues.isPrivate,
         languageId: String(initialValues.languageId),
         categoryId: String(initialValues.categoryId),
-        organizationId: organizationId,
+        organizationId: organizationId ??"",
         keywordIds: initialValues.keywordIds || [],
       });
     }
@@ -105,7 +105,7 @@ export default function UpdateResources({
     if (data.description) formData.append("description", data.description);
     formData.append("languageId", data.languageId);
     formData.append("categoryId", data.categoryId);
-    formData.append("organizationId", organizationId);
+    formData.append("organizationId", organizationId ??"");
 
     if (data.keywordIds && data.keywordIds.length > 0) {
       formData.append("keywordIds", data.keywordIds);

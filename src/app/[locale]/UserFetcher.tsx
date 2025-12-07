@@ -5,7 +5,7 @@ import {
   setUserId,
   setUserInformation,
 } from "@/lib/redux/features/auth/authSlice";
-import { setOrganization } from "@/lib/redux/features/organizer/organizationSlice";
+import { markAsInitialized, setOrganization } from "@/lib/redux/features/organizer/organizationSlice";
 import {
   setAdminOrganizationPermission,
   setPermission,
@@ -63,10 +63,20 @@ export const UserFetcher = () => {
   }, [isSuccess, data, dispatch, isLoading]);
 
   // If organization data is available in cookies, parse and set it in the store
-  useEffect(() => {
+   useEffect(() => {
     if (organizationData) {
-      const parsedData = JSON.parse(organizationData);
-      dispatch(setOrganization(parsedData));
+      try {
+        const parsedData = JSON.parse(organizationData);
+        dispatch(setOrganization(parsedData));
+      } catch (error) {
+        console.error('Failed to parse organization data from cookie:', error);
+        // If cookie data is corrupted, clear it
+        Cookies.remove("organizationData");
+        dispatch(markAsInitialized());
+      }
+    } else {
+      // No organization data in cookies, mark as initialized with empty state
+      dispatch(markAsInitialized());
     }
   }, [organizationData, dispatch]);
 

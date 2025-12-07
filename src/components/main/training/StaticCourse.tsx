@@ -1,43 +1,42 @@
 "use client";
 
+import { ITraining } from "@/components/dashboard/traning/types/Training";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useGet } from "@/hooks/useGet";
 import { motion } from "framer-motion";
 import { GraduationCap } from "lucide-react";
 
-const courses = [
-  {
-    title: "Age and Disability Inclusion in Humanitarian Action",
-    link: "https://kayaconnect.org/course/info.php?id=11732",
-  },
-  {
-    title: "IASC e-Learning on Gender Equality in Humanitarian Action",
-    link: "https://portal.trainingcentre.unwomen.org/product/iasc-e-learning-on-gender-equality-in-humanitarian-action/?utm_source=chatgpt.com",
-  },
-  {
-    title:
-      "Collecting Data for the Inclusion of Persons with Disabilities in Humanitarian Action",
-    link: "https://kayaconnect.org/course/info.php?id=1221",
-  },
-  {
-    title: "Disability Inclusion in the Workplace",
-    link: "https://alison.com/course/disability-inclusion-in-the-workplace?",
-  },
-  {
-    title: "Disability Inclusive Disaster Risk Reduction",
-    link: "https://kayaconnect.org/course/info.php?id=11411",
-  },
-  {
-    title: "Humanitarian Aid Learning",
-    link: "https://academy.europa.eu/local/euacademy/pages/course/community-overview.php?title=dg-echo-humanitarian-aid-learning",
-  },
-];
-
 export default function StaticCourse() {
+  const { data, isLoading } = useGet<ITraining[]>(
+      `/link-courses/all?isActive=true`,
+      ["link-course"]
+    );
+  if (isLoading) {
+    return (
+      <div className="bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 p-4">
+        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+          {[...Array(6)].map((_, i) => (
+            <div
+              key={i}
+              className="rounded-2xl shadow-lg bg-white/80 backdrop-blur-sm border border-gray-100 p-6 flex flex-col items-center text-center"
+            >
+              <Skeleton className="h-20 w-20 rounded-full mb-5" />
+
+              <Skeleton className="h-5 w-40 mb-3" />
+
+              <Skeleton className="h-10 w-full mt-auto rounded-lg" />
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
   return (
     <div className=" bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 ">
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-        {courses.map((course, i) => (
+        {data?.data.map((course, i) => (
           <motion.div
             key={i}
             whileHover={{ scale: 1.03 }}
@@ -60,7 +59,7 @@ export default function StaticCourse() {
                     className="bg-blue hover:bg-blue text-white w-full py-2 rounded-lg transition-all font-inter"
                   >
                     <a
-                      href={course.link}
+                      href={course.linkUrl}
                       target="_blank"
                       rel="noopener noreferrer"
                     >

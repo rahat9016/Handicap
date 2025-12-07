@@ -10,26 +10,33 @@ export default function PowerBiSection() {
     page: String(1),
     limit: String(10),
   });
-
   const t = useTranslations("Home");
-
-  // console.log("data", data?.data);
   return (
     <div className="bg-light">
-
-    <div className="container mx-auto py-10">
-      <SectionTopTitle title={t("powerBi")} desc={t("powerBiDesc")} />
-      <div className={`grid grid-cols-2 gap-4 mt-8`}>
-        {data?.data?.map((powerBi: IPowerBi, index) => (
-          <PowerBiCard
-            key={index + 1}
-            report={powerBi}
-            length={data?.data?.length}
-            index={index}
-          />
-        ))}
+      <div className="container mx-auto py-10">
+        <SectionTopTitle title={t("powerBi")} desc={t("powerBiDesc")} />
+        {data?.data && data?.data?.length > 0 ? (
+          <div className={`grid grid-cols-2 gap-4 mt-8`}>
+            {data?.data?.map((powerBi: IPowerBi, index) => (
+              <PowerBiCard
+                key={index + 1}
+                report={powerBi}
+                length={data?.data?.length}
+                index={index}
+              />
+            ))}
+          </div>
+        ) : (
+          <div className="flex flex-col items-center justify-center text-center py-10">
+            {/* <div className="flex items-center justify-center w-20 h-20 rounded-full bg-blue/10 text-blue mb-3">
+              <CgDanger className="w-10 h-10" />
+            </div> */}
+            <h3 className="text-2xl font-semibold text-black mb-2 font-inter">
+              Coming Soon...
+            </h3>
+          </div>
+        )}
       </div>
-    </div>
     </div>
   );
 }

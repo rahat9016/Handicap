@@ -1,4 +1,5 @@
 import ErrorMessage from "@/components/common/Errors/ErrorMessage";
+import TextEditor from "@/components/common/text-editor/TextEditor";
 import { ControlledCheckField } from "@/components/share/ControlledCheckField";
 import ControlledInputField from "@/components/share/ControlledInputField";
 import ControlledMultiSelectField from "@/components/share/ControlledMultiSelectField";
@@ -16,18 +17,16 @@ import { usePatch } from "@/hooks/usePatch";
 import { usePost } from "@/hooks/usePost";
 import { mapToSelectOptions } from "@/utils/mapToSelectOptions";
 import { yupResolver } from "@hookform/resolvers/yup";
-import dynamic from "next/dynamic";
 import { useEffect } from "react";
 import { FieldError, FormProvider, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { INews } from "../NewsCategories/types/Categories";
-import { ITags } from "../NewsTags/types/Tags";
 import { NewsSectionForm, newsSectionSchema } from "./schema";
 import { INewsSection } from "./types";
-const EditorWrapper = dynamic(
-  () => import("@/components/share/EditorWrapper"),
-  { ssr: false }
-);
+// const EditorWrapper = dynamic(
+//   () => import("@/components/share/EditorWrapper"),
+//   { ssr: false }
+// );
 
 interface CreateUpdateSectionModalProps {
   isOpen: boolean;
@@ -40,11 +39,12 @@ export default function CreateUpdateNewsSectionModal({
   onClose,
   initialValues,
 }: CreateUpdateSectionModalProps) {
-  const { data: tagsData } = useGet<ITags[]>("/news-tag?isActive=true", ["news-tag"]);
-  const { data: categoryData } = useGet<INews[]>("/news-category?isActive=true", [
-    "news-category",
-  ]);
-  const newsTagsOptions = mapToSelectOptions(tagsData?.data, "name", "id");
+  // const { data: tagsData } = useGet<ITags[]>("/news-tag?isActive=true", ["news-tag"]);
+  const { data: categoryData } = useGet<INews[]>(
+    "/news-category?isActive=true",
+    ["news-category"]
+  );
+  // const newsTagsOptions = mapToSelectOptions(tagsData?.data, "name", "id");
   const newsCategoryOptions = mapToSelectOptions(
     categoryData?.data,
     "name",
@@ -84,7 +84,7 @@ export default function CreateUpdateNewsSectionModal({
         images: initialValues?.images?.map((img) => img.imageUrl) ?? [],
         categoryIds:
           initialValues?.categories?.map((cat) => cat.categoryId) ?? [],
-        tagIds: initialValues?.tags?.map((tag) => tag.tagId) ?? [],
+        // tagIds: initialValues?.tags?.map((tag) => tag.tagId) ?? [],
       });
     }
     const categoryIds = initialValues;
@@ -100,7 +100,7 @@ export default function CreateUpdateNewsSectionModal({
         isPublished: false,
         images: [],
         categoryIds: [],
-        tagIds: [],
+        // tagIds: [],
       });
       postReset();
     }
@@ -116,9 +116,9 @@ export default function CreateUpdateNewsSectionModal({
     (data.categoryIds || []).forEach((id) => {
       if (id) formData.append("categoryIds", String(id));
     });
-    (data.tagIds || []).forEach((id) => {
-      if (id) formData.append("tagIds", String(id));
-    });
+    // (data.tagIds || []).forEach((id) => {
+    //   if (id) formData.append("tagIds", String(id));
+    // });
     const currentImages = data.images || [];
     const newFiles = currentImages.filter((img) => img instanceof File);
     newFiles.forEach((file) => formData.append("images", file));
@@ -139,7 +139,7 @@ export default function CreateUpdateNewsSectionModal({
     (imagesToDelete || []).forEach((obj) => {
       if (obj) formData.append("removeImageIds", String(obj.id));
     });
-    
+
     if (isEditMode) {
       patchAsync({
         url: `/news/${initialValues?.id}`,
@@ -203,17 +203,26 @@ export default function CreateUpdateNewsSectionModal({
                   options={newsCategoryOptions}
                 />
               </div>
-              <div className="col-span-2 lg:col-span-1">
+              {/* <div className="col-span-2 lg:col-span-1">
                 <InputLabel label="Tags" required />
                 <ControlledMultiSelectField
                   name="tagIds"
                   placeholder="Please enter your tags"
                   options={newsTagsOptions}
                 />
-              </div>
+              </div> */}
               <div className="col-span-2">
                 <InputLabel label="Content" />
-                <EditorWrapper
+                <TextEditor
+                  value={methods.watch("content") ?? ""}
+                  onChange={(v) =>
+                    methods.setValue("content", v, { shouldValidate: true })
+                  }
+                  // className={
+                  //   methods.formState.errors.content ? "border-red-500" : ""
+                  // }
+                />
+                {/* <EditorWrapper
                   value={methods.watch("content") || ""}
                   onChange={(value) => {
                     methods.setValue("content", value, {
@@ -225,7 +234,7 @@ export default function CreateUpdateNewsSectionModal({
                       ? "border-rose-500 border"
                       : ""
                   }`}
-                />
+                /> */}
                 {methods.formState.errors?.content?.message && (
                   <div className="text-rose-500 text-xs mt-1 pl-2">
                     {methods.formState.errors?.content?.message}
@@ -249,7 +258,6 @@ export default function CreateUpdateNewsSectionModal({
                   label="Published (Visible on website)"
                 />
               </div>
-              
             </div>
             <ErrorMessage error={error || patchError} />
             <div className="flex justify-end gap-3 pt-4">

@@ -9,8 +9,8 @@ export default function Contact() {
   return (
     <div>
       <HeroSection
-        page=""
-        sectionType=""
+        page="CONTACT"
+        sectionType="HERO"
         title={t("contactUs")}
         desc={t("contactUsInfo")}
       />

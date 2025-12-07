@@ -10,21 +10,46 @@ import { PopularPages } from "./PopularPages";
 import { IAnalyticsSummary, IDashboardData } from "./types/interface";
 
 export default function Admin() {
-  const { organizationId } = useAppSelector((state) => state.organizer);
+  const { organizationId, isInitialized } = useAppSelector(
+    (state) => state.organizer
+  );
   const { hasPermission } = useAppSelector((state) => state.permission);
-  const endpoint = organizationId
-    ? `/dashboard/organization/${organizationId}`
-    : "/dashboard";
-
+  console.log("organizationId:", organizationId);
+  console.log("Type of organizationId:", typeof organizationId);
+  const endpoint = isInitialized
+    ? organizationId
+      ? `/dashboard/organization/${organizationId}`
+      : "/dashboard"
+    : null;
+  console.log("endpoint:", endpoint);
   const { data: dashboardData, isLoading: isDashboardLoading } =
     useGet<IDashboardData>(
-      endpoint,
-      ["dashboard", organizationId ?? "all"],
+      endpoint || "",
+      ["dashboard", organizationId || "all"],
       {},
-      { enabled: organizationId !== undefined }
+      {
+        enabled: isInitialized && endpoint !== null,
+        staleTime: 30000,
+        retry: 1,
+      }
     );
+
   const { data: analyticsData, isLoading: isAnalyticsLoading } =
-    useGet<IAnalyticsSummary>("/analytics/summary", ["analytics-summary"]);
+    useGet<IAnalyticsSummary>(
+      "/analytics/summary",
+      ["analytics-summary"],
+      {},
+      { enabled: isInitialized && hasPermission }
+    );
+
+  if (!isInitialized) {
+    return (
+      <div className="flex flex-col gap-6">
+        <AdminTotalCardSectionSkeleton />
+        <AdminTotalCardSectionSkeleton />
+      </div>
+    );
+  }
   return (
     <div className="flex flex-col gap-6">
       {isDashboardLoading ? (

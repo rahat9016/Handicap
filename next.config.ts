@@ -51,9 +51,18 @@ const nextConfig: NextConfig = {
         port: "4047",
         pathname: "/uploads/**",
       },
+      {
+        protocol: "https",
+        hostname: "api.disabilityinclusionresourcehub.com",
+        port: "",
+        pathname: "/uploads/**",
+      },
     ],
   },
 };
 
 const withNextIntl = createNextIntlPlugin();
 export default withNextIntl(nextConfig);
+
+// 
+// https://api.disabilityinclusionresourcehub.com

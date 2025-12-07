@@ -8,7 +8,6 @@ import { Button } from "@/components/ui/button";
 import { usePost } from "@/hooks/usePost";
 import { Link, useRouter } from "@/i18n/navigation";
 import { yupResolver } from "@hookform/resolvers/yup";
-import Image from "next/image";
 import { useState } from "react";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
@@ -115,7 +114,7 @@ export default function ForgotPassword() {
       >
         <div className="w-full lg:w-4/12 mx-auto px-6 py-7 lg:px-8 bg-white shadow-xl rounded-md border">
           <div className="flex flex-col items-center">
-            <Image width={97} height={43} src="/logo.png" alt="logo" />
+            {/* <Image width={97} height={43} src="/logo.png" alt="logo" /> */}
             <Title>
               {step === 0
                 ? "Signup To Your Account"

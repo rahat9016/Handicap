@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
+import ErrorMessage from "@/components/common/Errors/ErrorMessage";
 import HeroSection from "@/components/share/HeroSection";
 import Paragraph from "@/components/share/Paragraph";
 import Title from "@/components/share/Title";
@@ -8,7 +9,6 @@ import { Button } from "@/components/ui/button";
 import { usePost } from "@/hooks/usePost";
 import { Link, useRouter } from "@/i18n/navigation";
 import { yupResolver } from "@hookform/resolvers/yup";
-import Image from "next/image";
 import { useState } from "react";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
@@ -52,20 +52,32 @@ export default function SignUp() {
         setStep(0);
         methods.reset();
       });
-      console.log("OTP submitted:", data);
     }
   };
 
-  const resendOTPHandler = () => {
-    console.log("Resending OTP...");
+  const resendOTPHandler = async () => {
     const email = methods.getValues("email");
+
     if (!email) {
       toast.error("Email is required to resend OTP");
-      return;
+      return false;
     }
-    if (email) {
-      resendOTP({ email });
-    }
+
+    return new Promise<boolean>((resolve) => {
+      resendOTP(
+        { email },
+        {
+          onSuccess: () => {
+            toast.success("OTP sent successfully!");
+            resolve(true);
+          },
+          onError: (error: any) => {
+            toast.error(error?.message || "Failed to resend OTP");
+            resolve(false);
+          },
+        }
+      );
+    });
   };
 
   const renderStepsContent = () => {
@@ -84,11 +96,11 @@ export default function SignUp() {
       <HeroSection />
       <div
         style={{ backgroundImage: `url('/images/common/loginBg.png')` }}
-        className="flex flex-col bg-contain bg-top bg-no-repeat py-20 px-4"
+        className="flex flex-col bg-contain bg-top bg-no-repeat py-10 px-4"
       >
-        <div className="w-full lg:w-4/12 mx-auto px-6 py-7 lg:px-8 bg-white shadow-xl rounded-md">
+        <div className="w-full lg:w-4/12 mx-auto px-6 py-7 lg:px-8 bg-white shadow-xl rounded-md border">
           <div className="flex flex-col items-center">
-            <Image width={97} height={43} src="/logo.png" alt="logo" />
+            {/* <Image width={97} height={43} src="/logo.png" alt="logo" /> */}
             <Title>
               {step === 0
                 ? "Signup To Your Account"
@@ -108,13 +120,9 @@ export default function SignUp() {
                 className="w-full"
               >
                 {renderStepsContent()}
-                {error?.errors?.length ||
-                  (otpError?.errors?.length && (
-                    <div className="text-rose-600 bg-rose-200 text-center py-2 rounded-sm font-inter text-sm mt-3">
-                      {error?.errors && error?.errors[0]}
-                      {otpError?.errors && otpError?.errors[0]}
-                    </div>
-                  ))}
+                <div className="mt-2">
+                  <ErrorMessage error={error || otpError} />
+                </div>
                 <div>
                   <Button
                     type="submit"

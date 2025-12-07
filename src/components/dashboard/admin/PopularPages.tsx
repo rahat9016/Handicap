@@ -1,22 +1,14 @@
 // components/analytics/PopularPages.tsx
 
-import { formatNumber, formatDuration, formatPercentage, getDomainFromUrl, truncateText } from '@/utils/analytics';
-import { ExternalLink, Eye, Clock, TrendingUp } from 'lucide-react';
-import { PopularPage, PopularPagesProps } from './types/interface';
+import { formatDuration, formatNumber, formatPercentage, getRouterTitle } from '@/utils/analytics';
+import { Clock, ExternalLink, Eye, TrendingUp } from 'lucide-react';
+import { PopularPagesProps } from './types/interface';
 
 export const PopularPages: React.FC<PopularPagesProps> = ({ 
   popularPages, 
   maxItems = 5 
 }) => {
   const topPages = popularPages?.slice(0, maxItems);
-
-  const getPageName = (page: PopularPage): string => {
-    if (page.pageTitle && page.pageTitle.trim() !== '') {
-      return truncateText(page.pageTitle, 50);
-    }
-    const url = getDomainFromUrl(page.pageUrl);
-    return truncateText(url, 50);
-  };
 
   const getPathFromUrl = (url: string): string => {
     try {
@@ -48,10 +40,10 @@ export const PopularPages: React.FC<PopularPagesProps> = ({
             <div className="flex items-start space-x-4 flex-1 min-w-0">
               {/* Rank Badge */}
               <div className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold ${
-                index === 0 ? 'bg-yellow-100 text-yellow-800' :
-                index === 1 ? 'bg-gray-100 text-gray-800' :
+                index === 0 ? 'bg-yellow/20 text-yellow' :
+                index === 1 ? 'bg-gray/20 text-black' :
                 index === 2 ? 'bg-orange-100 text-orange-800' :
-                'bg-blue-100 text-blue-800'
+                'bg-blue/20 text-blue'
               }`}>
                 #{index + 1}
               </div>
@@ -60,8 +52,9 @@ export const PopularPages: React.FC<PopularPagesProps> = ({
               <div className="flex-1 min-w-0">
                 <div className="flex items-start justify-between">
                   <div className="flex-1 min-w-0">
-                    <h4 className="text-sm font-medium text-gray-900 truncate">
-                      {getPageName(page)}
+                    <h4 className="text-sm font-medium text-black truncate font-inter capitalize">
+                      {/* {getPageName(page)} */}
+                      {getRouterTitle(page.pageUrl)}
                     </h4>
                     <p className="text-xs text-gray-500 mt-1 truncate">
                       {getPathFromUrl(page.pageUrl)}
@@ -71,7 +64,7 @@ export const PopularPages: React.FC<PopularPagesProps> = ({
                     href={page.pageUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex-shrink-0 ml-2 text-gray-400 hover:text-blue-600 transition-colors"
+                    className="flex-shrink-0 ml-2 text-gray-400 hover:text-blue transition-colors"
                     title="Open page"
                   >
                     <ExternalLink className="w-4 h-4" />

@@ -5,7 +5,7 @@ import AboutUs from "./AboutUs";
 export default function About() {
   return (
     <div>
-      <HeroSection page="ABOUT" sectionType="OUR_MISSION" />
+      <HeroSection page="ABOUT" sectionType="HERO" />
       <AboutUs />
     </div>
   );

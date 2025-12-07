@@ -4,5 +4,6 @@ export interface IInitialState {
   roleId: string;
   roleName: string;
   organizationName: string;
-  organizationId: string
+  organizationId: string | null;
+  isInitialized: boolean,
 }

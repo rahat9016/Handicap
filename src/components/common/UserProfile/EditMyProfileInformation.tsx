@@ -10,7 +10,9 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { usePatch } from "@/hooks/usePatch";
+import { setUserInformation } from "@/lib/redux/features/auth/authSlice";
 import { IUserInformation } from "@/lib/redux/features/auth/authTypes";
+import { useAppDispatch } from "@/lib/redux/hooks";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
@@ -29,11 +31,12 @@ const EditMyProfileInformation = ({
   onClose,
   initialValues,
 }: Props) => {
+  const dispatch = useAppDispatch();
   const {
     mutateAsync: patchAsync,
     error: patchError,
     reset: patchReset,
-  } = usePatch((data) => console.log("Success", data), [["user"]]);
+  } = usePatch((data) => dispatch(setUserInformation(data)), [["user"]]);
   const methods = useForm({
     resolver: yupResolver(profileSchema),
     mode: "onChange",
@@ -58,7 +61,6 @@ const EditMyProfileInformation = ({
   }, [isOpen, reset, patchReset, initialValues]);
 
   const onSubmit = async (data: profileForm) => {
-    console.log(data.profilePicture);
     const formData = new FormData();
 
     formData.append("firstName", data.firstName);

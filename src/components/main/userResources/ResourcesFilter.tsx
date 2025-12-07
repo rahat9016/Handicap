@@ -42,11 +42,11 @@ const ResourcesFilter = () => {
     IsSuggested: IsSuggested,
     featured
   };
-
+console.log({currentPage})
   const queryString = buildQueryParams(filters, {
     ...(itemsPerPage !== -1 && {
       page: currentPage,
-      limit: 9,
+      limit: itemsPerPage,
     }),
   });
 

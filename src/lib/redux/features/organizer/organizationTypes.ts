@@ -4,5 +4,5 @@ export interface IInitialState {
   roleId: string;
   roleName: string;
   organizationName: string;
-  organizationId: string
+  organizationId: undefined | null | string
 }

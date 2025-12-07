@@ -5,7 +5,6 @@ import Bold from "@tiptap/extension-bold";
 import BulletList from "@tiptap/extension-bullet-list";
 import HardBreak from "@tiptap/extension-hard-break";
 import Highlight from "@tiptap/extension-highlight";
-import Image from "@tiptap/extension-image";
 import ListItem from "@tiptap/extension-list-item";
 import OrderedList from "@tiptap/extension-ordered-list";
 import TextAlign from "@tiptap/extension-text-align";
@@ -15,9 +14,7 @@ import { EditorContent, useEditor } from "@tiptap/react";
 
 import StarterKit from "@tiptap/starter-kit";
 import { TextSelection } from "prosemirror-state";
-import ImageResize from "tiptap-extension-resize-image";
 import { FontSizeExtension } from "./FontSizeExtension";
-import ImageUploader from "./ImageUploader";
 
 interface EditorWrapperProps {
   value: string;
@@ -39,13 +36,7 @@ export default function EditorWrapper({
         blockquote: {},
         hardBreak: false,
       }),
-      ImageResize.configure({
-        inline: true,
-      }),
-      Image.configure({
-        inline: true,
-        allowBase64: true,
-      }),
+
       Highlight.configure({
         multicolor: true,
         HTMLAttributes: {
@@ -228,7 +219,6 @@ export default function EditorWrapper({
         >
           ❝❞
         </button>
-        <ImageUploader editor={editor} />
       </div>
       <div className="ProseMirror  read-only border-2 rounded-md p-3 bg-white focus-within:border-blue-500 transition-colors">
         <EditorContent editor={editor} />

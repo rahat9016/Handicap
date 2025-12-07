@@ -7,7 +7,7 @@ const initialState: IInitialState = {
   roleId: "",
   roleName: "",
   organizationName: "",
-  organizationId: "",
+  organizationId: undefined,
 };
 
 const organizationSlice = createSlice({
@@ -18,7 +18,7 @@ const organizationSlice = createSlice({
       state.id = action.payload.id;
       state.roleId = action.payload.roleId;
       state.roleName = action.payload.roleName;
-      state.organizationId = action.payload.organizationId;
+      state.organizationId = action.payload.organizationId || null;;
       state.organizationName = action.payload.organizationName;
     },
     clearOrganization: (state) => {
@@ -26,7 +26,7 @@ const organizationSlice = createSlice({
       state.roleName = "";
       state.roleId = "";
       state.organizationName = "";
-      state.organizationId = "";
+      state.organizationId = null;
       Cookies.remove("organizationData");
     },
   },

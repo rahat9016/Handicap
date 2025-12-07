@@ -53,7 +53,7 @@ export function middleware(request: NextRequest) {
       console.error("Failed to decrypt adminPermission:", err);
     }
   }
-  console.log("Middleware", adminPermission)
+  // console.log("Middleware", adminPermission)
 
   // ✅ Redirect logged-in users away from login page
   if (isLoginPage && token) {

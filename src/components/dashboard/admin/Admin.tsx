@@ -12,19 +12,38 @@ import { IAnalyticsSummary, IDashboardData } from "./types/interface";
 export default function Admin() {
   const { organizationId } = useAppSelector((state) => state.organizer);
   const { hasPermission } = useAppSelector((state) => state.permission);
-  const endpoint = organizationId
-    ? `/dashboard/organization/${organizationId}`
-    : "/dashboard";
+  console.log({ organizationId });
+  const endpoint =
+    organizationId !== undefined
+      ? organizationId
+        ? `/dashboard/organization/${organizationId}`
+        : "/dashboard"
+      : null;
 
   const { data: dashboardData, isLoading: isDashboardLoading } =
     useGet<IDashboardData>(
-      endpoint,
+      endpoint || "",
       ["dashboard", organizationId ?? "all"],
       {},
-      { enabled: organizationId !== undefined }
+      { enabled: endpoint !== null }
     );
+
   const { data: analyticsData, isLoading: isAnalyticsLoading } =
-    useGet<IAnalyticsSummary>("/analytics/summary", ["analytics-summary"]);
+    useGet<IAnalyticsSummary>(
+      "/analytics/summary",
+      ["analytics-summary"],
+      {},
+      { enabled: hasPermission }
+    );
+
+  if (organizationId === undefined) {
+    return (
+      <div className="flex flex-col gap-6">
+        <AdminTotalCardSectionSkeleton />
+        <AdminTotalCardSectionSkeleton />
+      </div>
+    );
+  }
   return (
     <div className="flex flex-col gap-6">
       {isDashboardLoading ? (

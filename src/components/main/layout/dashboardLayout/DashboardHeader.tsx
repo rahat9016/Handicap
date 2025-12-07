@@ -8,7 +8,6 @@ import Link from "next/link";
 import { BiArrowBack } from "react-icons/bi";
 import Notification from "./Notification";
 import UserSkeleton from "./Skeleton/UserSkeleton";
-// import { NotificationBell } from "@/components/share/notification/NotificationBell";
 
 export default function DashboardHeader({
   toggleSidebar,
@@ -32,13 +31,15 @@ export default function DashboardHeader({
         organizationName ? "justify-between" : "justify-end"
       }`}
     >
-      <Link
-        href="/"
-        className="flex font-medium items-center gap-2 border px-4 py-2 hover:bg-muted rounded-lg text-sm "
-      >
-        <BiArrowBack size={20} />
-        Back to Home
-      </Link>
+      {!organizationName && (
+        <Link
+          href="/"
+          className="flex font-medium items-center gap-2 border px-4 py-2 hover:bg-muted rounded-lg text-sm "
+        >
+          <BiArrowBack size={20} />
+          Back to Home
+        </Link>
+      )}
       <div className="flex items-center gap-4">
         {toggleSidebar && (
           <button
@@ -75,7 +76,6 @@ export default function DashboardHeader({
       </div>
 
       <div className="flex items-center gap-2 md:gap-4 ml-auto">
-
         <Notification />
         {/* <div className="relative">
           <div className="w-8 h-8 md:w-12 md:h-12 bg-dashboard-primary rounded-full flex items-center justify-center text-white">

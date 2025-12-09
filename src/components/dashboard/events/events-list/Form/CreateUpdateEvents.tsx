@@ -17,11 +17,6 @@ import { EventFormType, eventSchema } from "../Schema/schema";
 import { ICategory, IEvent, ITag } from "../types";
 import EventForm from "./EventForm";
 
-// const EditorWrapper = dynamic(
-//   () => import("@/components/share/EditorWrapper"),
-//   { ssr: false }
-// );
-
 interface CreateUpdateEventModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -68,7 +63,6 @@ export default function CreateUpdateEvents({
     mode: "onChange",
   });
 
-  console.log(initialValues?.organizationId);
   useEffect(() => {
     if (initialValues) {
       methods.reset({
@@ -145,9 +139,8 @@ export default function CreateUpdateEvents({
       formData.append("organizationId", String(data.organizationId));
     }
 
-    // FIXED: Append individual category IDs
     (data.categoryIds || []).forEach((id) => {
-      if (id) formData.append("categoryIds", String(id)); // Fixed: String(id) not String(data.categoryIds)
+      if (id) formData.append("categoryIds", String(id));
     });
 
     // FIXED: This one was already correct

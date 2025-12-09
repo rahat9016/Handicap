@@ -8,16 +8,13 @@ import ControlledInputField from "@/components/share/ControlledInputField";
 import ControlledMultiSelectField from "@/components/share/ControlledMultiSelectField";
 import ControlledSelectField from "@/components/share/ControlledSelectField";
 
+import TextEditor from "@/components/common/text-editor/TextEditor";
 import InputLabel from "@/components/share/InputLabel";
 import MultipleImageFileInput from "@/components/share/MultipleImageFileInput";
 import { ErrorType } from "@/types";
-import dynamic from "next/dynamic";
 import { FieldError, useFormContext } from "react-hook-form";
 import { EventFormType } from "../Schema/schema";
-const EditorWrapper = dynamic(
-  () => import("@/components/share/EditorWrapper"),
-  { ssr: false }
-);
+
 export default function EventForm({
   isEditMode = false,
   onSubmit,
@@ -82,9 +79,9 @@ export default function EventForm({
           <ControlledDatePicker name="endDate" />
         </div>
 
-        <div className="col-span-1">
+        <div className="col-span-2">
           <InputLabel label="Description" required />
-          <EditorWrapper
+          <TextEditor
             value={methods.watch("description") || ""}
             onChange={(value) => {
               methods.setValue("description", value, {
@@ -99,9 +96,9 @@ export default function EventForm({
           )}
         </div>
 
-        <div className="col-span-1">
+        <div className="col-span-2">
           <InputLabel label="Summary" required />
-          <EditorWrapper
+          <TextEditor
             value={methods.watch("summary") || ""}
             onChange={(value) => {
               methods.setValue("summary", value, {

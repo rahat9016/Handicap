@@ -19,13 +19,14 @@ import { useAppSelector } from "@/lib/redux/hooks";
 import { mapToSelectOptions } from "@/utils/mapToSelectOptions";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Trash } from "lucide-react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { FormProvider, useFieldArray, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { ILanguage } from "../../setup/types/setup";
 import { IResource } from "../types/types";
 import { FileUploadController } from "./FileUploadController";
 import { resourcesSchema } from "./Schema/Resources";
+import { Progress } from "@/components/ui/progress";
 
 export default function CreateUpdateResources({
   isOpen,
@@ -36,21 +37,14 @@ export default function CreateUpdateResources({
   onClose: () => void;
   initialValues?: IResource | undefined;
 }) {
-  const { data: resourceCategories } = useGet<IResource[]>(
-    "/resource-categories",
-    ["resource-categories"]
-  );
-  const { data: resourceKeywords } = useGet<IResource[]>("/resource-keywords", [
-    "resource-keywords",
-  ]);
-  const { data: languages } = useGet<ILanguage[]>("/languages", [
-    "resource-languages",
-  ]);
-  const {
-    mutateAsync,
-    error,
-    reset: postReset,
-  } = usePost(
+  const [uploadProgress, setUploadProgress] = useState<number>(0);
+  const [uploading, setUploading] = useState<boolean>(false);
+
+  const { data: resourceCategories } = useGet<IResource[]>("/resource-categories", ["resource-categories"]);
+  const { data: resourceKeywords } = useGet<IResource[]>("/resource-keywords", ["resource-keywords"]);
+  const { data: languages } = useGet<ILanguage[]>("/languages", ["resource-languages"]);
+
+  const { mutateAsync, error, reset: postReset } = usePost(
     "/resources",
     (data) => {
       console.log("POST success", data);
@@ -59,7 +53,7 @@ export default function CreateUpdateResources({
   );
 
   const { organizationId } = useAppSelector((state) => state.organizer);
-  // Initialize form methods
+
   const methods = useForm({
     resolver: yupResolver(resourcesSchema),
     defaultValues: {
@@ -76,13 +70,10 @@ export default function CreateUpdateResources({
     },
     mode: "onChange",
   });
-  const { control, trigger, getValues, watch } = methods;
-  const { fields, append, remove } = useFieldArray({
-    control,
-    name: "files",
-  });
 
-  // Open the dialog when isOpen changes
+  const { control, trigger, } = methods;
+  const { fields, append, remove } = useFieldArray({ control, name: "files" });
+
   useEffect(() => {
     if (!isOpen) {
       methods.reset({
@@ -95,32 +86,18 @@ export default function CreateUpdateResources({
         categoryId: "",
         organizationId: "",
         keywordIds: [],
-        files: [
-          { title: "", description: "", languageId: "", file: undefined },
-        ],
+        files: [{ title: "", description: "", languageId: "", file: undefined }],
       });
       postReset();
+      setUploading(false);
+      setUploadProgress(0);
     }
   }, [isOpen, methods, postReset]);
 
   const addAnotherFile = async () => {
     const valid = await trigger();
-    const values = getValues("files");
-
-    values?.forEach((_file, idx) => {
-      const currentFile = watch(`files.${idx}` as const);
-      ["title", "description", "languageId", "file"].every(
-        (field) => !!currentFile?.[field as keyof typeof currentFile]
-      );
-    });
-
     if (valid) {
-      append({
-        title: "",
-        description: "",
-        languageId: "",
-        file: "",
-      });
+      append({ title: "", description: "", languageId: "", file: "" });
     }
   };
 
@@ -130,72 +107,80 @@ export default function CreateUpdateResources({
     formData.append("title", data.title);
     if (data.titleBn) formData.append("titleBn", data.titleBn);
     if (data.description) formData.append("description", data.description);
-    if (data.descriptionBn)
-      formData.append("descriptionBn", data.descriptionBn);
+    if (data.descriptionBn) formData.append("descriptionBn", data.descriptionBn);
     formData.append("languageId", data.languageId);
     formData.append("categoryId", data.categoryId);
-    formData.append("organizationId", organizationId);
-
-    if (data.keywordIds && data.keywordIds.length > 0) {
-      formData.append("keywordIds", data.keywordIds);
-    }
+    formData.append("organizationId", organizationId ?? "");
+    if (data.keywordIds?.length > 0) formData.append("keywordIds", data.keywordIds);
     formData.append("isPrivate", data.isPrivate);
 
     if (data.file) {
       if (typeof data.file === "string") {
-        // If file is URL string, send it as is
         formData.append("file", data.file);
       } else {
-        // File object
         formData.append("file", data.file);
       }
     }
 
-    // ✅ handle files with metadata
     data.files.forEach((f: any, idx: number) => {
-      if (f.file) {
-        formData.append(`files[${idx}][file]`, f.file);
-      }
+      if (f.file) formData.append(`files[${idx}][file]`, f.file);
       formData.append(`files[${idx}][title]`, f.title);
       formData.append(`files[${idx}][description]`, f.description);
       formData.append(`files[${idx}][languageId]`, f.languageId);
     });
+
     if (!initialValues) {
-      mutateAsync(formData).then(() => {
-        toast.success("Resource created successfully");
-        onClose();
-        methods.reset();
-      });
+      setUploading(true);
+
+      mutateAsync({
+        data: formData,
+        config: {
+          onUploadProgress: (evt: any) => {
+            const percent = Math.round((evt.loaded * 100) / evt.total);
+            setUploadProgress(percent);
+          },
+        },
+      })
+        .then(() => {
+          toast.success("Resource created successfully");
+          setUploading(false);
+          setUploadProgress(0);
+          methods.reset();
+          onClose();
+        })
+        .catch(() => setUploading(false));
+
       return;
     }
   };
 
-  const resourceCategoryOptions = mapToSelectOptions(
-    resourceCategories?.data,
-    "name",
-    "id"
-  );
+  const resourceCategoryOptions = mapToSelectOptions(resourceCategories?.data, "name", "id");
   const languageOptions = mapToSelectOptions(languages?.data, "name", "id");
-  const keywordOptions = mapToSelectOptions(
-    resourceKeywords?.data,
-    "name",
-    "id"
-  );
+  const keywordOptions = mapToSelectOptions(resourceKeywords?.data, "name", "id");
+
   useEffect(() => {
-    if (fields.length === 0)
-      append({ title: "", description: "", languageId: "", file: "" });
+    if (fields.length === 0) append({ title: "", description: "", languageId: "", file: "" });
   }, [fields, append]);
+
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="bg-white max-h-[95vh]  w-[800px] !max-w-none overflow-y-auto">
+    <Dialog
+      open={isOpen}
+      onOpenChange={() => {
+        if (!uploading) onClose();
+      }}
+    >
+      <DialogContent className="bg-white max-h-[95vh] w-[800px] !max-w-none overflow-y-auto">
         <DialogHeader>
           <DialogTitle>
             {initialValues ? "Update Resources" : "Create Resources"}
           </DialogTitle>
         </DialogHeader>
+
         <FormProvider {...methods}>
           <form onSubmit={methods.handleSubmit(onSubmit)} className="w-full">
-            <div className="flex flex-col gap-6 mt-8">
+            <div className="w-full">
+
+              <div className="flex flex-col gap-6 mt-8">
               <div className="grid grid-cols-2  gap-3 lg:gap-5">
                 <div>
                   <InputLabel label="Title" required />
@@ -231,7 +216,6 @@ export default function CreateUpdateResources({
                 </div>
               </div>
 
-              {/* Category + Language */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 lg:gap-5">
                 <div>
                   <InputLabel label="Category" required />
@@ -359,13 +343,27 @@ export default function CreateUpdateResources({
               <ErrorMessage error={error} />
             </div>
 
+              {/* <ErrorMessage error={error} /> */}
+            </div>
+
+            {/* Progress Bar */}
+            {uploading && (
+              <div className="mt-4">
+                <p className="text-sm text-gray-600 mb-1">
+                  Uploading... {uploadProgress}%
+                </p>
+                <Progress value={uploadProgress} className="w-full h-2" />
+              </div>
+            )}
+
             {/* Submit */}
-            <div className="flex justify-end gap-3 mt-4">
+            <div className="flex justify-end gap-3 mt-6">
               <Button
                 type="submit"
+                disabled={uploading}
                 className="bg-dashboard-primary hover:bg-dashboard-primary text-white"
               >
-                {initialValues ? "Update" : "Create"}
+                {uploading ? "Uploading..." : initialValues ? "Update" : "Create"}
               </Button>
             </div>
           </form>
@@ -374,3 +372,6 @@ export default function CreateUpdateResources({
     </Dialog>
   );
 }
+
+
+

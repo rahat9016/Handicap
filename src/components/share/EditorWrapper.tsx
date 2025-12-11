@@ -4,21 +4,17 @@ import Blockquote from "@tiptap/extension-blockquote";
 import Bold from "@tiptap/extension-bold";
 import BulletList from "@tiptap/extension-bullet-list";
 import HardBreak from "@tiptap/extension-hard-break";
-import Image from "@tiptap/extension-image";
+import Highlight from "@tiptap/extension-highlight";
 import ListItem from "@tiptap/extension-list-item";
 import OrderedList from "@tiptap/extension-ordered-list";
 import TextAlign from "@tiptap/extension-text-align";
 import { TextStyle } from "@tiptap/extension-text-style";
 import Underline from "@tiptap/extension-underline";
 import { EditorContent, useEditor } from "@tiptap/react";
-import Highlight from "@tiptap/extension-highlight";
 
 import StarterKit from "@tiptap/starter-kit";
 import { TextSelection } from "prosemirror-state";
-import { ResizableImage } from "tiptap-extension-resizable-image";
-import "tiptap-extension-resizable-image/styles.css";
 import { FontSizeExtension } from "./FontSizeExtension";
-import ImageUploader from "./ImageUploader";
 
 interface EditorWrapperProps {
   value: string;
@@ -40,27 +36,14 @@ export default function EditorWrapper({
         blockquote: {},
         hardBreak: false,
       }),
-      Image.configure({
-        inline: true,
-        allowBase64: true,
+
+      Highlight.configure({
+        multicolor: true,
         HTMLAttributes: {
-          class: "rounded-md max-w-full my-2",
-          style:
-            "display: inline-block; width: auto; height: auto; vertical-align: middle;",
+          class: "bg-yellow/20 px-1 rounded",
         },
       }),
-      Highlight.configure({ 
-        multicolor: true, 
-        HTMLAttributes: {
-          class: 'bg-yellow/20 px-1 rounded', 
-        },
-      }),
-      ResizableImage.configure({
-        allowBase64: true,
-        HTMLAttributes: {
-          class: "resizable-image  inline-block",
-        },
-      }),
+
       Bold,
       Underline,
       BulletList,
@@ -72,14 +55,6 @@ export default function EditorWrapper({
         },
       }),
       Blockquote,
-      Image.configure({
-        inline: true,
-        allowBase64: true,
-        HTMLAttributes: {
-          class: "rounded-md max-w-full my-2",
-          style: "height: auto; width: auto;",
-        },
-      }),
       TextStyle,
       TextAlign.configure({ types: ["heading", "paragraph", "image"] }),
       FontSizeExtension,
@@ -101,6 +76,7 @@ export default function EditorWrapper({
       onChange(editor.getHTML());
     },
     immediatelyRender: false,
+    // editable:false
   });
 
   if (!editor) return null;
@@ -186,7 +162,8 @@ export default function EditorWrapper({
           onClick={() => editor.chain().focus().toggleHighlight().run()}
           className={cn(
             "w-12 h-12 rounded-sm border border-gray/30 hover:bg-gray/10",
-            editor.isActive("highlight") && "font-bold text-blue bg-slate-200 border-blue/30"
+            editor.isActive("highlight") &&
+              "font-bold text-blue bg-slate-200 border-blue/30"
           )}
         >
           <div className="w-6 h-6 bg-yellow/20 rounded-sm mx-auto"></div>
@@ -242,9 +219,8 @@ export default function EditorWrapper({
         >
           ❝❞
         </button>
-        <ImageUploader editor={editor} />
       </div>
-      <div className="ProseMirror border-2 rounded-md p-3 bg-white focus-within:border-blue-500 transition-colors">
+      <div className="ProseMirror  read-only border-2 rounded-md p-3 bg-white focus-within:border-blue-500 transition-colors">
         <EditorContent editor={editor} />
       </div>
     </div>

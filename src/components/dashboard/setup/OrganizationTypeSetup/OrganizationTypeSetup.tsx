@@ -84,7 +84,7 @@ export default function OrganizationTypeSetup() {
               className="text-darkLiver hover:underline text-sm flex items-center gap-1"
             >
               <SquarePen size={16} />
-              Edit Role
+              Edit Type
             </button>
           </div>
         );

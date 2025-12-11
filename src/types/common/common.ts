@@ -42,7 +42,7 @@ export interface IPageSection {
   sectionType: string;
   order: number;
   title: ILangType;
-  subtitle: ILangType;
+  subTitle: ILangType;
   content: ILangType;
   buttonLabel: ILangType;
   buttonLabel2: ILangType;

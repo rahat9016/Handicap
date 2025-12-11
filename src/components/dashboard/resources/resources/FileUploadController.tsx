@@ -5,18 +5,11 @@ import { useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import { SUPPORTED_FORMATS } from "./Schema/Resources";
 
-// const SUPPORTED_FORMATS = [
-//   "image/png",
-//   "image/jpeg",
-//   "image/jpg",
-//   "application/pdf",
-//   "application/msword",
-//   "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-// ];
 
 interface FileUploadControllerProps {
   name: string;
   className?: string;
+  imgClassName?: string;
   initialUrl?: string;
   label?: string;
 }
@@ -24,6 +17,7 @@ interface FileUploadControllerProps {
 export function FileUploadController({
   name,
   className,
+  imgClassName,
   label,
 }: FileUploadControllerProps) {
   const { control, getValues } = useFormContext();
@@ -132,11 +126,10 @@ export function FileUploadController({
                       height={132}
                       src={preview}
                       alt="Preview"
-                      className="w-full h-full object-contain rounded-lg"
+                      className={cn("w-full h-full object-contain rounded-lg", imgClassName)}
                     />
                   </div>
                 ) : isVideo && preview ? (
-                  // Video preview
                   <div className="w-full h-full relative group">
                     <button
                       onClick={handleDelete}
@@ -195,69 +188,7 @@ export function FileUploadController({
                   />
                 </label>
               )}
-              {/* {fileValue ? (
-                isImage && preview ? (
-                  // Image preview
-                  <div className="w-full h-full relative group">
-                    <button
-                      onClick={handleDelete}
-                      className="absolute w-6 h-6 flex items-center justify-center bg-dashboard-primary hover:bg-dashboard-primary rounded-full p-1 -right-2 -top-2"
-                      aria-label="Delete image"
-                      type="button"
-                    >
-                      <X className="w-4 h-4 text-white" />
-                    </button>
-                    <Image
-                      width={244}
-                      height={132}
-                      src={preview}
-                      alt="File Preview"
-                      className="w-full h-full object-contain rounded-lg"
-                    />
-                  </div>
-                ) : (
-                  // PDF/DOC preview (icon + filename)
-                  <div className="w-full h-full flex flex-col items-center justify-center text-gray-600 relative">
-                    <button
-                      onClick={handleDelete}
-                      className="absolute w-6 h-6 flex items-center justify-center bg-dashboard-primary hover:bg-dashboard-primary rounded-full p-1 -right-2 -top-2"
-                      aria-label="Delete file"
-                      type="button"
-                    >
-                      <X className="w-4 h-4 text-white" />
-                    </button>
-                    {renderFileIcon()}
-                    <p className="text-sm font-normal font-inter mt-2 text-center px-2 truncate max-w-[200px]">
-                      {fileValue instanceof File
-                        ? fileValue.name
-                        : "File selected"}
-                    </p>
-                  </div>
-                )
-              ) : (
-                // Upload placeholder
-                <label
-                  htmlFor={`${name}-file`}
-                  className="flex flex-col items-center justify-center h-full lg:gap-2 cursor-pointer select-none"
-                >
-                  <Image
-                    width={36}
-                    height={36}
-                    src="/images/dashboard/gallery-add.svg"
-                    alt="gallery"
-                  />
-                  <span className="text-grayDark lg:text-[#A6A6A6] text-xs font-poppins font-normal">
-                    {label || "Upload file (image, pdf, doc)"}
-                  </span>
-                  <input
-                    id={`${name}-file`}
-                    type="file"
-                    accept={SUPPORTED_FORMATS.join(",")}
-                    className="hidden"
-                    onChange={handleFileChange}
-                  />
-                </label>
-              )} */}
+              
             </div>
             {fieldState.error && (
               <p className="text-rose-500 text-xs mt-1 pl-2">

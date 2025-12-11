@@ -221,17 +221,17 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { StatusToggle } from "@/components/share/StatusToggle";
 import { ColumnDef, DataTable } from "@/components/ui/data-table";
-import { usePost } from "@/hooks/usePost";
-import { useAppSelector } from "@/lib/redux/hooks";
-import { format } from "date-fns";
-import { Eye, SlidersHorizontal, SquarePen, MoreVertical } from "lucide-react";
-import { IResource, IResourceProps } from "../types/types";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { usePost } from "@/hooks/usePost";
+import { useAppSelector } from "@/lib/redux/hooks";
+import { format } from "date-fns";
+import { Eye, MoreVertical, SlidersHorizontal, SquarePen } from "lucide-react";
+import { IResource, IResourceProps } from "../types/types";
 
 export default function TableView({
   data,
@@ -368,7 +368,7 @@ export default function TableView({
             )}
 
             {/* Dropdown for all toggles */}
-            <DropdownMenu>
+            {hasPermission && <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <button
                   className="p-1 hover:bg-gray-100 rounded transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
@@ -474,7 +474,7 @@ export default function TableView({
                   </div>
                 </DropdownMenuItem>
               </DropdownMenuContent>
-            </DropdownMenu>
+            </DropdownMenu>}
           </div>
         );
       },

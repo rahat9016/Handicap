@@ -1,7 +1,7 @@
 // export const baseURL = 'http://163.47.146.233:4035' // server API - 1
-
-// export const baseURL = 'http://163.47.146.233:4048' // UAT server API
+// export const baseURL = 'http://163.47.146.233:4035' // UAT server API
 export const baseURL = 'http://192.168.100.240:4047' // Local Server API
+// export const baseURL = 'https://api.disabilityinclusionresourcehub.com' // Live Server API
 
 export const getBaseUrl = (): string => {
   return (
@@ -10,7 +10,7 @@ export const getBaseUrl = (): string => {
   ); // server API - 1
   // return (
   //   process.env.NEXT_PUBLIC_API_BASE_URL ||
-  //   `${baseURL}/handicap/api/v1`
+  //   `${baseURL}/handicap/api/v1`and
   // );
   // return (
   //   process.env.NEXT_PUBLIC_API_BASE_URL ||
@@ -25,5 +25,5 @@ export const getWebUrl = (): string => {
   //   process.env.NEXT_PUBLIC_API_BASE_URL ||
   //   "http://localhost:3000/"
   // );
-  return process.env.NEXT_PUBLIC_API_BASE_URL || "http://163.47.146.233:4032/";
+  return process.env.NEXT_PUBLIC_API_BASE_URL || "https://api.disabilityinclusionresourcehub.com";
 };

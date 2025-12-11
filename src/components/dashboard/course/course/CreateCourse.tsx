@@ -74,7 +74,7 @@ export default function CreateUpdateResources({
     formData.append("title", data.title);
     if (data.description) formData.append("description", data.description);
     formData.append("languageId", data.languageId);
-    formData.append("organizationId", organizationId);
+    formData.append("organizationId", organizationId ??"");
     formData.append("isPrivate", data.isPrivate);
 
     if (data.file) {

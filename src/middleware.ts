@@ -19,6 +19,7 @@ export function middleware(request: NextRequest) {
 
   // 🔑 Decrypt roleId
   let roleId: number | null = null;
+  let parentRoleId: number | null = null;
   const encryptedRoleId = request.cookies.get("roleId")?.value;
   if (encryptedRoleId) {
     try {
@@ -27,6 +28,16 @@ export function middleware(request: NextRequest) {
     } catch (err) {
       console.error("Failed to decrypt roleId:", err);
       roleId = null;
+    }
+  }
+  const encryptedParentRoleId = request.cookies.get("parentRoleId")?.value;
+  if (encryptedParentRoleId) {
+    try {
+      const decrypted = decryptData(encryptedParentRoleId, "ABC123!@#");
+      parentRoleId = Number(decrypted);
+    } catch (err) {
+      console.error("Failed to decrypt parentRoleId:", err);
+      parentRoleId = null;
     }
   }
 
@@ -42,6 +53,7 @@ export function middleware(request: NextRequest) {
       console.error("Failed to decrypt adminPermission:", err);
     }
   }
+  // console.log("Middleware", adminPermission)
 
   // ✅ Redirect logged-in users away from login page
   if (isLoginPage && token) {
@@ -77,11 +89,16 @@ export function middleware(request: NextRequest) {
   }
 
   // 🚫 Block users from /organization-list if roleId !== 2
-  if (isOrgListRoute && roleId !== 2) {
+  // if (isOrgListRoute && (roleId !== 2 || parentRoleId !== 2)) {
+  //   console.log("Redirecting from org list");
+  //   const redirectUrl = new URL(`/${locale}`, request.url);
+  //   return NextResponse.redirect(redirectUrl);
+  // }
+
+  if (isOrgListRoute && roleId !== 2 && parentRoleId !== 2) {
     const redirectUrl = new URL(`/${locale}`, request.url);
     return NextResponse.redirect(redirectUrl);
   }
-
   return intlMiddleware(request);
 }
 

@@ -162,12 +162,15 @@ export function AccessibilityControls() {
       currentAbortController = abortController;
 
       try {
-        const response = await fetch("http://192.168.100.203:8000/tts", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ text, voice: "female", speed: 1 }),
-          signal: abortController.signal,
-        });
+        const response = await fetch(
+          "https://translate.disabilityinclusionresourcehub.com/tts",
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ text, voice: "female", speed: 1 }),
+            signal: abortController.signal,
+          }
+        );
 
         if (abortController.signal.aborted) return;
 

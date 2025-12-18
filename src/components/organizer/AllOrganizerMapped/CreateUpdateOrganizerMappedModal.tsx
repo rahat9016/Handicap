@@ -40,7 +40,11 @@ export default function CreateUpdateOrganizerMappedModal({
   );
   const { data: roleData } = useGet<IRole[]>(`/roles/ADMIN`, ["roles"]);
 
-  const { mutateAsync, error } = usePost<IUser[]>(
+  const {
+    mutateAsync,
+    error,
+    reset: postReset,
+  } = usePost<IUser[]>(
     "/user-organization-role",
     (data) => {
       console.log("POST success", data);
@@ -70,7 +74,8 @@ export default function CreateUpdateOrganizerMappedModal({
         roleId: "",
       });
     }
-  }, [isOpen, methods]);
+    postReset();
+  }, [isOpen, methods, postReset]);
 
   const onSubmit = (data: UserRoleForm) => {
     const formattedData = {

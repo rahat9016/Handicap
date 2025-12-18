@@ -16,7 +16,6 @@ const HomeHeroSection = () => {
     "/page-sections/query/first?page=HOME&sectionType=HERO",
     ["page-sections"]
   );
-  console.log(heroData);
 
   const stats = data?.data;
   const hero = heroData?.data;

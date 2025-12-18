@@ -54,7 +54,7 @@ export function Quiz({ quiz, onQuizComplete }: QuizProps) {
       staleTime: 5 * 60 * 1000,
     }
   );
-  const { mutateAsync } = usePost(
+  const { mutateAsync } = usePost<QuizResult>(
     `/quizzes/submit-quiz`,
     () => {
       console.log("POST success");
@@ -66,7 +66,7 @@ export function Quiz({ quiz, onQuizComplete }: QuizProps) {
   const handleStartQuiz = () => {
     setQuizState("quiz");
     setCurrentQuestionIndex(0);
-    setAnswers([]);
+    setAnswers({});
   };
 
   const handlePreviousQuestion = () => {

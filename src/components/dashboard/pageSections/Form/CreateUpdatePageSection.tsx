@@ -126,7 +126,6 @@ export default function CreateUpdateSectionModal({
         url: `/page-sections/${initialValues?.id}`,
         data: formData,
       }).then(() => {
-        toast.success("Page section updated successfully");
         onClose();
         methods.reset();
       });
@@ -136,7 +135,6 @@ export default function CreateUpdateSectionModal({
 
     mutateAsync(formData)
       .then(() => {
-        toast.success("Section created successfully");
         onClose();
         methods.reset();
       })

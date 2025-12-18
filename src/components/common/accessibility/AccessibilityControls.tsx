@@ -118,15 +118,103 @@ export function AccessibilityControls() {
     }
   };
 
-  const speak = (text: string) => {
+  // const speak = (text: string) => {
+  //   if (!text) return;
+  //   window.speechSynthesis.cancel();
+  //   const utterance = new SpeechSynthesisUtterance(text);
+  //   utterance.lang = /[\u0980-\u09FF]/.test(text) ? "hi-IN" : "en-US";
+  //   // utterance.lang = "en-US";
+  //   // Select a female voice if available
+  //   const voices = window.speechSynthesis.getVoices();
+  //   const femaleVoice = voices.find(
+  //     (v) =>
+  //       v.lang.startsWith(utterance.lang) &&
+  //       v.name.toLowerCase().includes("female")
+  //   );
+  //   if (femaleVoice) utterance.voice = femaleVoice;
+  //   utterance.rate = 1;
+  //   window.speechSynthesis.speak(utterance);
+  // };
+
+  let currentAbortController: AbortController | null = null;
+  let currentAudio: HTMLAudioElement | null = null;
+
+  const speak = async (text: string) => {
     if (!text) return;
+
     window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = "en-US";
-    utterance.rate = 1;
-    window.speechSynthesis.speak(utterance);
+
+    if (currentAudio) {
+      currentAudio.pause();
+      currentAudio.currentTime = 0;
+      currentAudio = null;
+    }
+
+    if (currentAbortController) {
+      currentAbortController.abort();
+      currentAbortController = null;
+    }
+
+    const isBangla = /[\u0980-\u09FF]/.test(text);
+
+    if (isBangla) {
+      const abortController = new AbortController();
+      currentAbortController = abortController;
+
+      try {
+        const response = await fetch(
+          "https://translate.disabilityinclusionresourcehub.com/tts",
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ text, voice: "female", speed: 1 }),
+            signal: abortController.signal,
+          }
+        );
+
+        if (abortController.signal.aborted) return;
+
+        const audioBlob = await response.blob();
+        const audioUrl = URL.createObjectURL(audioBlob);
+
+        if (currentAudio) {
+          (currentAudio as HTMLAudioElement).pause();
+          (currentAudio as HTMLAudioElement).currentTime = 0;
+        }
+        currentAudio = new Audio(audioUrl);
+
+        currentAudio.play();
+        currentAudio.onended = () => {
+          currentAudio = null;
+        };
+      } catch (err) {
+        console.error("TTS request failed", err);
+      } finally {
+        if (currentAbortController === abortController) {
+          currentAbortController = null;
+        }
+      }
+    } else {
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = "en-US";
+      window.speechSynthesis.speak(utterance);
+    }
   };
 
+  useEffect(() => {
+    if (!("speechSynthesis" in window)) return;
+
+    const logVoices = () => {
+      const voices = window.speechSynthesis.getVoices();
+      voices.forEach((v) => {
+        console.log(
+          `Name: ${v.name}, Lang: ${v.lang}, Default: ${v.default}, VoiceURI: ${v.voiceURI}`
+        );
+      });
+    };
+    window.speechSynthesis.onvoiceschanged = logVoices;
+    logVoices();
+  }, []);
   return (
     <div
       className="hidden lg:flex fixed right-4 top-[32%] lg:top-[25%] z-[9999999]  flex-col gap-2 bg-background border rounded-lg p-2 shadow-md"

@@ -139,13 +139,23 @@ export function DataTable<T>({
         : sortedData;
 
     const rows = rowsSource.map((row) =>
-      visibleCols.map((col) =>
-        col.accessorKey ? row[col.accessorKey] ?? "" : ""
-      )
+      visibleCols.map((col) => {
+        const exportCol = col as ColumnDef<T> & {
+          exportValue?: (row: T) => string | number;
+        };
+
+        if (exportCol.exportValue) {
+          return exportCol.exportValue(row);
+        }
+
+        const value = col.accessorKey ? row[col.accessorKey] : "";
+        return typeof value === "object" ? "" : value ?? "";
+      })
     );
 
     const csv = Papa.unparse({ fields: headers, data: rows });
     const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+
     const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
     link.setAttribute("download", "table-data.csv");
@@ -170,13 +180,26 @@ export function DataTable<T>({
         : sortedData;
 
     const rows = rowsSource.map((row) =>
-      visibleCols.map((col) =>
-        col.accessorKey ? row[col.accessorKey] ?? "" : ""
-      )
+      visibleCols.map((col) => {
+        const exportCol = col as ColumnDef<T> & {
+          exportValue?: (row: T) => string | number;
+        };
+
+        if (exportCol.exportValue) {
+          return exportCol.exportValue(row);
+        }
+
+        const value = col.accessorKey ? row[col.accessorKey] : "";
+        return typeof value === "object" ? "" : value ?? "";
+      })
     );
 
     const doc = new jsPDF();
-    autoTable(doc, { head: [headers], body: rows });
+    autoTable(doc, {
+      head: [headers],
+      body: rows,
+    });
+
     doc.save("table-data.pdf");
   }
 

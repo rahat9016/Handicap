@@ -265,13 +265,15 @@ export default function TableView({
       cell: (_value: any, row: IResource) => {
         return <div>{row?.title?.en && <span>{row.title.en}</span>}</div>;
       },
+      exportValue: (row: IResource) => row?.title?.en ?? "",
     },
     {
       header: "Title BN",
       accessorKey: "title",
       cell: (_value: any, row: IResource) => {
-        return <div>{row?.title?.en && <span>{row.title.bn}</span>}</div>;
+        return <div>{row?.title?.bn && <span>{row.title.bn}</span>}</div>;
       },
+      exportValue: (row: IResource) => row?.title?.bn ?? "",
     },
     {
       header: "Organization",
@@ -279,6 +281,7 @@ export default function TableView({
       cell: (_value: any, row: any) => {
         return <span>{row?.organization?.name}</span>;
       },
+      exportValue: (row: IResource) => row?.organization?.name ?? "",
     },
     { header: "Download Count", accessorKey: "totalDownloadCount" },
     { header: "View Count", accessorKey: "totalViewCount" },
@@ -306,6 +309,7 @@ export default function TableView({
           </span>
         );
       },
+      exportValue: (row: IResource) => row.isCurrent ? "Active" : "Inactive",
     },
     {
       header: "Is Approved",
@@ -323,6 +327,7 @@ export default function TableView({
           </span>
         );
       },
+      exportValue: (row: IResource) => row.isApproved ? "Approved" : "Unapproved",
     },
     {
       header: "Visibility",
@@ -340,6 +345,7 @@ export default function TableView({
           </span>
         );
       },
+      exportValue: (row: IResource) => row.isPrivate ? "Private" : "Public",
     },
     {
       header: "Actions",
@@ -443,7 +449,6 @@ export default function TableView({
                   </DropdownMenuItem>
                 )}
 
-                {/* /handicap/api/v1/resources/toggle-recommended/{id} */}
 
                 <DropdownMenuItem
                   asChild

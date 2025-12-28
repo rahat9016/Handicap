@@ -1,7 +1,4 @@
 import { IUser } from "@/components/organizer/types";
-import ControlledSelectField from "@/components/share/ControlledSelectField";
-import InputLabel from "@/components/share/InputLabel";
-import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -15,8 +12,9 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import { roleChange, RoleChangeForm } from "./Schema/Setup";
-import { IRole } from "./types/Role";
+import { roleChange, RoleChangeForm } from "../Schema/Setup";
+import { IRole } from "../types/Role";
+import UserRoleForm from "./UserRoleForm";
 
 export default function CreateUpdateUser({
   isOpen,
@@ -27,10 +25,8 @@ export default function CreateUpdateUser({
   onClose: () => void;
   initialValues?: IUser | undefined;
 }) {
-  const { data } = useGet<IRole[]>("/roles/SUPER_ADMIN", [
-    "roles",
-  ]);
-  const { mutateAsync, error } = usePatch<IUser[]>(
+  const { data } = useGet<IRole[]>("/roles/SUPER_ADMIN", ["roles"]);
+  const { mutateAsync, isPending, error } = usePatch<IUser[]>(
     (data) => console.log("Success", data),
     [["user"]]
   );
@@ -50,19 +46,14 @@ export default function CreateUpdateUser({
   }, [initialValues, methods]);
 
   const onSubmit = (data: { roleId: string }) => {
-    const updateUserRole = {
-      roleId: Number(data.roleId),
-    };
-
-    // Submit the form data
     mutateAsync({
       url: `/user/${initialValues?.id}/role`,
-      data: updateUserRole,
+      data: {
+        roleId: Number(data.roleId),
+      },
     }).then(() => {
-      console.log("User role updated successfully");
       toast.success("User role updated successfully");
       onClose();
-      // Reset the form after successful submission
       methods.reset();
     });
   };
@@ -75,30 +66,12 @@ export default function CreateUpdateUser({
           <DialogTitle>Update Role</DialogTitle>
         </DialogHeader>
         <FormProvider {...methods}>
-          <form onSubmit={methods.handleSubmit(onSubmit)} className="w-full">
-            <div className="mb-4">
-              <InputLabel label="User Role" required />
-              <ControlledSelectField
-                options={roleOptions}
-                name="roleId"
-                placeholder="Select role"
-              />
-            </div>
-
-            {error?.errors?.length && (
-              <div className="text-rose-600 bg-rose-200 text-center py-2 rounded-sm font-inter text-sm">
-                {error?.errors && error?.errors[0]}
-              </div>
-            )}
-            <div className="flex justify-end gap-3 mt-6">
-              <Button
-                type="submit"
-                className="bg-dashboard-primary hover:bg-dashboard-primary text-white"
-              >
-                Update
-              </Button>
-            </div>
-          </form>
+          <UserRoleForm
+            roleOptions={roleOptions}
+            onSubmit={onSubmit}
+            error={error}
+            isPending={isPending}
+          />
         </FormProvider>
       </DialogContent>
     </Dialog>

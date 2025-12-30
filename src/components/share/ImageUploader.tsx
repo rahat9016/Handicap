@@ -7,7 +7,9 @@ import { ChangeEvent } from "react";
 import { toast } from "react-toastify";
 
 export default function ImageUploader({ editor }: { editor: Editor }) {
-  const { mutateAsync, isPending } = usePost("/public-images", (data) => {
+  const { mutateAsync, isPending } = usePost<{
+    imageUrl: string
+  }>("/public-images", (data) => {
     console.log("Upload success", data);
   });
 

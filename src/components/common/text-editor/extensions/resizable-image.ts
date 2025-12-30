@@ -1,6 +1,6 @@
-import { ResizableImageAttributes } from "../types/editor";
+import { type CommandProps, type Editor, type NodeViewProps, type NodeViewRendererProps } from "@tiptap/core";
 import Image from "@tiptap/extension-image";
-import { type Editor, NodeViewProps, type CommandProps } from "@tiptap/core";
+import { ResizableImageAttributes } from "../types/editor";
 
 const ResizableImage = Image.extend({
   name: "resizableImage",
@@ -84,17 +84,18 @@ const ResizableImage = Image.extend({
 
   addCommands() {
     return {
+      // accept a wider options shape to remain compatible with the base Image command
       setImage:
-        (options: ResizableImageAttributes) =>
+        (options: unknown) =>
         ({ commands }: CommandProps) =>
           commands.insertContent({
             type: this.name,
-            attrs: options,
+            attrs: options as ResizableImageAttributes,
           }),
       updateImage:
-        (options: Partial<ResizableImageAttributes>) =>
+        (options: unknown) =>
         ({ chain }: CommandProps) =>
-          chain().updateAttributes(this.name, options).run(),
+          chain().updateAttributes(this.name, options as Partial<ResizableImageAttributes>).run(),
       setImageSize:
         (width: string, height: string = "auto") =>
         ({ chain }: CommandProps) =>
@@ -111,7 +112,8 @@ const ResizableImage = Image.extend({
   },
 
   addNodeView() {
-    return ({ node, getPos, editor }: NodeViewProps & { editor: Editor }) => {
+    return (props: NodeViewRendererProps) => {
+      const { node, getPos, editor } = props as NodeViewProps & { editor: Editor };
       const dom = document.createElement("span");
       dom.className = `image-resize-container image-wrap-${node.attrs.wrap}`;
       dom.setAttribute("data-wrap", node.attrs.wrap);

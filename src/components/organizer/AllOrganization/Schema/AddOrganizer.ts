@@ -1,5 +1,6 @@
 import * as Yup from "yup";
 import { InferType } from "yup";
+
 export const SUPPORTED_FORMATS = [
   "image/jpg",
   "image/webp",
@@ -9,7 +10,9 @@ export const SUPPORTED_FORMATS = [
   "image/heic",
   "image/heif",
 ];
+
 const FILE_SIZE = 10 * 1024 * 1024;
+
 export const organizationSchema = Yup.object().shape({
   name: Yup.string()
     .required("Organizer name is required")
@@ -59,18 +62,6 @@ export const organizationSchema = Yup.object().shape({
     isActive: Yup.boolean().default(true),
 });
 
-export const userRoleSchema = Yup.object().shape({
-  userId: Yup.string()
-    .required("User ID is required")
-    .min(1, "User ID is required"),
-  organizationId: Yup.string()
-    .required("Organization ID is required")
-    .min(1, "Organization ID is required"),
-  roleId: Yup.string()
-    .required("Role ID is required")
-    .min(1, "Role ID is required"),
-});
 
 
-export type UserRoleForm = InferType<typeof userRoleSchema>;
-export type OrganizationForm = InferType<typeof organizationSchema>;
+export type OrganizationFormType = InferType<typeof organizationSchema>;

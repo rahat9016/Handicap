@@ -8,7 +8,7 @@ import { usePatch } from "@/hooks/usePatch";
 import { useSearchDebounce } from "@/hooks/useSearchDebounce";
 import { Eye, SquarePen, UsersIcon } from "lucide-react";
 import { useEffect, useState } from "react";
-import CreateUpdateUser from "./CreateUpdateUsers";
+import CreateUpdateUser from "./Form/CreateUpdateUsers";
 import ViewDetails from "./ViewDetails";
 
 export default function Users() {

@@ -40,7 +40,9 @@ const TextEditor = ({ value, onChange }: TextEditorProps) => {
 
   const fontSizes = [8, 10, 12, 14, 16, 18, 20, 24, 28, 32, 36, 40, 48, 56, 64];
 
-  const { mutateAsync, isPending } = usePost("/public-images", (data) => {
+  const { mutateAsync, isPending } = usePost<{
+    imageUrl: string
+  }>("/public-images", (data) => {
     console.log("Upload success", data);
   });
 
@@ -53,6 +55,7 @@ const TextEditor = ({ value, onChange }: TextEditorProps) => {
 
     try {
       const res = await mutateAsync(formData);
+      console.log("response --------->", res)
       if (res.imageUrl) {
         editor
           ?.chain()

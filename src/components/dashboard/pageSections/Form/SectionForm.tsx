@@ -90,15 +90,15 @@ function SectionForm({
         </div>
         <div>
           <InputLabel label="Button Label (EN)" />
-          <ControlledInputField name="buttonLabel" />
+          <ControlledInputField name="buttonLabel" placeholder="Write here..." />
         </div>
         <div>
           <InputLabel label="Button Label (BN)" />
-          <ControlledInputField name="buttonLabelBn" />
+          <ControlledInputField name="buttonLabelBn" placeholder="Write here..." />
         </div>
         <div className="col-span-2">
           <InputLabel label="Button URL" />
-          <ControlledInputField placeholder="Write here..." name="buttonUrl" />
+          <ControlledInputField placeholder="Write here..." name="buttonUrl"  />
         </div>
 
         <div

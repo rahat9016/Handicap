@@ -8,7 +8,7 @@ import { format } from "date-fns";
 import { Building2, Eye, SquarePen } from "lucide-react";
 import { useEffect, useState } from "react";
 import { IOrganizationResponse } from "../types";
-import CreateUpdateOrganization from "./CreateUpdateOrganization";
+import CreateUpdateOrganization from "./Form/CreateUpdateOrganization";
 import ViewOrganizationDetails from "./ViewDetails";
 
 export default function AllOrganization() {

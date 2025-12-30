@@ -1,4 +1,4 @@
-import { SUPPORTED_FORMATS } from "@/components/organizer/schema/AddOrganizer";
+import { SUPPORTED_FORMATS } from "@/components/organizer/AllOrganization/Schema/AddOrganizer";
 import { cn } from "@/lib/utils";
 import { X } from "lucide-react";
 import Image from "next/image";

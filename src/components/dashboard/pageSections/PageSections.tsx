@@ -70,6 +70,7 @@ export default function PageSections() {
           </div>
         );
       },
+      
     },
     { header: "Page Name", accessorKey: "pageId" },
     { header: "Section Type", accessorKey: "sectionType" },
@@ -83,6 +84,7 @@ export default function PageSections() {
       ) => {
         return <div>{row?.title?.en && <span>{row.title.en}</span>}</div>;
       },
+      exportValue: (row: IPageSection) => row?.title?.en || ""
     },
     {
       header: "Title BN",
@@ -93,11 +95,12 @@ export default function PageSections() {
       ) => {
         return <div>{row?.title?.bn && <span>{row.title.bn}</span>}</div>;
       },
+      exportValue: (row: IPageSection) => row?.title?.bn || ""
     },
     {
       header: "Action",
       accessorKey: "id",
-      cell: (_value, row) => {
+      cell: (_value: string | number | boolean | string[] | ILangType, row: IPageSection) => {
         return (
           <div className="flex items-center gap-5">
             <button
@@ -111,7 +114,8 @@ export default function PageSections() {
         );
       },
     },
-  ];
+  ].filter(Boolean) as ColumnDef<IPageSection>[];
+
   return (
     <div className="bg-white p-4 lg:p-8 min-h-[85vh] border border-skeleton rounded-2xl">
       <DataTable

@@ -7,13 +7,9 @@ import { useAppSelector } from "@/lib/redux/hooks";
 import { SquarePen, UserRoundPlus } from "lucide-react";
 import { useEffect, useState } from "react";
 import { UserOrganizationAssignment } from "../types";
-import CreateUpdateOrganizerMappedModal from "./CreateUpdateOrganizerMappedModal";
-interface IOrganization {
-  action?: string;
-  organizationName: string;
-  role: string;
-  userName: string;
-}
+import CreateUpdateOrganizerMappedModal from "./Form/CreateUpdateOrganizerMappedModal";
+import { IOrganization } from "./types";
+
 export default function AllOrganizerMapped() {
   const { hasPermission } = useAppSelector((state) => state.permission);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -80,6 +76,7 @@ export default function AllOrganizerMapped() {
         }
       : undefined,
   ].filter(Boolean) as ColumnDef<IOrganization>[];
+
   return (
     <div className="bg-white p-4 lg:p-8 min-h-[85vh] border border-skeleton rounded-2xl">
       <DataTable
